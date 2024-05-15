@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Abouts on seisokeii blog</title>
+    <link>https://seisokeii.github.io/about/</link>
+    <description>Recent content in Abouts on seisokeii blog</description>
+    <generator>Hugo</generator>
+    <language>zh-tw</language>
+    <managingEditor>Noway@bimbimbambam (seisokeii)</managingEditor>
+    <webMaster>Noway@bimbimbambam (seisokeii)</webMaster>
+    <lastBuildDate>Thu, 16 May 2024 02:47:30 +0800</lastBuildDate>
+    <atom:link href="https://seisokeii.github.io/about/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>About</title>
+      <link>https://seisokeii.github.io/about/about/</link>
+      <pubDate>Tue, 14 May 2024 22:27:11 +0800</pubDate><author>Noway@bimbimbambam (seisokeii)</author>
+      <guid>https://seisokeii.github.io/about/about/</guid>
+      <description>About Me 有空會慢慢會分享一些奇奇怪怪的東西，包含學習、學業、技術、個人興趣 (e.g., 潛水)&amp;hellip; 等等的。</description>
+    </item>
+  </channel>
+</rss>

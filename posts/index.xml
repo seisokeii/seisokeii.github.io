@@ -1,0 +1,16 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title>All Posts - seisokeii blog</title>
+        <link>https://seisokeii.github.io/posts/</link>
+        <description>All Posts | seisokeii blog</description>
+        <generator>Hugo -- gohugo.io</generator><language>zh-tw</language><managingEditor>Noway@bimbimbambam (seisokeii)</managingEditor>
+            <webMaster>Noway@bimbimbambam (seisokeii)</webMaster><lastBuildDate>Tue, 14 May 2024 22:20:52 &#43;0800</lastBuildDate><atom:link href="https://seisokeii.github.io/posts/" rel="self" type="application/rss+xml" /><item>
+    <title>Halo</title>
+    <link>https://seisokeii.github.io/posts/halo/</link>
+    <pubDate>Tue, 14 May 2024 22:20:52 &#43;0800</pubDate>
+    <author>seisokeii</author>
+    <guid>https://seisokeii.github.io/posts/halo/</guid>
+    <description><![CDATA[Halo 第一個貼文就送給 hugo 吧！ 首先，不得不說偶的運氣真的差的可憐&hellip; 看了網路很多文章都寫說 hugo 5分鐘就可以架設好了，結果窩花了一天的時間]]></description>
+</item>
+</channel>
+</rss>

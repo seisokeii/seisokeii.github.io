@@ -1,0 +1,16 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title>Halo - Tag - seisokeii blog</title>
+        <link>http://localhost:1313/tags/halo/</link>
+        <description>Halo - Tag - seisokeii blog</description>
+        <generator>Hugo -- gohugo.io</generator><language>zh-tw</language><managingEditor>Noway@bimbimbambam (seisokeii)</managingEditor>
+            <webMaster>Noway@bimbimbambam (seisokeii)</webMaster><lastBuildDate>Tue, 14 May 2024 22:20:52 &#43;0800</lastBuildDate><atom:link href="http://localhost:1313/tags/halo/" rel="self" type="application/rss+xml" /><item>
+    <title>Halo</title>
+    <link>http://localhost:1313/posts/halo/</link>
+    <pubDate>Tue, 14 May 2024 22:20:52 &#43;0800</pubDate>
+    <author>seisokeii</author>
+    <guid>http://localhost:1313/posts/halo/</guid>
+    <description><![CDATA[Halo ]]></description>
+</item>
+</channel>
+</rss>
