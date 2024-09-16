@@ -12,7 +12,8 @@
     <guid>https://seisokeii.github.io/en/posts/onie/onie-intro/</guid>
     <description><![CDATA[<hr>
 <p>If you have ever used a whitebox switch, you maybe know what Open Network Install Environment is ~
-Here is a simple brief introduction to ONIE. The first task during my internship at Edge-core Networks was to make a new device compatible with ONIE, which means making ONIE run on the new device.</p>
+Here is a simple brief introduction to ONIE. The first task during my internship at Edge-core Networks was to make a new
+device compatible with ONIE, which means making ONIE run on the new device.</p>
 <h2 id="what-is-onie">What is ONIE?</h2>
 <p>In short, ONIE is a lightweight Linux environment that makes it easy to install Network Operating System (NOS).</p>]]></description>
 </item>
