@@ -2,19 +2,19 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Abouts on seisokeii blog</title>
-    <link>http://localhost:1313/zh-tw/about/</link>
+    <link>https://seisokeii.github.io/zh-tw/about/</link>
     <description>Recent content in Abouts on seisokeii blog</description>
     <generator>Hugo</generator>
     <language>zh-TW</language>
     <managingEditor>Noway@bimbimbambam (seisokeii)</managingEditor>
     <webMaster>Noway@bimbimbambam (seisokeii)</webMaster>
     <lastBuildDate>Thu, 16 May 2024 02:47:30 +0800</lastBuildDate>
-    <atom:link href="http://localhost:1313/zh-tw/about/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://seisokeii.github.io/zh-tw/about/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>About</title>
-      <link>http://localhost:1313/zh-tw/about/about/</link>
+      <link>https://seisokeii.github.io/zh-tw/about/about/</link>
       <pubDate>Tue, 14 May 2024 22:27:11 +0800</pubDate><author>Noway@bimbimbambam (seisokeii)</author>
-      <guid>http://localhost:1313/zh-tw/about/about/</guid>
+      <guid>https://seisokeii.github.io/zh-tw/about/about/</guid>
       <description>&lt;h1 id=&#34;about-me&#34;&gt;About Me&lt;/h1&gt;&#xA;&lt;p&gt;有空會慢慢會分享一些奇奇怪怪的東西，包含學習、學業、技術、個人興趣 (e.g., 潛水)&amp;hellip; 等等的。&lt;/p&gt;</description>
     </item>
   </channel>

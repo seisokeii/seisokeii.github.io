@@ -61,4 +61,4 @@ Disallow: /
 User-agent: ZoominfoBot
 Disallow: /
 
-Sitemap: http://localhost:1313/zh-tw/sitemap.xml
+Sitemap: https://seisokeii.github.io/zh-tw/sitemap.xml
