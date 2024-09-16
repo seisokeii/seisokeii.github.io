@@ -15,7 +15,7 @@
       <link>http://localhost:1313/about/about/</link>
       <pubDate>Tue, 14 May 2024 22:27:11 +0800</pubDate><author>Noway@bimbimbambam (seisokeii)</author>
       <guid>http://localhost:1313/about/about/</guid>
-      <description>About Me 有空會慢慢會分享一些奇奇怪怪的東西，包含學習、學業、技術、個人興趣 (e.g., 潛水)&amp;hellip; 等等的。</description>
+      <description>&lt;h1 id=&#34;about-me&#34;&gt;About Me&lt;/h1&gt;&#xA;&lt;p&gt;有空會慢慢會分享一些奇奇怪怪的東西，包含學習、學業、技術、個人興趣 (e.g., 潛水)&amp;hellip; 等等的。&lt;/p&gt;</description>
     </item>
   </channel>
 </rss>

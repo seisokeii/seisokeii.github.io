@@ -4,15 +4,27 @@
         <link>http://localhost:1313/</link>
         <description>seisokeii&#39;s blog</description>
         <generator>Hugo -- gohugo.io</generator><language>zh-tw</language><managingEditor>Noway@bimbimbambam (seisokeii)</managingEditor>
-            <webMaster>Noway@bimbimbambam (seisokeii)</webMaster><lastBuildDate>Sat, 20 Jul 2024 16:28:06 &#43;0800</lastBuildDate>
+            <webMaster>Noway@bimbimbambam (seisokeii)</webMaster><lastBuildDate>Tue, 13 Aug 2024 17:39:33 &#43;0800</lastBuildDate>
             <atom:link href="http://localhost:1313/index.xml" rel="self" type="application/rss+xml" />
         <item>
+    <title>Open Network Install Environment (ONIE) 白話文簡介</title>
+    <link>http://localhost:1313/posts/onie/onie-intro/</link>
+    <pubDate>Tue, 13 Aug 2024 17:39:33 &#43;0800</pubDate>
+    <author>seisokeii</author>
+    <guid>http://localhost:1313/posts/onie/onie-intro/</guid>
+    <description><![CDATA[<hr>
+<p>用過 whitebox 交換機應該加減都會知道 Open Network Install Environment 這東東吧！<br>
+這邊稍微來提一下這東東吧，剛好最近在 Edge-core Networks 實習期間的第一個任務，就是讓一台新設備與 ONIE 相容，講白了就是想辦法讓
+ONIE 可以在新設備上面跑啦~</p>]]></description>
+</item>
+<item>
     <title>ACS 客製化降噪耳塞</title>
-    <link>http://localhost:1313/posts/acs-earplug01/</link>
+    <link>http://localhost:1313/posts/earplug/acs-earplug01/</link>
     <pubDate>Sat, 20 Jul 2024 16:28:06 &#43;0800</pubDate>
     <author>seisokeii</author>
-    <guid>http://localhost:1313/posts/acs-earplug01/</guid>
-    <description><![CDATA[想說網路上很少人在分享這東東，就來分享一下唄。 那為什麼會想客製化耳塞呢？ 主要是因為朋友會揪一些 hardstyle 的夜店場跟音樂節像是 Defqon.1、Int]]></description>
+    <guid>http://localhost:1313/posts/earplug/acs-earplug01/</guid>
+    <description><![CDATA[<p>想說網路上很少人在分享這東東，就來分享一下唄。</p>
+<p>那為什麼會想客製化耳塞呢？ 主要是因為朋友會揪一些 hardstyle 的夜店場跟音樂節像是 Defqon.1、Intents、&hellip; 之類的，然後耳膜可是非常脆弱的，我還不想要這麼快就失聰QQ</p>]]></description>
 </item>
 <item>
     <title>Halo</title>
@@ -20,7 +32,8 @@
     <pubDate>Tue, 14 May 2024 22:20:52 &#43;0800</pubDate>
     <author>seisokeii</author>
     <guid>http://localhost:1313/posts/halo/</guid>
-    <description><![CDATA[第一個貼文就送給 hugo 吧！ 首先，不得不說偶的運氣真的差的可憐&hellip; 看了網路很多文章都寫說 hugo 5分鐘就可以架設好了，結果窩花了一天的時間(]]></description>
+    <description><![CDATA[<p>第一個貼文就送給 hugo 吧！</p>
+<p>首先，不得不說偶的運氣真的差的可憐&hellip; 看了網路很多文章都寫說 hugo 5分鐘就可以架設好了，結果窩花了一天的時間(20小時以上)才搞定開始寫這則貼文&hellip;</p>]]></description>
 </item>
 </channel>
 </rss>
