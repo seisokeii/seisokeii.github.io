@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="zh-tw">
+    <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <title>Open Network Install Environment (ONIE) 白話文簡介 - seisokeii blog</title><meta name="Description" content="seisokeii&#39;s blog"><meta property="og:url" content="http://localhost:1313/posts/onie/onie-intro.zh-cn/">
+  <meta property="og:site_name" content="seisokeii blog">
+  <meta property="og:title" content="Open Network Install Environment (ONIE) 白話文簡介">
+  <meta property="og:description" content=" 用過 whitebox 交換機應該加減都會知道 Open Network Install Environment 這東東吧！
+這邊稍微來提一下這東東吧，剛好最近在 Edge-core Networks 實習期間的第一個任務，就是讓一台新設備與 ONIE 相容，講白了就是想辦法讓 ONIE 可以在新設備上面跑啦~">
+  <meta property="og:locale" content="zh_tw">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2024-08-13T17:39:33+08:00">
+    <meta property="article:modified_time" content="2024-08-13T17:39:33+08:00">
+    <meta property="article:tag" content="ONIE">
+    <meta property="article:tag" content="SONiC">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Open Network Install Environment (ONIE) 白話文簡介">
+  <meta name="twitter:description" content=" 用過 whitebox 交換機應該加減都會知道 Open Network Install Environment 這東東吧！
+這邊稍微來提一下這東東吧，剛好最近在 Edge-core Networks 實習期間的第一個任務，就是讓一台新設備與 ONIE 相容，講白了就是想辦法讓 ONIE 可以在新設備上面跑啦~">
+<meta name="application-name" content="seisokeii の blog">
+<meta name="apple-mobile-web-app-title" content="seisokeii の blog"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="http://localhost:1313/posts/onie/onie-intro.zh-cn/" /><link rel="prev" href="http://localhost:1313/posts/earplug/acs-earplug01/" /><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "Open Network Install Environment (ONIE) 白話文簡介",
+        "inLanguage": "zh-tw",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "http:\/\/localhost:1313\/posts\/onie\/onie-intro.zh-cn\/"
+        },"genre": "posts","keywords": "ONIE, SONiC","wordcount":  1596 ,
+        "url": "http:\/\/localhost:1313\/posts\/onie\/onie-intro.zh-cn\/","datePublished": "2024-08-13T17:39:33+08:00","dateModified": "2024-08-13T17:39:33+08:00","publisher": {
+            "@type": "Organization",
+            "name": ""},"author": {
+                "@type": "Person",
+                "name": "seisokeii"
+            },"description": ""
+    }
+    </script></head>
+    <body data-header-desktop="fixed" data-header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="seisokeii blog"><span id="id-1" class="typeit"></span></a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/"> Posts </a><a class="menu-item" href="/tags/"> Tags </a><a class="menu-item" href="/categories/"> Categories </a><a class="menu-item" href="/about/about"> About </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="Search titles or contents..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="Search">
+                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="Clear">
+                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                    <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+                </a></div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="seisokeii blog"><span id="id-2" class="typeit"></span></a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="Search titles or contents..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="Search">
+                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="Clear">
+                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        Cancel
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="">Posts</a><a class="menu-item" href="/tags/" title="">Tags</a><a class="menu-item" href="/categories/" title="">Categories</a><a class="menu-item" href="/about/about" title="">About</a><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+            </a></div>
+    </div>
+</header><div class="search-dropdown desktop">
+        <div id="search-dropdown-desktop"></div>
+    </div>
+    <div class="search-dropdown mobile">
+        <div id="search-dropdown-mobile"></div>
+    </div><main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">Contents</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">Open Network Install Environment (ONIE) 白話文簡介</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="github.com/seisokeii" title="Author" rel="author" class="author"><i class="fas fa-user-circle fa-fw" aria-hidden="true"></i>seisokeii</a></span>&nbsp;<span class="post-category">included in <a href="/categories/onie/"><i class="far fa-folder fa-fw" aria-hidden="true"></i>ONIE</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2024-08-13">2024-08-13</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;1596 words&nbsp;
+                <i class="far fa-clock fa-fw" aria-hidden="true"></i>&nbsp;4 minutes&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  data-kept="">
+                <div class="details-summary toc-title">
+                    <span>Contents</span>
+                    <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#onie-是什麼">ONIE 是什麼？</a></li>
+    <li><a href="#onie-專案現況-til-202408">ONIE 專案現況 (til 2024/08)</a></li>
+    <li><a href="#onie-運作原理">ONIE 運作原理</a></li>
+    <li><a href="#onie-畫面">ONIE 畫面</a></li>
+    <li><a href="#結語">結語</a>
+      <ul>
+        <li><a href="#參考">參考</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><hr>
+<p>用過 whitebox 交換機應該加減都會知道 Open Network Install Environment 這東東吧！<br>
+這邊稍微來提一下這東東吧，剛好最近在 Edge-core Networks 實習期間的第一個任務，就是讓一台新設備與 ONIE 相容，講白了就是想辦法讓
+ONIE 可以在新設備上面跑啦~</p>
+<h2 id="onie-是什麼">ONIE 是什麼？</h2>
+<p>先講結論，ONIE 就是一個輕量的 Linux 環境，方便安裝 Network Operation System (NOS)</p>
+<p>當初 ONIE 會出現，只是為了要有一個 Linux 環境，執行 NOS 的 installer，把 NOS 需要的 partition 建出來，複製檔案進
+partition，然後設定 GRUB 或 U-boot 去開 NOS，ONIE 的任務就結束了。</p>
+<p>如果沒有 ONIE 的話，網通廠商出廠前就要把 NOS 燒在 flash 上，如果使用者想要更換 NOS 的話就會很麻煩，所以 ONIE
+就是為了解決這個問題而生的，這使得使用者可以隨時切換 NOS。</p>
+<p>當然 ONIE 還可以做到解除安裝、選擇進入不同 NOS&hellip; 之類的功能。</p>
+<blockquote>
+<p>BTW. 這個輕量的 Linux 環境主要就是 busybox 這東東，剩下的就是一堆工具東拼西湊的組再一起。</p>
+</blockquote>
+<h2 id="onie-專案現況-til-202408">ONIE 專案現況 (til 2024/08)</h2>
+<p>(我就是要放在上面讓大家看一下硬體廠商搞出來的資訊封閉ㄉ世界)</p>
+<p>這邊要吐槽一下硬體廠商，硬體廠商針對新的硬體的資訊其實是很封閉的，但想想也合理，畢竟就是他們的商業機密(?</p>
+<p>為什麼這麼說呢？因為像是新 CPU 推出後，就會需要對 Linux 做相容，而這些相容幾乎都是 SoC 廠商做的，網通廠商找 SoC 買晶片後，SoC
+廠商會提供相關的 drivers 與 DTS&hellip; 之類的檔案 (有時候是直接給整坨爆改過的 Linux kernel 原始碼呢)</p>
+<p>那針對這種情況，ONIE 這個專案的做法就是採用 patch 的方式，讓各個網通廠商製作 Linux kernel、U-boot 的 patch，來讓其他用戶可以自行
+build，畢竟 ONIE source code 不適合一直加新東西吧!</p>
+<p>那這邊繼續虧一下 SoC 廠商，目前大部分的 x86 機器幾乎都可以讓使用者自行 build ONIE，但是近幾年加入戰場的 ARM
+就不是這麼一回事了，有時候是網通廠的客戶不希望資訊公開，有些是 SoC 廠本身就不允許資訊公開，甚至會需要網通廠的客戶與 SoC 廠簽
+NDA 呢QQ</p>
+<p>另外，其實每家網通廠商都會自己維護自家的 Linux 與 u-boot 版本 (在資訊業應該算是常態?)，所以好像也加劇了導致資訊更加封閉，這中間其實有很多坑啦～</p>
+<p>總之目前 x86 的設備大概率是可以直接使用 ONIE repo 去 build 起來，但是 ARM 的話大概別想了QQ （不過老實說應該沒有什麼人會想在
+home lab 玩重灌二手 whitebox 吧，光 image 拿不拿得到就夠頭痛了XD</p>
+<h2 id="onie-運作原理">ONIE 運作原理</h2>
+<p>這邊簡單寫一下，看<a href="https://opencomputeproject.github.io/onie/overview/index.html#initial-system-boot" target="_blank" rel="noopener noreffer ">官方的圖</a></p>
+<figure><img src="/images/ONIE/onie_first_time_work_flow.png"><figcaption>
+      <h4>第一次開機流程</h4>
+    </figcaption>
+</figure>
+
+<p>第一步驟跟一般 Linux 機器開機一樣，會先去讀取 bootloader 讀完後會知道要去哪裡把 ONIE 的 Linux kernel 載入到記憶體。</p>
+<p>第二步就是 bootloader 已經轉跳到 ONIE 了，接下來有了 Linux 環境後就可以設定好網路，然後連到有 images 的伺服器上進行下載來安裝與更新。</p>
+<p>第三步驟安裝完成後，就可以讓 ONIE 轉跳到新的 NOS 了。</p>
+<p>那之後開機的話就會直接跳過 ONIE 頁面，直接進入 NOS 了。 如下圖：</p>
+<figure><img src="/images/ONIE/onie_after_installed_nos.png"><figcaption>
+      <h4>安裝 NOS 後開機流程</h4>
+    </figcaption>
+</figure>
+
+<p>看似多了一個東西在開機流程很冗，但是這個東東為使用者以及網路廠商減少了在 NOS 安裝方面的很多麻煩，網通廠商出廠自帶 ONIE
+即可，剩下的就讓客戶自己搞，使用者也可以自己選擇喜歡的 NOS。</p>
+<p>到這邊就是 ONIE 的用途非常簡單的介紹。</p>
+<h2 id="onie-畫面">ONIE 畫面</h2>
+<p>有個東西來提個好了，就是 ONIE 的畫面，之前有碰過的 x86 CPU 的機器，當然使用的是 BIOS 開機，然後會看到一個 GUI 畫面給我選擇
+NOS。</p>
+<p>但是我在實習的時候接觸的是 ARM 機器，然後使用的是 U-boot，當初就在想那個選單怎麼弄出來，後來才知道原來選單是 GRUB&hellip;
+畫面大致如下:</p>
+<figure><img src="/images/ONIE/onie_x86_grub.png"><figcaption>
+      <h4>ONIE 文件 GRUB 選單</h4>
+    </figcaption>
+</figure>
+
+<p>那問題來了，U-boot 機器都不用 GRUB 該怎麼辦？</p>
+<p>嘿嘿 U-boot 其實還是有參數這種東西(廢話)，有個參數就是開機指令 bootcmd，只要把這個指令寫好就可以開機進到想要的 NOS 了，這邊
+ONIE 安裝 NOS 同時會去做修改這個參數。</p>
+<blockquote>
+<p>當然這個 bootcmd 不一定是這樣搞，要看製作該 U-boot 的人(bring-up 人員)，他是怎麼定義的，
+像我遇到的機器就是開機自動讀取 preboot 這個參數並執行開機指令。</p>
+</blockquote>
+<h2 id="結語">結語</h2>
+<p>一開始偶也是花了不少先嗑 ONIE 官方的 document，然後才去做 build 的動作。 老實說&hellip;
+沒有動手做是真的不知道官網到底在寫啥XD (應該是我對硬體一竅不通吧)</p>
+<p>有時間再來看看要怎麼寫 ONIE 的 building 過程分享，但是又不能洩漏公司的機密資訊XD 有難度但窩盡量^^</p>
+<h3 id="參考">參考</h3>
+<ul>
+<li>ONIE 官網文件 <a href="https://opencomputeproject.github.io/onie/overview/index.html#" target="_blank" rel="noopener noreffer ">https://opencomputeproject.github.io/onie/overview/index.html#</a></li>
+<li>ONIE 官方 Github <a href="https://github.com/opencomputeproject/onie" target="_blank" rel="noopener noreffer ">https://github.com/opencomputeproject/onie</a></li>
+</ul>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>Updated on 2024-08-13</span>
+            </div></div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw" aria-hidden="true"></i>&nbsp;<a href="/tags/onie/">ONIE</a>,&nbsp;<a href="/tags/sonic/">SONiC</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">Back</a></span>&nbsp;|&nbsp;<span><a href="/">Home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/posts/earplug/acs-earplug01/" class="prev" rel="prev" title="ACS 客製化降噪耳塞"><i class="fas fa-angle-left fa-fw" aria-hidden="true"></i>ACS 客製化降噪耳塞</a></div>
+</div>
+</article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.134.2">Hugo</a> | Theme - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.11"><i class="far fa-kiss-wink-heart fa-fw" aria-hidden="true"></i> LoveIt</a>
+                </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright fa-fw" aria-hidden="true"></i><span itemprop="copyrightYear">2024</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="github.com/seisokeii" target="_blank">seisokeii</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="Back to Top">
+                <i class="fas fa-arrow-up fa-fw" aria-hidden="true"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="View Comments">
+                <i class="fas fa-comment fa-fw" aria-hidden="true"></i>
+            </a>
+        </div><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/lunr/lunr.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript" src="/lib/typeit/index.umd.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":30},"comment":{},"data":{"id-1":"seisokeii の blog","id-2":"seisokeii の blog"},"search":{"highlightTag":"em","maxResultLength":10,"noResultsFound":"No results found","snippetLength":30},"typeit":{"cursorChar":"|","cursorSpeed":1000,"data":{"id-1":["id-1"],"id-2":["id-2"]},"duration":-1,"speed":10}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

@@ -1,9 +1,9 @@
 <rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
     <channel>
-        <title>Tags - Tag - seisokeii blog</title>
+        <title>Tags - 標籤 - seisokeii blog</title>
         <link>http://localhost:1313/tags/</link>
-        <description>Tags - Tag - seisokeii blog</description>
-        <generator>Hugo -- gohugo.io</generator><language>zh-tw</language><managingEditor>Noway@bimbimbambam (seisokeii)</managingEditor>
+        <description>Tags - 標籤 - seisokeii blog</description>
+        <generator>Hugo -- gohugo.io</generator><language>zh-TW</language><managingEditor>Noway@bimbimbambam (seisokeii)</managingEditor>
             <webMaster>Noway@bimbimbambam (seisokeii)</webMaster><lastBuildDate>Tue, 13 Aug 2024 17:39:33 &#43;0800</lastBuildDate><atom:link href="http://localhost:1313/tags/" rel="self" type="application/rss+xml" /><item>
     <title>ONIE</title>
     <link>http://localhost:1313/tags/onie/</link>

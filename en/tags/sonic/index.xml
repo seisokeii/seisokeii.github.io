@@ -1,0 +1,20 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title>SONiC - Tag - seisokeii blog</title>
+        <link>http://localhost:1313/en/tags/sonic/</link>
+        <description>SONiC - Tag - seisokeii blog</description>
+        <generator>Hugo -- gohugo.io</generator><language>en</language><managingEditor>Noway@bimbimbambam (seisokeii)</managingEditor>
+            <webMaster>Noway@bimbimbambam (seisokeii)</webMaster><lastBuildDate>Tue, 13 Aug 2024 17:39:33 &#43;0800</lastBuildDate><atom:link href="http://localhost:1313/en/tags/sonic/" rel="self" type="application/rss+xml" /><item>
+    <title>Open Network Install Environment (ONIE) Simple Introduction</title>
+    <link>http://localhost:1313/en/posts/onie/onie-intro/</link>
+    <pubDate>Tue, 13 Aug 2024 17:39:33 &#43;0800</pubDate>
+    <author>seisokeii</author>
+    <guid>http://localhost:1313/en/posts/onie/onie-intro/</guid>
+    <description><![CDATA[<hr>
+<p>If you have ever used a whitebox switch, you maybe know what Open Network Install Environment is ~
+Here is a simple brief introduction to ONIE. The first task during my internship at Edge-core Networks was to make a new device compatible with ONIE, which means making ONIE run on the new device.</p>
+<h2 id="what-is-onie">What is ONIE?</h2>
+<p>In short, ONIE is a lightweight Linux environment that makes it easy to install Network Operating System (NOS).</p>]]></description>
+</item>
+</channel>
+</rss>

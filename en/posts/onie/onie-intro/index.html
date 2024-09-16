@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <title>Open Network Install Environment (ONIE) Simple Introduction - seisokeii blog</title><meta name="Description" content="seisokeii&#39;s blog"><meta property="og:url" content="http://localhost:1313/en/posts/onie/onie-intro/">
+  <meta property="og:site_name" content="seisokeii blog">
+  <meta property="og:title" content="Open Network Install Environment (ONIE) Simple Introduction">
+  <meta property="og:description" content=" If you have ever used a whitebox switch, you maybe know what Open Network Install Environment is ~ Here is a simple brief introduction to ONIE. The first task during my internship at Edge-core Networks was to make a new device compatible with ONIE, which means making ONIE run on the new device.
+What is ONIE? In short, ONIE is a lightweight Linux environment that makes it easy to install Network Operating System (NOS).">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2024-08-13T17:39:33+08:00">
+    <meta property="article:modified_time" content="2024-08-13T17:39:33+08:00">
+    <meta property="article:tag" content="ONIE">
+    <meta property="article:tag" content="SONiC">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Open Network Install Environment (ONIE) Simple Introduction">
+  <meta name="twitter:description" content=" If you have ever used a whitebox switch, you maybe know what Open Network Install Environment is ~ Here is a simple brief introduction to ONIE. The first task during my internship at Edge-core Networks was to make a new device compatible with ONIE, which means making ONIE run on the new device.
+What is ONIE? In short, ONIE is a lightweight Linux environment that makes it easy to install Network Operating System (NOS).">
+<meta name="application-name" content="seisokeii の blog">
+<meta name="apple-mobile-web-app-title" content="seisokeii の blog"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="http://localhost:1313/en/posts/onie/onie-intro/" /><link rel="prev" href="http://localhost:1313/en/posts/earplug/acs-earplug01/" /><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "Open Network Install Environment (ONIE) Simple Introduction",
+        "inLanguage": "en",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "http:\/\/localhost:1313\/en\/posts\/onie\/onie-intro\/"
+        },"genre": "posts","keywords": "ONIE, SONiC","wordcount":  904 ,
+        "url": "http:\/\/localhost:1313\/en\/posts\/onie\/onie-intro\/","datePublished": "2024-08-13T17:39:33+08:00","dateModified": "2024-08-13T17:39:33+08:00","publisher": {
+            "@type": "Organization",
+            "name": ""},"author": {
+                "@type": "Person",
+                "name": "seisokeii"
+            },"description": ""
+    }
+    </script></head>
+    <body data-header-desktop="fixed" data-header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/en/" title="seisokeii blog"><span id="id-1" class="typeit"></span></a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/en/posts/"> Posts </a><a class="menu-item" href="/en/tags/"> Tags </a><a class="menu-item" href="/en/categories/"> Categories </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="Search titles or contents..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="Search">
+                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="Clear">
+                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                    <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+                </a><a href="javascript:void(0);" class="menu-item language" title="Select Language">
+                    <i class="fa fa-globe" aria-hidden="true"></i>                      
+                    <select class="language-select" id="language-select-desktop" onchange="location = this.value;"><option value="/en/posts/onie/onie-intro/" selected>English</option><option value="/zh-tw/posts/onie/onie-intro/">繁體中文</option></select>
+                </a></div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/en/" title="seisokeii blog"><span id="id-2" class="typeit"></span></a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="Search titles or contents..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="Search">
+                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="Clear">
+                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        Cancel
+                    </a>
+                </div><a class="menu-item" href="/en/posts/" title="">Posts</a><a class="menu-item" href="/en/tags/" title="">Tags</a><a class="menu-item" href="/en/categories/" title="">Categories</a><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+            </a><a href="javascript:void(0);" class="menu-item" title="Select Language">
+                    <i class="fa fa-globe fa-fw" aria-hidden="true"></i>
+                    <select class="language-select" onchange="location = this.value;"><option value="/en/posts/onie/onie-intro/" selected>English</option><option value="/zh-tw/posts/onie/onie-intro/">繁體中文</option></select>
+                </a></div>
+    </div>
+</header><div class="search-dropdown desktop">
+        <div id="search-dropdown-desktop"></div>
+    </div>
+    <div class="search-dropdown mobile">
+        <div id="search-dropdown-mobile"></div>
+    </div><main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">Contents</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">Open Network Install Environment (ONIE) Simple Introduction</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="github.com/seisokeii" title="Author" rel="author" class="author"><i class="fas fa-user-circle fa-fw" aria-hidden="true"></i>seisokeii</a></span>&nbsp;<span class="post-category">included in <a href="/en/categories/onie/"><i class="far fa-folder fa-fw" aria-hidden="true"></i>ONIE</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2024-08-13">2024-08-13</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;904 words&nbsp;
+                <i class="far fa-clock fa-fw" aria-hidden="true"></i>&nbsp;5 minutes&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  data-kept="">
+                <div class="details-summary toc-title">
+                    <span>Contents</span>
+                    <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#what-is-onie">What is ONIE?</a></li>
+    <li><a href="#onie-project-status-til-202408">ONIE Project Status (til 2024/08)</a></li>
+    <li><a href="#onie-operation-principle">ONIE Operation Principle</a></li>
+    <li><a href="#onie-gui">ONIE GUI</a></li>
+    <li><a href="#conclusion">Conclusion</a>
+      <ul>
+        <li><a href="#reference">Reference</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><hr>
+<p>If you have ever used a whitebox switch, you maybe know what Open Network Install Environment is ~
+Here is a simple brief introduction to ONIE. The first task during my internship at Edge-core Networks was to make a new device compatible with ONIE, which means making ONIE run on the new device.</p>
+<h2 id="what-is-onie">What is ONIE?</h2>
+<p>In short, ONIE is a lightweight Linux environment that makes it easy to install Network Operating System (NOS).</p>
+<p>When ONIE first appeared, it was just a Linux environment that ran the NOS installer, created the partitions needed by the NOS, copied files into the partitions, and set up GRUB or U-boot to boot the NOS. After that, ONIE&rsquo;s mission was complete.</p>
+<p>Without ONIE, network device manufacturers have to burn the NOS into the flash memory before shipping the device. If users wanted to change the NOS, it would be very troublesome. ONIE was created to solve this problem, allowing users to switch, install or uninstall NOS at any time.</p>
+<blockquote>
+<p>BTW. This lightweight Linux environment is mainly busybox, and the rest is a bunch of tools put together.</p>
+</blockquote>
+<h2 id="onie-project-status-til-202408">ONIE Project Status (til 2024/08)</h2>
+<p>(I just want to put it here to let everyone see the information-closed world created by hardware manufacturers)</p>
+<p>Here, I want to complain about hardware manufacturers. The information about new hardware is actually very closed. But think about it, it&rsquo;s reasonable, after all, it&rsquo;s their trade secret(?</p>
+<p>Why do I say that? Because, for example, after a new CPU is released, it needs to be compatible with Linux. This compatibility is almost entirely done by SoC manufacturers. After network device manufacturers buy SoC chips, SoC manufacturers will provide related drivers and DTS&hellip; files (sometimes they directly provide a heavily modified Linux kernel source code).</p>
+<p>In response to this situation, the ONIE project adopts a patch approach, allowing various network device manufacturers to create Linux kernel and U-boot patches to allow other users to build them themselves. After all, the ONIE source code is not suitable for constantly adding new things!</p>
+<p>Continuing to fxxk SoC manufacturers, currently, almost all x86 machines can be built by users themselves, but in recent years, ARM has joined the battlefield, and it&rsquo;s not the same. Sometimes it&rsquo;s because the customers of network device manufacturers don&rsquo;t want the information to be public, sometimes it&rsquo;s because the SoC manufacturers themselves don&rsquo;t allow the information to be public, and sometimes the customers of network device manufacturers need to sign an NDA with the SoC manufacturers.</p>
+<p>In addition, in fact, every network device manufacturer will maintain its own Linux and U-boot versions (this should be normal in the information industry?), which seems to have exacerbated the closure of information, and there are many pitfalls in between.</p>
+<p>In short, it is highly probable that x86 devices can be directly built using the ONIE repo, but ARM devices are probably not possible (but honestly, not many people would want to reinstall second-hand whitebox in a home lab, just getting the image is enough headache XD</p>
+<h2 id="onie-operation-principle">ONIE Operation Principle</h2>
+<p>Here is a simple explanation, see the <a href="https://opencomputeproject.github.io/onie/overview/index.html#initial-system-boot" target="_blank" rel="noopener noreffer ">official diagram</a></p>
+<figure><img src="/images/ONIE/onie_first_time_work_flow.png"><figcaption>
+      <h4>First boot process</h4>
+    </figcaption>
+</figure>
+
+<p>The first step is the same as booting a general Linux machine. It runs the bootloader first, and after running it, it knows where to load the ONIE Linux kernel into memory.</p>
+<p>The second step is that the bootloader has already jumped to ONIE. After having a Linux environment, you can set up the network, then connect to the server with images to download and install and update.</p>
+<p>The third step you can let ONIE jump to the new NOS.</p>
+<p>After installing NOS, ONIE will skip in boot stage and straight go into NOS. Showing like below:</p>
+<figure><img src="/images/ONIE/onie_after_installed_nos.png"><figcaption>
+      <h4>Boot process after installing NOS</h4>
+    </figcaption>
+</figure>
+
+<p>Although it seems to have added an extra thing in the boot process, this thing has reduced a lot of trouble for users and network device manufacturers in the NOS installation process.
+Network device manufacturers come with ONIE, and users can choose the NOS they like.</p>
+<p>Ok! That&rsquo;s all for ONIE introduction.</p>
+<h2 id="onie-gui">ONIE GUI</h2>
+<p>There&rsquo;s one thing I want to mention. That is ONIE GUI.</p>
+<p>I&rsquo;ve been used x86 CPU switch. Of course, it is BIOS and there&rsquo;s a GUI provide me to choose NOS.</p>
+<p>But in my internship, I have to develop ONIE on ARM CPU switch which using U-boot. At that time, I was wondering why my switch don&rsquo;t have this menu&hellip; Finally, I realized that menu is GRUB = =</p>
+<p>The GRUB screen is like below:</p>
+<figure><img src="/images/ONIE/onie_x86_grub.png"><figcaption>
+      <h4>ONIE GRUB MENU</h4>
+    </figcaption>
+</figure>
+
+<p>OK! There&rsquo;s a problem coming~ How U-boot going ONIE or NOS without GRUB?</p>
+<p>HeyHey! Actually, U-boot contains many arguments(obvious) and one of them is <code>bootcmd</code>. This argument is a string that U-boot will execute when booting</p>
+<blockquote>
+<p>Of course, this <code>bootcmd</code> is not necessarily like this. It depends on the person who made the U-boot (bring-up person) how to define it.
+Like the machine I encountered, it automatically reads the preboot parameter and executes the boot command.</p>
+</blockquote>
+<h2 id="conclusion">Conclusion</h2>
+<p>I deep dive into ONIE document at the beginning, then I started to build it. Honestly&hellip;
+I don&rsquo;t know what the official website is talking about until I build it myself XD (Maybe it because I don&rsquo;t have any basic knowledge in hardware)</p>
+<p>If I have time, I will share the ONIE building process, but I can&rsquo;t leak the company&rsquo;s confidential information XD I&rsquo;ll try my best^^</p>
+<h3 id="reference">Reference</h3>
+<ul>
+<li>ONIE Official document <a href="https://opencomputeproject.github.io/onie/overview/index.html#" target="_blank" rel="noopener noreffer ">https://opencomputeproject.github.io/onie/overview/index.html#</a></li>
+<li>ONIE Official Github <a href="https://github.com/opencomputeproject/onie" target="_blank" rel="noopener noreffer ">https://github.com/opencomputeproject/onie</a></li>
+</ul>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>Updated on 2024-08-13</span>
+            </div></div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw" aria-hidden="true"></i>&nbsp;<a href="/en/tags/onie/">ONIE</a>,&nbsp;<a href="/en/tags/sonic/">SONiC</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">Back</a></span>&nbsp;|&nbsp;<span><a href="/en/">Home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/en/posts/earplug/acs-earplug01/" class="prev" rel="prev" title="ACS Custom Noise Cancelling Earplugs"><i class="fas fa-angle-left fa-fw" aria-hidden="true"></i>ACS Custom Noise Cancelling Earplugs</a></div>
+</div>
+</article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.134.2">Hugo</a> | Theme - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.11"><i class="far fa-kiss-wink-heart fa-fw" aria-hidden="true"></i> LoveIt</a>
+                </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright fa-fw" aria-hidden="true"></i><span itemprop="copyrightYear">2024</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="github.com/seisokeii" target="_blank">seisokeii</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="Back to Top">
+                <i class="fas fa-arrow-up fa-fw" aria-hidden="true"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="View Comments">
+                <i class="fas fa-comment fa-fw" aria-hidden="true"></i>
+            </a>
+        </div><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/lunr/lunr.min.js"></script><script type="text/javascript" src="/lib/lunr/lunr.stemmer.support.min.js"></script><script type="text/javascript" src="/lib/lunr/lunr.zh.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript" src="/lib/typeit/index.umd.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":30},"comment":{},"data":{"id-1":"seisokeii の blog","id-2":"seisokeii の blog"},"search":{"highlightTag":"em","lunrLanguageCode":"en","lunrSegmentitURL":"/lib/lunr/lunr.segmentit.js","maxResultLength":10,"noResultsFound":"No results found","snippetLength":30},"typeit":{"cursorChar":"|","cursorSpeed":1000,"data":{"id-1":["id-1"],"id-2":["id-2"]},"duration":-1,"speed":10}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

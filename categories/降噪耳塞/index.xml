@@ -1,9 +1,9 @@
 <rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
     <channel>
-        <title>降噪耳塞 - Category - seisokeii blog</title>
+        <title>降噪耳塞 - 分類 - seisokeii blog</title>
         <link>http://localhost:1313/categories/%E9%99%8D%E5%99%AA%E8%80%B3%E5%A1%9E/</link>
-        <description>降噪耳塞 - Category - seisokeii blog</description>
-        <generator>Hugo -- gohugo.io</generator><language>zh-tw</language><managingEditor>Noway@bimbimbambam (seisokeii)</managingEditor>
+        <description>降噪耳塞 - 分類 - seisokeii blog</description>
+        <generator>Hugo -- gohugo.io</generator><language>zh-TW</language><managingEditor>Noway@bimbimbambam (seisokeii)</managingEditor>
             <webMaster>Noway@bimbimbambam (seisokeii)</webMaster><lastBuildDate>Sat, 20 Jul 2024 16:28:06 &#43;0800</lastBuildDate><atom:link href="http://localhost:1313/categories/%E9%99%8D%E5%99%AA%E8%80%B3%E5%A1%9E/" rel="self" type="application/rss+xml" /><item>
     <title>ACS 客製化降噪耳塞</title>
     <link>http://localhost:1313/posts/earplug/acs-earplug01/</link>
