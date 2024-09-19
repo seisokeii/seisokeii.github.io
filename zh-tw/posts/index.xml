@@ -4,7 +4,17 @@
         <link>https://seisokeii.github.io/zh-tw/posts/</link>
         <description>所有文章 | seisokeii blog</description>
         <generator>Hugo -- gohugo.io</generator><language>zh-TW</language><managingEditor>Noway@bimbimbambam (seisokeii)</managingEditor>
-            <webMaster>Noway@bimbimbambam (seisokeii)</webMaster><lastBuildDate>Tue, 13 Aug 2024 17:39:33 &#43;0800</lastBuildDate><atom:link href="https://seisokeii.github.io/zh-tw/posts/" rel="self" type="application/rss+xml" /><item>
+            <webMaster>Noway@bimbimbambam (seisokeii)</webMaster><lastBuildDate>Thu, 19 Sep 2024 17:03:33 &#43;0800</lastBuildDate><atom:link href="https://seisokeii.github.io/zh-tw/posts/" rel="self" type="application/rss+xml" /><item>
+    <title>Open Network Install Environment (ONIE) How to build?</title>
+    <link>https://seisokeii.github.io/zh-tw/posts/onie/onie-build/</link>
+    <pubDate>Thu, 19 Sep 2024 17:03:33 &#43;0800</pubDate>
+    <author>seisokeii</author>
+    <guid>https://seisokeii.github.io/zh-tw/posts/onie/onie-build/</guid>
+    <description><![CDATA[<hr>
+<p>繼上一篇 <code>ONIE 白話文簡介</code> ，來稍微分享一下 ONIE 這東東是怎麼 build 起來的唄！</p>
+<p>這邊會類似一個教學文件，但是當然不可能會把公司的資訊放在這~ 就只是大致看一下一間網通廠是怎麼搞出這東東的而已。</p>]]></description>
+</item>
+<item>
     <title>Open Network Install Environment (ONIE) 白話文簡介</title>
     <link>https://seisokeii.github.io/zh-tw/posts/onie/onie-intro/</link>
     <pubDate>Tue, 13 Aug 2024 17:39:33 &#43;0800</pubDate>
