@@ -2,106 +2,108 @@
     xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
     xmlns:xhtml="http://www.w3.org/1999/xhtml"
     ><url>
-            <loc>https://seisokeii.github.io/zh-tw/categories/</loc><lastmod>2024-09-16T18:37:42&#43;08:00</lastmod><xhtml:link
+            <loc>http://localhost:1313/zh-tw/about/</loc><lastmod>2024-09-19T16:04:00&#43;08:00</lastmod></url><url>
+            <loc>http://localhost:1313/zh-tw/</loc><lastmod>2024-09-19T16:04:00&#43;08:00</lastmod><xhtml:link
                         rel="alternate"
                         hreflang="en"
-                        href="https://seisokeii.github.io/en/categories/"
+                        href="http://localhost:1313/en/"
                         /><xhtml:link
                     rel="alternate"
                     hreflang="zh-tw"
-                    href="https://seisokeii.github.io/zh-tw/categories/"
+                    href="http://localhost:1313/zh-tw/"
                     /></url><url>
-            <loc>https://seisokeii.github.io/zh-tw/tags/onie/</loc><lastmod>2024-09-16T18:37:42&#43;08:00</lastmod><xhtml:link
+            <loc>http://localhost:1313/zh-tw/about/todo/</loc><lastmod>2024-09-19T16:04:00&#43;08:00</lastmod></url><url>
+            <loc>http://localhost:1313/zh-tw/about/dirtytalk/</loc><lastmod>2024-09-19T15:45:00&#43;08:00</lastmod></url><url>
+            <loc>http://localhost:1313/zh-tw/categories/</loc><lastmod>2024-09-16T21:26:24&#43;08:00</lastmod><xhtml:link
                         rel="alternate"
                         hreflang="en"
-                        href="https://seisokeii.github.io/en/tags/onie/"
+                        href="http://localhost:1313/en/categories/"
                         /><xhtml:link
                     rel="alternate"
                     hreflang="zh-tw"
-                    href="https://seisokeii.github.io/zh-tw/tags/onie/"
+                    href="http://localhost:1313/zh-tw/categories/"
                     /></url><url>
-            <loc>https://seisokeii.github.io/zh-tw/categories/onie/</loc><lastmod>2024-09-16T18:37:42&#43;08:00</lastmod><xhtml:link
+            <loc>http://localhost:1313/zh-tw/tags/onie/</loc><lastmod>2024-09-16T18:37:42&#43;08:00</lastmod><xhtml:link
                         rel="alternate"
                         hreflang="en"
-                        href="https://seisokeii.github.io/en/categories/onie/"
+                        href="http://localhost:1313/en/tags/onie/"
                         /><xhtml:link
                     rel="alternate"
                     hreflang="zh-tw"
-                    href="https://seisokeii.github.io/zh-tw/categories/onie/"
+                    href="http://localhost:1313/zh-tw/tags/onie/"
                     /></url><url>
-            <loc>https://seisokeii.github.io/zh-tw/posts/onie/onie-intro/</loc><lastmod>2024-09-16T18:37:42&#43;08:00</lastmod><xhtml:link
+            <loc>http://localhost:1313/zh-tw/categories/onie/</loc><lastmod>2024-09-16T18:37:42&#43;08:00</lastmod><xhtml:link
                         rel="alternate"
                         hreflang="en"
-                        href="https://seisokeii.github.io/en/posts/onie/onie-intro/"
+                        href="http://localhost:1313/en/categories/onie/"
                         /><xhtml:link
                     rel="alternate"
                     hreflang="zh-tw"
-                    href="https://seisokeii.github.io/zh-tw/posts/onie/onie-intro/"
+                    href="http://localhost:1313/zh-tw/categories/onie/"
                     /></url><url>
-            <loc>https://seisokeii.github.io/zh-tw/posts/</loc><lastmod>2024-09-16T18:37:42&#43;08:00</lastmod><xhtml:link
+            <loc>http://localhost:1313/zh-tw/posts/onie/onie-intro/</loc><lastmod>2024-09-16T18:37:42&#43;08:00</lastmod><xhtml:link
                         rel="alternate"
                         hreflang="en"
-                        href="https://seisokeii.github.io/en/posts/"
+                        href="http://localhost:1313/en/posts/onie/onie-intro/"
                         /><xhtml:link
                     rel="alternate"
                     hreflang="zh-tw"
-                    href="https://seisokeii.github.io/zh-tw/posts/"
+                    href="http://localhost:1313/zh-tw/posts/onie/onie-intro/"
                     /></url><url>
-            <loc>https://seisokeii.github.io/zh-tw/</loc><lastmod>2024-09-16T18:37:42&#43;08:00</lastmod><xhtml:link
+            <loc>http://localhost:1313/zh-tw/posts/</loc><lastmod>2024-09-16T21:26:24&#43;08:00</lastmod><xhtml:link
                         rel="alternate"
                         hreflang="en"
-                        href="https://seisokeii.github.io/en/"
+                        href="http://localhost:1313/en/posts/"
                         /><xhtml:link
                     rel="alternate"
                     hreflang="zh-tw"
-                    href="https://seisokeii.github.io/zh-tw/"
+                    href="http://localhost:1313/zh-tw/posts/"
                     /></url><url>
-            <loc>https://seisokeii.github.io/zh-tw/tags/sonic/</loc><lastmod>2024-09-16T18:37:42&#43;08:00</lastmod><xhtml:link
+            <loc>http://localhost:1313/zh-tw/tags/sonic/</loc><lastmod>2024-09-16T18:37:42&#43;08:00</lastmod><xhtml:link
                         rel="alternate"
                         hreflang="en"
-                        href="https://seisokeii.github.io/en/tags/sonic/"
+                        href="http://localhost:1313/en/tags/sonic/"
                         /><xhtml:link
                     rel="alternate"
                     hreflang="zh-tw"
-                    href="https://seisokeii.github.io/zh-tw/tags/sonic/"
+                    href="http://localhost:1313/zh-tw/tags/sonic/"
                     /></url><url>
-            <loc>https://seisokeii.github.io/zh-tw/tags/</loc><lastmod>2024-09-16T18:37:42&#43;08:00</lastmod><xhtml:link
+            <loc>http://localhost:1313/zh-tw/tags/</loc><lastmod>2024-09-16T21:26:24&#43;08:00</lastmod><xhtml:link
                         rel="alternate"
                         hreflang="en"
-                        href="https://seisokeii.github.io/en/tags/"
+                        href="http://localhost:1313/en/tags/"
                         /><xhtml:link
                     rel="alternate"
                     hreflang="zh-tw"
-                    href="https://seisokeii.github.io/zh-tw/tags/"
+                    href="http://localhost:1313/zh-tw/tags/"
                     /></url><url>
-            <loc>https://seisokeii.github.io/zh-tw/tags/acs/</loc><lastmod>2024-09-16T18:37:42&#43;08:00</lastmod><xhtml:link
+            <loc>http://localhost:1313/zh-tw/tags/acs/</loc><lastmod>2024-09-16T21:26:24&#43;08:00</lastmod><xhtml:link
                         rel="alternate"
                         hreflang="en"
-                        href="https://seisokeii.github.io/en/tags/acs/"
+                        href="http://localhost:1313/en/tags/acs/"
                         /><xhtml:link
                     rel="alternate"
                     hreflang="zh-tw"
-                    href="https://seisokeii.github.io/zh-tw/tags/acs/"
+                    href="http://localhost:1313/zh-tw/tags/acs/"
                     /></url><url>
-            <loc>https://seisokeii.github.io/zh-tw/posts/earplug/acs-earplug01/</loc><lastmod>2024-09-16T18:37:42&#43;08:00</lastmod><xhtml:link
+            <loc>http://localhost:1313/zh-tw/posts/earplug/acs-earplug01/</loc><lastmod>2024-09-16T21:26:24&#43;08:00</lastmod><xhtml:link
                         rel="alternate"
                         hreflang="en"
-                        href="https://seisokeii.github.io/en/posts/earplug/acs-earplug01/"
+                        href="http://localhost:1313/en/posts/earplug/acs-earplug01/"
                         /><xhtml:link
                     rel="alternate"
                     hreflang="zh-tw"
-                    href="https://seisokeii.github.io/zh-tw/posts/earplug/acs-earplug01/"
+                    href="http://localhost:1313/zh-tw/posts/earplug/acs-earplug01/"
                     /></url><url>
-            <loc>https://seisokeii.github.io/zh-tw/tags/%E9%99%8D%E5%99%AA%E8%80%B3%E5%A1%9E/</loc><lastmod>2024-09-16T18:37:42&#43;08:00</lastmod></url><url>
-            <loc>https://seisokeii.github.io/zh-tw/categories/%E9%99%8D%E5%99%AA%E8%80%B3%E5%A1%9E/</loc><lastmod>2024-09-16T18:37:42&#43;08:00</lastmod></url><url>
-            <loc>https://seisokeii.github.io/zh-tw/about/about/</loc><lastmod>2024-05-16T02:47:30&#43;08:00</lastmod></url><url>
-            <loc>https://seisokeii.github.io/zh-tw/about/</loc><lastmod>2024-05-16T02:47:30&#43;08:00</lastmod></url><url>
-            <loc>https://seisokeii.github.io/zh-tw/posts/halo/</loc><lastmod>2024-09-16T18:37:42&#43;08:00</lastmod><xhtml:link
+            <loc>http://localhost:1313/zh-tw/tags/%E9%99%8D%E5%99%AA%E8%80%B3%E5%A1%9E/</loc><lastmod>2024-09-16T21:26:24&#43;08:00</lastmod></url><url>
+            <loc>http://localhost:1313/zh-tw/categories/%E9%99%8D%E5%99%AA%E8%80%B3%E5%A1%9E/</loc><lastmod>2024-09-16T21:26:24&#43;08:00</lastmod></url><url>
+            <loc>http://localhost:1313/zh-tw/about/about/</loc><lastmod>2024-05-16T02:47:30&#43;08:00</lastmod></url><url>
+            <loc>http://localhost:1313/zh-tw/posts/halo/</loc><lastmod>2024-09-16T21:26:24&#43;08:00</lastmod><xhtml:link
                         rel="alternate"
                         hreflang="en"
-                        href="https://seisokeii.github.io/en/posts/halo/"
+                        href="http://localhost:1313/en/posts/halo/"
                         /><xhtml:link
                     rel="alternate"
                     hreflang="zh-tw"
-                    href="https://seisokeii.github.io/zh-tw/posts/halo/"
+                    href="http://localhost:1313/zh-tw/posts/halo/"
                     /></url></urlset>

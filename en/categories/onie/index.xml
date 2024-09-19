@@ -1,15 +1,15 @@
 <rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
     <channel>
         <title>ONIE - Category - seisokeii blog</title>
-        <link>https://seisokeii.github.io/en/categories/onie/</link>
+        <link>http://localhost:1313/en/categories/onie/</link>
         <description>ONIE - Category - seisokeii blog</description>
         <generator>Hugo -- gohugo.io</generator><language>en</language><managingEditor>Noway@bimbimbambam (seisokeii)</managingEditor>
-            <webMaster>Noway@bimbimbambam (seisokeii)</webMaster><lastBuildDate>Tue, 13 Aug 2024 17:39:33 &#43;0800</lastBuildDate><atom:link href="https://seisokeii.github.io/en/categories/onie/" rel="self" type="application/rss+xml" /><item>
+            <webMaster>Noway@bimbimbambam (seisokeii)</webMaster><lastBuildDate>Tue, 13 Aug 2024 17:39:33 &#43;0800</lastBuildDate><atom:link href="http://localhost:1313/en/categories/onie/" rel="self" type="application/rss+xml" /><item>
     <title>Open Network Install Environment (ONIE) Simple Introduction</title>
-    <link>https://seisokeii.github.io/en/posts/onie/onie-intro/</link>
+    <link>http://localhost:1313/en/posts/onie/onie-intro/</link>
     <pubDate>Tue, 13 Aug 2024 17:39:33 &#43;0800</pubDate>
     <author>seisokeii</author>
-    <guid>https://seisokeii.github.io/en/posts/onie/onie-intro/</guid>
+    <guid>http://localhost:1313/en/posts/onie/onie-intro/</guid>
     <description><![CDATA[<hr>
 <p>If you have ever used a whitebox switch, you maybe know what Open Network Install Environment is ~
 Here is a simple brief introduction to ONIE. The first task during my internship at Edge-core Networks was to make a new
