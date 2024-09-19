@@ -1,15 +1,15 @@
 <rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
     <channel>
         <title>All Posts - seisokeii blog</title>
-        <link>http://localhost:1313/en/posts/</link>
+        <link>https://seisokeii.github.io/en/posts/</link>
         <description>All Posts | seisokeii blog</description>
         <generator>Hugo -- gohugo.io</generator><language>en</language><managingEditor>Noway@bimbimbambam (seisokeii)</managingEditor>
-            <webMaster>Noway@bimbimbambam (seisokeii)</webMaster><lastBuildDate>Tue, 13 Aug 2024 17:39:33 &#43;0800</lastBuildDate><atom:link href="http://localhost:1313/en/posts/" rel="self" type="application/rss+xml" /><item>
+            <webMaster>Noway@bimbimbambam (seisokeii)</webMaster><lastBuildDate>Tue, 13 Aug 2024 17:39:33 &#43;0800</lastBuildDate><atom:link href="https://seisokeii.github.io/en/posts/" rel="self" type="application/rss+xml" /><item>
     <title>Open Network Install Environment (ONIE) Simple Introduction</title>
-    <link>http://localhost:1313/en/posts/onie/onie-intro/</link>
+    <link>https://seisokeii.github.io/en/posts/onie/onie-intro/</link>
     <pubDate>Tue, 13 Aug 2024 17:39:33 &#43;0800</pubDate>
     <author>seisokeii</author>
-    <guid>http://localhost:1313/en/posts/onie/onie-intro/</guid>
+    <guid>https://seisokeii.github.io/en/posts/onie/onie-intro/</guid>
     <description><![CDATA[<hr>
 <p>If you have ever used a whitebox switch, you maybe know what Open Network Install Environment is ~
 Here is a simple brief introduction to ONIE. The first task during my internship at Edge-core Networks was to make a new
@@ -19,10 +19,10 @@ device compatible with ONIE, which means making ONIE run on the new device.</p>
 </item>
 <item>
     <title>ACS Custom Noise Cancelling Earplugs</title>
-    <link>http://localhost:1313/en/posts/earplug/acs-earplug01/</link>
+    <link>https://seisokeii.github.io/en/posts/earplug/acs-earplug01/</link>
     <pubDate>Sat, 20 Jul 2024 16:28:06 &#43;0800</pubDate>
     <author>seisokeii</author>
-    <guid>http://localhost:1313/en/posts/earplug/acs-earplug01/</guid>
+    <guid>https://seisokeii.github.io/en/posts/earplug/acs-earplug01/</guid>
     <description><![CDATA[<hr>
 <p>I decided to share my experience since there aren&rsquo;t many people talking about this on internet.</p>
 <p>So why did I want custom earplugs? Mainly because my friends often invite me to hardstyle nightclubs and music festivals
@@ -33,10 +33,10 @@ these reasons, I wanted to find a way to protect my ears.</p>]]></description>
 </item>
 <item>
     <title>Halo</title>
-    <link>http://localhost:1313/en/posts/halo/</link>
+    <link>https://seisokeii.github.io/en/posts/halo/</link>
     <pubDate>Tue, 14 May 2024 22:20:52 &#43;0800</pubDate>
     <author>seisokeii</author>
-    <guid>http://localhost:1313/en/posts/halo/</guid>
+    <guid>https://seisokeii.github.io/en/posts/halo/</guid>
     <description><![CDATA[<hr>
 <p>The first post is dedicated to Hugo!</p>
 <p>First of all, I have to say that my luck is really terrible&hellip; I read many articles on the Internet that said Hugo can

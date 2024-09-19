@@ -1,15 +1,15 @@
 <rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
     <channel>
         <title>ONIE - 標籤 - seisokeii blog</title>
-        <link>http://localhost:1313/zh-tw/tags/onie/</link>
+        <link>https://seisokeii.github.io/zh-tw/tags/onie/</link>
         <description>ONIE - 標籤 - seisokeii blog</description>
         <generator>Hugo -- gohugo.io</generator><language>zh-TW</language><managingEditor>Noway@bimbimbambam (seisokeii)</managingEditor>
-            <webMaster>Noway@bimbimbambam (seisokeii)</webMaster><lastBuildDate>Tue, 13 Aug 2024 17:39:33 &#43;0800</lastBuildDate><atom:link href="http://localhost:1313/zh-tw/tags/onie/" rel="self" type="application/rss+xml" /><item>
+            <webMaster>Noway@bimbimbambam (seisokeii)</webMaster><lastBuildDate>Tue, 13 Aug 2024 17:39:33 &#43;0800</lastBuildDate><atom:link href="https://seisokeii.github.io/zh-tw/tags/onie/" rel="self" type="application/rss+xml" /><item>
     <title>Open Network Install Environment (ONIE) 白話文簡介</title>
-    <link>http://localhost:1313/zh-tw/posts/onie/onie-intro/</link>
+    <link>https://seisokeii.github.io/zh-tw/posts/onie/onie-intro/</link>
     <pubDate>Tue, 13 Aug 2024 17:39:33 &#43;0800</pubDate>
     <author>seisokeii</author>
-    <guid>http://localhost:1313/zh-tw/posts/onie/onie-intro/</guid>
+    <guid>https://seisokeii.github.io/zh-tw/posts/onie/onie-intro/</guid>
     <description><![CDATA[<hr>
 <p>用過 whitebox 交換機應該加減都會知道 Open Network Install Environment 這東東吧！<br>
 這邊稍微來提一下這東東吧，剛好最近在 Edge-core Networks 實習期間的第一個任務，就是讓一台新設備與 ONIE 相容，講白了就是想辦法讓
