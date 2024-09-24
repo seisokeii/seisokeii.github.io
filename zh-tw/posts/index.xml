@@ -4,7 +4,18 @@
         <link>https://seisokeii.github.io/zh-tw/posts/</link>
         <description>所有文章 | seisokeii blog</description>
         <generator>Hugo -- gohugo.io</generator><language>zh-TW</language><managingEditor>Noway@bimbimbambam (seisokeii)</managingEditor>
-            <webMaster>Noway@bimbimbambam (seisokeii)</webMaster><lastBuildDate>Thu, 19 Sep 2024 17:03:33 &#43;0800</lastBuildDate><atom:link href="https://seisokeii.github.io/zh-tw/posts/" rel="self" type="application/rss+xml" /><item>
+            <webMaster>Noway@bimbimbambam (seisokeii)</webMaster><lastBuildDate>Tue, 24 Sep 2024 15:56:33 &#43;0800</lastBuildDate><atom:link href="https://seisokeii.github.io/zh-tw/posts/" rel="self" type="application/rss+xml" /><item>
+    <title>SONiC Community Image 初始化設定</title>
+    <link>https://seisokeii.github.io/zh-tw/posts/sonic/sonic-kvm-init-setup/</link>
+    <pubDate>Tue, 24 Sep 2024 15:56:33 &#43;0800</pubDate>
+    <author>seisokeii</author>
+    <guid>https://seisokeii.github.io/zh-tw/posts/sonic/sonic-kvm-init-setup/</guid>
+    <description><![CDATA[<hr>
+<p>在 EVE-NG 或 GNS3 模擬器中跑 <a href="https://sonic.software/" target="_blank" rel="noopener noreffer ">SONiC KVM image</a>，在開機後都會留下一大堆設定，每次拉一台新機器開機就要拔掉一堆設定有夠惱人。</p>
+<p>那這時候懶惰的我肯定是想要自動化的解決問題 (資工人特性 =&gt; 懶)，但是這時候好像還不需要動用到 Ansible 或 pyATS 或是 Nornir
+這種巨砲，所以就用 shell script 來解決。</p>]]></description>
+</item>
+<item>
     <title>Open Network Install Environment (ONIE) How to build?</title>
     <link>https://seisokeii.github.io/zh-tw/posts/onie/onie-build/</link>
     <pubDate>Thu, 19 Sep 2024 17:03:33 &#43;0800</pubDate>

@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <title>SONiC Community Image Initial Setup - seisokeii blog</title><meta name="Description" content="seisokeii&#39;s blog"><meta property="og:url" content="https://seisokeii.github.io/en/posts/sonic/sonic-kvm-init-setup/">
+  <meta property="og:site_name" content="seisokeii blog">
+  <meta property="og:title" content="SONiC Community Image Initial Setup">
+  <meta property="og:description" content=" In EVE-NG or GNS3 simulator, running the SONiC KVM image will leave a lot of settings after booting. It’s annoying to pull out a bunch of settings every time you boot a new machine.
+In this situation, I would like to automate the solution ( computer science people =&gt; lazy), but it seems that I don’t need to use Ansible, pyATS, or Nornir yet. So I use shell script to solve it.">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2024-09-24T15:56:33+08:00">
+    <meta property="article:modified_time" content="2024-09-24T15:56:33+08:00">
+    <meta property="article:tag" content="SONiC">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="SONiC Community Image Initial Setup">
+  <meta name="twitter:description" content=" In EVE-NG or GNS3 simulator, running the SONiC KVM image will leave a lot of settings after booting. It’s annoying to pull out a bunch of settings every time you boot a new machine.
+In this situation, I would like to automate the solution ( computer science people =&gt; lazy), but it seems that I don’t need to use Ansible, pyATS, or Nornir yet. So I use shell script to solve it.">
+<meta name="application-name" content="seisokeii の blog">
+<meta name="apple-mobile-web-app-title" content="seisokeii の blog"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://seisokeii.github.io/en/posts/sonic/sonic-kvm-init-setup/" /><link rel="prev" href="https://seisokeii.github.io/en/posts/onie/onie-build/" /><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.1.1/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.1.1/css/all.min.css"></noscript><link rel="preload" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css"></noscript><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "SONiC Community Image Initial Setup",
+        "inLanguage": "en",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/seisokeii.github.io\/en\/posts\/sonic\/sonic-kvm-init-setup\/"
+        },"genre": "posts","keywords": "SONiC","wordcount":  936 ,
+        "url": "https:\/\/seisokeii.github.io\/en\/posts\/sonic\/sonic-kvm-init-setup\/","datePublished": "2024-09-24T15:56:33+08:00","dateModified": "2024-09-24T15:56:33+08:00","publisher": {
+            "@type": "Organization",
+            "name": ""},"author": {
+                "@type": "Person",
+                "name": "seisokeii"
+            },"description": ""
+    }
+    </script></head>
+    <body data-header-desktop="fixed" data-header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/en/" title="seisokeii blog"><span id="id-1" class="typeit"></span></a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/en/posts/"> Posts </a><a class="menu-item" href="/en/tags/"> Tags </a><a class="menu-item" href="/en/categories/"> Categories </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="Search titles or contents..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="Search">
+                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="Clear">
+                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                    <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+                </a><a href="javascript:void(0);" class="menu-item language" title="Select Language">
+                    <i class="fa fa-globe" aria-hidden="true"></i>                      
+                    <select class="language-select" id="language-select-desktop" onchange="location = this.value;"><option value="/en/posts/sonic/sonic-kvm-init-setup/" selected>English</option><option value="/zh-tw/posts/sonic/sonic-kvm-init-setup/">繁體中文</option></select>
+                </a></div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/en/" title="seisokeii blog"><span id="id-2" class="typeit"></span></a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="Search titles or contents..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="Search">
+                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="Clear">
+                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        Cancel
+                    </a>
+                </div><a class="menu-item" href="/en/posts/" title="">Posts</a><a class="menu-item" href="/en/tags/" title="">Tags</a><a class="menu-item" href="/en/categories/" title="">Categories</a><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+            </a><a href="javascript:void(0);" class="menu-item" title="Select Language">
+                    <i class="fa fa-globe fa-fw" aria-hidden="true"></i>
+                    <select class="language-select" onchange="location = this.value;"><option value="/en/posts/sonic/sonic-kvm-init-setup/" selected>English</option><option value="/zh-tw/posts/sonic/sonic-kvm-init-setup/">繁體中文</option></select>
+                </a></div>
+    </div>
+</header><div class="search-dropdown desktop">
+        <div id="search-dropdown-desktop"></div>
+    </div>
+    <div class="search-dropdown mobile">
+        <div id="search-dropdown-mobile"></div>
+    </div><main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">Contents</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">SONiC Community Image Initial Setup</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="github.com/seisokeii" title="Author" rel="author" class="author"><i class="fas fa-user-circle fa-fw" aria-hidden="true"></i>seisokeii</a></span>&nbsp;<span class="post-category">included in <a href="/en/categories/sonic/"><i class="far fa-folder fa-fw" aria-hidden="true"></i>SONiC</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2024-09-24">2024-09-24</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;936 words&nbsp;
+                <i class="far fa-clock fa-fw" aria-hidden="true"></i>&nbsp;2 minutes&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  data-kept="">
+                <div class="details-summary toc-title">
+                    <span>Contents</span>
+                    <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#preparations">Preparations</a></li>
+    <li><a href="#1-delete-interface-ip">1. Delete Interface IP</a></li>
+    <li><a href="#2-delete-frr-configuration">2. Delete FRR configuration</a></li>
+    <li><a href="#3-delete-bgp-related-config-in-config_dbjson">3. Delete BGP Related Config in config_db.json</a></li>
+    <li><a href="#conclusion">Conclusion</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><hr>
+<p>In EVE-NG or GNS3 simulator, running the <a href="https://sonic.software/" target="_blank" rel="noopener noreffer ">SONiC KVM image</a> will leave a lot of settings after
+booting. It&rsquo;s annoying to pull out a bunch of settings every time you boot a new machine.</p>
+<p>In this situation, I would like to automate the solution ( computer science people =&gt; lazy), but it seems that I don&rsquo;t
+need to use Ansible, pyATS, or Nornir yet. So I use shell script to solve it.</p>
+<p>Let me share my method here. Basically, there are three places that need to be modified:</p>
+<ol>
+<li>Delete Interface IP</li>
+<li>Delete FRR configuration</li>
+<li>Modify BGP_NEIGHBOR and DEVICE_METADATA localhost bgp_asn variable in config_db.json</li>
+</ol>
+<hr>
+<h2 id="preparations">Preparations</h2>
+<p>Before delete configurations, check all containers is UP by using <code>docker ps -a</code> command.</p>
+<p>Now I have no idea how to solve the part that ASIC-related features cannot work. I will look into how to make a patch
+in the future. After all, this situation can only be tested with physical devices, which is a bit troublesome. This post
+will
+not mention how to simulate and escape the need to use ASIC functions.</p>
+<h2 id="1-delete-interface-ip">1. Delete Interface IP</h2>
+<p>Use the <code>show ip int</code> command to see a bunch of interface information by default, and you will see a /31 IP on each
+interface.</p>
+<p>Please refer to the following script to write a deletion script:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="cp">#!/bin/bash
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="cl"><span class="k">for</span> <span class="o">((</span><span class="nv">i</span> <span class="o">=</span> 1, <span class="nv">j</span> <span class="o">=</span> 0<span class="p">;</span> i &lt;<span class="o">=</span> 54, j &lt;<span class="o">=</span> 106<span class="p">;</span> i++, <span class="nv">j</span> <span class="o">+=</span> 2<span class="o">))</span><span class="p">;</span> <span class="k">do</span>
+</span></span><span class="line"><span class="cl">		sudo config interface ip remove Ethernet<span class="nv">$i</span> 10.0.0.<span class="nv">$j</span>/31
+</span></span><span class="line"><span class="cl"><span class="k">done</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">sudo config interface ip remove Loopback0 10.1.0.1/32
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>Above this script, the <code>i</code> depends on how many interfaces you have and whether it starts from 0 or 1, just change it
+yourself.</p>
+<h2 id="2-delete-frr-configuration">2. Delete FRR configuration</h2>
+<p>Next, you can delete the FRR configuration. You can use the <code>show run bgp</code> command to see the settings, and there will
+be a bunch of pre-configured neighbors that are very annoying&hellip;</p>
+<p>Please refer to the following script to modify:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="cp">#!/bin/bash
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="cl"><span class="k">for</span> <span class="o">((</span> <span class="nv">i</span><span class="o">=</span>1<span class="p">;</span> i&lt;<span class="o">=</span>107<span class="p">;</span> <span class="nv">i</span><span class="o">+=</span><span class="m">2</span> <span class="o">))</span>
+</span></span><span class="line"><span class="cl"><span class="k">do</span>
+</span></span><span class="line"><span class="cl">    vtysh -c <span class="s2">&#34;conf&#34;</span> -c <span class="s2">&#34;router bgp 65100&#34;</span> -c <span class="s2">&#34;address-family ipv4 unicast&#34;</span> -c <span class="s2">&#34;no neighbor 10.0.0.</span><span class="nv">$i</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl">    vtysh -c <span class="s2">&#34;conf&#34;</span> -c <span class="s2">&#34;router bgp 65100&#34;</span> -c <span class="s2">&#34;no neighbor 10.0.0.</span><span class="nv">$i</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="k">done</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">vtysh -c <span class="s2">&#34;conf&#34;</span> -c <span class="s2">&#34;router bgp 65100&#34;</span> -c <span class="s2">&#34;address-family ipv4 unicast&#34;</span> -c <span class="s2">&#34;no maximum-paths 64&#34;</span>
+</span></span><span class="line"><span class="cl">vtysh -c <span class="s2">&#34;conf&#34;</span> -c <span class="s2">&#34;router bgp 65100&#34;</span> -c <span class="s2">&#34;address-family ipv4 unicast&#34;</span> -c <span class="s2">&#34;no neighbor PEER_V4&#34;</span>
+</span></span><span class="line"><span class="cl">vtysh -c <span class="s2">&#34;conf&#34;</span> -c <span class="s2">&#34;router bgp 65100&#34;</span> -c <span class="s2">&#34;address-family ipv4 unicast&#34;</span> -c <span class="s2">&#34;no network 10.1.0.1/32&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">vtysh -c <span class="s2">&#34;conf&#34;</span> -c <span class="s2">&#34;router bgp 65100&#34;</span> -c <span class="s2">&#34;address-family ipv6 unicast&#34;</span> -c <span class="s2">&#34;no neighbor PEER_V6&#34;</span>
+</span></span><span class="line"><span class="cl">vtysh -c <span class="s2">&#34;conf&#34;</span> -c <span class="s2">&#34;router bgp 65100&#34;</span> -c <span class="s2">&#34;address-family ipv6 unicast&#34;</span> -c <span class="s2">&#34;no maximum-paths 64&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">vtysh -c <span class="s2">&#34;conf&#34;</span> -c <span class="s2">&#34;router bgp 65100&#34;</span> -c <span class="s2">&#34;no neighbor PEER_V4&#34;</span>
+</span></span><span class="line"><span class="cl">vtysh -c <span class="s2">&#34;conf&#34;</span> -c <span class="s2">&#34;router bgp 65100&#34;</span> -c <span class="s2">&#34;no neighbor PEER_V6&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">vtysh -c <span class="s2">&#34;conf&#34;</span> -c <span class="s2">&#34;router bgp 65100&#34;</span> -c <span class="s2">&#34;no bgp router-id 10.1.0.1&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">vtysh -c <span class="s2">&#34;conf&#34;</span> -c <span class="s2">&#34;no bgp community-list standard allow_list_default_community&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">vtysh -c <span class="s2">&#34;conf&#34;</span> -c <span class="s2">&#34;no ip prefix-list PL_LoopbackV4&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">vtysh -c <span class="s2">&#34;conf&#34;</span> -c <span class="s2">&#34;no route-map ALLOW_LIST_DEPLOYMENT_ID_0_V4&#34;</span>
+</span></span><span class="line"><span class="cl">vtysh -c <span class="s2">&#34;conf&#34;</span> -c <span class="s2">&#34;no route-map ALLOW_LIST_DEPLOYMENT_ID_0_V6&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">vtysh -c <span class="s2">&#34;conf&#34;</span> -c <span class="s2">&#34;no route-map FROM_BGP_PEER_V4&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">vtysh -c <span class="s2">&#34;conf&#34;</span> -c <span class="s2">&#34;no route-map FROM_BGP_PEER_V6&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">vtysh -c <span class="s2">&#34;conf&#34;</span> -c <span class="s2">&#34;no route-map TO_BGP_PEER_V4&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">vtysh -c <span class="s2">&#34;conf&#34;</span> -c <span class="s2">&#34;no route-map TO_BGP_PEER_V6&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">vtysh -c <span class="s2">&#34;conf&#34;</span> -c <span class="s2">&#34;no router bgp 65100&#34;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>This script is actually to see the output of <code>show run bgp</code>, and then paste it here, and remember to modify the neighbor
+part like the interface.</p>
+<h2 id="3-delete-bgp-related-config-in-config_dbjson">3. Delete BGP Related Config in config_db.json</h2>
+<p>We just deleted the FRR settings, but the <code>config_db.json</code> still left some configs, which will make SONiC not work
+properly if it is not cleaned up.</p>
+<p>There are two places to delete:</p>
+<blockquote>
+<p>!!! Remember use sudo to modify !!!</p>
+</blockquote>
+<ol>
+<li>
+<p>BGP_NEIGHBOR</p>
+<p>The most annoying part is that there are settings for several neighbors, open the vi/vim editor to modify.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">admin@sonic$ sudo vi /etc/sonic/config_db.json <span class="c1"># Plz use sudo or you will not have permission to save after deleting</span>
+</span></span><span class="line"><span class="cl">...
+</span></span><span class="line"><span class="cl"><span class="s2">&#34;BGP_DEVICE_GLOBAL&#34;</span>: <span class="o">{</span>
+</span></span><span class="line"><span class="cl">        <span class="s2">&#34;STATE&#34;</span>: <span class="o">{</span>
+</span></span><span class="line"><span class="cl">            <span class="s2">&#34;tsa_enabled&#34;</span>: <span class="s2">&#34;false&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="o">}</span>
+</span></span><span class="line"><span class="cl">    <span class="o">}</span>,
+</span></span><span class="line"><span class="cl">    <span class="s2">&#34;BGP_NEIGHBOR&#34;</span>: <span class="o">{</span>
+</span></span><span class="line"><span class="cl">      <span class="c1">### Delete all neighbors like this</span>
+</span></span><span class="line"><span class="cl">    <span class="o">}</span>,
+</span></span><span class="line"><span class="cl">    <span class="s2">&#34;CRM&#34;</span>: <span class="o">{</span>
+</span></span><span class="line"><span class="cl">        <span class="s2">&#34;Config&#34;</span>: <span class="o">{</span>
+</span></span><span class="line"><span class="cl">            <span class="s2">&#34;acl_counter_high_threshold&#34;</span>: <span class="s2">&#34;85&#34;</span>,
+</span></span><span class="line"><span class="cl">            <span class="s2">&#34;acl_counter_low_threshold&#34;</span>: <span class="s2">&#34;70&#34;</span>,
+</span></span><span class="line"><span class="cl">            ...
+</span></span></code></pre></td></tr></table>
+</div>
+</div></li>
+<li>
+<p>DEVICE_METADATA 的 localhost</p>
+<p>Find <code>DEVICE_METADATA</code> and <code>localhost</code>, then delete <code>&quot;bgp_asn&quot;: &quot;65100&quot;,</code>.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">        <span class="s2">&#34;snat_entry_low_threshold&#34;</span>: <span class="s2">&#34;70&#34;</span>,
+</span></span><span class="line"><span class="cl">            <span class="s2">&#34;snat_entry_threshold_type&#34;</span>: <span class="s2">&#34;percentage&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="o">}</span>
+</span></span><span class="line"><span class="cl">    <span class="o">}</span>,
+</span></span><span class="line"><span class="cl">    <span class="s2">&#34;DEVICE_METADATA&#34;</span>: <span class="o">{</span>
+</span></span><span class="line"><span class="cl">        <span class="s2">&#34;localhost&#34;</span>: <span class="o">{</span>
+</span></span><span class="line"><span class="cl">            <span class="c1"># Delete this &#34;bgp_asn&#34;: &#34;65100&#34;,</span>
+</span></span><span class="line"><span class="cl">            <span class="s2">&#34;buffer_model&#34;</span>: <span class="s2">&#34;traditional&#34;</span>,
+</span></span><span class="line"><span class="cl">            <span class="s2">&#34;default_bgp_status&#34;</span>: <span class="s2">&#34;up&#34;</span>,
+</span></span><span class="line"><span class="cl">            <span class="s2">&#34;default_pfcwd_status&#34;</span>: <span class="s2">&#34;disable&#34;</span>,
+</span></span></code></pre></td></tr></table>
+</div>
+</div></li>
+</ol>
+<p>This is what SONiC community image needs to be modified.</p>
+<span style="color: red">
+Remember to save the file and reload the configuration after modifying it, use the `sudo config reload -y` command.
+</span>
+<blockquote>
+<p>After reload config_db.json, you can use <code>watch docker ps -a</code> to check if all containers are working properly.</p>
+</blockquote>
+<p>Now you have completed the basic settings, and you can finally start playing with the settings you want.</p>
+<h2 id="conclusion">Conclusion</h2>
+<p>In the beginning, I saw many bloggers actually teach how to install, and after installation, they immediately set up
+BGP, and then it works&hellip; WTF I just cannot do it like them QQ</p>
+<p>After debugging for a while, I found there are some configs still in the <code>config_db.json</code> file. Fortunately, I only need
+to change it once for each machine&hellip; I will take a look at the SONiC source code when I have time to see how to make it
+a patch file.</p>
+<p>This post for me is just a workaround, not a good solution QQ But it&rsquo;s simple and easy to understand.</p>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>Updated on 2024-09-24</span>
+            </div></div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw" aria-hidden="true"></i>&nbsp;<a href="/en/tags/sonic/">SONiC</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">Back</a></span>&nbsp;|&nbsp;<span><a href="/en/">Home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/en/posts/onie/onie-build/" class="prev" rel="prev" title="Open Network Install Environment (ONIE) How to build?"><i class="fas fa-angle-left fa-fw" aria-hidden="true"></i>Open Network Install Environment (ONIE) How to build?</a></div>
+</div>
+<div id="comments"><div id="disqus_thread" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://disqus.com/?ref_noscript">Disqus</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.134.2">Hugo</a> | Theme - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.11"><i class="far fa-kiss-wink-heart fa-fw" aria-hidden="true"></i> LoveIt</a>
+                </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright fa-fw" aria-hidden="true"></i><span itemprop="copyrightYear">2024</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="github.com/seisokeii" target="_blank">seisokeii</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="Back to Top">
+                <i class="fas fa-arrow-up fa-fw" aria-hidden="true"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="View Comments">
+                <i class="fas fa-comment fa-fw" aria-hidden="true"></i>
+            </a>
+        </div><script type="text/javascript" src="https://.disqus.com/embed.js" defer></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/autocomplete.js@0.38.1/dist/autocomplete.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lunr@2.3.9/lunr.min.js"></script><script type="text/javascript" src="/lib/lunr/lunr.stemmer.support.min.js"></script><script type="text/javascript" src="/lib/lunr/lunr.zh.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lazysizes@5.3.2/lazysizes.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/clipboard@2.0.11/dist/clipboard.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/sharer.js@0.5.1/sharer.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/typeit@8.6.0/dist/index.umd.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":30},"comment":{},"data":{"id-1":"seisokeii の blog","id-2":"seisokeii の blog"},"search":{"highlightTag":"em","lunrLanguageCode":"en","lunrSegmentitURL":"/lib/lunr/lunr.segmentit.js","maxResultLength":10,"noResultsFound":"No results found","snippetLength":30},"typeit":{"cursorChar":"|","cursorSpeed":1000,"data":{"id-1":["id-1"],"id-2":["id-2"]},"duration":-1,"speed":10}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

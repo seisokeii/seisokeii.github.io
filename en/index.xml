@@ -4,9 +4,21 @@
         <link>https://seisokeii.github.io/en/</link>
         <description>seisokeii&#39;s blog</description>
         <generator>Hugo -- gohugo.io</generator><language>en</language><managingEditor>Noway@bimbimbambam (seisokeii)</managingEditor>
-            <webMaster>Noway@bimbimbambam (seisokeii)</webMaster><lastBuildDate>Thu, 19 Sep 2024 17:03:33 &#43;0800</lastBuildDate>
+            <webMaster>Noway@bimbimbambam (seisokeii)</webMaster><lastBuildDate>Tue, 24 Sep 2024 15:56:33 &#43;0800</lastBuildDate>
             <atom:link href="https://seisokeii.github.io/en/index.xml" rel="self" type="application/rss+xml" />
         <item>
+    <title>SONiC Community Image Initial Setup</title>
+    <link>https://seisokeii.github.io/en/posts/sonic/sonic-kvm-init-setup/</link>
+    <pubDate>Tue, 24 Sep 2024 15:56:33 &#43;0800</pubDate>
+    <author>seisokeii</author>
+    <guid>https://seisokeii.github.io/en/posts/sonic/sonic-kvm-init-setup/</guid>
+    <description><![CDATA[<hr>
+<p>In EVE-NG or GNS3 simulator, running the <a href="https://sonic.software/" target="_blank" rel="noopener noreffer ">SONiC KVM image</a> will leave a lot of settings after
+booting. It&rsquo;s annoying to pull out a bunch of settings every time you boot a new machine.</p>
+<p>In this situation, I would like to automate the solution ( computer science people =&gt; lazy), but it seems that I don&rsquo;t
+need to use Ansible, pyATS, or Nornir yet. So I use shell script to solve it.</p>]]></description>
+</item>
+<item>
     <title>Open Network Install Environment (ONIE) How to build?</title>
     <link>https://seisokeii.github.io/en/posts/onie/onie-build/</link>
     <pubDate>Thu, 19 Sep 2024 17:03:33 &#43;0800</pubDate>
