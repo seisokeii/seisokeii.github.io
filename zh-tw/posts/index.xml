@@ -4,7 +4,20 @@
         <link>https://seisokeii.github.io/zh-tw/posts/</link>
         <description>所有文章 | seisokeii blog</description>
         <generator>Hugo -- gohugo.io</generator><language>zh-TW</language><managingEditor>Noway@bimbimbambam (seisokeii)</managingEditor>
-            <webMaster>Noway@bimbimbambam (seisokeii)</webMaster><lastBuildDate>Tue, 24 Sep 2024 15:56:33 &#43;0800</lastBuildDate><atom:link href="https://seisokeii.github.io/zh-tw/posts/" rel="self" type="application/rss+xml" /><item>
+            <webMaster>Noway@bimbimbambam (seisokeii)</webMaster><lastBuildDate>Wed, 25 Sep 2024 16:54:37 &#43;0800</lastBuildDate><atom:link href="https://seisokeii.github.io/zh-tw/posts/" rel="self" type="application/rss+xml" /><item>
+    <title>碩班時期公司實習心得</title>
+    <link>https://seisokeii.github.io/zh-tw/posts/internship/edgecore-intern/</link>
+    <pubDate>Wed, 25 Sep 2024 16:54:37 &#43;0800</pubDate>
+    <author>seisokeii</author>
+    <guid>https://seisokeii.github.io/zh-tw/posts/internship/edgecore-intern/</guid>
+    <description><![CDATA[<hr>
+<p>最近實習生涯即將結束，剛好可以來湊一篇心得順便當作是紀錄唄～</p>
+<hr>
+<h2 id="窩滴來歷">窩滴來歷</h2>
+<p>這標題聽起來很猛誒XD 沒有啦~ 偶只是個菜雞。</p>
+<p>自高中畢業後大學跟碩士都是在資工系，但但但偏偏我就是程式能力欠訓練，然後我也沒花多少時間在刷題搞演算法&hellip; 大多時間都是在搞機房維運。</p>]]></description>
+</item>
+<item>
     <title>SONiC Community Image 初始化設定</title>
     <link>https://seisokeii.github.io/zh-tw/posts/sonic/sonic-kvm-init-setup/</link>
     <pubDate>Tue, 24 Sep 2024 15:56:33 &#43;0800</pubDate>
