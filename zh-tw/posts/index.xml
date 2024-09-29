@@ -4,18 +4,29 @@
         <link>https://seisokeii.github.io/zh-tw/posts/</link>
         <description>所有文章 | seisokeii blog</description>
         <generator>Hugo -- gohugo.io</generator><language>zh-TW</language><managingEditor>Noway@bimbimbambam (seisokeii)</managingEditor>
-            <webMaster>Noway@bimbimbambam (seisokeii)</webMaster><lastBuildDate>Wed, 25 Sep 2024 16:54:37 &#43;0800</lastBuildDate><atom:link href="https://seisokeii.github.io/zh-tw/posts/" rel="self" type="application/rss+xml" /><item>
+            <webMaster>Noway@bimbimbambam (seisokeii)</webMaster><lastBuildDate>Thu, 26 Sep 2024 10:03:56 &#43;0800</lastBuildDate><atom:link href="https://seisokeii.github.io/zh-tw/posts/" rel="self" type="application/rss+xml" /><item>
+    <title>陽明交通大學資訊科學與工程學系碩士丁組</title>
+    <link>https://seisokeii.github.io/zh-tw/posts/nycucsit/nycu-csit-master-degree/</link>
+    <pubDate>Thu, 26 Sep 2024 10:03:56 &#43;0800</pubDate>
+    <author>seisokeii</author>
+    <guid>https://seisokeii.github.io/zh-tw/posts/nycucsit/nycu-csit-master-degree/</guid>
+    <description><![CDATA[<div class="featured-image">
+                <img src="/images/CSIT/csit-cht-banqiao-IDC.png" referrerpolicy="no-referrer">
+            </div><p>上面這張圖片是系計中跟另一間實驗室去參觀中華電信板橋資料中心，聽說這裡要參觀很難申請呢XD</p>
+<hr>
+<p>趁著要當兵前趕緊寫一下～ 現在九月好像現在也是大四要準備推甄的時期了呢。</p>]]></description>
+</item>
+<item>
     <title>碩班時期公司實習心得</title>
     <link>https://seisokeii.github.io/zh-tw/posts/internship/edgecore-intern/</link>
     <pubDate>Wed, 25 Sep 2024 16:54:37 &#43;0800</pubDate>
     <author>seisokeii</author>
     <guid>https://seisokeii.github.io/zh-tw/posts/internship/edgecore-intern/</guid>
-    <description><![CDATA[<hr>
-<p>最近實習生涯即將結束，剛好可以來湊一篇心得順便當作是紀錄唄～</p>
+    <description><![CDATA[<div class="featured-image">
+                <img src="/images/internship/internship-cafe.png" referrerpolicy="no-referrer">
+            </div><p>上面這張圖是在公司的某一個角落，就像葬送的芙莉蓮中探索迷宮都要將每個角落都摸透一樣，美妙的地方就是這樣找到的XD</p>
 <hr>
-<h2 id="窩滴來歷">窩滴來歷</h2>
-<p>這標題聽起來很猛誒XD 沒有啦~ 偶只是個菜雞。</p>
-<p>自高中畢業後大學跟碩士都是在資工系，但但但偏偏我就是程式能力欠訓練，然後我也沒花多少時間在刷題搞演算法&hellip; 大多時間都是在搞機房維運。</p>]]></description>
+<p>最近實習生涯即將結束，剛好可以來湊一篇心得順便當作是紀錄唄～</p>]]></description>
 </item>
 <item>
     <title>SONiC Community Image 初始化設定</title>
@@ -23,10 +34,11 @@
     <pubDate>Tue, 24 Sep 2024 15:56:33 &#43;0800</pubDate>
     <author>seisokeii</author>
     <guid>https://seisokeii.github.io/zh-tw/posts/sonic/sonic-kvm-init-setup/</guid>
-    <description><![CDATA[<hr>
-<p>在 EVE-NG 或 GNS3 模擬器中跑 <a href="https://sonic.software/" target="_blank" rel="noopener noreffer ">SONiC KVM image</a>，在開機後都會留下一大堆設定，每次拉一台新機器開機就要拔掉一堆設定有夠惱人。</p>
-<p>那這時候懶惰的我肯定是想要自動化的解決問題 (資工人特性 =&gt; 懶)，但是這時候好像還不需要動用到 Ansible 或 pyATS 或是 Nornir
-這種巨砲，所以就用 shell script 來解決。</p>]]></description>
+    <description><![CDATA[<div class="featured-image">
+                <img src="/images/SONiC/sonic-preview01.png" referrerpolicy="no-referrer">
+            </div><p>上面這張圖就只是為了驗證一些概念而接上去的一個小小的 Lab 而已QQ</p>
+<hr>
+<p>在 EVE-NG 或 GNS3 模擬器中跑 <a href="https://sonic.software/" target="_blank" rel="noopener noreffer ">SONiC KVM image</a>，在開機後都會留下一大堆設定，每次拉一台新機器開機就要拔掉一堆設定有夠惱人。</p>]]></description>
 </item>
 <item>
     <title>Open Network Install Environment (ONIE) How to build?</title>
@@ -34,7 +46,10 @@
     <pubDate>Thu, 19 Sep 2024 17:03:33 &#43;0800</pubDate>
     <author>seisokeii</author>
     <guid>https://seisokeii.github.io/zh-tw/posts/onie/onie-build/</guid>
-    <description><![CDATA[<hr>
+    <description><![CDATA[<div class="featured-image">
+                <img src="/images/ONIE/onie-dev-machine.jpeg" referrerpolicy="no-referrer">
+            </div><p>上面這張圖是窩在開發用的機器，長得有點像是 1U 的 N3k 誒XD</p>
+<hr>
 <p>繼上一篇 <code>ONIE 白話文簡介</code> ，來稍微分享一下 ONIE 這東東是怎麼 build 起來的唄！</p>
 <p>這邊會類似一個教學文件，但是當然不可能會把公司的資訊放在這~ 就只是大致看一下一間網通廠是怎麼搞出這東東的而已。</p>]]></description>
 </item>
@@ -44,7 +59,10 @@
     <pubDate>Tue, 13 Aug 2024 17:39:33 &#43;0800</pubDate>
     <author>seisokeii</author>
     <guid>https://seisokeii.github.io/zh-tw/posts/onie/onie-intro/</guid>
-    <description><![CDATA[<hr>
+    <description><![CDATA[<div class="featured-image">
+                <img src="/images/ONIE/onie-Gemini-Generated-ONIE.jpg" referrerpolicy="no-referrer">
+            </div><p>上面這張圖是叫 Gemini 產的，說想要一張日本 ONIE 的圖，結果就變這樣了XD</p>
+<hr>
 <p>用過 whitebox 交換機應該加減都會知道 Open Network Install Environment 這東東吧！<br>
 這邊稍微來提一下這東東吧，剛好最近在 Edge-core Networks 實習期間的第一個任務，就是讓一台新設備與 ONIE 相容，講白了就是想辦法讓
 ONIE 可以在新設備上面跑啦~</p>]]></description>
@@ -55,7 +73,10 @@ ONIE 可以在新設備上面跑啦~</p>]]></description>
     <pubDate>Sat, 20 Jul 2024 16:28:06 &#43;0800</pubDate>
     <author>seisokeii</author>
     <guid>https://seisokeii.github.io/zh-tw/posts/earplug/acs-earplug01/</guid>
-    <description><![CDATA[<hr>
+    <description><![CDATA[<div class="featured-image">
+                <img src="/images/ACSEarplug/acs_earplug_box.png" referrerpolicy="no-referrer">
+            </div><p>上面這圖不用多說了吧~ 就是 ACS 客製化耳塞拿到的盒子，滿意外沒有很大XD</p>
+<hr>
 <p>想說網路上很少人在分享這東東，就來分享一下唄。</p>
 <p>那為什麼會想客製化耳塞呢？ 主要是因為朋友會揪一些 hardstyle 的夜店場跟音樂節像是 Defqon.1、Intents、&hellip;
 之類的，然後耳膜可是非常脆弱的，我還不想要這麼快就失聰QQ</p>]]></description>
@@ -66,7 +87,10 @@ ONIE 可以在新設備上面跑啦~</p>]]></description>
     <pubDate>Tue, 14 May 2024 22:20:52 &#43;0800</pubDate>
     <author>seisokeii</author>
     <guid>https://seisokeii.github.io/zh-tw/posts/halo/</guid>
-    <description><![CDATA[<hr>
+    <description><![CDATA[<div class="featured-image">
+                <img src="/images/halo/sub-zero-project-halo.jpg" referrerpolicy="no-referrer">
+            </div><p>開場要打招呼，就突然想到 sub zero project 有一首歌叫 HALO，蠻喜歡的推薦推薦XD</p>
+<hr>
 <p>第一個貼文就送給 hugo 吧！</p>
 <p>首先，不得不說偶的運氣真的差的可憐&hellip; 看了網路很多文章都寫說 hugo 5分鐘就可以架設好了，結果窩花了一天的時間(20小時以上)
 才搞定開始寫這則貼文&hellip;</p>]]></description>

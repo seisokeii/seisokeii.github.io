@@ -10,7 +10,10 @@
     <pubDate>Thu, 19 Sep 2024 17:03:33 &#43;0800</pubDate>
     <author>seisokeii</author>
     <guid>https://seisokeii.github.io/zh-tw/posts/onie/onie-build/</guid>
-    <description><![CDATA[<hr>
+    <description><![CDATA[<div class="featured-image">
+                <img src="/images/ONIE/onie-dev-machine.jpeg" referrerpolicy="no-referrer">
+            </div><p>上面這張圖是窩在開發用的機器，長得有點像是 1U 的 N3k 誒XD</p>
+<hr>
 <p>繼上一篇 <code>ONIE 白話文簡介</code> ，來稍微分享一下 ONIE 這東東是怎麼 build 起來的唄！</p>
 <p>這邊會類似一個教學文件，但是當然不可能會把公司的資訊放在這~ 就只是大致看一下一間網通廠是怎麼搞出這東東的而已。</p>]]></description>
 </item>
@@ -20,7 +23,10 @@
     <pubDate>Tue, 13 Aug 2024 17:39:33 &#43;0800</pubDate>
     <author>seisokeii</author>
     <guid>https://seisokeii.github.io/zh-tw/posts/onie/onie-intro/</guid>
-    <description><![CDATA[<hr>
+    <description><![CDATA[<div class="featured-image">
+                <img src="/images/ONIE/onie-Gemini-Generated-ONIE.jpg" referrerpolicy="no-referrer">
+            </div><p>上面這張圖是叫 Gemini 產的，說想要一張日本 ONIE 的圖，結果就變這樣了XD</p>
+<hr>
 <p>用過 whitebox 交換機應該加減都會知道 Open Network Install Environment 這東東吧！<br>
 這邊稍微來提一下這東東吧，剛好最近在 Edge-core Networks 實習期間的第一個任務，就是讓一台新設備與 ONIE 相容，講白了就是想辦法讓
 ONIE 可以在新設備上面跑啦~</p>]]></description>

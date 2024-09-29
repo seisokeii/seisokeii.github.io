@@ -10,7 +10,10 @@
     <pubDate>Tue, 24 Sep 2024 15:56:33 &#43;0800</pubDate>
     <author>seisokeii</author>
     <guid>https://seisokeii.github.io/en/posts/sonic/sonic-kvm-init-setup/</guid>
-    <description><![CDATA[<hr>
+    <description><![CDATA[<div class="featured-image">
+                <img src="/images/SONiC/sonic-preview01.png" referrerpolicy="no-referrer">
+            </div><p>Above image is just for verifying some concepts then build a small Lab QQ</p>
+<hr>
 <p>In EVE-NG or GNS3 simulator, running the <a href="https://sonic.software/" target="_blank" rel="noopener noreffer ">SONiC KVM image</a> will leave a lot of settings after
 booting. It&rsquo;s annoying to pull out a bunch of settings every time you boot a new machine.</p>
 <p>In this situation, I would like to automate the solution ( computer science people =&gt; lazy), but it seems that I don&rsquo;t

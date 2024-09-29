@@ -7,24 +7,24 @@
         <title>Open Network Install Environment (ONIE) How to build? - seisokeii blog</title><meta name="Description" content="seisokeii&#39;s blog"><meta property="og:url" content="https://seisokeii.github.io/en/posts/onie/onie-build/">
   <meta property="og:site_name" content="seisokeii blog">
   <meta property="og:title" content="Open Network Install Environment (ONIE) How to build?">
-  <meta property="og:description" content=" Following the previous article ONIE Simple Introduction, let’s briefly share how ONIE is built!
+  <meta property="og:description" content="Above images is the machine I used for development, it looks like a 1U N3k XD
+Following the previous article ONIE Simple Introduction, let’s briefly share how ONIE is built!
 This will be similar to a tutorial, but of course it’s impossible to put company information here~ It’s just a general look at how a network equipment manufacturer makes this thing.
-Preparation - Prepare the development environment Honestly, the development environment is just a standard Linux machine, I use a virtual machine~
-This environment is actually based on the recommendations on the ONIE official website to install the DUE package made by CumulusNetworks, otherwise anyone who has compiled the Linux Kernel should know how dog shit the dependency is. After using DUE, everything will be automatically handled~">
+Preparation - Prepare the development environment Honestly, the development environment is just a standard Linux machine, I use a virtual machine~">
   <meta property="og:locale" content="en">
   <meta property="og:type" content="article">
     <meta property="article:section" content="posts">
     <meta property="article:published_time" content="2024-09-19T17:03:33+08:00">
-    <meta property="article:modified_time" content="2024-09-19T18:15:24+08:00">
+    <meta property="article:modified_time" content="2024-09-29T22:52:57+08:00">
     <meta property="article:tag" content="ONIE">
     <meta property="article:tag" content="SONiC">
 
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Open Network Install Environment (ONIE) How to build?">
-  <meta name="twitter:description" content=" Following the previous article ONIE Simple Introduction, let’s briefly share how ONIE is built!
+  <meta name="twitter:description" content="Above images is the machine I used for development, it looks like a 1U N3k XD
+Following the previous article ONIE Simple Introduction, let’s briefly share how ONIE is built!
 This will be similar to a tutorial, but of course it’s impossible to put company information here~ It’s just a general look at how a network equipment manufacturer makes this thing.
-Preparation - Prepare the development environment Honestly, the development environment is just a standard Linux machine, I use a virtual machine~
-This environment is actually based on the recommendations on the ONIE official website to install the DUE package made by CumulusNetworks, otherwise anyone who has compiled the Linux Kernel should know how dog shit the dependency is. After using DUE, everything will be automatically handled~">
+Preparation - Prepare the development environment Honestly, the development environment is just a standard Linux machine, I use a virtual machine~">
 <meta name="application-name" content="seisokeii の blog">
 <meta name="apple-mobile-web-app-title" content="seisokeii の blog"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
@@ -39,8 +39,8 @@ This environment is actually based on the recommendations on the ONIE official w
         "mainEntityOfPage": {
             "@type": "WebPage",
             "@id": "https:\/\/seisokeii.github.io\/en\/posts\/onie\/onie-build\/"
-        },"genre": "posts","keywords": "ONIE, SONiC","wordcount":  1448 ,
-        "url": "https:\/\/seisokeii.github.io\/en\/posts\/onie\/onie-build\/","datePublished": "2024-09-19T17:03:33+08:00","dateModified": "2024-09-19T18:15:24+08:00","publisher": {
+        },"genre": "posts","keywords": "ONIE, SONiC","wordcount":  1464 ,
+        "url": "https:\/\/seisokeii.github.io\/en\/posts\/onie\/onie-build\/","datePublished": "2024-09-19T17:03:33+08:00","dateModified": "2024-09-29T22:52:57+08:00","publisher": {
             "@type": "Organization",
             "name": ""},"author": {
                 "@type": "Person",
@@ -53,7 +53,7 @@ This environment is actually based on the recommendations on the ONIE official w
         <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
     <div class="header-wrapper">
         <div class="header-title">
-            <a href="/en/" title="seisokeii blog"><span id="id-1" class="typeit"></span></a>
+            <a href="/en/" title="seisokeii blog">seisokeii の blog</a>
         </div>
         <div class="menu">
             <div class="menu-inner"><a class="menu-item" href="/en/posts/"> Posts </a><a class="menu-item" href="/en/tags/"> Tags </a><a class="menu-item" href="/en/categories/"> Categories </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
@@ -79,7 +79,7 @@ This environment is actually based on the recommendations on the ONIE official w
     <div class="header-container">
         <div class="header-wrapper">
             <div class="header-title">
-                <a href="/en/" title="seisokeii blog"><span id="id-2" class="typeit"></span></a>
+                <a href="/en/" title="seisokeii blog">seisokeii の blog</a>
             </div>
             <div class="menu-toggle" id="menu-toggle-mobile">
                 <span></span><span></span><span></span>
@@ -119,9 +119,16 @@ This environment is actually based on the recommendations on the ONIE official w
             <div class="toc-content" id="toc-content-auto"></div>
         </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">Open Network Install Environment (ONIE) How to build?</h1><div class="post-meta">
             <div class="post-meta-line"><span class="post-author"><a href="github.com/seisokeii" title="Author" rel="author" class="author"><i class="fas fa-user-circle fa-fw" aria-hidden="true"></i>seisokeii</a></span>&nbsp;<span class="post-category">included in <a href="/en/categories/onie/"><i class="far fa-folder fa-fw" aria-hidden="true"></i>ONIE</a></span></div>
-            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2024-09-19">2024-09-19</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;1448 words&nbsp;
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2024-09-19">2024-09-19</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;1464 words&nbsp;
                 <i class="far fa-clock fa-fw" aria-hidden="true"></i>&nbsp;7 minutes&nbsp;</div>
-        </div><div class="details toc" id="toc-static"  data-kept="">
+        </div><div class="featured-image"><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="/images/ONIE/onie-dev-machine.jpeg"
+        data-srcset="/images/ONIE/onie-dev-machine.jpeg, /images/ONIE/onie-dev-machine.jpeg 1.5x, /images/ONIE/onie-dev-machine.jpeg 2x"
+        data-sizes="auto"
+        alt="/images/ONIE/onie-dev-machine.jpeg"
+        title="/images/ONIE/onie-dev-machine.jpeg" /></div><div class="details toc" id="toc-static"  data-kept="">
                 <div class="details-summary toc-title">
                     <span>Contents</span>
                     <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
@@ -141,7 +148,8 @@ This environment is actually based on the recommendations on the ONIE official w
     </li>
   </ul>
 </nav></div>
-            </div><div class="content" id="content"><hr>
+            </div><div class="content" id="content"><p>Above images is the machine I used for development, it looks like a 1U N3k XD</p>
+<hr>
 <p>Following the previous article <code>ONIE Simple Introduction</code>, let&rsquo;s briefly share how ONIE is built!</p>
 <p>This will be similar to a tutorial, but of course it&rsquo;s impossible to put company information here~ It&rsquo;s just a general
 look at how a network equipment manufacturer makes this thing.</p>
@@ -339,7 +347,7 @@ are and how they work XD</p>
     <div class="post-info">
         <div class="post-info-line">
             <div class="post-info-mod">
-                <span>Updated on 2024-09-19</span>
+                <span>Updated on 2024-09-29</span>
             </div></div>
         <div class="post-info-line">
             <div class="post-info-md"></div>
@@ -373,5 +381,5 @@ are and how they work XD</p>
             </a><a href="#" id="view-comments" class="fixed-button" title="View Comments">
                 <i class="fas fa-comment fa-fw" aria-hidden="true"></i>
             </a>
-        </div><script type="text/javascript" src="https://.disqus.com/embed.js" defer></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/autocomplete.js@0.38.1/dist/autocomplete.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lunr@2.3.9/lunr.min.js"></script><script type="text/javascript" src="/lib/lunr/lunr.stemmer.support.min.js"></script><script type="text/javascript" src="/lib/lunr/lunr.zh.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lazysizes@5.3.2/lazysizes.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/clipboard@2.0.11/dist/clipboard.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/sharer.js@0.5.1/sharer.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/typeit@8.6.0/dist/index.umd.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":30},"comment":{},"data":{"id-1":"seisokeii の blog","id-2":"seisokeii の blog"},"search":{"highlightTag":"em","lunrLanguageCode":"en","lunrSegmentitURL":"/lib/lunr/lunr.segmentit.js","maxResultLength":10,"noResultsFound":"No results found","snippetLength":30},"typeit":{"cursorChar":"|","cursorSpeed":1000,"data":{"id-1":["id-1"],"id-2":["id-2"]},"duration":-1,"speed":10}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+        </div><script type="text/javascript" src="https://.disqus.com/embed.js" defer></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/autocomplete.js@0.38.1/dist/autocomplete.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lunr@2.3.9/lunr.min.js"></script><script type="text/javascript" src="/lib/lunr/lunr.stemmer.support.min.js"></script><script type="text/javascript" src="/lib/lunr/lunr.zh.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lazysizes@5.3.2/lazysizes.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/clipboard@2.0.11/dist/clipboard.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/sharer.js@0.5.1/sharer.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":30},"comment":{},"search":{"highlightTag":"em","lunrLanguageCode":"en","lunrSegmentitURL":"/lib/lunr/lunr.segmentit.js","maxResultLength":10,"noResultsFound":"No results found","snippetLength":30}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
 </html>

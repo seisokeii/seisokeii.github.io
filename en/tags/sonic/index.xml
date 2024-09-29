@@ -10,7 +10,10 @@
     <pubDate>Tue, 24 Sep 2024 15:56:33 &#43;0800</pubDate>
     <author>seisokeii</author>
     <guid>https://seisokeii.github.io/en/posts/sonic/sonic-kvm-init-setup/</guid>
-    <description><![CDATA[<hr>
+    <description><![CDATA[<div class="featured-image">
+                <img src="/images/SONiC/sonic-preview01.png" referrerpolicy="no-referrer">
+            </div><p>Above image is just for verifying some concepts then build a small Lab QQ</p>
+<hr>
 <p>In EVE-NG or GNS3 simulator, running the <a href="https://sonic.software/" target="_blank" rel="noopener noreffer ">SONiC KVM image</a> will leave a lot of settings after
 booting. It&rsquo;s annoying to pull out a bunch of settings every time you boot a new machine.</p>
 <p>In this situation, I would like to automate the solution ( computer science people =&gt; lazy), but it seems that I don&rsquo;t
@@ -22,16 +25,15 @@ need to use Ansible, pyATS, or Nornir yet. So I use shell script to solve it.</p
     <pubDate>Thu, 19 Sep 2024 17:03:33 &#43;0800</pubDate>
     <author>seisokeii</author>
     <guid>https://seisokeii.github.io/en/posts/onie/onie-build/</guid>
-    <description><![CDATA[<hr>
+    <description><![CDATA[<div class="featured-image">
+                <img src="/images/ONIE/onie-dev-machine.jpeg" referrerpolicy="no-referrer">
+            </div><p>Above images is the machine I used for development, it looks like a 1U N3k XD</p>
+<hr>
 <p>Following the previous article <code>ONIE Simple Introduction</code>, let&rsquo;s briefly share how ONIE is built!</p>
 <p>This will be similar to a tutorial, but of course it&rsquo;s impossible to put company information here~ It&rsquo;s just a general
 look at how a network equipment manufacturer makes this thing.</p>
 <h2 id="preparation---prepare-the-development-environment">Preparation - Prepare the development environment</h2>
-<p>Honestly, the development environment is just a standard Linux machine, I use a virtual machine~</p>
-<p>This environment is actually based on the recommendations on the ONIE official website to install the DUE package made
-by
-CumulusNetworks, otherwise anyone who has compiled the Linux Kernel should know how dog shit the dependency is. After
-using DUE, everything will be automatically handled~</p>]]></description>
+<p>Honestly, the development environment is just a standard Linux machine, I use a virtual machine~</p>]]></description>
 </item>
 <item>
     <title>Open Network Install Environment (ONIE) Simple Introduction</title>
@@ -39,12 +41,13 @@ using DUE, everything will be automatically handled~</p>]]></description>
     <pubDate>Tue, 13 Aug 2024 17:39:33 &#43;0800</pubDate>
     <author>seisokeii</author>
     <guid>https://seisokeii.github.io/en/posts/onie/onie-intro/</guid>
-    <description><![CDATA[<hr>
+    <description><![CDATA[<div class="featured-image">
+                <img src="/images/ONIE/onie-Gemini-Generated-ONIE.jpg" referrerpolicy="no-referrer">
+            </div><p>Above image is generate by Gemini. I just say that I want a Japanese style ONIE image, and it becomes like this XD</p>
+<hr>
 <p>If you have ever used a whitebox switch, you maybe know what Open Network Install Environment is ~
 Here is a simple brief introduction to ONIE. The first task during my internship at Edge-core Networks was to make a new
-device compatible with ONIE, which means making ONIE run on the new device.</p>
-<h2 id="what-is-onie">What is ONIE?</h2>
-<p>In short, ONIE is a lightweight Linux environment that makes it easy to install Network Operating System (NOS).</p>]]></description>
+device compatible with ONIE, which means making ONIE run on the new device.</p>]]></description>
 </item>
 </channel>
 </rss>

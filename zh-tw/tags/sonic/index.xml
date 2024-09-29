@@ -10,10 +10,11 @@
     <pubDate>Tue, 24 Sep 2024 15:56:33 &#43;0800</pubDate>
     <author>seisokeii</author>
     <guid>https://seisokeii.github.io/zh-tw/posts/sonic/sonic-kvm-init-setup/</guid>
-    <description><![CDATA[<hr>
-<p>在 EVE-NG 或 GNS3 模擬器中跑 <a href="https://sonic.software/" target="_blank" rel="noopener noreffer ">SONiC KVM image</a>，在開機後都會留下一大堆設定，每次拉一台新機器開機就要拔掉一堆設定有夠惱人。</p>
-<p>那這時候懶惰的我肯定是想要自動化的解決問題 (資工人特性 =&gt; 懶)，但是這時候好像還不需要動用到 Ansible 或 pyATS 或是 Nornir
-這種巨砲，所以就用 shell script 來解決。</p>]]></description>
+    <description><![CDATA[<div class="featured-image">
+                <img src="/images/SONiC/sonic-preview01.png" referrerpolicy="no-referrer">
+            </div><p>上面這張圖就只是為了驗證一些概念而接上去的一個小小的 Lab 而已QQ</p>
+<hr>
+<p>在 EVE-NG 或 GNS3 模擬器中跑 <a href="https://sonic.software/" target="_blank" rel="noopener noreffer ">SONiC KVM image</a>，在開機後都會留下一大堆設定，每次拉一台新機器開機就要拔掉一堆設定有夠惱人。</p>]]></description>
 </item>
 <item>
     <title>Open Network Install Environment (ONIE) How to build?</title>
@@ -21,7 +22,10 @@
     <pubDate>Thu, 19 Sep 2024 17:03:33 &#43;0800</pubDate>
     <author>seisokeii</author>
     <guid>https://seisokeii.github.io/zh-tw/posts/onie/onie-build/</guid>
-    <description><![CDATA[<hr>
+    <description><![CDATA[<div class="featured-image">
+                <img src="/images/ONIE/onie-dev-machine.jpeg" referrerpolicy="no-referrer">
+            </div><p>上面這張圖是窩在開發用的機器，長得有點像是 1U 的 N3k 誒XD</p>
+<hr>
 <p>繼上一篇 <code>ONIE 白話文簡介</code> ，來稍微分享一下 ONIE 這東東是怎麼 build 起來的唄！</p>
 <p>這邊會類似一個教學文件，但是當然不可能會把公司的資訊放在這~ 就只是大致看一下一間網通廠是怎麼搞出這東東的而已。</p>]]></description>
 </item>
@@ -31,7 +35,10 @@
     <pubDate>Tue, 13 Aug 2024 17:39:33 &#43;0800</pubDate>
     <author>seisokeii</author>
     <guid>https://seisokeii.github.io/zh-tw/posts/onie/onie-intro/</guid>
-    <description><![CDATA[<hr>
+    <description><![CDATA[<div class="featured-image">
+                <img src="/images/ONIE/onie-Gemini-Generated-ONIE.jpg" referrerpolicy="no-referrer">
+            </div><p>上面這張圖是叫 Gemini 產的，說想要一張日本 ONIE 的圖，結果就變這樣了XD</p>
+<hr>
 <p>用過 whitebox 交換機應該加減都會知道 Open Network Install Environment 這東東吧！<br>
 這邊稍微來提一下這東東吧，剛好最近在 Edge-core Networks 實習期間的第一個任務，就是讓一台新設備與 ONIE 相容，講白了就是想辦法讓
 ONIE 可以在新設備上面跑啦~</p>]]></description>

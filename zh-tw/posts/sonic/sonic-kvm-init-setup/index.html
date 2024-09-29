@@ -7,19 +7,19 @@
         <title>SONiC Community Image 初始化設定 - seisokeii blog</title><meta name="Description" content="seisokeii&#39;s blog"><meta property="og:url" content="https://seisokeii.github.io/zh-tw/posts/sonic/sonic-kvm-init-setup/">
   <meta property="og:site_name" content="seisokeii blog">
   <meta property="og:title" content="SONiC Community Image 初始化設定">
-  <meta property="og:description" content=" 在 EVE-NG 或 GNS3 模擬器中跑 SONiC KVM image，在開機後都會留下一大堆設定，每次拉一台新機器開機就要拔掉一堆設定有夠惱人。
-那這時候懶惰的我肯定是想要自動化的解決問題 (資工人特性 =&gt; 懶)，但是這時候好像還不需要動用到 Ansible 或 pyATS 或是 Nornir 這種巨砲，所以就用 shell script 來解決。">
+  <meta property="og:description" content="上面這張圖就只是為了驗證一些概念而接上去的一個小小的 Lab 而已QQ
+在 EVE-NG 或 GNS3 模擬器中跑 SONiC KVM image，在開機後都會留下一大堆設定，每次拉一台新機器開機就要拔掉一堆設定有夠惱人。">
   <meta property="og:locale" content="zh_TW">
   <meta property="og:type" content="article">
     <meta property="article:section" content="posts">
     <meta property="article:published_time" content="2024-09-24T15:56:33+08:00">
-    <meta property="article:modified_time" content="2024-09-24T17:06:43+08:00">
+    <meta property="article:modified_time" content="2024-09-29T22:52:57+08:00">
     <meta property="article:tag" content="SONiC">
 
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="SONiC Community Image 初始化設定">
-  <meta name="twitter:description" content=" 在 EVE-NG 或 GNS3 模擬器中跑 SONiC KVM image，在開機後都會留下一大堆設定，每次拉一台新機器開機就要拔掉一堆設定有夠惱人。
-那這時候懶惰的我肯定是想要自動化的解決問題 (資工人特性 =&gt; 懶)，但是這時候好像還不需要動用到 Ansible 或 pyATS 或是 Nornir 這種巨砲，所以就用 shell script 來解決。">
+  <meta name="twitter:description" content="上面這張圖就只是為了驗證一些概念而接上去的一個小小的 Lab 而已QQ
+在 EVE-NG 或 GNS3 模擬器中跑 SONiC KVM image，在開機後都會留下一大堆設定，每次拉一台新機器開機就要拔掉一堆設定有夠惱人。">
 <meta name="application-name" content="seisokeii の blog">
 <meta name="apple-mobile-web-app-title" content="seisokeii の blog"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
@@ -34,8 +34,8 @@
         "mainEntityOfPage": {
             "@type": "WebPage",
             "@id": "https:\/\/seisokeii.github.io\/zh-tw\/posts\/sonic\/sonic-kvm-init-setup\/"
-        },"genre": "posts","keywords": "SONiC","wordcount":  1349 ,
-        "url": "https:\/\/seisokeii.github.io\/zh-tw\/posts\/sonic\/sonic-kvm-init-setup\/","datePublished": "2024-09-24T15:56:33+08:00","dateModified": "2024-09-24T17:06:43+08:00","publisher": {
+        },"genre": "posts","keywords": "SONiC","wordcount":  1380 ,
+        "url": "https:\/\/seisokeii.github.io\/zh-tw\/posts\/sonic\/sonic-kvm-init-setup\/","datePublished": "2024-09-24T15:56:33+08:00","dateModified": "2024-09-29T22:52:57+08:00","publisher": {
             "@type": "Organization",
             "name": ""},"author": {
                 "@type": "Person",
@@ -48,7 +48,7 @@
         <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
     <div class="header-wrapper">
         <div class="header-title">
-            <a href="/zh-tw/" title="seisokeii blog"><span id="id-1" class="typeit"></span></a>
+            <a href="/zh-tw/" title="seisokeii blog">seisokeii の blog</a>
         </div>
         <div class="menu">
             <div class="menu-inner"><a class="menu-item" href="/zh-tw/posts/"> 文章 </a><a class="menu-item" href="/zh-tw/tags/"> 標籤 </a><a class="menu-item" href="/zh-tw/categories/"> 分類 </a><a class="menu-item" href="/zh-tw/about/about"> About </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
@@ -74,7 +74,7 @@
     <div class="header-container">
         <div class="header-wrapper">
             <div class="header-title">
-                <a href="/zh-tw/" title="seisokeii blog"><span id="id-2" class="typeit"></span></a>
+                <a href="/zh-tw/" title="seisokeii blog">seisokeii の blog</a>
             </div>
             <div class="menu-toggle" id="menu-toggle-mobile">
                 <span></span><span></span><span></span>
@@ -114,9 +114,16 @@
             <div class="toc-content" id="toc-content-auto"></div>
         </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">SONiC Community Image 初始化設定</h1><div class="post-meta">
             <div class="post-meta-line"><span class="post-author"><a href="github.com/seisokeii" title="Author" rel="author" class="author"><i class="fas fa-user-circle fa-fw" aria-hidden="true"></i>seisokeii</a></span>&nbsp;<span class="post-category">收錄於 <a href="/zh-tw/categories/sonic/"><i class="far fa-folder fa-fw" aria-hidden="true"></i>SONiC</a></span></div>
-            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2024-09-24">2024-09-24</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;約 1349 字&nbsp;
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2024-09-24">2024-09-24</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;約 1380 字&nbsp;
                 <i class="far fa-clock fa-fw" aria-hidden="true"></i>&nbsp;預計閱讀 3 分鐘&nbsp;</div>
-        </div><div class="details toc" id="toc-static"  data-kept="">
+        </div><div class="featured-image"><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="/images/SONiC/sonic-preview01.png"
+        data-srcset="/images/SONiC/sonic-preview01.png, /images/SONiC/sonic-preview01.png 1.5x, /images/SONiC/sonic-preview01.png 2x"
+        data-sizes="auto"
+        alt="/images/SONiC/sonic-preview01.png"
+        title="/images/SONiC/sonic-preview01.png" /></div><div class="details toc" id="toc-static"  data-kept="">
                 <div class="details-summary toc-title">
                     <span>目錄</span>
                     <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
@@ -130,7 +137,8 @@
     <li><a href="#結語">結語</a></li>
   </ul>
 </nav></div>
-            </div><div class="content" id="content"><hr>
+            </div><div class="content" id="content"><p>上面這張圖就只是為了驗證一些概念而接上去的一個小小的 Lab 而已QQ</p>
+<hr>
 <p>在 EVE-NG 或 GNS3 模擬器中跑 <a href="https://sonic.software/" target="_blank" rel="noopener noreffer ">SONiC KVM image</a>，在開機後都會留下一大堆設定，每次拉一台新機器開機就要拔掉一堆設定有夠惱人。</p>
 <p>那這時候懶惰的我肯定是想要自動化的解決問題 (資工人特性 =&gt; 懶)，但是這時候好像還不需要動用到 Ansible 或 pyATS 或是 Nornir
 這種巨砲，所以就用 shell script 來解決。</p>
@@ -347,7 +355,7 @@ patch，畢竟這種情況只能拿實體設備測試設定而已，有點麻煩
     <div class="post-info">
         <div class="post-info-line">
             <div class="post-info-mod">
-                <span>更新於 2024-09-24</span>
+                <span>更新於 2024-09-29</span>
             </div></div>
         <div class="post-info-line">
             <div class="post-info-md"></div>
@@ -381,5 +389,5 @@ patch，畢竟這種情況只能拿實體設備測試設定而已，有點麻煩
             </a><a href="#" id="view-comments" class="fixed-button" title="查看評論">
                 <i class="fas fa-comment fa-fw" aria-hidden="true"></i>
             </a>
-        </div><script type="text/javascript" src="https://.disqus.com/embed.js" defer></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/autocomplete.js@0.38.1/dist/autocomplete.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lunr@2.3.9/lunr.min.js"></script><script type="text/javascript" src="/lib/lunr/lunr.stemmer.support.min.js"></script><script type="text/javascript" src="/lib/lunr/lunr.zh.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lazysizes@5.3.2/lazysizes.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/clipboard@2.0.11/dist/clipboard.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/sharer.js@0.5.1/sharer.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/typeit@8.6.0/dist/index.umd.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"複製到剪貼板","maxShownLines":30},"comment":{},"data":{"id-1":"seisokeii の blog","id-2":"seisokeii の blog"},"search":{"highlightTag":"em","lunrLanguageCode":"zh","lunrSegmentitURL":"/lib/lunr/lunr.segmentit.js","maxResultLength":10,"noResultsFound":"沒有找到結果","snippetLength":30},"typeit":{"cursorChar":"|","cursorSpeed":1000,"data":{"id-1":["id-1"],"id-2":["id-2"]},"duration":-1,"speed":10}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+        </div><script type="text/javascript" src="https://.disqus.com/embed.js" defer></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/autocomplete.js@0.38.1/dist/autocomplete.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lunr@2.3.9/lunr.min.js"></script><script type="text/javascript" src="/lib/lunr/lunr.stemmer.support.min.js"></script><script type="text/javascript" src="/lib/lunr/lunr.zh.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lazysizes@5.3.2/lazysizes.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/clipboard@2.0.11/dist/clipboard.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/sharer.js@0.5.1/sharer.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"複製到剪貼板","maxShownLines":30},"comment":{},"search":{"highlightTag":"em","lunrLanguageCode":"zh","lunrSegmentitURL":"/lib/lunr/lunr.segmentit.js","maxResultLength":10,"noResultsFound":"沒有找到結果","snippetLength":30}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
 </html>
