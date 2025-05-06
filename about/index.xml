@@ -1,20 +1,32 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Abouts on seisokeii blog</title>
-    <link>http://localhost:1313/about/</link>
-    <description>Recent content in Abouts on seisokeii blog</description>
+    <title>Abouts on </title>
+    <link>http://seisokeii.github.io/zh-tw/about/</link>
+    <description>Recent content in Abouts on </description>
     <generator>Hugo</generator>
-    <language>zh-TW</language>
-    <managingEditor>Noway@bimbimbambam (seisokeii)</managingEditor>
-    <webMaster>Noway@bimbimbambam (seisokeii)</webMaster>
-    <lastBuildDate>Thu, 16 May 2024 02:47:30 +0800</lastBuildDate>
-    <atom:link href="http://localhost:1313/about/index.xml" rel="self" type="application/rss+xml" />
+    <language>en</language>
+    <lastBuildDate>Thu, 19 Sep 2024 16:04:00 +0800</lastBuildDate>
+    <atom:link href="http://seisokeii.github.io/zh-tw/about/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>就是個欠債清單</title>
+      <link>http://seisokeii.github.io/zh-tw/about/todo/</link>
+      <pubDate>Thu, 19 Sep 2024 16:04:00 +0800</pubDate>
+      <guid>http://seisokeii.github.io/zh-tw/about/todo/</guid>
+      <description>&lt;hr&gt;&#xA;&lt;hr&gt;&#xA;&lt;p&gt;啊就不知道記在哪裡，就放這裡好了～ 有發現 about 底下有東西的你讚讚！&lt;/p&gt;&#xA;&lt;hr&gt;&#xA;&lt;hr&gt;&#xA;&lt;h1 id=&#34;待寫清單-敬請期待&#34;&gt;待寫清單 （敬請期待&lt;/h1&gt;&#xA;&lt;h3 id=&#34;個人生活&#34;&gt;個人生活&lt;/h3&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;國軍 Online&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;h3 id=&#34;水肺潛水-技術潛水&#34;&gt;水肺潛水 (技術潛水)&lt;/h3&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;乾衣&lt;/li&gt;&#xA;&lt;li&gt;側掛&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;h3 id=&#34;學業&#34;&gt;學業&lt;/h3&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;(Done)羊交資科工碩丁組畢業心得&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;h3 id=&#34;網路技術&#34;&gt;網路技術&lt;/h3&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;pyATS&lt;/li&gt;&#xA;&lt;li&gt;NetDevOps (Nornir + pyATS + GitLab)&lt;/li&gt;&#xA;&lt;li&gt;SONiC&lt;/li&gt;&#xA;&lt;li&gt;BGP (ECMP)&lt;/li&gt;&#xA;&lt;li&gt;VxLAN&lt;/li&gt;&#xA;&lt;li&gt;EVPN&lt;/li&gt;&#xA;&lt;li&gt;MPLS&lt;/li&gt;&#xA;&lt;li&gt;RSVP-TE&lt;/li&gt;&#xA;&lt;li&gt;SRv6&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;h3 id=&#34;亂七八糟神奇知識&#34;&gt;亂七八糟神奇知識&lt;/h3&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;Datacenter 建築物架構&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;hr&gt;&#xA;&lt;hr&gt;&#xA;&lt;hr&gt;&#xA;&lt;h1 id=&#34;以下未來會發生或正在正在搜集資料中&#34;&gt;以下未來會發生(或正在)，正在搜集資料中!&lt;/h1&gt;&#xA;&lt;h4 id=&#34;空中飛人&#34;&gt;空中飛人&lt;/h4&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;跳傘證照&lt;/li&gt;&#xA;&lt;li&gt;飛鼠裝證照&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;h4 id=&#34;工作&#34;&gt;工作&lt;/h4&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;RD 也可以瘋狂出差飛出國?&lt;/li&gt;&#xA;&lt;li&gt;RD + IT + Tech Support + PLM 集於一身是種什麼體驗？&lt;/li&gt;&#xA;&lt;/ul&gt;</description>
+    </item>
+    <item>
+      <title>CSY教我</title>
+      <link>http://seisokeii.github.io/zh-tw/about/dirtytalk/</link>
+      <pubDate>Thu, 19 Sep 2024 15:45:00 +0800</pubDate>
+      <guid>http://seisokeii.github.io/zh-tw/about/dirtytalk/</guid>
+      <description>&lt;p&gt;CSY 不可以色色!&lt;/p&gt;</description>
+    </item>
     <item>
       <title>About</title>
-      <link>http://localhost:1313/about/about/</link>
-      <pubDate>Tue, 14 May 2024 22:27:11 +0800</pubDate><author>Noway@bimbimbambam (seisokeii)</author>
-      <guid>http://localhost:1313/about/about/</guid>
+      <link>http://seisokeii.github.io/zh-tw/about/about/</link>
+      <pubDate>Tue, 14 May 2024 22:27:11 +0800</pubDate>
+      <guid>http://seisokeii.github.io/zh-tw/about/about/</guid>
       <description>&lt;h1 id=&#34;about-me&#34;&gt;About Me&lt;/h1&gt;&#xA;&lt;p&gt;有空會慢慢會分享一些奇奇怪怪的東西，包含學習、學業、技術、個人興趣 (e.g., 潛水)&amp;hellip; 等等的。&lt;/p&gt;</description>
     </item>
   </channel>

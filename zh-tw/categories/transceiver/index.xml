@@ -1,0 +1,20 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title>Transceiver - 分類 - seisokeii blog</title>
+        <link>https://seisokeii.github.io/zh-tw/categories/transceiver/</link>
+        <description>Transceiver - 分類 - seisokeii blog</description>
+        <generator>Hugo -- gohugo.io</generator><language>zh-TW</language><managingEditor>Noway@bimbimbambam (seisokeii)</managingEditor>
+            <webMaster>Noway@bimbimbambam (seisokeii)</webMaster><lastBuildDate>Mon, 05 May 2025 23:39:27 &#43;0800</lastBuildDate><atom:link href="https://seisokeii.github.io/zh-tw/categories/transceiver/" rel="self" type="application/rss+xml" /><item>
+    <title>Fiber Optic Transceiver Module 光纖收發器模組型號簡介</title>
+    <link>https://seisokeii.github.io/zh-tw/posts/transceiver/transceiver-intro-01/</link>
+    <pubDate>Mon, 05 May 2025 23:39:27 &#43;0800</pubDate>
+    <author>seisokeii</author>
+    <guid>https://seisokeii.github.io/zh-tw/posts/transceiver/transceiver-intro-01/</guid>
+    <description><![CDATA[<div class="featured-image">
+                <img src="/images/transceiver/xcver-32O-cage.png" referrerpolicy="no-referrer">
+            </div><p>上面這張圖是 OSFP 洞洞的交換器，越來越粗了呢(灬ºωº灬)</p>
+<hr>
+<p>當手上有錢了以後，想要買 400G 跟 800G switch 來玩 AI 網路時，發現光纖模組一大堆，到底要挑哪款&hellip;</p>]]></description>
+</item>
+</channel>
+</rss>

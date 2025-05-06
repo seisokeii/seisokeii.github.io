@@ -48,7 +48,7 @@ Preparation - Prepare the development environment Honestly, the development envi
             },"description": ""
     }
     </script></head>
-    <body data-header-desktop="fixed" data-header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+    <body data-header-desktop="fixed" data-header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('dark' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'dark' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
 
         <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
     <div class="header-wrapper">
@@ -70,7 +70,7 @@ Preparation - Prepare the development environment Honestly, the development envi
                     </span><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
                     <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
                 </a><a href="javascript:void(0);" class="menu-item language" title="Select Language">
-                    <i class="fa fa-globe" aria-hidden="true"></i>                      
+                    <i class="fa fa-globe fa-fw" aria-hidden="true"></i>                      
                     <select class="language-select" id="language-select-desktop" onchange="location = this.value;"><option value="/en/posts/onie/onie-build/" selected>English</option><option value="/zh-tw/posts/onie/onie-build/">繁體中文</option></select>
                 </a></div>
         </div>
@@ -118,7 +118,7 @@ Preparation - Prepare the development environment Honestly, the development envi
             <h2 class="toc-title">Contents</h2>
             <div class="toc-content" id="toc-content-auto"></div>
         </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">Open Network Install Environment (ONIE) How to build?</h1><div class="post-meta">
-            <div class="post-meta-line"><span class="post-author"><a href="github.com/seisokeii" title="Author" rel="author" class="author"><i class="fas fa-user-circle fa-fw" aria-hidden="true"></i>seisokeii</a></span>&nbsp;<span class="post-category">included in <a href="/en/categories/onie/"><i class="far fa-folder fa-fw" aria-hidden="true"></i>ONIE</a></span></div>
+            <div class="post-meta-line"><span class="post-author"><a href="https://github.com/seisokeii" title="Author" target="_blank" rel="noopener noreffer author" class="author"><i class="fas fa-user-circle fa-fw" aria-hidden="true"></i>seisokeii</a></span>&nbsp;<span class="post-category">included in <a href="/en/categories/onie/"><i class="far fa-folder fa-fw" aria-hidden="true"></i>ONIE</a></span></div>
             <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2024-09-19">2024-09-19</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;1464 words&nbsp;
                 <i class="far fa-clock fa-fw" aria-hidden="true"></i>&nbsp;7 minutes&nbsp;</div>
         </div><div class="featured-image"><img
@@ -163,8 +163,7 @@ using DUE, everything will be automatically handled~</p>
 use <code>docker pull ubuntu:16.04</code> not Debian because the mirror sites are almost down and packages are hard to find.</p>
 <blockquote>
 <p>In addition, one thing to note is that the <code>due</code> command should be used as a normal user, not root. (If you don&rsquo;t
-believe me, try it and you&rsquo;ll see)</p>
-</blockquote>
+believe me, try it and you&rsquo;ll see)</p></blockquote>
 <p>The environment is roughly like this, the rest is just following the instructions in the document to install.</p>
 <h2 id="preparation---ask-for-files">Preparation - Ask for files</h2>
 <p>Yes! Just ask for files! The hardware part will have embedded engineers help you with U-boot and there will be a team
@@ -190,8 +189,7 @@ own U-boot and Linux Kernel, and develops its own products based on these, so if
 of some files, you will most likely die directly.</p>
 <blockquote>
 <p>So&hellip; seeing this, you should know that it&rsquo;s almost impossible for ordinary people to build ONIE, especially for
-devices with ARM chips.</p>
-</blockquote>
+devices with ARM chips.</p></blockquote>
 <h2 id="start-building---phase-1">Start Building - Phase 1</h2>
 <p>!!! Attention! From now on, it&rsquo;s useless for ordinary people to read QQ But you can know what engineers are doing!!!</p>
 <p>First clone the ONIE repo, then create your own branch to modify the code~</p>
@@ -208,16 +206,13 @@ Actually, you only need to copy the important files:</p>
 the build directory.</p>
 <blockquote>
 <p>There is a directory called images under the build directory, which contains the generated image files.
-The .itb file is the pure ONIE image, and .bin is the .itb + u-boot image!</p>
-</blockquote>
+The .itb file is the pure ONIE image, and .bin is the .itb + u-boot image!</p></blockquote>
 <blockquote>
 <p>I would like to remind you here that the U-boot binary image you get needs to be named xxx-r0.u-boot to compile the
-.bin file and the updater file together!</p>
-</blockquote>
+.bin file and the updater file together!</p></blockquote>
 <blockquote>
 <p>By the way, let me mention another pitfall I found based on my blood and sweat, which is the series file. Please do
-not add blank lines at the end of the file, otherwise the series file will not be read during the build~</p>
-</blockquote>
+not add blank lines at the end of the file, otherwise the series file will not be read during the build~</p></blockquote>
 <p>The first stage is just to make sure you can build something.</p>
 <h2 id="tuning---phase-2">Tuning - Phase 2</h2>
 <p>Now you can start fine-tuning some parameters~
@@ -230,8 +225,7 @@ the official Linux source code, just re-link to the Linux directory used by Diag
 directory can be deleted.</p>
 <blockquote>
 <p>If you don&rsquo;t have the entire kernel source code but only the patch file, then go to the patch directory and patch the
-official source code!</p>
-</blockquote>
+official source code!</p></blockquote>
 <p>Build ONIE again at this point~ If there are no problems, you can get a usable ONIE. I think many network equipment
 manufacturers stop here XD</p>
 <h2 id="patch-functionality---phase-3">Patch functionality - Phase 3</h2>
@@ -371,8 +365,8 @@ are and how they work XD</p>
                 Please enable JavaScript to view the comments powered by <a href="https://disqus.com/?ref_noscript">Disqus</a>.
             </noscript></div></article></div>
             </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line">Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.134.2">Hugo</a> | Theme - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.11"><i class="far fa-kiss-wink-heart fa-fw" aria-hidden="true"></i> LoveIt</a>
-                </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright fa-fw" aria-hidden="true"></i><span itemprop="copyrightYear">2024 - 2025</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="github.com/seisokeii" target="_blank">seisokeii</a></span></div>
+        <div class="footer-container"><div class="footer-line">Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.145.0">Hugo</a> | Theme - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.3.0"><i class="far fa-kiss-wink-heart fa-fw" aria-hidden="true"></i> LoveIt</a>
+                </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright fa-fw" aria-hidden="true"></i><span itemprop="copyrightYear">2024 - 2025</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/en/" target="_blank">seisokeii</a></span></div>
         </div>
     </footer></div>
 

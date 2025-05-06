@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Edgecore on </title>
+    <link>//localhost:1313/tags/edgecore/</link>
+    <description>Recent content in Edgecore on </description>
+    <generator>Hugo</generator>
+    <language>en</language>
+    <lastBuildDate>Wed, 25 Sep 2024 16:54:37 +0800</lastBuildDate>
+    <atom:link href="//localhost:1313/tags/edgecore/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>碩班時期公司實習心得</title>
+      <link>//localhost:1313/posts/internship/edgecore-intern.zh-tw/</link>
+      <pubDate>Wed, 25 Sep 2024 16:54:37 +0800</pubDate>
+      <guid>//localhost:1313/posts/internship/edgecore-intern.zh-tw/</guid>
+      <description>&lt;p&gt;上面這張圖是在公司的某一個角落，就像葬送的芙莉蓮中探索迷宮都要將每個角落都摸透一樣，美妙的地方就是這樣找到的XD&lt;/p&gt;&#xA;&lt;hr&gt;&#xA;&lt;p&gt;最近實習生涯即將結束，剛好可以來湊一篇心得順便當作是紀錄唄～&lt;/p&gt;&#xA;&lt;h2 id=&#34;窩滴來歷&#34;&gt;窩滴來歷&lt;/h2&gt;&#xA;&lt;p&gt;這標題聽起來很猛誒XD 沒有啦~ 偶只是個菜雞。&lt;/p&gt;&#xA;&lt;p&gt;自高中畢業後大學跟碩士都是在資工系，但但但偏偏我就是程式能力欠訓練，然後我也沒花多少時間在刷題搞演算法&amp;hellip; 大多時間都是在搞機房維運。&lt;/p&gt;&#xA;&lt;p&gt;大約是從大二開始在&lt;a href=&#34;https://ph302.cs.pu.edu.tw/&#34;&gt;靜宜資訊學院主機房&lt;/a&gt;學習 NASA (Network Administrator System&#xA;Administrator) 相關的技術。&#xA;學著學著之後就推徵進到了&lt;a href=&#34;https://it.cs.nycu.edu.tw/&#34;&gt;交通大學資工系資訊中心&lt;/a&gt;的丁組碩班，下一篇補個交大資工系計中丁組唄XD&lt;/p&gt;&#xA;&lt;h2 id=&#34;為什麼會去-edgecore-實習&#34;&gt;為什麼會去 Edgecore 實習&lt;/h2&gt;&#xA;&lt;p&gt;大約在 2024/02 碩論口試完後，我就開始邊玩邊思考工作XD&lt;/p&gt;&#xA;&lt;p&gt;在詢問過很多學長們畢業去向，以及已經在資訊業工作的捧朋們，發現身上卡著兵役是真的難受，想去的外商公司都不會想要收留QQ&lt;/p&gt;&#xA;&lt;p&gt;然後有人告訴我有個東西叫做研發替代役，然後我就開始找研替，也是一樣去詢問認識的人他們的公司有沒有名額可以拿，在詢問完後其實還是不少人可以把名額留給偶。&#xA;但是台灣資訊業撇除外商公司以外，其實大多都是硬體產業居多&amp;hellip; 可惜我就是對硬體一竅不通也沒啥興趣呵呵 所以我又刪掉了好多選擇。&lt;/p&gt;&#xA;&lt;p&gt;另外我其實蠻龜毛的，維運搞了差不多快5年也有點膩了，然後自己會的網路自動化 NetDevOps 老實說沒啥台灣的公司敢嘗試，所以後來想說轉戰RD領域看看，剛好畢業前都在用RUST寫一些大便程式當練習。&lt;/p&gt;&#xA;&lt;p&gt;我又再去看看之前給我的職缺，RD的缺老實說幾乎都是寫網頁&amp;hellip; 嘿嘿我其實又對網頁沒興趣，大學畢專曾經用 Laravel 搞後端，.NET&#xA;Core、Vue 跟 React 也稍微碰過，但就是真的提不起興趣。&lt;/p&gt;&#xA;&lt;p&gt;沒錯活該沒工作! 我就是超級龜毛挑惕QQ 但是奇蹟就在這個時候出現了&amp;hellip;&lt;/p&gt;&#xA;&lt;p&gt;有兩個畢業的學長剛好在交大日(校友日)回來，再聊過一陣子之後又再次得到一個方向，也就是架構師。 仔細想了一下 對誒!&#xA;這一條路好像比較符合我的現況，也很有興趣!&lt;/p&gt;&#xA;&lt;p&gt;所以我就繼續再去詢問有沒有類似的職缺，其實此時我已經有點要放棄RD夢了&amp;hellip; 然後剛好就問到一位學長，他就介紹我去他朋友的部門，剛好就是搞網路的。&lt;/p&gt;&#xA;&lt;p&gt;嘿! 沒錯後來我就來到了 Edgecore 當實習生了～ 省略的不少當初內心的來回糾結，但避免文長XD&lt;/p&gt;&#xA;&lt;h2 id=&#34;實習期間在做什麼&#34;&gt;實習期間在做什麼&lt;/h2&gt;&#xA;&lt;p&gt;我在 Edgecore 實習的部門其實是掛在類似業務的部門，主要都是面對客戶的第一線。&#xA;剛好我非常幸運，mentor 也就是學長的朋友，他很願意把事情全權交給我處理，相信我的專業能力以及我這幾年的 co-work 經驗。&lt;/p&gt;&#xA;&lt;p&gt;那我處理過的事情除了第一個任務我瘋狂抱怨矇逼外，其實都還不錯玩。整個實習時間為 2024/06 ~ 2024/09 大約4個月，我處理過的案子有4件。&lt;/p&gt;&#xA;&lt;p&gt;第一件之前的文章有分享過，就是 ONIE 啦～&lt;br&gt;&#xA;我根本不會硬體也沒興趣，但是任務來了我就想說好吧多學一點也不錯，所以就抓個RD不放，叫他教我XD&lt;br&gt;&#xA;很剛好RD也希望其他部門也可以學起來以後自己搞，所以我就開始搞這個並且做了一份蠻詳細的教學放在公司的筆記中~ 幾乎是懶人的方式可以高機率&#xA;build 出來。&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

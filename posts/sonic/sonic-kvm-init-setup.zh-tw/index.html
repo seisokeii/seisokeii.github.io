@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <title>SONiC Community Image 初始化設定 - </title><meta name="Description" content="seisokeii&#39;s blog"><meta property="og:url" content="http://localhost:1313/posts/sonic/sonic-kvm-init-setup.zh-tw/">
+  <meta property="og:site_name" content="seisokeii の blog">
+  <meta property="og:title" content="SONiC Community Image 初始化設定">
+  <meta property="og:description" content="上面這張圖就只是為了驗證一些概念而接上去的一個小小的 Lab 而已QQ
+在 EVE-NG 或 GNS3 模擬器中跑 SONiC KVM image，在開機後都會留下一大堆設定，每次拉一台新機器開機就要拔掉一堆設定有夠惱人。
+那這時候懶惰的我肯定是想要自動化的解決問題 (資工人特性 =&gt; 懶)，但是這時候好像還不需要動用到 Ansible 或 pyATS 或是 Nornir 這種巨砲，所以就用 shell script 來解決。
+這邊分享一下我的作法，大致上設定主要有三個地方需要動:
+刪除 Interface IP 刪除 FRR configuration config_db.json 的 BGP_NEIGHBOR 跟 DEVICE_METADATA 中 localhost 的 bgp_asn 前置 要刪除設定前，請先查看一下 container 是不是都有正常運作了，可以用 docker ps -a 指令來看，所有的容器狀態都要是 UP。
+另外目前還沒有想法怎麼解決 ASIC 有關的功能無法運作的部分，之後有空再來看看能怎麼搞 patch，畢竟這種情況只能拿實體設備測試設定而已，有點麻煩，本篇先不提怎麼去模擬並跳脫要用 ASIC 的功能。
+1. 刪除 Interface IP 使用 show ip int 指令可以看到預設會列出一坨 interface 的資訊，然後會看到每個 interface 上都有一個 /31 的 IP。">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2024-09-24T15:56:33+08:00">
+    <meta property="article:modified_time" content="2024-09-24T15:56:33+08:00">
+    <meta property="article:tag" content="SONiC">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="SONiC Community Image 初始化設定">
+  <meta name="twitter:description" content="上面這張圖就只是為了驗證一些概念而接上去的一個小小的 Lab 而已QQ
+在 EVE-NG 或 GNS3 模擬器中跑 SONiC KVM image，在開機後都會留下一大堆設定，每次拉一台新機器開機就要拔掉一堆設定有夠惱人。
+那這時候懶惰的我肯定是想要自動化的解決問題 (資工人特性 =&gt; 懶)，但是這時候好像還不需要動用到 Ansible 或 pyATS 或是 Nornir 這種巨砲，所以就用 shell script 來解決。
+這邊分享一下我的作法，大致上設定主要有三個地方需要動:
+刪除 Interface IP 刪除 FRR configuration config_db.json 的 BGP_NEIGHBOR 跟 DEVICE_METADATA 中 localhost 的 bgp_asn 前置 要刪除設定前，請先查看一下 container 是不是都有正常運作了，可以用 docker ps -a 指令來看，所有的容器狀態都要是 UP。
+另外目前還沒有想法怎麼解決 ASIC 有關的功能無法運作的部分，之後有空再來看看能怎麼搞 patch，畢竟這種情況只能拿實體設備測試設定而已，有點麻煩，本篇先不提怎麼去模擬並跳脫要用 ASIC 的功能。
+1. 刪除 Interface IP 使用 show ip int 指令可以看到預設會列出一坨 interface 的資訊，然後會看到每個 interface 上都有一個 /31 的 IP。">
+<meta name="application-name" content="seisokeii の blog">
+<meta name="apple-mobile-web-app-title" content="seisokeii の blog"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="http://localhost:1313/posts/sonic/sonic-kvm-init-setup.zh-tw/" /><link rel="prev" href="http://localhost:1313/posts/onie/onie-build/" /><link rel="next" href="http://localhost:1313/posts/sonic/sonic-kvm-init-setup/" /><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "SONiC Community Image 初始化設定",
+        "inLanguage": "en",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "http:\/\/localhost:1313\/posts\/sonic\/sonic-kvm-init-setup.zh-tw\/"
+        },"genre": "posts","keywords": "SONiC","wordcount":  464 ,
+        "url": "http:\/\/localhost:1313\/posts\/sonic\/sonic-kvm-init-setup.zh-tw\/","datePublished": "2024-09-24T15:56:33+08:00","dateModified": "2024-09-24T15:56:33+08:00","publisher": {
+            "@type": "Organization",
+            "name": ""},"author": {
+                "@type": "Person",
+                "name": "Author"
+            },"description": ""
+    }
+    </script></head>
+    <body data-header-desktop="fixed" data-header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('dark' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'dark' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="">seisokeii の blog</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="Search titles or contents..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="Search">
+                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="Clear">
+                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                    <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+                </a></div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="">seisokeii の blog</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="Search titles or contents..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="Search">
+                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="Clear">
+                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        Cancel
+                    </a>
+                </div><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+            </a></div>
+    </div>
+</header><div class="search-dropdown desktop">
+        <div id="search-dropdown-desktop"></div>
+    </div>
+    <div class="search-dropdown mobile">
+        <div id="search-dropdown-mobile"></div>
+    </div><main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">Contents</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">SONiC Community Image 初始化設定</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel="author" class="author"><i class="fas fa-user-circle fa-fw" aria-hidden="true"></i>Author</a></span>&nbsp;<span class="post-category">included in <a href="/categories/sonic/"><i class="far fa-folder fa-fw" aria-hidden="true"></i>SONiC</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2024-09-24">2024-09-24</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;464 words&nbsp;
+                <i class="far fa-clock fa-fw" aria-hidden="true"></i>&nbsp;3 minutes&nbsp;</div>
+        </div><div class="featured-image"><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="/images/SONiC/sonic-preview01.png"
+        data-srcset="/images/SONiC/sonic-preview01.png, /images/SONiC/sonic-preview01.png 1.5x, /images/SONiC/sonic-preview01.png 2x"
+        data-sizes="auto"
+        alt="/images/SONiC/sonic-preview01.png"
+        title="/images/SONiC/sonic-preview01.png" /></div><div class="details toc" id="toc-static"  data-kept="">
+                <div class="details-summary toc-title">
+                    <span>Contents</span>
+                    <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#前置">前置</a></li>
+    <li><a href="#1-刪除-interface-ip">1. 刪除 Interface IP</a></li>
+    <li><a href="#2-刪除-frr-上的設定">2. 刪除 FRR 上的設定</a></li>
+    <li><a href="#3-刪除-config_dbjson-中的-bgp-相關設定">3. 刪除 config_db.json 中的 BGP 相關設定</a></li>
+    <li><a href="#結語">結語</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><p>上面這張圖就只是為了驗證一些概念而接上去的一個小小的 Lab 而已QQ</p>
+<hr>
+<p>在 EVE-NG 或 GNS3 模擬器中跑 <a href="https://sonic.software/" target="_blank" rel="noopener noreffer ">SONiC KVM image</a>，在開機後都會留下一大堆設定，每次拉一台新機器開機就要拔掉一堆設定有夠惱人。</p>
+<p>那這時候懶惰的我肯定是想要自動化的解決問題 (資工人特性 =&gt; 懶)，但是這時候好像還不需要動用到 Ansible 或 pyATS 或是 Nornir
+這種巨砲，所以就用 shell script 來解決。</p>
+<p>這邊分享一下我的作法，大致上設定主要有三個地方需要動:</p>
+<ol>
+<li>刪除 Interface IP</li>
+<li>刪除 FRR configuration</li>
+<li>config_db.json 的 BGP_NEIGHBOR 跟 DEVICE_METADATA 中 localhost 的 bgp_asn</li>
+</ol>
+<hr>
+<h2 id="前置">前置</h2>
+<p>要刪除設定前，請先查看一下 container 是不是都有正常運作了，可以用 <code>docker ps -a</code> 指令來看，所有的容器狀態都要是 UP。</p>
+<p>另外目前還沒有想法怎麼解決 ASIC 有關的功能無法運作的部分，之後有空再來看看能怎麼搞
+patch，畢竟這種情況只能拿實體設備測試設定而已，有點麻煩，本篇先不提怎麼去模擬並跳脫要用 ASIC 的功能。</p>
+<h2 id="1-刪除-interface-ip">1. 刪除 Interface IP</h2>
+<p>使用 <code>show ip int</code> 指令可以看到預設會列出一坨 interface 的資訊，然後會看到每個 interface 上都有一個 /31 的 IP。</p>
+<p>這時候可以參考以下腳本去寫一個刪除腳本:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e">#!/bin/bash
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> <span style="color:#f92672">((</span>i <span style="color:#f92672">=</span> 1, j <span style="color:#f92672">=</span> 0; i &lt;<span style="color:#f92672">=</span> 54, j &lt;<span style="color:#f92672">=</span> 106; i++, j <span style="color:#f92672">+=</span> 2<span style="color:#f92672">))</span>; <span style="color:#66d9ef">do</span>
+</span></span><span style="display:flex;"><span>		sudo config interface ip remove Ethernet$i 10.0.0.$j/31
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">done</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>sudo config interface ip remove Loopback0 10.1.0.1/32
+</span></span></code></pre></div><p>上面這個腳本中那個 <code>i</code> 要看你有幾個 Interface 跟是從 0 還是從 1 開始，就自己改吧。</p>
+<h2 id="2-刪除-frr-上的設定">2. 刪除 FRR 上的設定</h2>
+<p>接下來可以刪除 FRR 的設定，設定可以用 <code>show run bgp</code> 指令來看，預設會有一堆設定好的 neighbor 很礙眼&hellip;</p>
+<p>這邊可以參考以下腳本進行修改:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e">#!/bin/bash
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> <span style="color:#f92672">((</span> i<span style="color:#f92672">=</span>1; i&lt;<span style="color:#f92672">=</span>107; i<span style="color:#f92672">+=</span><span style="color:#ae81ff">2</span> <span style="color:#f92672">))</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">do</span>
+</span></span><span style="display:flex;"><span>    vtysh -c <span style="color:#e6db74">&#34;conf&#34;</span> -c <span style="color:#e6db74">&#34;router bgp 65100&#34;</span> -c <span style="color:#e6db74">&#34;address-family ipv4 unicast&#34;</span> -c <span style="color:#e6db74">&#34;no neighbor 10.0.0.</span>$i<span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>    vtysh -c <span style="color:#e6db74">&#34;conf&#34;</span> -c <span style="color:#e6db74">&#34;router bgp 65100&#34;</span> -c <span style="color:#e6db74">&#34;no neighbor 10.0.0.</span>$i<span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">done</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>vtysh -c <span style="color:#e6db74">&#34;conf&#34;</span> -c <span style="color:#e6db74">&#34;router bgp 65100&#34;</span> -c <span style="color:#e6db74">&#34;address-family ipv4 unicast&#34;</span> -c <span style="color:#e6db74">&#34;no maximum-paths 64&#34;</span>
+</span></span><span style="display:flex;"><span>vtysh -c <span style="color:#e6db74">&#34;conf&#34;</span> -c <span style="color:#e6db74">&#34;router bgp 65100&#34;</span> -c <span style="color:#e6db74">&#34;address-family ipv4 unicast&#34;</span> -c <span style="color:#e6db74">&#34;no neighbor PEER_V4&#34;</span>
+</span></span><span style="display:flex;"><span>vtysh -c <span style="color:#e6db74">&#34;conf&#34;</span> -c <span style="color:#e6db74">&#34;router bgp 65100&#34;</span> -c <span style="color:#e6db74">&#34;address-family ipv4 unicast&#34;</span> -c <span style="color:#e6db74">&#34;no network 10.1.0.1/32&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>vtysh -c <span style="color:#e6db74">&#34;conf&#34;</span> -c <span style="color:#e6db74">&#34;router bgp 65100&#34;</span> -c <span style="color:#e6db74">&#34;address-family ipv6 unicast&#34;</span> -c <span style="color:#e6db74">&#34;no neighbor PEER_V6&#34;</span>
+</span></span><span style="display:flex;"><span>vtysh -c <span style="color:#e6db74">&#34;conf&#34;</span> -c <span style="color:#e6db74">&#34;router bgp 65100&#34;</span> -c <span style="color:#e6db74">&#34;address-family ipv6 unicast&#34;</span> -c <span style="color:#e6db74">&#34;no maximum-paths 64&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>vtysh -c <span style="color:#e6db74">&#34;conf&#34;</span> -c <span style="color:#e6db74">&#34;router bgp 65100&#34;</span> -c <span style="color:#e6db74">&#34;no neighbor PEER_V4&#34;</span>
+</span></span><span style="display:flex;"><span>vtysh -c <span style="color:#e6db74">&#34;conf&#34;</span> -c <span style="color:#e6db74">&#34;router bgp 65100&#34;</span> -c <span style="color:#e6db74">&#34;no neighbor PEER_V6&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>vtysh -c <span style="color:#e6db74">&#34;conf&#34;</span> -c <span style="color:#e6db74">&#34;router bgp 65100&#34;</span> -c <span style="color:#e6db74">&#34;no bgp router-id 10.1.0.1&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>vtysh -c <span style="color:#e6db74">&#34;conf&#34;</span> -c <span style="color:#e6db74">&#34;no bgp community-list standard allow_list_default_community&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>vtysh -c <span style="color:#e6db74">&#34;conf&#34;</span> -c <span style="color:#e6db74">&#34;no ip prefix-list PL_LoopbackV4&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>vtysh -c <span style="color:#e6db74">&#34;conf&#34;</span> -c <span style="color:#e6db74">&#34;no route-map ALLOW_LIST_DEPLOYMENT_ID_0_V4&#34;</span>
+</span></span><span style="display:flex;"><span>vtysh -c <span style="color:#e6db74">&#34;conf&#34;</span> -c <span style="color:#e6db74">&#34;no route-map ALLOW_LIST_DEPLOYMENT_ID_0_V6&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>vtysh -c <span style="color:#e6db74">&#34;conf&#34;</span> -c <span style="color:#e6db74">&#34;no route-map FROM_BGP_PEER_V4&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>vtysh -c <span style="color:#e6db74">&#34;conf&#34;</span> -c <span style="color:#e6db74">&#34;no route-map FROM_BGP_PEER_V6&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>vtysh -c <span style="color:#e6db74">&#34;conf&#34;</span> -c <span style="color:#e6db74">&#34;no route-map TO_BGP_PEER_V4&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>vtysh -c <span style="color:#e6db74">&#34;conf&#34;</span> -c <span style="color:#e6db74">&#34;no route-map TO_BGP_PEER_V6&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>vtysh -c <span style="color:#e6db74">&#34;conf&#34;</span> -c <span style="color:#e6db74">&#34;no router bgp 65100&#34;</span>
+</span></span></code></pre></div><p>這個腳本其實就是看 <code>show run bgp</code> 的輸出，然後貼過來這邊就好， neighbor 的部分類似 interface 那樣記得修改。</p>
+<h2 id="3-刪除-config_dbjson-中的-bgp-相關設定">3. 刪除 config_db.json 中的 BGP 相關設定</h2>
+<p>剛剛已經刪除 FRR 的設定，但是 <code>config_db.json</code> 裡面就是會殘留設定QQ 沒有刪乾淨一樣會讓 SONiC 運作不正常。</p>
+<p>要刪除的有兩個地方:</p>
+<blockquote>
+<p>!!! 記得使用 sudo 去編輯 !!!</p></blockquote>
+<ol>
+<li>
+<p>BGP_NEIGHBOR</p>
+<p>這邊最煩，因為有好幾十個鄰居的設定，打開 vi/vim 編輯器去修改吧</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>admin@sonic$ sudo vi /etc/sonic/config_db.json <span style="color:#75715e"># 拜託記得要 sudo，不然好不容易刪完後會沒權限儲存</span>
+</span></span><span style="display:flex;"><span>...
+</span></span><span style="display:flex;"><span><span style="color:#e6db74">&#34;BGP_DEVICE_GLOBAL&#34;</span>: <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;STATE&#34;</span>: <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#e6db74">&#34;tsa_enabled&#34;</span>: <span style="color:#e6db74">&#34;false&#34;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">}</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;BGP_NEIGHBOR&#34;</span>: <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#75715e">### 把這里的設定刪到剩這樣就好</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">}</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;CRM&#34;</span>: <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;Config&#34;</span>: <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#e6db74">&#34;acl_counter_high_threshold&#34;</span>: <span style="color:#e6db74">&#34;85&#34;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#e6db74">&#34;acl_counter_low_threshold&#34;</span>: <span style="color:#e6db74">&#34;70&#34;</span>,
+</span></span><span style="display:flex;"><span>            ...
+</span></span></code></pre></div></li>
+<li>
+<p>DEVICE_METADATA 的 localhost</p>
+<p>這裡找到 <code>DEVICE_METADATA</code> 的 <code>localhost</code>， 刪除掉 <code>&quot;bgp_asn&quot;: &quot;65100&quot;,</code>，游標移到該行 dd 掉就可以了。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;snat_entry_low_threshold&#34;</span>: <span style="color:#e6db74">&#34;70&#34;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#e6db74">&#34;snat_entry_threshold_type&#34;</span>: <span style="color:#e6db74">&#34;percentage&#34;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">}</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;DEVICE_METADATA&#34;</span>: <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;localhost&#34;</span>: <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#75715e"># 請把 &#34;bgp_asn&#34;: &#34;65100&#34;, 刪除</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#e6db74">&#34;buffer_model&#34;</span>: <span style="color:#e6db74">&#34;traditional&#34;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#e6db74">&#34;default_bgp_status&#34;</span>: <span style="color:#e6db74">&#34;up&#34;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#e6db74">&#34;default_pfcwd_status&#34;</span>: <span style="color:#e6db74">&#34;disable&#34;</span>,
+</span></span></code></pre></div></li>
+</ol>
+<p>以上就是要修改的。</p>
+<!-- raw HTML omitted -->
+<blockquote>
+<p>重新載入 config_db.json 後，可以使用 <code>watch docker ps -a</code> 來監看 container 是否都正常運作。</p></blockquote>
+<p>到此就完成了基本設定了，終於可以開始玩自己想玩的設定了QQ</p>
+<h2 id="結語">結語</h2>
+<p>一開始看到很多部落客其實都有教怎麼安裝，然後安裝完後就馬上設定 BGP，然後就會動了&hellip; 馬的我的就是不會QQ</p>
+<p>找了一圈後才發現原來是有設定卡在 <code>config_db.json</code> 這個檔案中，還好這邊每台機器就改一次就好&hellip; 有空我再來看看 SONiC
+的原始碼，看看要怎麼把這邊搞成一個 patch 檔案。</p>
+<p>這一篇對我來說只能算是 workaround 而已，不太算是好的解決方式QQ</p>
+<p>但是目前就是我使用的最簡單的解決方式了。</p>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>Updated on 2024-09-24</span>
+            </div></div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw" aria-hidden="true"></i>&nbsp;<a href="/tags/sonic/">SONiC</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">Back</a></span>&nbsp;|&nbsp;<span><a href="/">Home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/posts/onie/onie-build/" class="prev" rel="prev" title="Open Network Install Environment (ONIE) How to build?"><i class="fas fa-angle-left fa-fw" aria-hidden="true"></i>Open Network Install Environment (ONIE) How to build?</a>
+            <a href="/posts/sonic/sonic-kvm-init-setup/" class="next" rel="next" title="SONiC Community Image Initial Setup">SONiC Community Image Initial Setup<i class="fas fa-angle-right fa-fw" aria-hidden="true"></i></a></div>
+</div>
+</article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.145.0">Hugo</a> | Theme - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.11"><i class="far fa-kiss-wink-heart fa-fw" aria-hidden="true"></i> LoveIt</a>
+                </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright fa-fw" aria-hidden="true"></i><span itemprop="copyrightYear">2024 - 2025</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank"></a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="Back to Top">
+                <i class="fas fa-arrow-up fa-fw" aria-hidden="true"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="View Comments">
+                <i class="fas fa-comment fa-fw" aria-hidden="true"></i>
+            </a>
+        </div><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/lunr/lunr.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":30},"comment":{},"search":{"highlightTag":"em","maxResultLength":10,"noResultsFound":"No results found","snippetLength":30}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <title>碩班時期公司實習心得 - </title><meta name="Description" content="seisokeii&#39;s blog"><meta property="og:url" content="http://localhost:1313/posts/internship/edgecore-intern.zh-tw/">
+  <meta property="og:site_name" content="seisokeii の blog">
+  <meta property="og:title" content="碩班時期公司實習心得">
+  <meta property="og:description" content="上面這張圖是在公司的某一個角落，就像葬送的芙莉蓮中探索迷宮都要將每個角落都摸透一樣，美妙的地方就是這樣找到的XD
+最近實習生涯即將結束，剛好可以來湊一篇心得順便當作是紀錄唄～
+窩滴來歷 這標題聽起來很猛誒XD 沒有啦~ 偶只是個菜雞。
+自高中畢業後大學跟碩士都是在資工系，但但但偏偏我就是程式能力欠訓練，然後我也沒花多少時間在刷題搞演算法… 大多時間都是在搞機房維運。
+大約是從大二開始在靜宜資訊學院主機房學習 NASA (Network Administrator System Administrator) 相關的技術。 學著學著之後就推徵進到了交通大學資工系資訊中心的丁組碩班，下一篇補個交大資工系計中丁組唄XD
+為什麼會去 Edgecore 實習 大約在 2024/02 碩論口試完後，我就開始邊玩邊思考工作XD
+在詢問過很多學長們畢業去向，以及已經在資訊業工作的捧朋們，發現身上卡著兵役是真的難受，想去的外商公司都不會想要收留QQ
+然後有人告訴我有個東西叫做研發替代役，然後我就開始找研替，也是一樣去詢問認識的人他們的公司有沒有名額可以拿，在詢問完後其實還是不少人可以把名額留給偶。 但是台灣資訊業撇除外商公司以外，其實大多都是硬體產業居多… 可惜我就是對硬體一竅不通也沒啥興趣呵呵 所以我又刪掉了好多選擇。
+另外我其實蠻龜毛的，維運搞了差不多快5年也有點膩了，然後自己會的網路自動化 NetDevOps 老實說沒啥台灣的公司敢嘗試，所以後來想說轉戰RD領域看看，剛好畢業前都在用RUST寫一些大便程式當練習。
+我又再去看看之前給我的職缺，RD的缺老實說幾乎都是寫網頁… 嘿嘿我其實又對網頁沒興趣，大學畢專曾經用 Laravel 搞後端，.NET Core、Vue 跟 React 也稍微碰過，但就是真的提不起興趣。
+沒錯活該沒工作! 我就是超級龜毛挑惕QQ 但是奇蹟就在這個時候出現了…
+有兩個畢業的學長剛好在交大日(校友日)回來，再聊過一陣子之後又再次得到一個方向，也就是架構師。 仔細想了一下 對誒! 這一條路好像比較符合我的現況，也很有興趣!
+所以我就繼續再去詢問有沒有類似的職缺，其實此時我已經有點要放棄RD夢了… 然後剛好就問到一位學長，他就介紹我去他朋友的部門，剛好就是搞網路的。
+嘿! 沒錯後來我就來到了 Edgecore 當實習生了～ 省略的不少當初內心的來回糾結，但避免文長XD
+實習期間在做什麼 我在 Edgecore 實習的部門其實是掛在類似業務的部門，主要都是面對客戶的第一線。 剛好我非常幸運，mentor 也就是學長的朋友，他很願意把事情全權交給我處理，相信我的專業能力以及我這幾年的 co-work 經驗。
+那我處理過的事情除了第一個任務我瘋狂抱怨矇逼外，其實都還不錯玩。整個實習時間為 2024/06 ~ 2024/09 大約4個月，我處理過的案子有4件。
+第一件之前的文章有分享過，就是 ONIE 啦～
+我根本不會硬體也沒興趣，但是任務來了我就想說好吧多學一點也不錯，所以就抓個RD不放，叫他教我XD
+很剛好RD也希望其他部門也可以學起來以後自己搞，所以我就開始搞這個並且做了一份蠻詳細的教學放在公司的筆記中~ 幾乎是懶人的方式可以高機率 build 出來。">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2024-09-25T16:54:37+08:00">
+    <meta property="article:modified_time" content="2024-09-25T16:54:37+08:00">
+    <meta property="article:tag" content="Internship">
+    <meta property="article:tag" content="Edgecore">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="碩班時期公司實習心得">
+  <meta name="twitter:description" content="上面這張圖是在公司的某一個角落，就像葬送的芙莉蓮中探索迷宮都要將每個角落都摸透一樣，美妙的地方就是這樣找到的XD
+最近實習生涯即將結束，剛好可以來湊一篇心得順便當作是紀錄唄～
+窩滴來歷 這標題聽起來很猛誒XD 沒有啦~ 偶只是個菜雞。
+自高中畢業後大學跟碩士都是在資工系，但但但偏偏我就是程式能力欠訓練，然後我也沒花多少時間在刷題搞演算法… 大多時間都是在搞機房維運。
+大約是從大二開始在靜宜資訊學院主機房學習 NASA (Network Administrator System Administrator) 相關的技術。 學著學著之後就推徵進到了交通大學資工系資訊中心的丁組碩班，下一篇補個交大資工系計中丁組唄XD
+為什麼會去 Edgecore 實習 大約在 2024/02 碩論口試完後，我就開始邊玩邊思考工作XD
+在詢問過很多學長們畢業去向，以及已經在資訊業工作的捧朋們，發現身上卡著兵役是真的難受，想去的外商公司都不會想要收留QQ
+然後有人告訴我有個東西叫做研發替代役，然後我就開始找研替，也是一樣去詢問認識的人他們的公司有沒有名額可以拿，在詢問完後其實還是不少人可以把名額留給偶。 但是台灣資訊業撇除外商公司以外，其實大多都是硬體產業居多… 可惜我就是對硬體一竅不通也沒啥興趣呵呵 所以我又刪掉了好多選擇。
+另外我其實蠻龜毛的，維運搞了差不多快5年也有點膩了，然後自己會的網路自動化 NetDevOps 老實說沒啥台灣的公司敢嘗試，所以後來想說轉戰RD領域看看，剛好畢業前都在用RUST寫一些大便程式當練習。
+我又再去看看之前給我的職缺，RD的缺老實說幾乎都是寫網頁… 嘿嘿我其實又對網頁沒興趣，大學畢專曾經用 Laravel 搞後端，.NET Core、Vue 跟 React 也稍微碰過，但就是真的提不起興趣。
+沒錯活該沒工作! 我就是超級龜毛挑惕QQ 但是奇蹟就在這個時候出現了…
+有兩個畢業的學長剛好在交大日(校友日)回來，再聊過一陣子之後又再次得到一個方向，也就是架構師。 仔細想了一下 對誒! 這一條路好像比較符合我的現況，也很有興趣!
+所以我就繼續再去詢問有沒有類似的職缺，其實此時我已經有點要放棄RD夢了… 然後剛好就問到一位學長，他就介紹我去他朋友的部門，剛好就是搞網路的。
+嘿! 沒錯後來我就來到了 Edgecore 當實習生了～ 省略的不少當初內心的來回糾結，但避免文長XD
+實習期間在做什麼 我在 Edgecore 實習的部門其實是掛在類似業務的部門，主要都是面對客戶的第一線。 剛好我非常幸運，mentor 也就是學長的朋友，他很願意把事情全權交給我處理，相信我的專業能力以及我這幾年的 co-work 經驗。
+那我處理過的事情除了第一個任務我瘋狂抱怨矇逼外，其實都還不錯玩。整個實習時間為 2024/06 ~ 2024/09 大約4個月，我處理過的案子有4件。
+第一件之前的文章有分享過，就是 ONIE 啦～
+我根本不會硬體也沒興趣，但是任務來了我就想說好吧多學一點也不錯，所以就抓個RD不放，叫他教我XD
+很剛好RD也希望其他部門也可以學起來以後自己搞，所以我就開始搞這個並且做了一份蠻詳細的教學放在公司的筆記中~ 幾乎是懶人的方式可以高機率 build 出來。">
+<meta name="application-name" content="seisokeii の blog">
+<meta name="apple-mobile-web-app-title" content="seisokeii の blog"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="http://localhost:1313/posts/internship/edgecore-intern.zh-tw/" /><link rel="prev" href="http://localhost:1313/posts/sonic/sonic-kvm-init-setup/" /><link rel="next" href="http://localhost:1313/posts/nycucsit/nycu-csit-master-degree.zh-tw/" /><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "碩班時期公司實習心得",
+        "inLanguage": "en",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "http:\/\/localhost:1313\/posts\/internship\/edgecore-intern.zh-tw\/"
+        },"genre": "posts","keywords": "internship, Edgecore","wordcount":  175 ,
+        "url": "http:\/\/localhost:1313\/posts\/internship\/edgecore-intern.zh-tw\/","datePublished": "2024-09-25T16:54:37+08:00","dateModified": "2024-09-25T16:54:37+08:00","publisher": {
+            "@type": "Organization",
+            "name": ""},"author": {
+                "@type": "Person",
+                "name": "Author"
+            },"description": ""
+    }
+    </script></head>
+    <body data-header-desktop="fixed" data-header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('dark' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'dark' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="">seisokeii の blog</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="Search titles or contents..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="Search">
+                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="Clear">
+                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                    <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+                </a></div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="">seisokeii の blog</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="Search titles or contents..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="Search">
+                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="Clear">
+                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        Cancel
+                    </a>
+                </div><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+            </a></div>
+    </div>
+</header><div class="search-dropdown desktop">
+        <div id="search-dropdown-desktop"></div>
+    </div>
+    <div class="search-dropdown mobile">
+        <div id="search-dropdown-mobile"></div>
+    </div><main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">Contents</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">碩班時期公司實習心得</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel="author" class="author"><i class="fas fa-user-circle fa-fw" aria-hidden="true"></i>Author</a></span>&nbsp;<span class="post-category">included in <a href="/categories/internship/"><i class="far fa-folder fa-fw" aria-hidden="true"></i>Internship</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2024-09-25">2024-09-25</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;175 words&nbsp;
+                <i class="far fa-clock fa-fw" aria-hidden="true"></i>&nbsp;One minute&nbsp;</div>
+        </div><div class="featured-image"><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="/images/internship/internship-cafe.png"
+        data-srcset="/images/internship/internship-cafe.png, /images/internship/internship-cafe.png 1.5x, /images/internship/internship-cafe.png 2x"
+        data-sizes="auto"
+        alt="/images/internship/internship-cafe.png"
+        title="/images/internship/internship-cafe.png" /></div><div class="details toc" id="toc-static"  data-kept="">
+                <div class="details-summary toc-title">
+                    <span>Contents</span>
+                    <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#窩滴來歷">窩滴來歷</a></li>
+    <li><a href="#為什麼會去-edgecore-實習">為什麼會去 Edgecore 實習</a></li>
+    <li><a href="#實習期間在做什麼">實習期間在做什麼</a></li>
+    <li><a href="#實習中學到的與心得">實習中學到的與心得</a></li>
+    <li><a href="#結語">結語</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><p>上面這張圖是在公司的某一個角落，就像葬送的芙莉蓮中探索迷宮都要將每個角落都摸透一樣，美妙的地方就是這樣找到的XD</p>
+<hr>
+<p>最近實習生涯即將結束，剛好可以來湊一篇心得順便當作是紀錄唄～</p>
+<h2 id="窩滴來歷">窩滴來歷</h2>
+<p>這標題聽起來很猛誒XD 沒有啦~ 偶只是個菜雞。</p>
+<p>自高中畢業後大學跟碩士都是在資工系，但但但偏偏我就是程式能力欠訓練，然後我也沒花多少時間在刷題搞演算法&hellip; 大多時間都是在搞機房維運。</p>
+<p>大約是從大二開始在<a href="https://ph302.cs.pu.edu.tw/" target="_blank" rel="noopener noreffer ">靜宜資訊學院主機房</a>學習 NASA (Network Administrator System
+Administrator) 相關的技術。
+學著學著之後就推徵進到了<a href="https://it.cs.nycu.edu.tw/" target="_blank" rel="noopener noreffer ">交通大學資工系資訊中心</a>的丁組碩班，下一篇補個交大資工系計中丁組唄XD</p>
+<h2 id="為什麼會去-edgecore-實習">為什麼會去 Edgecore 實習</h2>
+<p>大約在 2024/02 碩論口試完後，我就開始邊玩邊思考工作XD</p>
+<p>在詢問過很多學長們畢業去向，以及已經在資訊業工作的捧朋們，發現身上卡著兵役是真的難受，想去的外商公司都不會想要收留QQ</p>
+<p>然後有人告訴我有個東西叫做研發替代役，然後我就開始找研替，也是一樣去詢問認識的人他們的公司有沒有名額可以拿，在詢問完後其實還是不少人可以把名額留給偶。
+但是台灣資訊業撇除外商公司以外，其實大多都是硬體產業居多&hellip; 可惜我就是對硬體一竅不通也沒啥興趣呵呵 所以我又刪掉了好多選擇。</p>
+<p>另外我其實蠻龜毛的，維運搞了差不多快5年也有點膩了，然後自己會的網路自動化 NetDevOps 老實說沒啥台灣的公司敢嘗試，所以後來想說轉戰RD領域看看，剛好畢業前都在用RUST寫一些大便程式當練習。</p>
+<p>我又再去看看之前給我的職缺，RD的缺老實說幾乎都是寫網頁&hellip; 嘿嘿我其實又對網頁沒興趣，大學畢專曾經用 Laravel 搞後端，.NET
+Core、Vue 跟 React 也稍微碰過，但就是真的提不起興趣。</p>
+<p>沒錯活該沒工作! 我就是超級龜毛挑惕QQ 但是奇蹟就在這個時候出現了&hellip;</p>
+<p>有兩個畢業的學長剛好在交大日(校友日)回來，再聊過一陣子之後又再次得到一個方向，也就是架構師。 仔細想了一下 對誒!
+這一條路好像比較符合我的現況，也很有興趣!</p>
+<p>所以我就繼續再去詢問有沒有類似的職缺，其實此時我已經有點要放棄RD夢了&hellip; 然後剛好就問到一位學長，他就介紹我去他朋友的部門，剛好就是搞網路的。</p>
+<p>嘿! 沒錯後來我就來到了 Edgecore 當實習生了～ 省略的不少當初內心的來回糾結，但避免文長XD</p>
+<h2 id="實習期間在做什麼">實習期間在做什麼</h2>
+<p>我在 Edgecore 實習的部門其實是掛在類似業務的部門，主要都是面對客戶的第一線。
+剛好我非常幸運，mentor 也就是學長的朋友，他很願意把事情全權交給我處理，相信我的專業能力以及我這幾年的 co-work 經驗。</p>
+<p>那我處理過的事情除了第一個任務我瘋狂抱怨矇逼外，其實都還不錯玩。整個實習時間為 2024/06 ~ 2024/09 大約4個月，我處理過的案子有4件。</p>
+<p>第一件之前的文章有分享過，就是 ONIE 啦～<br>
+我根本不會硬體也沒興趣，但是任務來了我就想說好吧多學一點也不錯，所以就抓個RD不放，叫他教我XD<br>
+很剛好RD也希望其他部門也可以學起來以後自己搞，所以我就開始搞這個並且做了一份蠻詳細的教學放在公司的筆記中~ 幾乎是懶人的方式可以高機率
+build 出來。</p>
+<p>不過 ONIE 這任務算是個意外吧，之後的實習生大概不會再遇到這事了XD</p>
+<p>其他的案件其實也都是用之前在機房管理學會的技術來搞定的，像是設定 FortiGate 防火牆之類的，我個人覺得都很輕鬆不難，畢竟已經老熟了XD</p>
+<p>有個比較難的案子，合作人數也較多的就是某間公司在蓋新的 DC (Datacenter)，然後網路拓樸也需要相對應的重構，所以就找上我們部門尋求協助。
+在這個案子中我跟公司中另一位網路架構師合作，一起設計了 DC 的拓樸，這中間也學會了好多之前在 campus 網路中不會碰到的東西。滿意外
+mentor 可以安心地讓一個實習生去設計網路拓樸XD</p>
+<p>不過應該是我維運的經驗大概有5年左右吧~ 老實說之前在念 CCNP
+的時候很多技術也都有在模擬器上面玩過了，甚至無聊的時候會去下載別人做的 Lab (通常都是 CCIE 拓樸)來除錯練習。</p>
+<p>大致上的確都是在搞網路的東西~</p>
+<h2 id="實習中學到的與心得">實習中學到的與心得</h2>
+<p>實話說我其實算是比較極端的案例了，畢竟很少人有機會從大學開始就有辦法真的在機房真槍實彈的維運&hellip;</p>
+<p>在實習期間，雖然不少東西都是靠之前的經驗以及知識處理掉，但是也學會了好多大概只有在網通廠商才會碰到的事情。</p>
+<p>像是有 IXIA 硬體的流量產生器可以玩，動不動就可以借到 800G 跟 400G 的 switch
+拿來玩拓樸，這些資源是在學術單位沒辦法提供的了QQ (畢竟我是個人使用XD</p>
+<p>在碩班時期本來想說嘿嘿我大概是 CCNP 等級的維運經驗也不少，出去找工作沒問題的吧～ 但是&hellip; 現在的時代只會敲指令的 CCNP
+好像已經&hellip; 爛大街(? 甚至有些有 CCNP 的人只會設定，實際封包怎麼封裝 header 跟運作原理都不知道QQ</p>
+<p>但是自從實習之後發現&hellip; 恩我錯的好徹底QQ 感覺 technical support 部門的人隨便抓一個人都會 SONiC, Juniper, Cisco 的指令&hellip;
+而且他們還是 support 要幫忙解決問題的。突然就覺得自己是菜雞QQ</p>
+<p>另外，在實習之前我都是在玩 Cisco 或 Juniper 的設備居多，玩玩設定搞個自動化之類的，但是在實習期間幾乎都是在搞 SONiC，老實說 M$
+搞出來的 SONiC 其實滿屌的。</p>
+<p>因為 SONiC 是開源的，很多原始碼都是放在那邊，所以想要知道交換器到底是怎麼運作的，其實就直接去 trace
+code，可惜的是我在實習其間不在RD部門，不然有些閉源的部分像是 SAI 就可以好好的來看一下 SONiC 怎麼跟硬體溝通的。</p>
+<p>但就是因為是在網通廠，所以也在實習指派的任務中，了解了不少硬體底層相關的知識，這算是滿難得的機會，畢竟要從純硬體到整個 NOS (
+Network Operating System)，很多公司應該是沒辦法給實習生這個機會。</p>
+<p>對了! 有個很神奇的點，就是 Edgecore 因為客戶幾乎都是外國人的關係，所以大部分在溝通交流的時候都是用英文，這也讓我英文耐受度提高了超級多XD</p>
+<h2 id="結語">結語</h2>
+<p>其實我很感謝捧朋跟學長們的協助，以及公司的主管們跟 mentor 願意給我這些正職人才會碰到的案子QQ
+聽起來是在壓榨，但是窩覺得這些事情解決起來很輕鬆愉快沒壓力，應該不算壓榨吧XD</p>
+<p>個人還算很滿意這個實習的，畢竟收穫了好多。 除了技術外，跨部門合作、與客戶溝通、英文能力 &hellip; 啥鬼的能力都提升了不少。</p>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>Updated on 2024-09-25</span>
+            </div></div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw" aria-hidden="true"></i>&nbsp;<a href="/tags/internship/">Internship</a>,&nbsp;<a href="/tags/edgecore/">Edgecore</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">Back</a></span>&nbsp;|&nbsp;<span><a href="/">Home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/posts/sonic/sonic-kvm-init-setup/" class="prev" rel="prev" title="SONiC Community Image Initial Setup"><i class="fas fa-angle-left fa-fw" aria-hidden="true"></i>SONiC Community Image Initial Setup</a>
+            <a href="/posts/nycucsit/nycu-csit-master-degree.zh-tw/" class="next" rel="next" title="陽明交通大學資訊科學與工程學系碩士丁組">陽明交通大學資訊科學與工程學系碩士丁組<i class="fas fa-angle-right fa-fw" aria-hidden="true"></i></a></div>
+</div>
+</article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.145.0">Hugo</a> | Theme - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.11"><i class="far fa-kiss-wink-heart fa-fw" aria-hidden="true"></i> LoveIt</a>
+                </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright fa-fw" aria-hidden="true"></i><span itemprop="copyrightYear">2024 - 2025</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank"></a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="Back to Top">
+                <i class="fas fa-arrow-up fa-fw" aria-hidden="true"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="View Comments">
+                <i class="fas fa-comment fa-fw" aria-hidden="true"></i>
+            </a>
+        </div><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/lunr/lunr.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":30},"comment":{},"search":{"highlightTag":"em","maxResultLength":10,"noResultsFound":"No results found","snippetLength":30}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

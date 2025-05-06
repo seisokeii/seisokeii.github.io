@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>SONiC on </title>
+    <link>//localhost:1313/categories/sonic/</link>
+    <description>Recent content in SONiC on </description>
+    <generator>Hugo</generator>
+    <language>en</language>
+    <lastBuildDate>Tue, 24 Sep 2024 15:56:33 +0800</lastBuildDate>
+    <atom:link href="//localhost:1313/categories/sonic/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>SONiC Community Image Initial Setup</title>
+      <link>//localhost:1313/posts/sonic/sonic-kvm-init-setup/</link>
+      <pubDate>Tue, 24 Sep 2024 15:56:33 +0800</pubDate>
+      <guid>//localhost:1313/posts/sonic/sonic-kvm-init-setup/</guid>
+      <description>&lt;p&gt;Above image is just for verifying some concepts then build a small Lab QQ&lt;/p&gt;&#xA;&lt;hr&gt;&#xA;&lt;p&gt;In EVE-NG or GNS3 simulator, running the &lt;a href=&#34;https://sonic.software/&#34;&gt;SONiC KVM image&lt;/a&gt; will leave a lot of settings after&#xA;booting. It&amp;rsquo;s annoying to pull out a bunch of settings every time you boot a new machine.&lt;/p&gt;&#xA;&lt;p&gt;In this situation, I would like to automate the solution ( computer science people =&amp;gt; lazy), but it seems that I don&amp;rsquo;t&#xA;need to use Ansible, pyATS, or Nornir yet. So I use shell script to solve it.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>SONiC Community Image 初始化設定</title>
+      <link>//localhost:1313/posts/sonic/sonic-kvm-init-setup.zh-tw/</link>
+      <pubDate>Tue, 24 Sep 2024 15:56:33 +0800</pubDate>
+      <guid>//localhost:1313/posts/sonic/sonic-kvm-init-setup.zh-tw/</guid>
+      <description>&lt;p&gt;上面這張圖就只是為了驗證一些概念而接上去的一個小小的 Lab 而已QQ&lt;/p&gt;&#xA;&lt;hr&gt;&#xA;&lt;p&gt;在 EVE-NG 或 GNS3 模擬器中跑 &lt;a href=&#34;https://sonic.software/&#34;&gt;SONiC KVM image&lt;/a&gt;，在開機後都會留下一大堆設定，每次拉一台新機器開機就要拔掉一堆設定有夠惱人。&lt;/p&gt;&#xA;&lt;p&gt;那這時候懶惰的我肯定是想要自動化的解決問題 (資工人特性 =&amp;gt; 懶)，但是這時候好像還不需要動用到 Ansible 或 pyATS 或是 Nornir&#xA;這種巨砲，所以就用 shell script 來解決。&lt;/p&gt;&#xA;&lt;p&gt;這邊分享一下我的作法，大致上設定主要有三個地方需要動:&lt;/p&gt;&#xA;&lt;ol&gt;&#xA;&lt;li&gt;刪除 Interface IP&lt;/li&gt;&#xA;&lt;li&gt;刪除 FRR configuration&lt;/li&gt;&#xA;&lt;li&gt;config_db.json 的 BGP_NEIGHBOR 跟 DEVICE_METADATA 中 localhost 的 bgp_asn&lt;/li&gt;&#xA;&lt;/ol&gt;&#xA;&lt;hr&gt;&#xA;&lt;h2 id=&#34;前置&#34;&gt;前置&lt;/h2&gt;&#xA;&lt;p&gt;要刪除設定前，請先查看一下 container 是不是都有正常運作了，可以用 &lt;code&gt;docker ps -a&lt;/code&gt; 指令來看，所有的容器狀態都要是 UP。&lt;/p&gt;&#xA;&lt;p&gt;另外目前還沒有想法怎麼解決 ASIC 有關的功能無法運作的部分，之後有空再來看看能怎麼搞&#xA;patch，畢竟這種情況只能拿實體設備測試設定而已，有點麻煩，本篇先不提怎麼去模擬並跳脫要用 ASIC 的功能。&lt;/p&gt;&#xA;&lt;h2 id=&#34;1-刪除-interface-ip&#34;&gt;1. 刪除 Interface IP&lt;/h2&gt;&#xA;&lt;p&gt;使用 &lt;code&gt;show ip int&lt;/code&gt; 指令可以看到預設會列出一坨 interface 的資訊，然後會看到每個 interface 上都有一個 /31 的 IP。&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

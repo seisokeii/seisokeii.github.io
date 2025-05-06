@@ -46,7 +46,7 @@
             },"description": ""
     }
     </script></head>
-    <body data-header-desktop="fixed" data-header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+    <body data-header-desktop="fixed" data-header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('dark' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'dark' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
 
         <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
     <div class="header-wrapper">
@@ -68,7 +68,7 @@
                     </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切換主題">
                     <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
                 </a><a href="javascript:void(0);" class="menu-item language" title="選擇語言">
-                    <i class="fa fa-globe" aria-hidden="true"></i>                      
+                    <i class="fa fa-globe fa-fw" aria-hidden="true"></i>                      
                     <select class="language-select" id="language-select-desktop" onchange="location = this.value;"><option value="/en/posts/onie/onie-build/">English</option><option value="/zh-tw/posts/onie/onie-build/" selected>繁體中文</option></select>
                 </a></div>
         </div>
@@ -116,7 +116,7 @@
             <h2 class="toc-title">目錄</h2>
             <div class="toc-content" id="toc-content-auto"></div>
         </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">Open Network Install Environment (ONIE) How to build?</h1><div class="post-meta">
-            <div class="post-meta-line"><span class="post-author"><a href="github.com/seisokeii" title="Author" rel="author" class="author"><i class="fas fa-user-circle fa-fw" aria-hidden="true"></i>seisokeii</a></span>&nbsp;<span class="post-category">收錄於 <a href="/zh-tw/categories/onie/"><i class="far fa-folder fa-fw" aria-hidden="true"></i>ONIE</a></span></div>
+            <div class="post-meta-line"><span class="post-author"><a href="https://github.com/seisokeii" title="Author" target="_blank" rel="noopener noreffer author" class="author"><i class="fas fa-user-circle fa-fw" aria-hidden="true"></i>seisokeii</a></span>&nbsp;<span class="post-category">收錄於 <a href="/zh-tw/categories/onie/"><i class="far fa-folder fa-fw" aria-hidden="true"></i>ONIE</a></span></div>
             <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2024-09-19">2024-09-19</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;約 2318 字&nbsp;
                 <i class="far fa-clock fa-fw" aria-hidden="true"></i>&nbsp;預計閱讀 5 分鐘&nbsp;</div>
         </div><div class="featured-image"><img
@@ -157,8 +157,7 @@ dependency 有多麽靠北，用了 DUE 後就會自動搞定這一切摟～</p>
 <p>DUE 是要使用 Docker 的，那這邊建議 container 不要用太新的 Linux Kernel，像我就 <code>docker pull ubuntu:16.04</code> 不用 Debian
 的關係是因為鏡像站都倒光光了，packages 有夠難找。</p>
 <blockquote>
-<p>另外，有個要注意的是 <code>due</code> 指令請使用一般使用者，不要用 root 跑呦。 (不信的用了你就知道了)</p>
-</blockquote>
+<p>另外，有個要注意的是 <code>due</code> 指令請使用一般使用者，不要用 root 跑呦。 (不信的用了你就知道了)</p></blockquote>
 <p>環境大致就是這樣而已，其餘的就是依樣畫葫蘆照著文件那樣安裝下指令就好了。</p>
 <h2 id="前置作業---要檔案">前置作業 - 要檔案</h2>
 <p>沒錯！就是要檔案! 硬體的部分會有嵌入式工程師幫你搞定 U-boot 以及會有一個叫做 bring-up 的團隊去製作 Diagnostic OS 這個
@@ -179,8 +178,7 @@ Support 在使用的除錯系統。</p>
 而且拿 Linux Kernel 原始碼是因為，每家(網通)硬體廠商通常都會自己維護一個公司自己的 U-boot 以及 Linux
 Kernel，基於這些來開發自家產品，所以有些檔案直接拿官方版本的來用，大概率是直接死去。</p>
 <blockquote>
-<p>所以&hellip; 看到這裡，你應該知道高機率普通人要 build 出 ONIE 的話幾乎是不太可能的惹，尤其是 ARM 晶片的設備更難。</p>
-</blockquote>
+<p>所以&hellip; 看到這裡，你應該知道高機率普通人要 build 出 ONIE 的話幾乎是不太可能的惹，尤其是 ARM 晶片的設備更難。</p></blockquote>
 <h2 id="開始-build-瞜---第一階">開始 Build 瞜 - 第一階</h2>
 <p>！！！ 注意！ 接下來普通人看也沒用ＱＱ 但是你可以知道工程師都在做什麼 ！！！</p>
 <p>先去 clone ONIE 的 repo，然後自己開一個 branch 準備來改 code~</p>
@@ -194,15 +192,12 @@ Kernel，基於這些來開發自家產品，所以有些檔案直接拿官方�
 <p>大致就是有 <code>config</code> 的都複製過去吧! 然後就可以先用指令去 build 一次，看看 build 的目錄會不會有檔案跑出來。</p>
 <blockquote>
 <p>build 目錄底下有個叫 images 的目錄，裡面就是產生出來的 image 檔案。
-.itb 檔案就是純 ONIE 的 image，.bin 才是 .itb + u-boot 的 image 呦！</p>
-</blockquote>
+.itb 檔案就是純 ONIE 的 image，.bin 才是 .itb + u-boot 的 image 呦！</p></blockquote>
 <blockquote>
-<p>這邊要提醒一下拿到的 U-boot 的 binary image 要命名成 xxx-r0.u-boot 才會一起編譯出 .bin 檔案還有 updater 的檔案！</p>
-</blockquote>
+<p>這邊要提醒一下拿到的 U-boot 的 binary image 要命名成 xxx-r0.u-boot 才會一起編譯出 .bin 檔案還有 updater 的檔案！</p></blockquote>
 <blockquote>
 <p>順便再說一個基於偶的血汗找到的雷點，就是 series 的檔案，檔案最後請不要加上空白行，這樣 build 的時後會吃不到 series
-這個檔案呦~</p>
-</blockquote>
+這個檔案呦~</p></blockquote>
 <p>第一階段就是確定能 build 出東西就好。</p>
 <h2 id="微調---第二階">微調 - 第二階</h2>
 <p>現在可以開始微調一些參數摟～ 第一階段的一些設定都是抄作業抄來的，那有些參數或是啥鬼的會因為硬體不同以及不同 bring-up
@@ -211,8 +206,7 @@ Kernel，基於這些來開發自家產品，所以有些檔案直接拿官方�
 <p>那接下來就是把 DiagOS 他們的使用的 Linux Kernel Source Code 放在 build 的目錄，build 的時候其實會去下載 Linux
 官方的原始碼，只要去重新 link 到 DiagOS 用的 Linux 目錄即可，原始的 Kernel Code 目錄可以刪掉了。</p>
 <blockquote>
-<p>如果沒有拿到整坨 kernel source code 只有拿到 patch 檔案，那就去 patch 目錄中官方的原始碼吧！</p>
-</blockquote>
+<p>如果沒有拿到整坨 kernel source code 只有拿到 patch 檔案，那就去 patch 目錄中官方的原始碼吧！</p></blockquote>
 <p>到這邊再次 build 出 ONIE 吧~ 沒問題的話就可以拿到可以用的 ONIE 了。 應該很多網通廠商做到這一步就收尾了XD</p>
 <h2 id="修復功能---第三階">修復功能 - 第三階</h2>
 <p>抱歉我待的公司就是把這件事搞得比較複雜，因為 ONIE 需要有一些神奇的指令支援。</p>
@@ -344,8 +338,8 @@ fw_printenv 那邊的 linux kernel DTS 檔案，而所有空間就是指 uboot +
                 Please enable JavaScript to view the comments powered by <a href="https://disqus.com/?ref_noscript">Disqus</a>.
             </noscript></div></article></div>
             </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.134.2">Hugo</a> 強力驅動 | 主題 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.11"><i class="far fa-kiss-wink-heart fa-fw" aria-hidden="true"></i> LoveIt</a>
-                </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright fa-fw" aria-hidden="true"></i><span itemprop="copyrightYear">2024 - 2025</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="github.com/seisokeii" target="_blank">seisokeii</a></span></div>
+        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.145.0">Hugo</a> 強力驅動 | 主題 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.3.0"><i class="far fa-kiss-wink-heart fa-fw" aria-hidden="true"></i> LoveIt</a>
+                </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright fa-fw" aria-hidden="true"></i><span itemprop="copyrightYear">2024 - 2025</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/zh-tw/" target="_blank">seisokeii</a></span></div>
         </div>
     </footer></div>
 

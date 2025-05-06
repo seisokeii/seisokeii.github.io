@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <title>Halo - </title><meta name="Description" content="seisokeii&#39;s blog"><meta property="og:url" content="http://localhost:1313/posts/halo.zh-tw/">
+  <meta property="og:site_name" content="seisokeii の blog">
+  <meta property="og:title" content="Halo">
+  <meta property="og:description" content="開場要打招呼，就突然想到 sub zero project 有一首歌叫 HALO，蠻喜歡的推薦推薦XD
+第一個貼文就送給 hugo 吧！
+首先，不得不說偶的運氣真的差的可憐… 看了網路很多文章都寫說 hugo 5分鐘就可以架設好了，結果窩花了一天的時間(20小時以上) 才搞定開始寫這則貼文…
+至於原因嘛… 一開始就挑酷酷的主題去使用，結果呢幾乎每個主題都只說到 git submodule 安裝這邊就結束了，剩下的就是請自己想辦法，對於懂的人來說這倒是真的，但是對於一開始的超級小白就不好說了，尤其是不會去看 Document 的人，這邊就是我盒盒盒。
+窩遇到的問題其實很簡單，看著錯誤訊息想了老半天才發覺，就是在設定檔內少了或打錯 theme = &#39;xxx&#39; 這東東= =
+把這個設定加上去後的確 5 分鐘可以搞定，但是還不包含整體環境設定的修改，因為主題的作者都叫你去 exampleSite 直接下指令跑起來。 這就是第二個問題，小白不會一開始就知道 config.toml (現在改成 hugo.toml) 是怎麼搞的，要吃哪裡的設定檔啥的…
+大致這兩點問題就是不看 Document 的人，照著說明直接坐下去有機會遇到的吧，事後還是要慢慢的去看一下 Document 唄！ 但是窩就是懶，而且窩其實超級不喜歡網頁相關的東西，但是窩很崇拜寫網頁的人，因為網頁相關的工具技術太多且更新太快，窩根本跟不上…
+B.T.W. GitHub Page (GH) 也就是 github.io 這個專案中，只能放 public 裡面的東西，因為 GH 會去讀取該專案下的 index.html 檔。 如果是將整個 hugo push 上去的話會跑不動，就算你加了 .nojekyll 讓 deploy 成功也一樣會得到 404 的訊息盒盒盒 ( 窩不會說這是偶遇到過的)
+安裝 Hugo 這邊就超級粗略的講一下這邊 hugo 是怎麼被窩搞起來的吧～">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2024-05-14T22:20:52+08:00">
+    <meta property="article:modified_time" content="2024-05-14T22:20:52+08:00">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Halo">
+  <meta name="twitter:description" content="開場要打招呼，就突然想到 sub zero project 有一首歌叫 HALO，蠻喜歡的推薦推薦XD
+第一個貼文就送給 hugo 吧！
+首先，不得不說偶的運氣真的差的可憐… 看了網路很多文章都寫說 hugo 5分鐘就可以架設好了，結果窩花了一天的時間(20小時以上) 才搞定開始寫這則貼文…
+至於原因嘛… 一開始就挑酷酷的主題去使用，結果呢幾乎每個主題都只說到 git submodule 安裝這邊就結束了，剩下的就是請自己想辦法，對於懂的人來說這倒是真的，但是對於一開始的超級小白就不好說了，尤其是不會去看 Document 的人，這邊就是我盒盒盒。
+窩遇到的問題其實很簡單，看著錯誤訊息想了老半天才發覺，就是在設定檔內少了或打錯 theme = &#39;xxx&#39; 這東東= =
+把這個設定加上去後的確 5 分鐘可以搞定，但是還不包含整體環境設定的修改，因為主題的作者都叫你去 exampleSite 直接下指令跑起來。 這就是第二個問題，小白不會一開始就知道 config.toml (現在改成 hugo.toml) 是怎麼搞的，要吃哪裡的設定檔啥的…
+大致這兩點問題就是不看 Document 的人，照著說明直接坐下去有機會遇到的吧，事後還是要慢慢的去看一下 Document 唄！ 但是窩就是懶，而且窩其實超級不喜歡網頁相關的東西，但是窩很崇拜寫網頁的人，因為網頁相關的工具技術太多且更新太快，窩根本跟不上…
+B.T.W. GitHub Page (GH) 也就是 github.io 這個專案中，只能放 public 裡面的東西，因為 GH 會去讀取該專案下的 index.html 檔。 如果是將整個 hugo push 上去的話會跑不動，就算你加了 .nojekyll 讓 deploy 成功也一樣會得到 404 的訊息盒盒盒 ( 窩不會說這是偶遇到過的)
+安裝 Hugo 這邊就超級粗略的講一下這邊 hugo 是怎麼被窩搞起來的吧～">
+<meta name="application-name" content="seisokeii の blog">
+<meta name="apple-mobile-web-app-title" content="seisokeii の blog"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="http://localhost:1313/posts/halo.zh-tw/" /><link rel="next" href="http://localhost:1313/posts/halo/" /><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "Halo",
+        "inLanguage": "en",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "http:\/\/localhost:1313\/posts\/halo.zh-tw\/"
+        },"genre": "posts","wordcount":  286 ,
+        "url": "http:\/\/localhost:1313\/posts\/halo.zh-tw\/","datePublished": "2024-05-14T22:20:52+08:00","dateModified": "2024-05-14T22:20:52+08:00","publisher": {
+            "@type": "Organization",
+            "name": ""},"author": {
+                "@type": "Person",
+                "name": "Author"
+            },"description": ""
+    }
+    </script></head>
+    <body data-header-desktop="fixed" data-header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('dark' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'dark' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="">seisokeii の blog</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="Search titles or contents..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="Search">
+                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="Clear">
+                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                    <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+                </a></div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="">seisokeii の blog</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="Search titles or contents..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="Search">
+                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="Clear">
+                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        Cancel
+                    </a>
+                </div><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+            </a></div>
+    </div>
+</header><div class="search-dropdown desktop">
+        <div id="search-dropdown-desktop"></div>
+    </div>
+    <div class="search-dropdown mobile">
+        <div id="search-dropdown-mobile"></div>
+    </div><main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">Contents</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">Halo</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel="author" class="author"><i class="fas fa-user-circle fa-fw" aria-hidden="true"></i>Author</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2024-05-14">2024-05-14</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;286 words&nbsp;
+                <i class="far fa-clock fa-fw" aria-hidden="true"></i>&nbsp;2 minutes&nbsp;</div>
+        </div><div class="featured-image"><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="/images/halo/sub-zero-project-halo.jpg"
+        data-srcset="/images/halo/sub-zero-project-halo.jpg, /images/halo/sub-zero-project-halo.jpg 1.5x, /images/halo/sub-zero-project-halo.jpg 2x"
+        data-sizes="auto"
+        alt="/images/halo/sub-zero-project-halo.jpg"
+        title="/images/halo/sub-zero-project-halo.jpg" /></div><div class="details toc" id="toc-static"  data-kept="">
+                <div class="details-summary toc-title">
+                    <span>Contents</span>
+                    <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#安裝-hugo">安裝 Hugo</a></li>
+    <li><a href="#github-action">Github Action</a>
+      <ul>
+        <li><a href="#參考">參考</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><p>開場要打招呼，就突然想到 sub zero project 有一首歌叫 HALO，蠻喜歡的推薦推薦XD</p>
+<hr>
+<p>第一個貼文就送給 hugo 吧！</p>
+<p>首先，不得不說偶的運氣真的差的可憐&hellip; 看了網路很多文章都寫說 hugo 5分鐘就可以架設好了，結果窩花了一天的時間(20小時以上)
+才搞定開始寫這則貼文&hellip;</p>
+<p>至於原因嘛&hellip; 一開始就挑酷酷的主題去使用，結果呢幾乎每個主題都只說到 git submodule
+安裝這邊就結束了，剩下的就是請自己想辦法，對於懂的人來說這倒是真的，但是對於一開始的超級小白就不好說了，尤其是不會去看
+Document 的人，這邊就是我盒盒盒。</p>
+<p>窩遇到的問題其實很簡單，看著錯誤訊息想了老半天才發覺，就是在設定檔內少了或打錯 <code>theme = 'xxx'</code> 這東東= =</p>
+<p>把這個設定加上去後的確 5 分鐘可以搞定，但是還不包含整體環境設定的修改，因為主題的作者都叫你去 <code>exampleSite</code> 直接下指令跑起來。
+這就是第二個問題，小白不會一開始就知道 <code>config.toml</code> (現在改成 <code>hugo.toml</code>) 是怎麼搞的，要吃哪裡的設定檔啥的&hellip;</p>
+<p>大致這兩點問題就是不看 Document 的人，照著說明直接坐下去有機會遇到的吧，事後還是要慢慢的去看一下 Document 唄！
+但是窩就是懶，而且窩其實超級不喜歡網頁相關的東西，但是窩很崇拜寫網頁的人，因為網頁相關的工具技術太多且更新太快，窩根本跟不上&hellip;</p>
+<blockquote>
+<p>B.T.W. GitHub Page (GH) 也就是 github.io 這個專案中，只能放 public 裡面的東西，因為 GH 會去讀取該專案下的 index.html 檔。
+如果是將整個 hugo push 上去的話會跑不動，就算你加了 .nojekyll 讓 deploy 成功也一樣會得到 404 的訊息盒盒盒 (
+窩不會說這是偶遇到過的)</p></blockquote>
+<h2 id="安裝-hugo">安裝 Hugo</h2>
+<p>這邊就超級粗略的講一下這邊 hugo 是怎麼被窩搞起來的吧～</p>
+<ol>
+<li>安裝 hugo、Go (這個就不多說了，請自己查唄)</li>
+<li>創建新的網站
+，這邊我選擇 submodule 是因為之後主題更新比較簡單，hugo 好像有 mod 可以用，這要去看文件教學了
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>hugo new site my_website
+</span></span><span style="display:flex;"><span>cd my_website
+</span></span><span style="display:flex;"><span>git init
+</span></span><span style="display:flex;"><span>git clone https://github.com/dillonzq/LoveIt.git themes/LoveIt
+</span></span><span style="display:flex;"><span>git submodule add https://github.com/dillonzq/LoveIt.git themes/LoveIt
+</span></span></code></pre></div></li>
+<li>在 <strong>hugo.toml</strong> 內加入 <code>theme = 'LoveIt'</code>，而這個 <code>LoveIt</code> 就是第2點最後一個指令所放的<code>目錄名稱</code>
+其實也可以直接拿 <strong>exampleSite</strong> 的 <strong>config.toml</strong> 來用，要不要把檔名改成 <strong>hugo.toml</strong> 就看你了</li>
+<li>查看結果，指令請在 <code>my_website</code> 目錄下執行（所謂的根目錄）
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>hugo server
+</span></span></code></pre></div></li>
+<li>接下來就可以開始寫文章了跟調整 hugo.toml 的設定檔了，這邊就不多說了，因為窩也還在摸索中&hellip;</li>
+</ol>
+<h2 id="github-action">Github Action</h2>
+<p>這裡有個很酷的點要提一下，就是部落格可以將整個 Hugo 專案放在一個 Private 專案中，然後透過 Github Action 的 workflows 部署到
+github.io 專案中，醬可以把原始碼跟一些壞壞東西給藏起來^^
+（感謝 <a href="https://github.com/CSY54" target="_blank" rel="noopener noreffer ">CSY</a> 教我這一招）</p>
+<p>做法的話呢如下：</p>
+<ol>
+<li>在 hugo 專案中新增 <code>.github/workflows/deploy.yml</code> 檔案</li>
+<li>以偶的 <code>deploy.yml</code> 檔案為例，我裡面要替換的東西就請自行思考了，應該不難吧！</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span>---
+</span></span><span style="display:flex;"><span><span style="color:#f92672">name</span>: <span style="color:#ae81ff">Deploy public directory to seisokeii.github.io (MyBlog) repository</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">on</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">push</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">branches</span>: [ <span style="color:#ae81ff">main ]</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">jobs</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">deploy</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">runs-on</span>: <span style="color:#ae81ff">ubuntu-latest</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">steps</span>:
+</span></span><span style="display:flex;"><span>      - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">Checkout repository</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">uses</span>: <span style="color:#ae81ff">actions/checkout@v3</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">with</span>:
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">token</span>: <span style="color:#ae81ff">${{ secrets.你的吉哈伯PAT }}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">Setup SSH</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">uses</span>: <span style="color:#ae81ff">MrSquaare/ssh-setup-action@v1</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">with</span>:
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">host</span>: <span style="color:#ae81ff">github.com</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">private-key</span>: <span style="color:#ae81ff">${{ secrets.你的SSH private key }}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">Copy public directory</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">run</span>: |<span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">          mkdir -p target-repo
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">          git clone git@github.com:seisokeii/seisokeii.github.io.git target-repo
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">          cp -r public/* target-repo/</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">Commit and push changes</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">run</span>: |<span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">          cd target-repo
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">          git config user.name 使用者abc
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">          git config user.email 信箱abc
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">          git add .
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">          SukaBlyad_date=$(date +%Y/%m/%d) # 這邊我就只是記錄啥時候更改而已，可以不用學我使用日期，可以看我的 commit comment
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">          git commit -m &#34;Update: $SukaBlyad_date&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">          git push</span>
+</span></span></code></pre></div><ol start="3">
+<li>有了以上 YAML 設定檔後，要記得去設定所需要的東西，像是 PAT (Personal Access Token) 跟 SSH private
+key，我是將這些東西產生好後放在專案中的環境變數(repo Settings -&gt; Secrets and Variables -&gt; Actions)，記得它只給你 Update
+而已，不會顯示現有的，所以要記得先儲存好呦！</li>
+<li>完成以上後，嘗試 push 整個 hugo 專案，看看 GitHub Action 能不能成功，以及 github.io 專案是否只有出現 public 的東西。</li>
+</ol>
+<h3 id="參考">參考</h3>
+<p><a href="https://hugoloveit.com/theme-documentation-basics/" target="_blank" rel="noopener noreffer ">LoveIt 主題文件</a>
+<a href="https://github.com/dillonzq/LoveIt/blob/master/exampleSite/config.toml" target="_blank" rel="noopener noreffer ">LoveIt Github config.toml 範例</a></p>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>Updated on 2024-05-14</span>
+            </div></div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">Back</a></span>&nbsp;|&nbsp;<span><a href="/">Home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav">
+            <a href="/posts/halo/" class="next" rel="next" title="Halo">Halo<i class="fas fa-angle-right fa-fw" aria-hidden="true"></i></a></div>
+</div>
+</article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.145.0">Hugo</a> | Theme - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.11"><i class="far fa-kiss-wink-heart fa-fw" aria-hidden="true"></i> LoveIt</a>
+                </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright fa-fw" aria-hidden="true"></i><span itemprop="copyrightYear">2024 - 2025</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank"></a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="Back to Top">
+                <i class="fas fa-arrow-up fa-fw" aria-hidden="true"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="View Comments">
+                <i class="fas fa-comment fa-fw" aria-hidden="true"></i>
+            </a>
+        </div><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/lunr/lunr.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":30},"comment":{},"search":{"highlightTag":"em","maxResultLength":10,"noResultsFound":"No results found","snippetLength":30}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

@@ -1,24 +1,68 @@
-<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
-    <channel>
-        <title>Categories - 分類 - seisokeii blog</title>
-        <link>http://localhost:1313/categories/</link>
-        <description>Categories - 分類 - seisokeii blog</description>
-        <generator>Hugo -- gohugo.io</generator><language>zh-TW</language><managingEditor>Noway@bimbimbambam (seisokeii)</managingEditor>
-            <webMaster>Noway@bimbimbambam (seisokeii)</webMaster><lastBuildDate>Tue, 13 Aug 2024 17:39:33 &#43;0800</lastBuildDate><atom:link href="http://localhost:1313/categories/" rel="self" type="application/rss+xml" /><item>
-    <title>ONIE</title>
-    <link>http://localhost:1313/categories/onie/</link>
-    <pubDate>Tue, 13 Aug 2024 17:39:33 &#43;0800</pubDate>
-    <author>seisokeii</author>
-    <guid>http://localhost:1313/categories/onie/</guid>
-    <description><![CDATA[]]></description>
-</item>
-<item>
-    <title>降噪耳塞</title>
-    <link>http://localhost:1313/categories/%E9%99%8D%E5%99%AA%E8%80%B3%E5%A1%9E/</link>
-    <pubDate>Sat, 20 Jul 2024 16:28:06 &#43;0800</pubDate>
-    <author>seisokeii</author>
-    <guid>http://localhost:1313/categories/%E9%99%8D%E5%99%AA%E8%80%B3%E5%A1%9E/</guid>
-    <description><![CDATA[]]></description>
-</item>
-</channel>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Categories on </title>
+    <link>http://seisokeii.github.io/zh-tw/categories/</link>
+    <description>Recent content in Categories on </description>
+    <generator>Hugo</generator>
+    <language>en</language>
+    <lastBuildDate>Mon, 28 Apr 2025 11:39:27 +0800</lastBuildDate>
+    <atom:link href="http://seisokeii.github.io/zh-tw/categories/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Transceiver</title>
+      <link>http://seisokeii.github.io/zh-tw/categories/transceiver/</link>
+      <pubDate>Mon, 28 Apr 2025 11:39:27 +0800</pubDate>
+      <guid>http://seisokeii.github.io/zh-tw/categories/transceiver/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>義務役兵役</title>
+      <link>http://seisokeii.github.io/zh-tw/categories/%E7%BE%A9%E5%8B%99%E5%BD%B9%E5%85%B5%E5%BD%B9/</link>
+      <pubDate>Fri, 06 Dec 2024 22:41:21 +0800</pubDate>
+      <guid>http://seisokeii.github.io/zh-tw/categories/%E7%BE%A9%E5%8B%99%E5%BD%B9%E5%85%B5%E5%BD%B9/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>NYCU-CSIT</title>
+      <link>http://seisokeii.github.io/zh-tw/categories/nycu-csit/</link>
+      <pubDate>Thu, 26 Sep 2024 10:03:56 +0800</pubDate>
+      <guid>http://seisokeii.github.io/zh-tw/categories/nycu-csit/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Internship</title>
+      <link>http://seisokeii.github.io/zh-tw/categories/internship/</link>
+      <pubDate>Wed, 25 Sep 2024 16:54:37 +0800</pubDate>
+      <guid>http://seisokeii.github.io/zh-tw/categories/internship/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>SONiC</title>
+      <link>http://seisokeii.github.io/zh-tw/categories/sonic/</link>
+      <pubDate>Tue, 24 Sep 2024 15:56:33 +0800</pubDate>
+      <guid>http://seisokeii.github.io/zh-tw/categories/sonic/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>ONIE</title>
+      <link>http://seisokeii.github.io/zh-tw/categories/onie/</link>
+      <pubDate>Thu, 19 Sep 2024 17:03:33 +0800</pubDate>
+      <guid>http://seisokeii.github.io/zh-tw/categories/onie/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>NoiseCancellingEarplugs</title>
+      <link>http://seisokeii.github.io/zh-tw/categories/noisecancellingearplugs/</link>
+      <pubDate>Sat, 20 Jul 2024 16:28:06 +0800</pubDate>
+      <guid>http://seisokeii.github.io/zh-tw/categories/noisecancellingearplugs/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>降噪耳塞</title>
+      <link>http://seisokeii.github.io/zh-tw/categories/%E9%99%8D%E5%99%AA%E8%80%B3%E5%A1%9E/</link>
+      <pubDate>Sat, 20 Jul 2024 16:28:06 +0800</pubDate>
+      <guid>http://seisokeii.github.io/zh-tw/categories/%E9%99%8D%E5%99%AA%E8%80%B3%E5%A1%9E/</guid>
+      <description></description>
+    </item>
+  </channel>
 </rss>

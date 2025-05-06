@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>MasterDegree on </title>
+    <link>//localhost:1313/tags/masterdegree/</link>
+    <description>Recent content in MasterDegree on </description>
+    <generator>Hugo</generator>
+    <language>en</language>
+    <lastBuildDate>Thu, 26 Sep 2024 10:03:56 +0800</lastBuildDate>
+    <atom:link href="//localhost:1313/tags/masterdegree/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>陽明交通大學資訊科學與工程學系碩士丁組</title>
+      <link>//localhost:1313/posts/nycucsit/nycu-csit-master-degree.zh-tw/</link>
+      <pubDate>Thu, 26 Sep 2024 10:03:56 +0800</pubDate>
+      <guid>//localhost:1313/posts/nycucsit/nycu-csit-master-degree.zh-tw/</guid>
+      <description>&lt;p&gt;上面這張圖片是系計中跟另一間實驗室去參觀中華電信板橋資料中心，聽說這裡要參觀很難申請呢XD&lt;/p&gt;&#xA;&lt;hr&gt;&#xA;&lt;p&gt;趁著要當兵前趕緊寫一下～ 現在九月好像現在也是大四要準備推甄的時期了呢。&lt;/p&gt;&#xA;&lt;h2 id=&#34;丁組是什麼&#34;&gt;丁組是什麼？&lt;/h2&gt;&#xA;&lt;p&gt;先上官網XD &lt;a href=&#34;https://it.cs.nycu.edu.tw/join-us&#34;&gt;資工系資訊中心&lt;/a&gt;&lt;/p&gt;&#xA;&lt;p&gt;就如同官網寫的這樣 &amp;ldquo;資工系資訊中心是一群由丁組、研究生、與大學生共同組成的團隊&amp;rdquo;，我們都簡稱叫系計中或叫 cc 都可以~&lt;/p&gt;&#xA;&lt;p&gt;整個系計中有許多大組別，像是 WWW、System、Mail、PC、VM、Net，有大就有小，所以其實有一些隱藏的職位，都是我們自己內部再細切出來的。&lt;/p&gt;&#xA;&lt;p&gt;其實看組別就應該知道我們大致會負責什麼了，我主要是在 Net 組，不用說就是跟網路有關的了!&lt;/p&gt;&#xA;&lt;p&gt;那丁組呢？ 講白了就是專屬於系計中的碩士班啦! 因為維運總是需要一些固定人員，雖然說大學部的人不少，但丁組在系計中其實有幾個扮演的角色。&#xA;我個人覺得這麼說可能比較適合吧，像是要使用大學期間的維運經驗來丁組發現問題並解決問題，當然維運的部分一樣要繼續XD&lt;/p&gt;&#xA;&lt;p&gt;同時丁組的人也需要兼任課程助教摟～ 像是資工一定聽過的 NASA，那像我是 Net 組的話，就要額外去負責 &amp;lsquo;網路技術與實務&amp;rsquo; 也就是入門的 CCNA。&lt;/p&gt;&#xA;&lt;p&gt;本篇我會以 Net 組為準~&lt;/p&gt;&#xA;&lt;blockquote&gt;&#xA;&lt;p&gt;你知道嗎 網頁組又稱為 VVVVVV 組呦^＾&lt;/p&gt;&lt;/blockquote&gt;&#xA;&lt;h2 id=&#34;我為什麼去丁組&#34;&gt;我為什麼去丁組？&lt;/h2&gt;&#xA;&lt;p&gt;哎呀～ 寫這篇的時候其實是丁組碩班畢業了&amp;hellip; 沒辦法像是許多人分享的那樣，大四生的那種申請碩班的激情感，我反而是一種懷念的感覺在寫XD&lt;/p&gt;&#xA;&lt;p&gt;當初我大學是在靜宜大學唸的，靜宜的資訊學院其實也有以學生自治的機房，叫做 &amp;lsquo;主機房&amp;rsquo;。 當初我是大二左右進入主機房的，然後就開始學 NASA 這邊的技能。&#xA;在主機房的時候當時都是使用 FreeBSD 去架設服務的，然後資訊學院的主顧樓整棟網路也是管理範圍，所以當時候也有加減學 Cisco, Extreme, Aruba, Dell, &amp;hellip;等等的交換機品牌怎麼操作。&lt;/p&gt;&#xA;&lt;p&gt;其實除了這邊維運之外，我也學會了一些水塔水冷氣、UPS、&amp;hellip;之類的維運XD 幾乎都是我們學生自己來就連跟廠商談生意也是XD&lt;/p&gt;&#xA;&lt;p&gt;那在這樣的大學時期，就漸漸的變成了&amp;hellip; 管理機房的 MIS 了QQ (偶是資工系誒&amp;hellip; 算不誤正業嗎?&lt;/p&gt;&#xA;&lt;p&gt;在大四的時候發現一件事情，就是我只會管機房寫程式沒有很厲害跟本菜雞，然後主機房有學長姐跟我說交大有系計中可以念碩班，所以我就去申請了= =&lt;/p&gt;&#xA;&lt;p&gt;當初的想法就是只有申請交大丁組而已，如果沒上我就繼續留在靜宜，反正都是自己學校熟的。 啊後來就幸運的進到了交大了XD&lt;/p&gt;&#xA;&lt;h2 id=&#34;在丁組做什麼&#34;&gt;在丁組做什麼？&lt;/h2&gt;&#xA;&lt;p&gt;一開始進丁組的話，老實說身為過來人，真心希望新人可以暑假就先到系計中開始熟悉業務了，不然你開學後才開始熟悉太慢了，因為開學不管是誰都會很忙!&lt;/p&gt;&#xA;&lt;p&gt;碩一第一學期，其實 SA 課程就開始了，而丁組碩一就是要負責這門課的作業，通常是暑假就開始計劃討論並實作可行性，最後再撰寫 judge 系統腳本，所以其實開學再做的時間很少了，畢竟交大的別稱是交作業大學XD&#xA;在過去這邊還有個比較難的點，就是每份作業都不能跟曾經任何一份的作業要相同，也就是網路上沒辦法複製貼上就動了，如果可以我們助教就會被電翻。(在我這一屆2021年之前是這樣，之後我不敢保證XD&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

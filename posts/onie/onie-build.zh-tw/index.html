@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <title>Open Network Install Environment (ONIE) How to build? - </title><meta name="Description" content="seisokeii&#39;s blog"><meta property="og:url" content="http://localhost:1313/posts/onie/onie-build.zh-tw/">
+  <meta property="og:site_name" content="seisokeii の blog">
+  <meta property="og:title" content="Open Network Install Environment (ONIE) How to build?">
+  <meta property="og:description" content="上面這張圖是窩在開發用的機器，長得有點像是 1U 的 N3k 誒XD
+繼上一篇 ONIE 白話文簡介 ，來稍微分享一下 ONIE 這東東是怎麼 build 起來的唄！
+這邊會類似一個教學文件，但是當然不可能會把公司的資訊放在這~ 就只是大致看一下一間網通廠是怎麼搞出這東東的而已。
+前置作業 - 準備開發環境 開發環境老實說就是一台中規中矩的 Linux 就可以了，窩是用虛擬機啦~
+這個環境其實就是照 ONIE 官網的建議，去安裝 CumulusNetworks 做的 DUE 套件，不然有編譯過 Linux Kernel 的應該會知道那個 dependency 有多麽靠北，用了 DUE 後就會自動搞定這一切摟～
+DUE 是要使用 Docker 的，那這邊建議 container 不要用太新的 Linux Kernel，像我就 docker pull ubuntu:16.04 不用 Debian 的關係是因為鏡像站都倒光光了，packages 有夠難找。
+另外，有個要注意的是 due 指令請使用一般使用者，不要用 root 跑呦。 (不信的用了你就知道了)
+環境大致就是這樣而已，其餘的就是依樣畫葫蘆照著文件那樣安裝下指令就好了。
+前置作業 - 要檔案 沒錯！就是要檔案! 硬體的部分會有嵌入式工程師幫你搞定 U-boot 以及會有一個叫做 bring-up 的團隊去製作 Diagnostic OS 這個 Support 在使用的除錯系統。">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2024-09-19T17:03:33+08:00">
+    <meta property="article:modified_time" content="2024-09-19T17:03:33+08:00">
+    <meta property="article:tag" content="ONIE">
+    <meta property="article:tag" content="SONiC">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Open Network Install Environment (ONIE) How to build?">
+  <meta name="twitter:description" content="上面這張圖是窩在開發用的機器，長得有點像是 1U 的 N3k 誒XD
+繼上一篇 ONIE 白話文簡介 ，來稍微分享一下 ONIE 這東東是怎麼 build 起來的唄！
+這邊會類似一個教學文件，但是當然不可能會把公司的資訊放在這~ 就只是大致看一下一間網通廠是怎麼搞出這東東的而已。
+前置作業 - 準備開發環境 開發環境老實說就是一台中規中矩的 Linux 就可以了，窩是用虛擬機啦~
+這個環境其實就是照 ONIE 官網的建議，去安裝 CumulusNetworks 做的 DUE 套件，不然有編譯過 Linux Kernel 的應該會知道那個 dependency 有多麽靠北，用了 DUE 後就會自動搞定這一切摟～
+DUE 是要使用 Docker 的，那這邊建議 container 不要用太新的 Linux Kernel，像我就 docker pull ubuntu:16.04 不用 Debian 的關係是因為鏡像站都倒光光了，packages 有夠難找。
+另外，有個要注意的是 due 指令請使用一般使用者，不要用 root 跑呦。 (不信的用了你就知道了)
+環境大致就是這樣而已，其餘的就是依樣畫葫蘆照著文件那樣安裝下指令就好了。
+前置作業 - 要檔案 沒錯！就是要檔案! 硬體的部分會有嵌入式工程師幫你搞定 U-boot 以及會有一個叫做 bring-up 的團隊去製作 Diagnostic OS 這個 Support 在使用的除錯系統。">
+<meta name="application-name" content="seisokeii の blog">
+<meta name="apple-mobile-web-app-title" content="seisokeii の blog"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="http://localhost:1313/posts/onie/onie-build.zh-tw/" /><link rel="prev" href="http://localhost:1313/posts/onie/onie-intro/" /><link rel="next" href="http://localhost:1313/posts/onie/onie-build/" /><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "Open Network Install Environment (ONIE) How to build?",
+        "inLanguage": "en",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "http:\/\/localhost:1313\/posts\/onie\/onie-build.zh-tw\/"
+        },"genre": "posts","keywords": "ONIE, SONiC","wordcount":  564 ,
+        "url": "http:\/\/localhost:1313\/posts\/onie\/onie-build.zh-tw\/","datePublished": "2024-09-19T17:03:33+08:00","dateModified": "2024-09-19T17:03:33+08:00","publisher": {
+            "@type": "Organization",
+            "name": ""},"author": {
+                "@type": "Person",
+                "name": "Author"
+            },"description": ""
+    }
+    </script></head>
+    <body data-header-desktop="fixed" data-header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('dark' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'dark' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="">seisokeii の blog</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="Search titles or contents..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="Search">
+                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="Clear">
+                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                    <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+                </a></div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="">seisokeii の blog</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="Search titles or contents..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="Search">
+                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="Clear">
+                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        Cancel
+                    </a>
+                </div><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+            </a></div>
+    </div>
+</header><div class="search-dropdown desktop">
+        <div id="search-dropdown-desktop"></div>
+    </div>
+    <div class="search-dropdown mobile">
+        <div id="search-dropdown-mobile"></div>
+    </div><main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">Contents</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">Open Network Install Environment (ONIE) How to build?</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel="author" class="author"><i class="fas fa-user-circle fa-fw" aria-hidden="true"></i>Author</a></span>&nbsp;<span class="post-category">included in <a href="/categories/onie/"><i class="far fa-folder fa-fw" aria-hidden="true"></i>ONIE</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2024-09-19">2024-09-19</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;564 words&nbsp;
+                <i class="far fa-clock fa-fw" aria-hidden="true"></i>&nbsp;3 minutes&nbsp;</div>
+        </div><div class="featured-image"><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="/images/ONIE/onie-dev-machine.jpeg"
+        data-srcset="/images/ONIE/onie-dev-machine.jpeg, /images/ONIE/onie-dev-machine.jpeg 1.5x, /images/ONIE/onie-dev-machine.jpeg 2x"
+        data-sizes="auto"
+        alt="/images/ONIE/onie-dev-machine.jpeg"
+        title="/images/ONIE/onie-dev-machine.jpeg" /></div><div class="details toc" id="toc-static"  data-kept="">
+                <div class="details-summary toc-title">
+                    <span>Contents</span>
+                    <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#前置作業---準備開發環境">前置作業 - 準備開發環境</a></li>
+    <li><a href="#前置作業---要檔案">前置作業 - 要檔案</a></li>
+    <li><a href="#開始-build-瞜---第一階">開始 Build 瞜 - 第一階</a></li>
+    <li><a href="#微調---第二階">微調 - 第二階</a></li>
+    <li><a href="#修復功能---第三階">修復功能 - 第三階</a></li>
+    <li><a href="#onie-updater---第四階">onie-updater - 第四階</a></li>
+    <li><a href="#結語">結語</a>
+      <ul>
+        <li><a href="#參考">參考</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><p>上面這張圖是窩在開發用的機器，長得有點像是 1U 的 N3k 誒XD</p>
+<hr>
+<p>繼上一篇 <code>ONIE 白話文簡介</code> ，來稍微分享一下 ONIE 這東東是怎麼 build 起來的唄！</p>
+<p>這邊會類似一個教學文件，但是當然不可能會把公司的資訊放在這~ 就只是大致看一下一間網通廠是怎麼搞出這東東的而已。</p>
+<h2 id="前置作業---準備開發環境">前置作業 - 準備開發環境</h2>
+<p>開發環境老實說就是一台中規中矩的 Linux 就可以了，窩是用虛擬機啦~</p>
+<p>這個環境其實就是照 ONIE 官網的建議，去安裝 CumulusNetworks 做的 DUE 套件，不然有編譯過 Linux Kernel 的應該會知道那個
+dependency 有多麽靠北，用了 DUE 後就會自動搞定這一切摟～</p>
+<p>DUE 是要使用 Docker 的，那這邊建議 container 不要用太新的 Linux Kernel，像我就 <code>docker pull ubuntu:16.04</code> 不用 Debian
+的關係是因為鏡像站都倒光光了，packages 有夠難找。</p>
+<blockquote>
+<p>另外，有個要注意的是 <code>due</code> 指令請使用一般使用者，不要用 root 跑呦。 (不信的用了你就知道了)</p></blockquote>
+<p>環境大致就是這樣而已，其餘的就是依樣畫葫蘆照著文件那樣安裝下指令就好了。</p>
+<h2 id="前置作業---要檔案">前置作業 - 要檔案</h2>
+<p>沒錯！就是要檔案! 硬體的部分會有嵌入式工程師幫你搞定 U-boot 以及會有一個叫做 bring-up 的團隊去製作 Diagnostic OS 這個
+Support 在使用的除錯系統。</p>
+<p>那 DiagOS 這其實也是的輕量化的 Linux 系統，好換個角度想，其實 Linux 已經被相容了XD 不然 DiagOS 是啥?!</p>
+<p>有人幫忙搞定相容性後，老實說我們只需要拿到這些相容性需要的檔案就好，需要的資訊以及檔案大致是:</p>
+<ul>
+<li>u-boot binary 檔案、DTS、defconfig</li>
+<li>Linux kernel (Diag 用的) 原始碼、DTS、defconfig、&hellip;
+<ul>
+<li>kernel patch 檔案也可，這通常是 SoC 廠商製作的</li>
+<li>DTS 要記得是給 Linux 用的，而不是 u-boot 用的，兩者長的不同，之後有些東西會參考到 u-boot 的 DTS 設定並做對應的調整</li>
+</ul>
+</li>
+<li>詢問 NOR Flash、eMMC 的 layout (也就是存放 address 是怎樣的)</li>
+</ul>
+<p>上述這些檔案啊，在上一篇有提到，有些檔案是 SoC 廠商提供的，也不太需要自己搞，畢竟硬體是 SoC 做的呀。
+而且拿 Linux Kernel 原始碼是因為，每家(網通)硬體廠商通常都會自己維護一個公司自己的 U-boot 以及 Linux
+Kernel，基於這些來開發自家產品，所以有些檔案直接拿官方版本的來用，大概率是直接死去。</p>
+<blockquote>
+<p>所以&hellip; 看到這裡，你應該知道高機率普通人要 build 出 ONIE 的話幾乎是不太可能的惹，尤其是 ARM 晶片的設備更難。</p></blockquote>
+<h2 id="開始-build-瞜---第一階">開始 Build 瞜 - 第一階</h2>
+<p>！！！ 注意！ 接下來普通人看也沒用ＱＱ 但是你可以知道工程師都在做什麼 ！！！</p>
+<p>先去 clone ONIE 的 repo，然後自己開一個 branch 準備來改 code~</p>
+<p>這邊公司內部的 RD 是建議我切換到舊的 branch，不要用最新的 branch 然後把想要的機器目錄建立起來。</p>
+<p>那首先就是抄作業XD 沒錯！去找一台相近的機器，然後整坨設定複製過來，其實只要複製重要的檔案就好:</p>
+<ul>
+<li>busybox/conf/config</li>
+<li>kernel/config</li>
+<li>machine.make</li>
+</ul>
+<p>大致就是有 <code>config</code> 的都複製過去吧! 然後就可以先用指令去 build 一次，看看 build 的目錄會不會有檔案跑出來。</p>
+<blockquote>
+<p>build 目錄底下有個叫 images 的目錄，裡面就是產生出來的 image 檔案。
+.itb 檔案就是純 ONIE 的 image，.bin 才是 .itb + u-boot 的 image 呦！</p></blockquote>
+<blockquote>
+<p>這邊要提醒一下拿到的 U-boot 的 binary image 要命名成 xxx-r0.u-boot 才會一起編譯出 .bin 檔案還有 updater 的檔案！</p></blockquote>
+<blockquote>
+<p>順便再說一個基於偶的血汗找到的雷點，就是 series 的檔案，檔案最後請不要加上空白行，這樣 build 的時後會吃不到 series
+這個檔案呦~</p></blockquote>
+<p>第一階段就是確定能 build 出東西就好。</p>
+<h2 id="微調---第二階">微調 - 第二階</h2>
+<p>現在可以開始微調一些參數摟～ 第一階段的一些設定都是抄作業抄來的，那有些參數或是啥鬼的會因為硬體不同以及不同 bring-up
+調教的都會不一樣。</p>
+<p>那首先就是要調整的是 <code>machine.make</code> 中的 DTB 資訊，這些資訊會出現在 diagOS 的開機輸出畫面，找到後填上即可。</p>
+<p>那接下來就是把 DiagOS 他們的使用的 Linux Kernel Source Code 放在 build 的目錄，build 的時候其實會去下載 Linux
+官方的原始碼，只要去重新 link 到 DiagOS 用的 Linux 目錄即可，原始的 Kernel Code 目錄可以刪掉了。</p>
+<blockquote>
+<p>如果沒有拿到整坨 kernel source code 只有拿到 patch 檔案，那就去 patch 目錄中官方的原始碼吧！</p></blockquote>
+<p>到這邊再次 build 出 ONIE 吧~ 沒問題的話就可以拿到可以用的 ONIE 了。 應該很多網通廠商做到這一步就收尾了XD</p>
+<h2 id="修復功能---第三階">修復功能 - 第三階</h2>
+<p>抱歉我待的公司就是把這件事搞得比較複雜，因為 ONIE 需要有一些神奇的指令支援。</p>
+<p>那這邊老實說就是只能找到公司中有在做 ONIE 的部門，然後詢問他們並拿到對應的 patch 檔案，然後重新 build。</p>
+<p>但是最基本的功能就是 MGMT port 要有辦法上網，這樣就可以惹～</p>
+<h2 id="onie-updater---第四階">onie-updater - 第四階</h2>
+<p>沒錯！還有第四階段XD 這邊就是要去搞出 updater 這個檔案。</p>
+<p>Updater 這檔案可以在 ONIE 中去更新 U-boot 以及 ONIE 呦，很方便ㄉ！</p>
+<p>那這個檔案就是需要去修改 <code>onie-rom.conf</code> 這檔案，主要就是 env_sector_size 了，這個意思是要計算 uboot 到 onie 之間的所有空間，可以看
+fw_printenv 那邊的 linux kernel DTS 檔案，而所有空間就是指 uboot + onie</p>
+<p>搞定後就可以去修改 U-boot 的參數了，指令大致如下：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>setenv bootcmd &#39;run check_boot_reason; run nos_bootcmd; run onie_install&#39;
+</span></span><span style="display:flex;"><span>setenv consoledev &#39;ttyS0&#39;
+</span></span><span style="display:flex;"><span>setenv baudrate &#39;115200&#39;
+</span></span><span style="display:flex;"><span>setenv onie_platform &#39;arm64-sukablyad-r0&#39;
+</span></span><span style="display:flex;"><span>setenv onie_install &#39;setenv onie_boot_reason install &amp;&amp; run onie_bootcmd&#39;
+</span></span><span style="display:flex;"><span>setenv onie_rescue &#39;setenv onie_boot_reason rescue &amp;&amp; run onie_bootcmd&#39;
+</span></span><span style="display:flex;"><span>setenv onie_update &#39;setenv onie_boot_reason update &amp;&amp; run onie_bootcmd&#39;
+</span></span><span style="display:flex;"><span>setenv onie_uninstall &#39;setenv onie_boot_reason uninstall &amp;&amp; run onie_bootcmd&#39;
+</span></span><span style="display:flex;"><span>setenv onie_args &#39;if test -n $onie_boot_reason; then; else setenv onie_boot_reason rescue; fi; setenv bootargs quiet console=$consoledev,$baudrate boot_reason=$onie_boot_reason $onie_debugargs pci=pcie_bus_safe cpuidle.off=1&#39;
+</span></span><span style="display:flex;"><span>setenv check_boot_reason &#39;if test -n $onie_boot_reason; then run onie_bootcmd; fi;&#39;
+</span></span><span style="display:flex;"><span>setenv nos_bootcmd &#39;echo&#39;
+</span></span><span style="display:flex;"><span>setenv onie_bootcmd &#39;echo Loading Open Network Install Environment ...; echo Platform: $onie_platform ; usb start ; fatload usb 0:1 0x10000000 sukablyad-r0.itb &amp;&amp; run onie_args &amp;&amp; bootm 0x10000000&#39;
+</span></span><span style="display:flex;"><span>setenv onie_boot_reason &#39;install&#39;
+</span></span><span style="display:flex;"><span>saveenv
+</span></span></code></pre></div><p>加完後就可以再次進入 ONIE 然後就去執行 updater 檔案，執行完後就會發現 U-boot 跟 ONIE 都可以透過 updater 這個檔案去更新了。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>ONIE:/tmp # ./onie-updater-arm64-sukablyad-r0
+</span></span><span style="display:flex;"><span>Verifying image checksum ... OK.
+</span></span><span style="display:flex;"><span>Preparing image archive ... OK.
+</span></span><span style="display:flex;"><span>ONIE: Version       : 2020.02.00.00-dirty
+</span></span><span style="display:flex;"><span>ONIE: Architecture  : arm64
+</span></span><span style="display:flex;"><span>ONIE: Machine       : sukablyad
+</span></span><span style="display:flex;"><span>ONIE: Machine Rev   : 0
+</span></span><span style="display:flex;"><span>ONIE: Config Version: 1
+</span></span><span style="display:flex;"><span>ONIE: Build Date    : 2024-07-30T03:31+00:00
+</span></span><span style="display:flex;"><span>Updating ONIE OS ...
+</span></span><span style="display:flex;"><span>Erasing block: 3103/3103 (100%)
+</span></span><span style="display:flex;"><span>Writing kb: 12410/12410 (100%)
+</span></span><span style="display:flex;"><span>Verifying kb: 12410/12410 (100%)
+</span></span><span style="display:flex;"><span>Updating U-Boot ...
+</span></span><span style="display:flex;"><span>Erasing block: 414/414 (100%)
+</span></span><span style="display:flex;"><span>Writing kb: 1653/1653 (100%)
+</span></span><span style="display:flex;"><span>Verifying kb: 1653/1653 (100%)
+</span></span><span style="display:flex;"><span>ONIE:/tmp #
+</span></span></code></pre></div><p>對於工程師來說，到這裡 ONIE 才算是完成。</p>
+<h2 id="結語">結語</h2>
+<p>雖然這邊省掉了好多好多細節，但是大致流程其實就是拿到檔案，然後找參數拼拼湊湊，這樣就可以 build 出來一個 ONIE 了。</p>
+<p>公司好像也只有一個部門在做這件事情，但是新設備出現的很快，而這個 RD 部門也算是忙的，所以可以自己團隊內先 build
+就可以省掉不少功夫，而且也沒有很難啦 (除非你遇到沒有對應 patch 的問題XD)。</p>
+<p>老實說我一個實習生一開始就接到這個案子，有點矇B = = (我以前只是個網管椰QQ)</p>
+<p>抱怨歸抱怨，但是還是學到了不少底層的一些知識。
+為此我還特地去看了交大的 OSDI 課程，去學 first stage 跟 second stage bootloader 是什麼跟怎麼運作的XD</p>
+<p>這個專案撇開要檔案的時間，花了我一週的時間搞定了ＱＱ 非常感謝 David 的 RD 教我會這個多東西 (_ _)</p>
+<h3 id="參考">參考</h3>
+<ul>
+<li>ONIE 官網文件 <a href="https://opencomputeproject.github.io/onie/overview/index.html#" target="_blank" rel="noopener noreffer ">https://opencomputeproject.github.io/onie/overview/index.html#</a></li>
+<li>ONIE 官方 Github <a href="https://github.com/opencomputeproject/onie" target="_blank" rel="noopener noreffer ">https://github.com/opencomputeproject/onie</a></li>
+<li>DUE 官方文件 <a href="https://github.com/CumulusNetworks/DUE/blob/master/docs/GettingStarted.md" target="_blank" rel="noopener noreffer ">https://github.com/CumulusNetworks/DUE/blob/master/docs/GettingStarted.md</a></li>
+</ul>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>Updated on 2024-09-19</span>
+            </div></div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw" aria-hidden="true"></i>&nbsp;<a href="/tags/onie/">ONIE</a>,&nbsp;<a href="/tags/sonic/">SONiC</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">Back</a></span>&nbsp;|&nbsp;<span><a href="/">Home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/posts/onie/onie-intro/" class="prev" rel="prev" title="Open Network Install Environment (ONIE) Simple Introduction"><i class="fas fa-angle-left fa-fw" aria-hidden="true"></i>Open Network Install Environment (ONIE) Simple Introduction</a>
+            <a href="/posts/onie/onie-build/" class="next" rel="next" title="Open Network Install Environment (ONIE) How to build?">Open Network Install Environment (ONIE) How to build?<i class="fas fa-angle-right fa-fw" aria-hidden="true"></i></a></div>
+</div>
+</article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.145.0">Hugo</a> | Theme - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.11"><i class="far fa-kiss-wink-heart fa-fw" aria-hidden="true"></i> LoveIt</a>
+                </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright fa-fw" aria-hidden="true"></i><span itemprop="copyrightYear">2024 - 2025</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank"></a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="Back to Top">
+                <i class="fas fa-arrow-up fa-fw" aria-hidden="true"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="View Comments">
+                <i class="fas fa-comment fa-fw" aria-hidden="true"></i>
+            </a>
+        </div><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/lunr/lunr.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":30},"comment":{},"search":{"highlightTag":"em","maxResultLength":10,"noResultsFound":"No results found","snippetLength":30}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

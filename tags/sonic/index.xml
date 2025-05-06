@@ -1,19 +1,54 @@
-<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
-    <channel>
-        <title>SONiC - 標籤 - seisokeii blog</title>
-        <link>http://localhost:1313/tags/sonic/</link>
-        <description>SONiC - 標籤 - seisokeii blog</description>
-        <generator>Hugo -- gohugo.io</generator><language>zh-TW</language><managingEditor>Noway@bimbimbambam (seisokeii)</managingEditor>
-            <webMaster>Noway@bimbimbambam (seisokeii)</webMaster><lastBuildDate>Tue, 13 Aug 2024 17:39:33 &#43;0800</lastBuildDate><atom:link href="http://localhost:1313/tags/sonic/" rel="self" type="application/rss+xml" /><item>
-    <title>Open Network Install Environment (ONIE) 白話文簡介</title>
-    <link>http://localhost:1313/posts/onie/onie-intro/</link>
-    <pubDate>Tue, 13 Aug 2024 17:39:33 &#43;0800</pubDate>
-    <author>seisokeii</author>
-    <guid>http://localhost:1313/posts/onie/onie-intro/</guid>
-    <description><![CDATA[<hr>
-<p>用過 whitebox 交換機應該加減都會知道 Open Network Install Environment 這東東吧！<br>
-這邊稍微來提一下這東東吧，剛好最近在 Edge-core Networks 實習期間的第一個任務，就是讓一台新設備與 ONIE 相容，講白了就是想辦法讓
-ONIE 可以在新設備上面跑啦~</p>]]></description>
-</item>
-</channel>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>SONiC on </title>
+    <link>//localhost:1313/tags/sonic/</link>
+    <description>Recent content in SONiC on </description>
+    <generator>Hugo</generator>
+    <language>en</language>
+    <lastBuildDate>Tue, 24 Sep 2024 15:56:33 +0800</lastBuildDate>
+    <atom:link href="//localhost:1313/tags/sonic/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>SONiC Community Image Initial Setup</title>
+      <link>//localhost:1313/posts/sonic/sonic-kvm-init-setup/</link>
+      <pubDate>Tue, 24 Sep 2024 15:56:33 +0800</pubDate>
+      <guid>//localhost:1313/posts/sonic/sonic-kvm-init-setup/</guid>
+      <description>&lt;p&gt;Above image is just for verifying some concepts then build a small Lab QQ&lt;/p&gt;&#xA;&lt;hr&gt;&#xA;&lt;p&gt;In EVE-NG or GNS3 simulator, running the &lt;a href=&#34;https://sonic.software/&#34;&gt;SONiC KVM image&lt;/a&gt; will leave a lot of settings after&#xA;booting. It&amp;rsquo;s annoying to pull out a bunch of settings every time you boot a new machine.&lt;/p&gt;&#xA;&lt;p&gt;In this situation, I would like to automate the solution ( computer science people =&amp;gt; lazy), but it seems that I don&amp;rsquo;t&#xA;need to use Ansible, pyATS, or Nornir yet. So I use shell script to solve it.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>SONiC Community Image 初始化設定</title>
+      <link>//localhost:1313/posts/sonic/sonic-kvm-init-setup.zh-tw/</link>
+      <pubDate>Tue, 24 Sep 2024 15:56:33 +0800</pubDate>
+      <guid>//localhost:1313/posts/sonic/sonic-kvm-init-setup.zh-tw/</guid>
+      <description>&lt;p&gt;上面這張圖就只是為了驗證一些概念而接上去的一個小小的 Lab 而已QQ&lt;/p&gt;&#xA;&lt;hr&gt;&#xA;&lt;p&gt;在 EVE-NG 或 GNS3 模擬器中跑 &lt;a href=&#34;https://sonic.software/&#34;&gt;SONiC KVM image&lt;/a&gt;，在開機後都會留下一大堆設定，每次拉一台新機器開機就要拔掉一堆設定有夠惱人。&lt;/p&gt;&#xA;&lt;p&gt;那這時候懶惰的我肯定是想要自動化的解決問題 (資工人特性 =&amp;gt; 懶)，但是這時候好像還不需要動用到 Ansible 或 pyATS 或是 Nornir&#xA;這種巨砲，所以就用 shell script 來解決。&lt;/p&gt;&#xA;&lt;p&gt;這邊分享一下我的作法，大致上設定主要有三個地方需要動:&lt;/p&gt;&#xA;&lt;ol&gt;&#xA;&lt;li&gt;刪除 Interface IP&lt;/li&gt;&#xA;&lt;li&gt;刪除 FRR configuration&lt;/li&gt;&#xA;&lt;li&gt;config_db.json 的 BGP_NEIGHBOR 跟 DEVICE_METADATA 中 localhost 的 bgp_asn&lt;/li&gt;&#xA;&lt;/ol&gt;&#xA;&lt;hr&gt;&#xA;&lt;h2 id=&#34;前置&#34;&gt;前置&lt;/h2&gt;&#xA;&lt;p&gt;要刪除設定前，請先查看一下 container 是不是都有正常運作了，可以用 &lt;code&gt;docker ps -a&lt;/code&gt; 指令來看，所有的容器狀態都要是 UP。&lt;/p&gt;&#xA;&lt;p&gt;另外目前還沒有想法怎麼解決 ASIC 有關的功能無法運作的部分，之後有空再來看看能怎麼搞&#xA;patch，畢竟這種情況只能拿實體設備測試設定而已，有點麻煩，本篇先不提怎麼去模擬並跳脫要用 ASIC 的功能。&lt;/p&gt;&#xA;&lt;h2 id=&#34;1-刪除-interface-ip&#34;&gt;1. 刪除 Interface IP&lt;/h2&gt;&#xA;&lt;p&gt;使用 &lt;code&gt;show ip int&lt;/code&gt; 指令可以看到預設會列出一坨 interface 的資訊，然後會看到每個 interface 上都有一個 /31 的 IP。&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Open Network Install Environment (ONIE) How to build?</title>
+      <link>//localhost:1313/posts/onie/onie-build/</link>
+      <pubDate>Thu, 19 Sep 2024 17:03:33 +0800</pubDate>
+      <guid>//localhost:1313/posts/onie/onie-build/</guid>
+      <description>&lt;p&gt;Above images is the machine I used for development, it looks like a 1U N3k XD&lt;/p&gt;&#xA;&lt;hr&gt;&#xA;&lt;p&gt;Following the previous article &lt;code&gt;ONIE Simple Introduction&lt;/code&gt;, let&amp;rsquo;s briefly share how ONIE is built!&lt;/p&gt;&#xA;&lt;p&gt;This will be similar to a tutorial, but of course it&amp;rsquo;s impossible to put company information here~ It&amp;rsquo;s just a general&#xA;look at how a network equipment manufacturer makes this thing.&lt;/p&gt;&#xA;&lt;h2 id=&#34;preparation---prepare-the-development-environment&#34;&gt;Preparation - Prepare the development environment&lt;/h2&gt;&#xA;&lt;p&gt;Honestly, the development environment is just a standard Linux machine, I use a virtual machine~&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Open Network Install Environment (ONIE) How to build?</title>
+      <link>//localhost:1313/posts/onie/onie-build.zh-tw/</link>
+      <pubDate>Thu, 19 Sep 2024 17:03:33 +0800</pubDate>
+      <guid>//localhost:1313/posts/onie/onie-build.zh-tw/</guid>
+      <description>&lt;p&gt;上面這張圖是窩在開發用的機器，長得有點像是 1U 的 N3k 誒XD&lt;/p&gt;&#xA;&lt;hr&gt;&#xA;&lt;p&gt;繼上一篇 &lt;code&gt;ONIE 白話文簡介&lt;/code&gt; ，來稍微分享一下 ONIE 這東東是怎麼 build 起來的唄！&lt;/p&gt;&#xA;&lt;p&gt;這邊會類似一個教學文件，但是當然不可能會把公司的資訊放在這~ 就只是大致看一下一間網通廠是怎麼搞出這東東的而已。&lt;/p&gt;&#xA;&lt;h2 id=&#34;前置作業---準備開發環境&#34;&gt;前置作業 - 準備開發環境&lt;/h2&gt;&#xA;&lt;p&gt;開發環境老實說就是一台中規中矩的 Linux 就可以了，窩是用虛擬機啦~&lt;/p&gt;&#xA;&lt;p&gt;這個環境其實就是照 ONIE 官網的建議，去安裝 CumulusNetworks 做的 DUE 套件，不然有編譯過 Linux Kernel 的應該會知道那個&#xA;dependency 有多麽靠北，用了 DUE 後就會自動搞定這一切摟～&lt;/p&gt;&#xA;&lt;p&gt;DUE 是要使用 Docker 的，那這邊建議 container 不要用太新的 Linux Kernel，像我就 &lt;code&gt;docker pull ubuntu:16.04&lt;/code&gt; 不用 Debian&#xA;的關係是因為鏡像站都倒光光了，packages 有夠難找。&lt;/p&gt;&#xA;&lt;blockquote&gt;&#xA;&lt;p&gt;另外，有個要注意的是 &lt;code&gt;due&lt;/code&gt; 指令請使用一般使用者，不要用 root 跑呦。 (不信的用了你就知道了)&lt;/p&gt;&lt;/blockquote&gt;&#xA;&lt;p&gt;環境大致就是這樣而已，其餘的就是依樣畫葫蘆照著文件那樣安裝下指令就好了。&lt;/p&gt;&#xA;&lt;h2 id=&#34;前置作業---要檔案&#34;&gt;前置作業 - 要檔案&lt;/h2&gt;&#xA;&lt;p&gt;沒錯！就是要檔案! 硬體的部分會有嵌入式工程師幫你搞定 U-boot 以及會有一個叫做 bring-up 的團隊去製作 Diagnostic OS 這個&#xA;Support 在使用的除錯系統。&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Open Network Install Environment (ONIE) Simple Introduction</title>
+      <link>//localhost:1313/posts/onie/onie-intro/</link>
+      <pubDate>Tue, 13 Aug 2024 17:39:33 +0800</pubDate>
+      <guid>//localhost:1313/posts/onie/onie-intro/</guid>
+      <description>&lt;p&gt;Above image is generate by Gemini. I just say that I want a Japanese style ONIE image, and it becomes like this XD&lt;/p&gt;&#xA;&lt;hr&gt;&#xA;&lt;p&gt;If you have ever used a whitebox switch, you maybe know what Open Network Install Environment is ~&#xA;Here is a simple brief introduction to ONIE. The first task during my internship at Edge-core Networks was to make a new&#xA;device compatible with ONIE, which means making ONIE run on the new device.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Open Network Install Environment (ONIE) 白話文簡介</title>
+      <link>//localhost:1313/posts/onie/onie-intro.zh-tw/</link>
+      <pubDate>Tue, 13 Aug 2024 17:39:33 +0800</pubDate>
+      <guid>//localhost:1313/posts/onie/onie-intro.zh-tw/</guid>
+      <description>&lt;p&gt;上面這張圖是叫 Gemini 產的，說想要一張日本 ONIE 的圖，結果就變這樣了XD&lt;/p&gt;&#xA;&lt;hr&gt;&#xA;&lt;p&gt;用過 whitebox 交換機應該加減都會知道 Open Network Install Environment 這東東吧！&lt;br&gt;&#xA;這邊稍微來提一下這東東吧，剛好最近在 Edge-core Networks 實習期間的第一個任務，就是讓一台新設備與 ONIE 相容，講白了就是想辦法讓&#xA;ONIE 可以在新設備上面跑啦~&lt;/p&gt;&#xA;&lt;h2 id=&#34;onie-是什麼&#34;&gt;ONIE 是什麼？&lt;/h2&gt;&#xA;&lt;p&gt;先講結論，ONIE 就是一個輕量的 Linux 環境，方便安裝 Network Operating System (NOS)&lt;/p&gt;&#xA;&lt;p&gt;當初 ONIE 會出現，只是為了要有一個 Linux 環境，執行 NOS 的 installer，把 NOS 需要的 partition 建出來，複製檔案進&#xA;partition，然後設定 GRUB 或 U-boot 去開 NOS，ONIE 的任務就結束了。&lt;/p&gt;&#xA;&lt;p&gt;如果沒有 ONIE 的話，網通廠商出廠前就要把 NOS 燒在 flash 上，如果使用者想要更換 NOS 的話就會很麻煩，所以 ONIE&#xA;就是為了解決這個問題而生的，這使得使用者可以隨時切換 NOS。&lt;/p&gt;&#xA;&lt;p&gt;當然 ONIE 還可以做到解除安裝、選擇進入不同 NOS&amp;hellip; 之類的功能。&lt;/p&gt;&#xA;&lt;blockquote&gt;&#xA;&lt;p&gt;BTW. 這個輕量的 Linux 環境主要就是 busybox 這東東，剩下的就是一堆工具東拼西湊的組再一起。&lt;/p&gt;</description>
+    </item>
+  </channel>
 </rss>

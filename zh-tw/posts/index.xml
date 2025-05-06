@@ -4,7 +4,19 @@
         <link>https://seisokeii.github.io/zh-tw/posts/</link>
         <description>所有文章 | seisokeii blog</description>
         <generator>Hugo -- gohugo.io</generator><language>zh-TW</language><managingEditor>Noway@bimbimbambam (seisokeii)</managingEditor>
-            <webMaster>Noway@bimbimbambam (seisokeii)</webMaster><lastBuildDate>Fri, 06 Dec 2024 22:41:21 &#43;0800</lastBuildDate><atom:link href="https://seisokeii.github.io/zh-tw/posts/" rel="self" type="application/rss+xml" /><item>
+            <webMaster>Noway@bimbimbambam (seisokeii)</webMaster><lastBuildDate>Mon, 05 May 2025 23:39:27 &#43;0800</lastBuildDate><atom:link href="https://seisokeii.github.io/zh-tw/posts/" rel="self" type="application/rss+xml" /><item>
+    <title>Fiber Optic Transceiver Module 光纖收發器模組型號簡介</title>
+    <link>https://seisokeii.github.io/zh-tw/posts/transceiver/transceiver-intro-01/</link>
+    <pubDate>Mon, 05 May 2025 23:39:27 &#43;0800</pubDate>
+    <author>seisokeii</author>
+    <guid>https://seisokeii.github.io/zh-tw/posts/transceiver/transceiver-intro-01/</guid>
+    <description><![CDATA[<div class="featured-image">
+                <img src="/images/transceiver/xcver-32O-cage.png" referrerpolicy="no-referrer">
+            </div><p>上面這張圖是 OSFP 洞洞的交換器，越來越粗了呢(灬ºωº灬)</p>
+<hr>
+<p>當手上有錢了以後，想要買 400G 跟 800G switch 來玩 AI 網路時，發現光纖模組一大堆，到底要挑哪款&hellip;</p>]]></description>
+</item>
+<item>
     <title>十軍團重要目標防護營(重防營)義務役下部隊-part3</title>
     <link>https://seisokeii.github.io/zh-tw/posts/army/army-part3/</link>
     <pubDate>Fri, 06 Dec 2024 22:41:21 &#43;0800</pubDate>
@@ -117,20 +129,6 @@ ONIE 可以在新設備上面跑啦~</p>]]></description>
 <p>想說網路上很少人在分享這東東，就來分享一下唄。</p>
 <p>那為什麼會想客製化耳塞呢？ 主要是因為朋友會揪一些 hardstyle 的夜店場跟音樂節像是 Defqon.1、Intents、&hellip;
 之類的，然後耳膜可是非常脆弱的，我還不想要這麼快就失聰QQ</p>]]></description>
-</item>
-<item>
-    <title>Halo</title>
-    <link>https://seisokeii.github.io/zh-tw/posts/halo/</link>
-    <pubDate>Tue, 14 May 2024 22:20:52 &#43;0800</pubDate>
-    <author>seisokeii</author>
-    <guid>https://seisokeii.github.io/zh-tw/posts/halo/</guid>
-    <description><![CDATA[<div class="featured-image">
-                <img src="/images/halo/sub-zero-project-halo.jpg" referrerpolicy="no-referrer">
-            </div><p>開場要打招呼，就突然想到 sub zero project 有一首歌叫 HALO，蠻喜歡的推薦推薦XD</p>
-<hr>
-<p>第一個貼文就送給 hugo 吧！</p>
-<p>首先，不得不說偶的運氣真的差的可憐&hellip; 看了網路很多文章都寫說 hugo 5分鐘就可以架設好了，結果窩花了一天的時間(20小時以上)
-才搞定開始寫這則貼文&hellip;</p>]]></description>
 </item>
 </channel>
 </rss>

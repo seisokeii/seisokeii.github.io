@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Transceiver on </title>
+    <link>//localhost:1313/categories/transceiver/</link>
+    <description>Recent content in Transceiver on </description>
+    <generator>Hugo</generator>
+    <language>en</language>
+    <lastBuildDate>Mon, 28 Apr 2025 11:39:27 +0800</lastBuildDate>
+    <atom:link href="//localhost:1313/categories/transceiver/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Fiber Optic Transceiver Module 型號介紹</title>
+      <link>//localhost:1313/posts/transceiver/transceiver-intro-01.zh-tw/</link>
+      <pubDate>Mon, 28 Apr 2025 11:39:27 +0800</pubDate>
+      <guid>//localhost:1313/posts/transceiver/transceiver-intro-01.zh-tw/</guid>
+      <description>&lt;p&gt;圖片記得換&lt;/p&gt;&#xA;&lt;hr&gt;&#xA;&lt;p&gt;自從兵役結束陰間還陽後，就開始上工適應社畜生活了。但之前都是在小單位的機房搞維運，很少能接觸到高速網路的東西，所以對於一些高速光纖模組沒有到很了解。&#xA;藉由這一篇來順便學習與整理這一塊的資訊，看到網上有的資訊也沒太多，就來分享一下唄～&lt;/p&gt;&#xA;&lt;p&gt;接下來就照著偶現在的公司產品來講唄。主要會著重在 Datacenter 相關的應用這一塊，畢竟小弟目前是在這一塊討飯吃。&#xA;URL: &lt;a href=&#34;https://www.edge-core.com/tw/products/Transceivers/&#34;&gt;https://www.edge-core.com/tw/products/Transceivers/&lt;/a&gt;&lt;/p&gt;&#xA;&lt;h2 id=&#34;光纖線&#34;&gt;光纖線&lt;/h2&gt;&#xA;&lt;p&gt;首先先來提一下光纖線，之後光模的型號出現是因為解決光纖成本問題。&#xA;這裡我推薦一個做光纖線的廠商，官方的部落格資料很清楚也有圖片可以看，這家就是 &lt;code&gt;yingdapc&lt;/code&gt;。 可以先看這一篇 &lt;a href=&#34;https://yingdapc.com/zh-TW/%E9%97%9C%E6%96%BC-mpo-%E4%BD%A0%E8%A9%B2%E7%9F%A5%E9%81%93%E7%9A%84%E4%B8%80%E5%88%87/&#34;&gt;關於 MPO 您應該了解的一切&lt;/a&gt; 。&#xA;其餘的光纖相關知識，在該網站的部落格也都有不少文章可以看，滿不錯的。&lt;/p&gt;&#xA;&lt;h2 id=&#34;琳琅滿目的型號&#34;&gt;琳琅滿目的型號？？？&lt;/h2&gt;&#xA;&lt;hr&gt;&#xA;&lt;h2 id=&#34;疑問&#34;&gt;疑問&lt;/h2&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;cwdm4 only connect one sfp+?&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;hr&gt;&#xA;&lt;h2 id=&#34;reference&#34;&gt;Reference&lt;/h2&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;&lt;a href=&#34;https://yingdapc.com/zh-TW/%E9%97%9C%E6%96%BC-mpo-%E4%BD%A0%E8%A9%B2%E7%9F%A5%E9%81%93%E7%9A%84%E4%B8%80%E5%88%87/&#34;&gt;關於 MPO 您應該了解的一切&lt;/a&gt;&lt;/li&gt;&#xA;&lt;/ul&gt;</description>
+    </item>
+  </channel>
+</rss>

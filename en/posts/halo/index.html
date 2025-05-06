@@ -44,7 +44,7 @@ First of all, I have to say that my luck is really terrible… I read many artic
             },"description": ""
     }
     </script></head>
-    <body data-header-desktop="fixed" data-header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+    <body data-header-desktop="fixed" data-header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('dark' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'dark' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
 
         <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
     <div class="header-wrapper">
@@ -66,7 +66,7 @@ First of all, I have to say that my luck is really terrible… I read many artic
                     </span><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
                     <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
                 </a><a href="javascript:void(0);" class="menu-item language" title="Select Language">
-                    <i class="fa fa-globe" aria-hidden="true"></i>                      
+                    <i class="fa fa-globe fa-fw" aria-hidden="true"></i>                      
                     <select class="language-select" id="language-select-desktop" onchange="location = this.value;"><option value="/en/posts/halo/" selected>English</option><option value="/zh-tw/posts/halo/">繁體中文</option></select>
                 </a></div>
         </div>
@@ -114,7 +114,7 @@ First of all, I have to say that my luck is really terrible… I read many artic
             <h2 class="toc-title">Contents</h2>
             <div class="toc-content" id="toc-content-auto"></div>
         </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">Halo</h1><div class="post-meta">
-            <div class="post-meta-line"><span class="post-author"><a href="github.com/seisokeii" title="Author" rel="author" class="author"><i class="fas fa-user-circle fa-fw" aria-hidden="true"></i>seisokeii</a></span></div>
+            <div class="post-meta-line"><span class="post-author"><a href="https://github.com/seisokeii" title="Author" target="_blank" rel="noopener noreffer author" class="author"><i class="fas fa-user-circle fa-fw" aria-hidden="true"></i>seisokeii</a></span></div>
             <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2024-05-14">2024-05-14</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;884 words&nbsp;
                 <i class="far fa-clock fa-fw" aria-hidden="true"></i>&nbsp;5 minutes&nbsp;</div>
         </div><div class="featured-image"><img
@@ -163,8 +163,7 @@ web-related tools and technologies, and they are updated too quickly. I can&rsqu
 <p>B.T.W. In the GitHub Page (GH) project, which is github.io, you can only put things in the public folder because GH
 will read the index.html file under that project.
 If you push the entire Hugo project there, it won&rsquo;t run. Even if you add .nojekyll to make the deployment successful,
-you will still get a 404 message (I won&rsquo;t say I encountered this)</p>
-</blockquote>
+you will still get a 404 message (I won&rsquo;t say I encountered this)</p></blockquote>
 <h2 id="install-hugo">Install Hugo</h2>
 <p>Here is a very rough explanation of how I got Hugo up and running~</p>
 <ol>
@@ -284,7 +283,7 @@ be difficult, right!</li>
 </span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="p">|</span><span class="sd">
 </span></span></span><span class="line"><span class="cl"><span class="sd">          mkdir -p target-repo
 </span></span></span><span class="line"><span class="cl"><span class="sd">          git clone git@github.com:seisokeii/seisokeii.github.io.git target-repo
-</span></span></span><span class="line"><span class="cl"><span class="sd">          cp -r public/* target-repo/</span><span class="w">          
+</span></span></span><span class="line"><span class="cl"><span class="sd">          cp -r public/* target-repo/</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">Commit and push changes</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="p">|</span><span class="sd">
@@ -294,7 +293,7 @@ be difficult, right!</li>
 </span></span></span><span class="line"><span class="cl"><span class="sd">          git add .
 </span></span></span><span class="line"><span class="cl"><span class="sd">          SukaBlyad_date=$(date +%Y/%m/%d) # This is just for commit message
 </span></span></span><span class="line"><span class="cl"><span class="sd">          git commit -m &#34;Update: $SukaBlyad_date&#34;
-</span></span></span><span class="line"><span class="cl"><span class="sd">          git push</span><span class="w">          
+</span></span></span><span class="line"><span class="cl"><span class="sd">          git push</span><span class="w">
 </span></span></span></code></pre></td></tr></table>
 </div>
 </div><ol start="3">
@@ -336,8 +335,8 @@ public things appear in the github.io project.</li>
                 Please enable JavaScript to view the comments powered by <a href="https://disqus.com/?ref_noscript">Disqus</a>.
             </noscript></div></article></div>
             </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line">Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.134.2">Hugo</a> | Theme - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.11"><i class="far fa-kiss-wink-heart fa-fw" aria-hidden="true"></i> LoveIt</a>
-                </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright fa-fw" aria-hidden="true"></i><span itemprop="copyrightYear">2024 - 2025</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="github.com/seisokeii" target="_blank">seisokeii</a></span></div>
+        <div class="footer-container"><div class="footer-line">Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.145.0">Hugo</a> | Theme - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.3.0"><i class="far fa-kiss-wink-heart fa-fw" aria-hidden="true"></i> LoveIt</a>
+                </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright fa-fw" aria-hidden="true"></i><span itemprop="copyrightYear">2024 - 2025</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/en/" target="_blank">seisokeii</a></span></div>
         </div>
     </footer></div>
 

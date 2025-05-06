@@ -1,17 +1,26 @@
-<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
-    <channel>
-        <title>ACS - 標籤 - seisokeii blog</title>
-        <link>http://localhost:1313/tags/acs/</link>
-        <description>ACS - 標籤 - seisokeii blog</description>
-        <generator>Hugo -- gohugo.io</generator><language>zh-TW</language><managingEditor>Noway@bimbimbambam (seisokeii)</managingEditor>
-            <webMaster>Noway@bimbimbambam (seisokeii)</webMaster><lastBuildDate>Sat, 20 Jul 2024 16:28:06 &#43;0800</lastBuildDate><atom:link href="http://localhost:1313/tags/acs/" rel="self" type="application/rss+xml" /><item>
-    <title>ACS 客製化降噪耳塞</title>
-    <link>http://localhost:1313/posts/earplug/acs-earplug01/</link>
-    <pubDate>Sat, 20 Jul 2024 16:28:06 &#43;0800</pubDate>
-    <author>seisokeii</author>
-    <guid>http://localhost:1313/posts/earplug/acs-earplug01/</guid>
-    <description><![CDATA[<p>想說網路上很少人在分享這東東，就來分享一下唄。</p>
-<p>那為什麼會想客製化耳塞呢？ 主要是因為朋友會揪一些 hardstyle 的夜店場跟音樂節像是 Defqon.1、Intents、&hellip; 之類的，然後耳膜可是非常脆弱的，我還不想要這麼快就失聰QQ</p>]]></description>
-</item>
-</channel>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>ACS on </title>
+    <link>//localhost:1313/tags/acs/</link>
+    <description>Recent content in ACS on </description>
+    <generator>Hugo</generator>
+    <language>en</language>
+    <lastBuildDate>Sat, 20 Jul 2024 16:28:06 +0800</lastBuildDate>
+    <atom:link href="//localhost:1313/tags/acs/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>ACS Custom Noise Cancelling Earplugs</title>
+      <link>//localhost:1313/posts/earplug/acs-earplug01/</link>
+      <pubDate>Sat, 20 Jul 2024 16:28:06 +0800</pubDate>
+      <guid>//localhost:1313/posts/earplug/acs-earplug01/</guid>
+      <description>&lt;p&gt;I decided to share my experience since there aren&amp;rsquo;t many people talking about this on internet.&lt;/p&gt;&#xA;&lt;p&gt;So why did I want custom earplugs? Mainly because my friends often invite me to hardstyle nightclubs and music festivals&#xA;like Defqon.1, Intents, etc., and eardrums are very fragile. I don&amp;rsquo;t want to lose my hearing so early QQ&lt;/p&gt;&#xA;&lt;p&gt;But there&amp;rsquo;s another reason, which might be the bigger one, that sometimes I need to work on equipment in the network&#xA;room or server room, and sometimes I stay there for a long time, and the high-frequency fans are super noisy&amp;hellip; For&#xA;these reasons, I wanted to find a way to protect my ears.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>ACS 客製化降噪耳塞</title>
+      <link>//localhost:1313/posts/earplug/acs-earplug01.zh-tw/</link>
+      <pubDate>Sat, 20 Jul 2024 16:28:06 +0800</pubDate>
+      <guid>//localhost:1313/posts/earplug/acs-earplug01.zh-tw/</guid>
+      <description>&lt;p&gt;上面這圖不用多說了吧~ 就是 ACS 客製化耳塞拿到的盒子，滿意外沒有很大XD&lt;/p&gt;&#xA;&lt;hr&gt;&#xA;&lt;p&gt;想說網路上很少人在分享這東東，就來分享一下唄。&lt;/p&gt;&#xA;&lt;p&gt;那為什麼會想客製化耳塞呢？ 主要是因為朋友會揪一些 hardstyle 的夜店場跟音樂節像是 Defqon.1、Intents、&amp;hellip;&#xA;之類的，然後耳膜可是非常脆弱的，我還不想要這麼快就失聰QQ&lt;/p&gt;&#xA;&lt;p&gt;不過還有另一個原因，可能會佔據比較大部分啦，就是我有時候會需要在網路機房內操作設備，有時候不小心就待很久了，然後高頻風扇又超吵&amp;hellip;&#xA;基於以上這些原因，就想找個保護的方法摟～&lt;/p&gt;&#xA;&lt;p&gt;其實可以不需要搞到客製化，直接使用現成的產品即可，但想說都要花錢了，就來體驗一下客製化也不錯，那就順便分享一下我怎麼買的吧。&lt;/p&gt;&#xA;&lt;h2 id=&#34;挑選款式&#34;&gt;挑選款式&lt;/h2&gt;&#xA;&lt;p&gt;首先找到&lt;a href=&#34;https://www.acs-select.com/products/acs-pro17-music&#34;&gt;官網&lt;/a&gt;，這邊連結幫你直接導到客製化的 Pro 17，因為我的 base&#xA;就是選擇這一款。&lt;/p&gt;&#xA;&lt;p&gt;我是選擇全罩款，因為看說明是說可以戴頭盔不被影響，也不知道我怎樣才會有這需求就是了XD&lt;br&gt;&#xA;這邊推薦手把款，因為穿脫會比較方便，全罩款的穿脫上會有點點不方便。&lt;/p&gt;&#xA;&lt;p&gt;接下來就選擇台北 ACS 取模後就可以加入購物車了。&lt;/p&gt;&#xA;&lt;p&gt;另外建議加購&lt;a href=&#34;https://www.acs-select.com/zh-hant/products/acs-pro-neck-cord&#34;&gt;頸繩&lt;/a&gt;&#xA;，這真的是有夠方便，脫掉後可以直接垂在脖子不用擔心不見或掉了，頸繩還蠻牢固的，不小心扯一下也不太會掉。&lt;/p&gt;&#xA;&lt;p&gt;剩下的個性化選項像是&lt;a href=&#34;https://www.acs-select.com/products/silicone-color&#34;&gt;顏色&lt;/a&gt;或是雷雕啥的就看個人想不想加購摟。&lt;br&gt;&#xA;訂單會先到台北 ACS ，所以之後需要再加購什麼可以在製作耳模的時候再做額外加購也行。&lt;/p&gt;&#xA;&lt;p&gt;選擇完就可以在網頁的購物車頁面上結帳了，我是使用 LinePay 結帳的，有電子支付讚讚！&lt;/p&gt;&#xA;&lt;h2 id=&#34;預約耳模製作&#34;&gt;預約耳模製作&lt;/h2&gt;&#xA;&lt;p&gt;下單完後我是去私訊 ACS Facebook 的官方帳號，也可以打電話啦～&lt;/p&gt;&#xA;&lt;p&gt;整個製作時長順利的話就 30 分鐘以內即可，前面會先跟你說明介紹一下，之後就開始灌耳漿?!&lt;/p&gt;&#xA;&lt;p&gt;過程中的感覺滿酷的，就冰冰涼涼的，然後幾秒後填充物就開始膨脹起來，塞好塞滿(,,・ω・,,)&#xA;&lt;figure&gt;&lt;img src=&#34;//localhost:1313/images/ACSEarplug/acs_earplug_filling.jpg&#34;&gt;&lt;figcaption&gt;&#xA;      &lt;h4&gt;耳朵灌漿XD&lt;/h4&gt;&#xA;    &lt;/figcaption&gt;&#xA;&lt;/figure&gt;&#xA;&lt;/p&gt;&#xA;&lt;p&gt;大概過 5 分鐘乾掉後就拆下來，大概長成這樣&#xA;&lt;figure&gt;&lt;img src=&#34;//localhost:1313/images/ACSEarplug/acs_earplug_model.jpg&#34;&gt;&lt;figcaption&gt;&#xA;      &lt;h4&gt;窩耳朵の形狀&lt;/h4&gt;&#xA;    &lt;/figcaption&gt;&#xA;&lt;/figure&gt;&#xA;&lt;/p&gt;&#xA;&lt;p&gt;其實我到這一步結束後有再加購耳塞的顏色XD 本來挑透明，但是店員說久了可能會變黃黃的，畢竟是塑膠 (這是免費換顏色誒XD)&lt;br&gt;&#xA;顏色的話現場都有樣品可以看，有半透明、添加亮粉、&amp;hellip; 之類的樣式可以參考。&#xA;&lt;figure&gt;&lt;img src=&#34;//localhost:1313/images/ACSEarplug/acs_earplug_color_list.jpg&#34;&gt;&lt;figcaption&gt;&#xA;      &lt;h4&gt;現場有提供的參考樣品&lt;/h4&gt;&#xA;    &lt;/figcaption&gt;&#xA;&lt;/figure&gt;&#xA;&lt;/p&gt;&#xA;&lt;p&gt;最後跟店員確定整個訂單的細項後就可以送給英國那邊去製作了，然後等待 4 ~ 5 週的時間就可以寄到手中。&lt;/p&gt;&#xA;&lt;h2 id=&#34;開箱&#34;&gt;開箱&lt;/h2&gt;&#xA;&lt;p&gt;大概過了 4 週多就拿到了，整體內容大致如下:&#xA;&lt;figure&gt;&lt;img src=&#34;//localhost:1313/images/ACSEarplug/acs_earplug_all.jpg&#34;&gt;&lt;figcaption&gt;&#xA;      &lt;h4&gt;開箱開箱開箱&lt;/h4&gt;&#xA;    &lt;/figcaption&gt;&#xA;&lt;/figure&gt;&#xA;&lt;/p&gt;&#xA;&lt;p&gt;右邊鐵盒就小小的很可愛，大小類似圓形粉底盒吧XD&lt;br&gt;&#xA;這邊我是有再加購 pro 26 的濾音器，因為之前看到 Reddit 有人說 Defqon.1 最高有 100&#xA;多分貝偶好害怕就多買了這個，是說待的機房也很吵買高一點也沒差。&lt;br&gt;&#xA;潤滑液的部分我完全沒用到，拿到手就開始嘗試角度塞進去，還好沒啥痛感。&lt;/p&gt;</description>
+    </item>
+  </channel>
 </rss>
