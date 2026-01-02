@@ -4,9 +4,23 @@
         <link>https://seisokeii.github.io/en/</link>
         <description>seisokeii&#39;s blog</description>
         <generator>Hugo -- gohugo.io</generator><language>en</language><managingEditor>Noway@bimbimbambam (seisokeii)</managingEditor>
-            <webMaster>Noway@bimbimbambam (seisokeii)</webMaster><lastBuildDate>Tue, 24 Sep 2024 15:56:33 &#43;0800</lastBuildDate>
+            <webMaster>Noway@bimbimbambam (seisokeii)</webMaster><lastBuildDate>Fri, 02 Jan 2026 13:56:12 &#43;0800</lastBuildDate>
             <atom:link href="https://seisokeii.github.io/en/index.xml" rel="self" type="application/rss+xml" />
         <item>
+    <title>SONiC Image Installation Guide</title>
+    <link>https://seisokeii.github.io/en/posts/sonic/sonic-installation-via-onie/</link>
+    <pubDate>Fri, 02 Jan 2026 13:56:12 &#43;0800</pubDate>
+    <author>seisokeii</author>
+    <guid>https://seisokeii.github.io/en/posts/sonic/sonic-installation-via-onie/</guid>
+    <description><![CDATA[<div class="featured-image">
+                <img src="/images/SONiC/installation/sonic-AIS800-64O-2pcs.png" referrerpolicy="no-referrer">
+            </div><p>Every time I look at the AIS800-64O, it’s never fully populated… A full set of transceivers costs more than the switch itself.</p>
+<hr>
+<p>Lately I’ve often met people who don’t know how to install SONiC. To save time sending the same instructions over and over, here’s a simple walkthrough.</p>
+<p>First, you need to know about ONIE. I previously already wrote an <a href="https://seisokeii.github.io/zh-tw/posts/onie/onie-intro/" target="_blank" rel="noopener noreffer ">ONIE introduction</a>.</p>
+<p>There are two main ways to install or upgrade SONiC:</p>]]></description>
+</item>
+<item>
     <title>SONiC Community Image Initial Setup</title>
     <link>https://seisokeii.github.io/en/posts/sonic/sonic-kvm-init-setup/</link>
     <pubDate>Tue, 24 Sep 2024 15:56:33 &#43;0800</pubDate>

@@ -1,53 +1,42 @@
-<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
-    <channel>
-        <title>SONiC - Tag - seisokeii blog</title>
-        <link>https://seisokeii.github.io/en/tags/sonic/</link>
-        <description>SONiC - Tag - seisokeii blog</description>
-        <generator>Hugo -- gohugo.io</generator><language>en</language><managingEditor>Noway@bimbimbambam (seisokeii)</managingEditor>
-            <webMaster>Noway@bimbimbambam (seisokeii)</webMaster><lastBuildDate>Tue, 24 Sep 2024 15:56:33 &#43;0800</lastBuildDate><atom:link href="https://seisokeii.github.io/en/tags/sonic/" rel="self" type="application/rss+xml" /><item>
-    <title>SONiC Community Image Initial Setup</title>
-    <link>https://seisokeii.github.io/en/posts/sonic/sonic-kvm-init-setup/</link>
-    <pubDate>Tue, 24 Sep 2024 15:56:33 &#43;0800</pubDate>
-    <author>seisokeii</author>
-    <guid>https://seisokeii.github.io/en/posts/sonic/sonic-kvm-init-setup/</guid>
-    <description><![CDATA[<div class="featured-image">
-                <img src="/images/SONiC/sonic-preview01.png" referrerpolicy="no-referrer">
-            </div><p>Above image is just for verifying some concepts then build a small Lab QQ</p>
-<hr>
-<p>In EVE-NG or GNS3 simulator, running the <a href="https://sonic.software/" target="_blank" rel="noopener noreffer ">SONiC KVM image</a> will leave a lot of settings after
-booting. It&rsquo;s annoying to pull out a bunch of settings every time you boot a new machine.</p>
-<p>In this situation, I would like to automate the solution ( computer science people =&gt; lazy), but it seems that I don&rsquo;t
-need to use Ansible, pyATS, or Nornir yet. So I use shell script to solve it.</p>]]></description>
-</item>
-<item>
-    <title>Open Network Install Environment (ONIE) How to build?</title>
-    <link>https://seisokeii.github.io/en/posts/onie/onie-build/</link>
-    <pubDate>Thu, 19 Sep 2024 17:03:33 &#43;0800</pubDate>
-    <author>seisokeii</author>
-    <guid>https://seisokeii.github.io/en/posts/onie/onie-build/</guid>
-    <description><![CDATA[<div class="featured-image">
-                <img src="/images/ONIE/onie-dev-machine.jpeg" referrerpolicy="no-referrer">
-            </div><p>Above images is the machine I used for development, it looks like a 1U N3k XD</p>
-<hr>
-<p>Following the previous article <code>ONIE Simple Introduction</code>, let&rsquo;s briefly share how ONIE is built!</p>
-<p>This will be similar to a tutorial, but of course it&rsquo;s impossible to put company information here~ It&rsquo;s just a general
-look at how a network equipment manufacturer makes this thing.</p>
-<h2 id="preparation---prepare-the-development-environment">Preparation - Prepare the development environment</h2>
-<p>Honestly, the development environment is just a standard Linux machine, I use a virtual machine~</p>]]></description>
-</item>
-<item>
-    <title>Open Network Install Environment (ONIE) Simple Introduction</title>
-    <link>https://seisokeii.github.io/en/posts/onie/onie-intro/</link>
-    <pubDate>Tue, 13 Aug 2024 17:39:33 &#43;0800</pubDate>
-    <author>seisokeii</author>
-    <guid>https://seisokeii.github.io/en/posts/onie/onie-intro/</guid>
-    <description><![CDATA[<div class="featured-image">
-                <img src="/images/ONIE/onie-Gemini-Generated-ONIE.jpg" referrerpolicy="no-referrer">
-            </div><p>Above image is generate by Gemini. I just say that I want a Japanese style ONIE image, and it becomes like this XD</p>
-<hr>
-<p>If you have ever used a whitebox switch, you maybe know what Open Network Install Environment is ~
-Here is a simple brief introduction to ONIE. The first task during my internship at Edge-core Networks was to make a new
-device compatible with ONIE, which means making ONIE run on the new device.</p>]]></description>
-</item>
-</channel>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>SONiC on seisokeii blog</title>
+    <link>https://seisokeii.github.io/en/tags/sonic/</link>
+    <description>Recent content in SONiC on seisokeii blog</description>
+    <generator>Hugo</generator>
+    <language>en</language>
+    <managingEditor>Noway@bimbimbambam (seisokeii)</managingEditor>
+    <webMaster>Noway@bimbimbambam (seisokeii)</webMaster>
+    <lastBuildDate>Fri, 02 Jan 2026 13:56:12 +0800</lastBuildDate>
+    <atom:link href="https://seisokeii.github.io/en/tags/sonic/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>SONiC Image Installation Guide</title>
+      <link>https://seisokeii.github.io/en/posts/sonic/sonic-installation-via-onie/</link>
+      <pubDate>Fri, 02 Jan 2026 13:56:12 +0800</pubDate><author>Noway@bimbimbambam (seisokeii)</author>
+      <guid>https://seisokeii.github.io/en/posts/sonic/sonic-installation-via-onie/</guid>
+      <description>&lt;p&gt;Every time I look at the AIS800-64O, it’s never fully populated… A full set of transceivers costs more than the switch itself.&lt;/p&gt;&#xA;&lt;hr&gt;&#xA;&lt;p&gt;Lately I’ve often met people who don’t know how to install SONiC. To save time sending the same instructions over and over, here’s a simple walkthrough.&lt;/p&gt;&#xA;&lt;p&gt;First, you need to know about ONIE. I previously already wrote an &lt;a href=&#34;https://seisokeii.github.io/zh-tw/posts/onie/onie-intro/&#34; target=&#34;_blank&#34; rel=&#34;noopener noreffer &#34;&gt;ONIE introduction&lt;/a&gt;.&lt;/p&gt;&#xA;&lt;p&gt;There are two main ways to install or upgrade SONiC:&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>SONiC Community Image Initial Setup</title>
+      <link>https://seisokeii.github.io/en/posts/sonic/sonic-kvm-init-setup/</link>
+      <pubDate>Tue, 24 Sep 2024 15:56:33 +0800</pubDate><author>Noway@bimbimbambam (seisokeii)</author>
+      <guid>https://seisokeii.github.io/en/posts/sonic/sonic-kvm-init-setup/</guid>
+      <description>&lt;p&gt;Above image is just for verifying some concepts then build a small Lab QQ&lt;/p&gt;&#xA;&lt;hr&gt;&#xA;&lt;p&gt;In EVE-NG or GNS3 simulator, running the &lt;a href=&#34;https://sonic.software/&#34; target=&#34;_blank&#34; rel=&#34;noopener noreffer &#34;&gt;SONiC KVM image&lt;/a&gt; will leave a lot of settings after&#xA;booting. It&amp;rsquo;s annoying to pull out a bunch of settings every time you boot a new machine.&lt;/p&gt;&#xA;&lt;p&gt;In this situation, I would like to automate the solution ( computer science people =&amp;gt; lazy), but it seems that I don&amp;rsquo;t&#xA;need to use Ansible, pyATS, or Nornir yet. So I use shell script to solve it.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Open Network Install Environment (ONIE) How to build?</title>
+      <link>https://seisokeii.github.io/en/posts/onie/onie-build/</link>
+      <pubDate>Thu, 19 Sep 2024 17:03:33 +0800</pubDate><author>Noway@bimbimbambam (seisokeii)</author>
+      <guid>https://seisokeii.github.io/en/posts/onie/onie-build/</guid>
+      <description>&lt;p&gt;Above images is the machine I used for development, it looks like a 1U N3k XD&lt;/p&gt;&#xA;&lt;hr&gt;&#xA;&lt;p&gt;Following the previous article &lt;code&gt;ONIE Simple Introduction&lt;/code&gt;, let&amp;rsquo;s briefly share how ONIE is built!&lt;/p&gt;&#xA;&lt;p&gt;This will be similar to a tutorial, but of course it&amp;rsquo;s impossible to put company information here~ It&amp;rsquo;s just a general&#xA;look at how a network equipment manufacturer makes this thing.&lt;/p&gt;&#xA;&lt;h2 id=&#34;preparation---prepare-the-development-environment&#34;&gt;Preparation - Prepare the development environment&lt;/h2&gt;&#xA;&lt;p&gt;Honestly, the development environment is just a standard Linux machine, I use a virtual machine~&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Open Network Install Environment (ONIE) Simple Introduction</title>
+      <link>https://seisokeii.github.io/en/posts/onie/onie-intro/</link>
+      <pubDate>Tue, 13 Aug 2024 17:39:33 +0800</pubDate><author>Noway@bimbimbambam (seisokeii)</author>
+      <guid>https://seisokeii.github.io/en/posts/onie/onie-intro/</guid>
+      <description>&lt;p&gt;Above image is generate by Gemini. I just say that I want a Japanese style ONIE image, and it becomes like this XD&lt;/p&gt;&#xA;&lt;hr&gt;&#xA;&lt;p&gt;If you have ever used a whitebox switch, you maybe know what Open Network Install Environment is ~&#xA;Here is a simple brief introduction to ONIE. The first task during my internship at Edge-core Networks was to make a new&#xA;device compatible with ONIE, which means making ONIE run on the new device.&lt;/p&gt;</description>
+    </item>
+  </channel>
 </rss>

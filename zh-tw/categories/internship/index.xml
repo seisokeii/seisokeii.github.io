@@ -1,20 +1,21 @@
-<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
-    <channel>
-        <title>Internship - 分類 - seisokeii blog</title>
-        <link>https://seisokeii.github.io/zh-tw/categories/internship/</link>
-        <description>Internship - 分類 - seisokeii blog</description>
-        <generator>Hugo -- gohugo.io</generator><language>zh-TW</language><managingEditor>Noway@bimbimbambam (seisokeii)</managingEditor>
-            <webMaster>Noway@bimbimbambam (seisokeii)</webMaster><lastBuildDate>Wed, 25 Sep 2024 16:54:37 &#43;0800</lastBuildDate><atom:link href="https://seisokeii.github.io/zh-tw/categories/internship/" rel="self" type="application/rss+xml" /><item>
-    <title>碩班時期公司實習心得</title>
-    <link>https://seisokeii.github.io/zh-tw/posts/internship/edgecore-intern/</link>
-    <pubDate>Wed, 25 Sep 2024 16:54:37 &#43;0800</pubDate>
-    <author>seisokeii</author>
-    <guid>https://seisokeii.github.io/zh-tw/posts/internship/edgecore-intern/</guid>
-    <description><![CDATA[<div class="featured-image">
-                <img src="/images/internship/internship-cafe.png" referrerpolicy="no-referrer">
-            </div><p>上面這張圖是在公司的某一個角落，就像葬送的芙莉蓮中探索迷宮都要將每個角落都摸透一樣，美妙的地方就是這樣找到的XD</p>
-<hr>
-<p>最近實習生涯即將結束，剛好可以來湊一篇心得順便當作是紀錄唄～</p>]]></description>
-</item>
-</channel>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Internship on seisokeii blog</title>
+    <link>https://seisokeii.github.io/zh-tw/categories/internship/</link>
+    <description>Recent content in Internship on seisokeii blog</description>
+    <generator>Hugo</generator>
+    <language>zh-TW</language>
+    <managingEditor>Noway@bimbimbambam (seisokeii)</managingEditor>
+    <webMaster>Noway@bimbimbambam (seisokeii)</webMaster>
+    <lastBuildDate>Tue, 06 May 2025 23:52:30 +0800</lastBuildDate>
+    <atom:link href="https://seisokeii.github.io/zh-tw/categories/internship/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>碩班時期公司實習心得</title>
+      <link>https://seisokeii.github.io/zh-tw/posts/internship/edgecore-intern/</link>
+      <pubDate>Wed, 25 Sep 2024 16:54:37 +0800</pubDate><author>Noway@bimbimbambam (seisokeii)</author>
+      <guid>https://seisokeii.github.io/zh-tw/posts/internship/edgecore-intern/</guid>
+      <description>&lt;p&gt;上面這張圖是在公司的某一個角落，就像葬送的芙莉蓮中探索迷宮都要將每個角落都摸透一樣，美妙的地方就是這樣找到的XD&lt;/p&gt;&#xA;&lt;hr&gt;&#xA;&lt;p&gt;最近實習生涯即將結束，剛好可以來湊一篇心得順便當作是紀錄唄～&lt;/p&gt;</description>
+    </item>
+  </channel>
 </rss>

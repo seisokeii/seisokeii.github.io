@@ -13,7 +13,7 @@
   <meta property="og:type" content="article">
     <meta property="article:section" content="posts">
     <meta property="article:published_time" content="2025-05-05T23:39:27+08:00">
-    <meta property="article:modified_time" content="2025-05-05T23:39:27+08:00">
+    <meta property="article:modified_time" content="2025-05-06T23:52:30+08:00">
     <meta property="article:tag" content="Transceiver">
     <meta property="article:tag" content="Edgecore">
 
@@ -24,7 +24,7 @@
 <meta name="application-name" content="seisokeii の blog">
 <meta name="apple-mobile-web-app-title" content="seisokeii の blog"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://seisokeii.github.io/zh-tw/posts/transceiver/transceiver-intro-01/" /><link rel="prev" href="https://seisokeii.github.io/zh-tw/posts/army/army-part3/" /><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.1.1/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://seisokeii.github.io/zh-tw/posts/transceiver/transceiver-intro-01/" /><link rel="prev" href="https://seisokeii.github.io/zh-tw/posts/army/army-part3/" /><link rel="next" href="https://seisokeii.github.io/zh-tw/posts/sonic/sonic-installation-via-onie/" /><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.1.1/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
         <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.1.1/css/all.min.css"></noscript><link rel="preload" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
         <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css"></noscript><script type="application/ld+json">
     {
@@ -35,8 +35,8 @@
         "mainEntityOfPage": {
             "@type": "WebPage",
             "@id": "https:\/\/seisokeii.github.io\/zh-tw\/posts\/transceiver\/transceiver-intro-01\/"
-        },"genre": "posts","keywords": "Transceiver, edgecore","wordcount":  5977 ,
-        "url": "https:\/\/seisokeii.github.io\/zh-tw\/posts\/transceiver\/transceiver-intro-01\/","datePublished": "2025-05-05T23:39:27+08:00","dateModified": "2025-05-05T23:39:27+08:00","publisher": {
+        },"genre": "posts","keywords": "Transceiver, Edgecore","wordcount":  5977 ,
+        "url": "https:\/\/seisokeii.github.io\/zh-tw\/posts\/transceiver\/transceiver-intro-01\/","datePublished": "2025-05-05T23:39:27+08:00","dateModified": "2025-05-06T23:52:30+08:00","publisher": {
             "@type": "Organization",
             "name": ""},"author": {
                 "@type": "Person",
@@ -173,9 +173,11 @@
 藉由這一篇來順便學習與整理這一塊的資訊，看到網上有的資訊也沒太多，就來分享一下唄～</p>
 <p>接下來就照著<a href="https://www.edge-core.com/tw/products/Transceivers/" target="_blank" rel="noopener noreffer ">偶現在的公司產品</a>來講唄。主要會著重在 Datacenter 相關的應用這一塊，畢竟小弟目前是在這一塊討飯吃。</p>
 <blockquote>
-<p>因為吾是硬體白痴，所以儘量以 IT 小白都可以理解的方式來說明。</p></blockquote>
+<p>因為吾是硬體白痴，所以儘量以 IT 小白都可以理解的方式來說明。</p>
+</blockquote>
 <blockquote>
-<p>不是很喜歡用別人的圖，但沒辦法資訊量太多了別人又畫的比我好&hellip; 引用的圖都會附上連結，歡迎查看原文！</p></blockquote>
+<p>不是很喜歡用別人的圖，但沒辦法資訊量太多了別人又畫的比我好&hellip; 引用的圖都會附上連結，歡迎查看原文！</p>
+</blockquote>
 <p>本篇會儘量以流水序的方式說明，也會比較好去理解前因後果，希望這樣可以幫助打通任督二脈～</p>
 <h2 id="調變-modulation">調變 Modulation</h2>
 <p>那我們在看光纖模組前，肯定要先來了解一下傳輸原理，也就是光與電的 &ldquo;調變&rdquo; (跟速率有關) 就是光或電怎麼打出來的，分別是 NRZ (Non-Return-to-Zero) 與 PAM4 (Pulse Amplitude Modulation 4-Level)。</p>
@@ -197,7 +199,8 @@
 也就是 SNR (Signal-to-noise ratio) 更低了，這會導致 BER (bit error rate) 提高，所以就需要有 FEC (forward error correction) 來糾錯。</p>
 <p>在成本上，PAM4 低 SNR 的特性導致需要更複雜的信號處理，同時就提高了功耗、熱量、售價。</p>
 <blockquote>
-<p>PAM4 本身並不會產生多個 Lanes 或 Channels。 它的作用是讓每一個 Lane/Channel 的傳輸速率翻倍（相比於相同 baud 的 NRZ）</p></blockquote>
+<p>PAM4 本身並不會產生多個 Lanes 或 Channels。 它的作用是讓每一個 Lane/Channel 的傳輸速率翻倍（相比於相同 baud 的 NRZ）</p>
+</blockquote>
 <p>這裡補充一個點，就是硬體上大致會長這樣：
 <figure><img src="/images/transceiver/xcver-laser-diode.png"><figcaption>
       <h4>光纖模組中的雷射二極體</h4>
@@ -237,7 +240,8 @@
 <li>U-band(1625 – 1675 nm): 主要用於監控 (OTDR)。</li>
 </ul>
 <blockquote>
-<p>上述的說明有可能隨著時間改變，像是 C 跟 L 現在已經很擁擠了，可能未來會找其他段去擴充之類的，可以參考<a href="https://yingdapc.com/zh-TW/%E5%85%89%E9%80%9A%E8%A8%8A3%E5%80%8B%E6%96%B0%E9%A0%BB%E6%AE%B5CE-CPP%E5%92%8CCL%E9%A0%BB%E6%AE%B5/" target="_blank" rel="noopener noreffer ">光通訊新頻段：CE、Cpp、C+L 頻段</a>。</p></blockquote>
+<p>上述的說明有可能隨著時間改變，像是 C 跟 L 現在已經很擁擠了，可能未來會找其他段去擴充之類的，可以參考<a href="https://yingdapc.com/zh-TW/%E5%85%89%E9%80%9A%E8%A8%8A3%E5%80%8B%E6%96%B0%E9%A0%BB%E6%AE%B5CE-CPP%E5%92%8CCL%E9%A0%BB%E6%AE%B5/" target="_blank" rel="noopener noreffer ">光通訊新頻段：CE、Cpp、C+L 頻段</a>。</p>
+</blockquote>
 <p>WDM 因為是有不同的波長，並且要同時跑在一個光纖上，所以通常會有 MUX/DEMUX (多工器/解多工器) 來做到這件事情，可以看到下圖: 圖片來自<a href="https://fibconet.com/zh-tw/what-does-wdm-and-dwdm-meaning/" target="_blank" rel="noopener noreffer ">MUX DEMUX 示意圖</a>
 <figure><img src="/images/transceiver/xcver-mux-demux-01.png"><figcaption>
       <h4>MUX DEMUX 示意圖</h4>
@@ -250,16 +254,19 @@
 </figure>
 </p>
 <blockquote>
-<p>Lane 跟 Channel 會這樣畫是因為很多時候在 NIC 端會說 lane (Electrical)，而 WDM 會說是 channel (Optical)，混用的話也行反正聽得懂就好XD</p></blockquote>
+<p>Lane 跟 Channel 會這樣畫是因為很多時候在 NIC 端會說 lane (Electrical)，而 WDM 會說是 channel (Optical)，混用的話也行反正聽得懂就好XD</p>
+</blockquote>
 <blockquote>
-<p>在並行光纖方案中，每對光纖是一條 Channel；在 WDM 方案中，每個波長可以看作一條 Channel。</p></blockquote>
+<p>在並行光纖方案中，每對光纖是一條 Channel；在 WDM 方案中，每個波長可以看作一條 Channel。</p>
+</blockquote>
 <p>CWDM 所使用的 MUX/DEMUX 是無源的，也就是不用額外供電，同時因為波長間隔很大，所以做工精密度要求上比較小，造就了它會便宜。</p>
 <h3 id="dwdm-dense-wavelength-division-multiplexer">DWDM (Dense Wavelength Division Multiplexer)</h3>
 <p>Dense，就是緊湊的，相較於 CWDM 來說，DWDM 的波長大概會是 0.4 ~ 0.8nm，幾乎快要跟 CWDM 差一百倍了。(可以參考上面的 CWDM DWDM 波長示意圖)</p>
 <p>通常是拿來做長距離傳輸用途，因為光纖線拉線成本是按公尺算的，距離一長成本就非常高，所以不可能使用 CWDM 去打長距離。</p>
 <p>當然要在一個通道打這麼多個波長間距又這麼小，精密度當然要求會非常高，同時也會出現功耗與散熱問題，要解決這些問題就導致了價格也非常高。</p>
 <blockquote>
-<p>超長距離通常會再搭配放大器 (Optical Amplifier) ，可以去搜尋 &ldquo;EDFA&rdquo;，當然也會有相容問題這邊就不多談。</p></blockquote>
+<p>超長距離通常會再搭配放大器 (Optical Amplifier) ，可以去搜尋 &ldquo;EDFA&rdquo;，當然也會有相容問題這邊就不多談。</p>
+</blockquote>
 <p>除了上述的 CWDM 與 DWDM 外，還有其他的 WDM，但就是類似的原理在變形而已。</p>
 <p>在知道了光怎麼傳輸後，接下來可以來看一下現在的光纖模組速率是怎麼搞出來的了。</p>
 <hr>
@@ -273,7 +280,8 @@
 
 如果是 100G 的話，就是每個 lane 改成 25G NRZ 就是了。</p>
 <blockquote>
-<p>圖中可以看到右邊只畫一條線，這張圖是拿 400G-FR4 (Farm Reach 4-lane) 當舉例，光纖只需要一對(2條)，所以會使用 LC 頭。當然還有其他型號之後會提到，如果超過一對(2條)的話，就需要改用 MPO 接頭了。</p></blockquote>
+<p>圖中可以看到右邊只畫一條線，這張圖是拿 400G-FR4 (Farm Reach 4-lane) 當舉例，光纖只需要一對(2條)，所以會使用 LC 頭。當然還有其他型號之後會提到，如果超過一對(2條)的話，就需要改用 MPO 接頭了。</p>
+</blockquote>
 <p>以上大致就是簡單的介紹了，知道上述這些東西後，光纖模組的速率就都是透過排列組合去拼出來的了，不管是使用 NRZ 或是 PAM4 調變方式。</p>
 <p>再更白話點，速率疊上去是靠 WDM 技術，最原始速率是調變決定的，像是 10/25G NRZ，搭配 CWDM4 可以做到 10x4G/25x4G 就是 40G/100G 的速率。
 喔對！也可以直接打出四條並行的光纖不使用 WDM 技術，這樣也不需要 MUX 來會合到同一條光纖，所以也可以不依靠 WDM 技術，單靠增加通道提高速率 (常見用在 MPO 頭)。
@@ -322,7 +330,8 @@
 <p>看到這裡其實可以稍微有個小總結，其實那一堆型號就是看你想要使用的距離去挑的，這跟 SFP 那邊的 SR/LR 同樣道理，只是因為資料中心需求多樣化，所以多出很多型號來應付不同距離的情況，像是機櫃之間或是資料中心之間這種距離。
 那接頭問題主要就是看自己的需求摟，通常短距離的都是使用 MPO，長一點的就是使用 LC 頭。因為 MPO 是很多芯，對於長距離來說拉越多芯價錢越貴，所以長距離幾乎都是使用 LC 頭。可發現其中 SR/DR 多是使用 MPO，其餘四個都是 LC 頭。</p>
 <blockquote>
-<p>數字表示大致是這樣： 光纖頭孔數 + SR/DR/FR/LR/ER/ZR + channel 數量。</p></blockquote>
+<p>數字表示大致是這樣： 光纖頭孔數 + SR/DR/FR/LR/ER/ZR + channel 數量。</p>
+</blockquote>
 <h3 id="qsfp56">QSFP56</h3>
 <p>看到 56 的意思就是最高 56Gbps 但實際就約 50Gbps，這邊就是 28 Gbaud 然後使用 PAM4 所以才有了 56Gbps。同樣的 Q 就是 4 lanes 所以這邊拼出來 (4x50G) 的速率就是比較不常見的 200G。</p>
 <h3 id="qsfp56-dd-qsfp-dd">QSFP56-DD (QSFP-DD)</h3>
@@ -349,7 +358,8 @@
 </figure>
 </p>
 <blockquote>
-<p>有沒有順便發現 SR4/DR4 就是使用 MPO12，SR8/DR8 就是使用 MPO16 呢^^</p></blockquote>
+<p>有沒有順便發現 SR4/DR4 就是使用 MPO12，SR8/DR8 就是使用 MPO16 呢^^</p>
+</blockquote>
 <h3 id="qsfp112-dd">QSFP112-DD</h3>
 <p>這邊一樣可以借鑑前面的使用方式，Q 配上 DD 就有 8 lanes，然後每 lane 都是 112G (56G PAM4)，相乘一下就是 800G 了，對應的產品是 ET8002-SR8。</p>
 <p>那有另一款就是 ET8002-2DR4，這一個雖然看起來很像，但是 2DR4 就是有兩個光纖頭 (金手指差異那張圖)，該光模是分成兩個 400G 去做到的。
@@ -432,7 +442,7 @@
     <div class="post-info">
         <div class="post-info-line">
             <div class="post-info-mod">
-                <span>更新於 2025-05-05</span>
+                <span>更新於 2025-05-06</span>
             </div></div>
         <div class="post-info-line">
             <div class="post-info-md"></div>
@@ -449,14 +459,15 @@
         </section>
     </div>
 
-    <div class="post-nav"><a href="/zh-tw/posts/army/army-part3/" class="prev" rel="prev" title="十軍團重要目標防護營(重防營)義務役下部隊-part3"><i class="fas fa-angle-left fa-fw" aria-hidden="true"></i>十軍團重要目標防護營(重防營)義務役下部隊-part3</a></div>
+    <div class="post-nav"><a href="/zh-tw/posts/army/army-part3/" class="prev" rel="prev" title="十軍團重要目標防護營(重防營)義務役下部隊-part3"><i class="fas fa-angle-left fa-fw" aria-hidden="true"></i>十軍團重要目標防護營(重防營)義務役下部隊-part3</a>
+            <a href="/zh-tw/posts/sonic/sonic-installation-via-onie/" class="next" rel="next" title="SONiC Image 安裝教學">SONiC Image 安裝教學<i class="fas fa-angle-right fa-fw" aria-hidden="true"></i></a></div>
 </div>
 <div id="comments"><div id="disqus_thread" class="comment"></div><noscript>
                 Please enable JavaScript to view the comments powered by <a href="https://disqus.com/?ref_noscript">Disqus</a>.
             </noscript></div></article></div>
             </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.145.0">Hugo</a> 強力驅動 | 主題 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.3.0"><i class="far fa-kiss-wink-heart fa-fw" aria-hidden="true"></i> LoveIt</a>
-                </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright fa-fw" aria-hidden="true"></i><span itemprop="copyrightYear">2024 - 2025</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/zh-tw/" target="_blank">seisokeii</a></span></div>
+        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.152.2">Hugo</a> 強力驅動 | 主題 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.3.0"><i class="far fa-kiss-wink-heart fa-fw" aria-hidden="true"></i> LoveIt</a>
+                </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright fa-fw" aria-hidden="true"></i><span itemprop="copyrightYear">2024 - 2026</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/zh-tw/" target="_blank">seisokeii</a></span></div>
         </div>
     </footer></div>
 

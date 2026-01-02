@@ -14,7 +14,7 @@ In this situation, I would like to automate the solution ( computer science peop
   <meta property="og:type" content="article">
     <meta property="article:section" content="posts">
     <meta property="article:published_time" content="2024-09-24T15:56:33+08:00">
-    <meta property="article:modified_time" content="2024-09-29T22:52:57+08:00">
+    <meta property="article:modified_time" content="2025-05-06T23:52:30+08:00">
     <meta property="article:tag" content="SONiC">
 
   <meta name="twitter:card" content="summary">
@@ -25,7 +25,7 @@ In this situation, I would like to automate the solution ( computer science peop
 <meta name="application-name" content="seisokeii の blog">
 <meta name="apple-mobile-web-app-title" content="seisokeii の blog"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://seisokeii.github.io/en/posts/sonic/sonic-kvm-init-setup/" /><link rel="prev" href="https://seisokeii.github.io/en/posts/onie/onie-build/" /><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.1.1/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://seisokeii.github.io/en/posts/sonic/sonic-kvm-init-setup/" /><link rel="prev" href="https://seisokeii.github.io/en/posts/onie/onie-build/" /><link rel="next" href="https://seisokeii.github.io/en/posts/sonic/sonic-installation-via-onie/" /><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.1.1/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
         <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.1.1/css/all.min.css"></noscript><link rel="preload" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
         <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css"></noscript><script type="application/ld+json">
     {
@@ -37,7 +37,7 @@ In this situation, I would like to automate the solution ( computer science peop
             "@type": "WebPage",
             "@id": "https:\/\/seisokeii.github.io\/en\/posts\/sonic\/sonic-kvm-init-setup\/"
         },"genre": "posts","keywords": "SONiC","wordcount":  950 ,
-        "url": "https:\/\/seisokeii.github.io\/en\/posts\/sonic\/sonic-kvm-init-setup\/","datePublished": "2024-09-24T15:56:33+08:00","dateModified": "2024-09-29T22:52:57+08:00","publisher": {
+        "url": "https:\/\/seisokeii.github.io\/en\/posts\/sonic\/sonic-kvm-init-setup\/","datePublished": "2024-09-24T15:56:33+08:00","dateModified": "2025-05-06T23:52:30+08:00","publisher": {
             "@type": "Organization",
             "name": ""},"author": {
                 "@type": "Person",
@@ -273,7 +273,8 @@ part like the interface.</p>
 properly if it is not cleaned up.</p>
 <p>There are two places to delete:</p>
 <blockquote>
-<p>!!! Remember use sudo to modify !!!</p></blockquote>
+<p>!!! Remember use sudo to modify !!!</p>
+</blockquote>
 <ol>
 <li>
 <p>BGP_NEIGHBOR</p>
@@ -351,7 +352,8 @@ properly if it is not cleaned up.</p>
 Remember to save the file and reload the configuration after modifying it, use the `sudo config reload -y` command.
 </span>
 <blockquote>
-<p>After reload config_db.json, you can use <code>watch docker ps -a</code> to check if all containers are working properly.</p></blockquote>
+<p>After reload config_db.json, you can use <code>watch docker ps -a</code> to check if all containers are working properly.</p>
+</blockquote>
 <p>Now you have completed the basic settings, and you can finally start playing with the settings you want.</p>
 <h2 id="conclusion">Conclusion</h2>
 <p>In the beginning, I saw many bloggers actually teach how to install, and after installation, they immediately set up
@@ -364,7 +366,7 @@ a patch file.</p>
     <div class="post-info">
         <div class="post-info-line">
             <div class="post-info-mod">
-                <span>Updated on 2024-09-29</span>
+                <span>Updated on 2025-05-06</span>
             </div></div>
         <div class="post-info-line">
             <div class="post-info-md"></div>
@@ -381,14 +383,15 @@ a patch file.</p>
         </section>
     </div>
 
-    <div class="post-nav"><a href="/en/posts/onie/onie-build/" class="prev" rel="prev" title="Open Network Install Environment (ONIE) How to build?"><i class="fas fa-angle-left fa-fw" aria-hidden="true"></i>Open Network Install Environment (ONIE) How to build?</a></div>
+    <div class="post-nav"><a href="/en/posts/onie/onie-build/" class="prev" rel="prev" title="Open Network Install Environment (ONIE) How to build?"><i class="fas fa-angle-left fa-fw" aria-hidden="true"></i>Open Network Install Environment (ONIE) How to build?</a>
+            <a href="/en/posts/sonic/sonic-installation-via-onie/" class="next" rel="next" title="SONiC Image Installation Guide">SONiC Image Installation Guide<i class="fas fa-angle-right fa-fw" aria-hidden="true"></i></a></div>
 </div>
 <div id="comments"><div id="disqus_thread" class="comment"></div><noscript>
                 Please enable JavaScript to view the comments powered by <a href="https://disqus.com/?ref_noscript">Disqus</a>.
             </noscript></div></article></div>
             </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line">Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.145.0">Hugo</a> | Theme - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.3.0"><i class="far fa-kiss-wink-heart fa-fw" aria-hidden="true"></i> LoveIt</a>
-                </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright fa-fw" aria-hidden="true"></i><span itemprop="copyrightYear">2024 - 2025</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/en/" target="_blank">seisokeii</a></span></div>
+        <div class="footer-container"><div class="footer-line">Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.152.2">Hugo</a> | Theme - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.3.0"><i class="far fa-kiss-wink-heart fa-fw" aria-hidden="true"></i> LoveIt</a>
+                </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright fa-fw" aria-hidden="true"></i><span itemprop="copyrightYear">2024 - 2026</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/en/" target="_blank">seisokeii</a></span></div>
         </div>
     </footer></div>
 

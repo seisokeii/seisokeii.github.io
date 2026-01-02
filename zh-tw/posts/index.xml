@@ -4,7 +4,19 @@
         <link>https://seisokeii.github.io/zh-tw/posts/</link>
         <description>所有文章 | seisokeii blog</description>
         <generator>Hugo -- gohugo.io</generator><language>zh-TW</language><managingEditor>Noway@bimbimbambam (seisokeii)</managingEditor>
-            <webMaster>Noway@bimbimbambam (seisokeii)</webMaster><lastBuildDate>Mon, 05 May 2025 23:39:27 &#43;0800</lastBuildDate><atom:link href="https://seisokeii.github.io/zh-tw/posts/" rel="self" type="application/rss+xml" /><item>
+            <webMaster>Noway@bimbimbambam (seisokeii)</webMaster><lastBuildDate>Fri, 02 Jan 2026 13:56:12 &#43;0800</lastBuildDate><atom:link href="https://seisokeii.github.io/zh-tw/posts/" rel="self" type="application/rss+xml" /><item>
+    <title>SONiC Image 安裝教學</title>
+    <link>https://seisokeii.github.io/zh-tw/posts/sonic/sonic-installation-via-onie/</link>
+    <pubDate>Fri, 02 Jan 2026 13:56:12 &#43;0800</pubDate>
+    <author>seisokeii</author>
+    <guid>https://seisokeii.github.io/zh-tw/posts/sonic/sonic-installation-via-onie/</guid>
+    <description><![CDATA[<div class="featured-image">
+                <img src="/images/SONiC/installation/sonic-AIS800-64O-2pcs.png" referrerpolicy="no-referrer">
+            </div><p>每次看到 AIS800-64O 都不會是接滿的狀態&hellip; Transceiver 接滿的時候比一台機器還貴&hellip;</p>
+<hr>
+<p>近期很常遇到說不會安裝 SONiC 的人，想說就寫了一篇教學以後省得每次在傳教學文件&hellip;</p>]]></description>
+</item>
+<item>
     <title>Fiber Optic Transceiver Module 光纖收發器模組型號簡介</title>
     <link>https://seisokeii.github.io/zh-tw/posts/transceiver/transceiver-intro-01/</link>
     <pubDate>Mon, 05 May 2025 23:39:27 &#43;0800</pubDate>
@@ -115,20 +127,6 @@
 <p>用過 whitebox 交換機應該加減都會知道 Open Network Install Environment 這東東吧！<br>
 這邊稍微來提一下這東東吧，剛好最近在 Edge-core Networks 實習期間的第一個任務，就是讓一台新設備與 ONIE 相容，講白了就是想辦法讓
 ONIE 可以在新設備上面跑啦~</p>]]></description>
-</item>
-<item>
-    <title>ACS 客製化降噪耳塞</title>
-    <link>https://seisokeii.github.io/zh-tw/posts/earplug/acs-earplug01/</link>
-    <pubDate>Sat, 20 Jul 2024 16:28:06 &#43;0800</pubDate>
-    <author>seisokeii</author>
-    <guid>https://seisokeii.github.io/zh-tw/posts/earplug/acs-earplug01/</guid>
-    <description><![CDATA[<div class="featured-image">
-                <img src="/images/ACSEarplug/acs_earplug_box.png" referrerpolicy="no-referrer">
-            </div><p>上面這圖不用多說了吧~ 就是 ACS 客製化耳塞拿到的盒子，滿意外沒有很大XD</p>
-<hr>
-<p>想說網路上很少人在分享這東東，就來分享一下唄。</p>
-<p>那為什麼會想客製化耳塞呢？ 主要是因為朋友會揪一些 hardstyle 的夜店場跟音樂節像是 Defqon.1、Intents、&hellip;
-之類的，然後耳膜可是非常脆弱的，我還不想要這麼快就失聰QQ</p>]]></description>
 </item>
 </channel>
 </rss>

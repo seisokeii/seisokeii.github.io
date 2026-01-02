@@ -1,23 +1,28 @@
-<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
-    <channel>
-        <title>SONiC - Category - seisokeii blog</title>
-        <link>https://seisokeii.github.io/en/categories/sonic/</link>
-        <description>SONiC - Category - seisokeii blog</description>
-        <generator>Hugo -- gohugo.io</generator><language>en</language><managingEditor>Noway@bimbimbambam (seisokeii)</managingEditor>
-            <webMaster>Noway@bimbimbambam (seisokeii)</webMaster><lastBuildDate>Tue, 24 Sep 2024 15:56:33 &#43;0800</lastBuildDate><atom:link href="https://seisokeii.github.io/en/categories/sonic/" rel="self" type="application/rss+xml" /><item>
-    <title>SONiC Community Image Initial Setup</title>
-    <link>https://seisokeii.github.io/en/posts/sonic/sonic-kvm-init-setup/</link>
-    <pubDate>Tue, 24 Sep 2024 15:56:33 &#43;0800</pubDate>
-    <author>seisokeii</author>
-    <guid>https://seisokeii.github.io/en/posts/sonic/sonic-kvm-init-setup/</guid>
-    <description><![CDATA[<div class="featured-image">
-                <img src="/images/SONiC/sonic-preview01.png" referrerpolicy="no-referrer">
-            </div><p>Above image is just for verifying some concepts then build a small Lab QQ</p>
-<hr>
-<p>In EVE-NG or GNS3 simulator, running the <a href="https://sonic.software/" target="_blank" rel="noopener noreffer ">SONiC KVM image</a> will leave a lot of settings after
-booting. It&rsquo;s annoying to pull out a bunch of settings every time you boot a new machine.</p>
-<p>In this situation, I would like to automate the solution ( computer science people =&gt; lazy), but it seems that I don&rsquo;t
-need to use Ansible, pyATS, or Nornir yet. So I use shell script to solve it.</p>]]></description>
-</item>
-</channel>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>SONiC on seisokeii blog</title>
+    <link>https://seisokeii.github.io/en/categories/sonic/</link>
+    <description>Recent content in SONiC on seisokeii blog</description>
+    <generator>Hugo</generator>
+    <language>en</language>
+    <managingEditor>Noway@bimbimbambam (seisokeii)</managingEditor>
+    <webMaster>Noway@bimbimbambam (seisokeii)</webMaster>
+    <lastBuildDate>Fri, 02 Jan 2026 13:56:12 +0800</lastBuildDate>
+    <atom:link href="https://seisokeii.github.io/en/categories/sonic/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>SONiC Image Installation Guide</title>
+      <link>https://seisokeii.github.io/en/posts/sonic/sonic-installation-via-onie/</link>
+      <pubDate>Fri, 02 Jan 2026 13:56:12 +0800</pubDate><author>Noway@bimbimbambam (seisokeii)</author>
+      <guid>https://seisokeii.github.io/en/posts/sonic/sonic-installation-via-onie/</guid>
+      <description>&lt;p&gt;Every time I look at the AIS800-64O, it’s never fully populated… A full set of transceivers costs more than the switch itself.&lt;/p&gt;&#xA;&lt;hr&gt;&#xA;&lt;p&gt;Lately I’ve often met people who don’t know how to install SONiC. To save time sending the same instructions over and over, here’s a simple walkthrough.&lt;/p&gt;&#xA;&lt;p&gt;First, you need to know about ONIE. I previously already wrote an &lt;a href=&#34;https://seisokeii.github.io/zh-tw/posts/onie/onie-intro/&#34; target=&#34;_blank&#34; rel=&#34;noopener noreffer &#34;&gt;ONIE introduction&lt;/a&gt;.&lt;/p&gt;&#xA;&lt;p&gt;There are two main ways to install or upgrade SONiC:&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>SONiC Community Image Initial Setup</title>
+      <link>https://seisokeii.github.io/en/posts/sonic/sonic-kvm-init-setup/</link>
+      <pubDate>Tue, 24 Sep 2024 15:56:33 +0800</pubDate><author>Noway@bimbimbambam (seisokeii)</author>
+      <guid>https://seisokeii.github.io/en/posts/sonic/sonic-kvm-init-setup/</guid>
+      <description>&lt;p&gt;Above image is just for verifying some concepts then build a small Lab QQ&lt;/p&gt;&#xA;&lt;hr&gt;&#xA;&lt;p&gt;In EVE-NG or GNS3 simulator, running the &lt;a href=&#34;https://sonic.software/&#34; target=&#34;_blank&#34; rel=&#34;noopener noreffer &#34;&gt;SONiC KVM image&lt;/a&gt; will leave a lot of settings after&#xA;booting. It&amp;rsquo;s annoying to pull out a bunch of settings every time you boot a new machine.&lt;/p&gt;&#xA;&lt;p&gt;In this situation, I would like to automate the solution ( computer science people =&amp;gt; lazy), but it seems that I don&amp;rsquo;t&#xA;need to use Ansible, pyATS, or Nornir yet. So I use shell script to solve it.&lt;/p&gt;</description>
+    </item>
+  </channel>
 </rss>
