@@ -119,11 +119,11 @@
         </div><div class="featured-image"><img
         class="lazyload"
         src="/svg/loading.min.svg"
-        data-src="/images/SONiC/sonic-preview01.png"
-        data-srcset="/images/SONiC/sonic-preview01.png, /images/SONiC/sonic-preview01.png 1.5x, /images/SONiC/sonic-preview01.png 2x"
+        data-src="/images/SONiC/community-init-gns3/sonic-preview01.png"
+        data-srcset="/images/SONiC/community-init-gns3/sonic-preview01.png, /images/SONiC/community-init-gns3/sonic-preview01.png 1.5x, /images/SONiC/community-init-gns3/sonic-preview01.png 2x"
         data-sizes="auto"
-        alt="/images/SONiC/sonic-preview01.png"
-        title="/images/SONiC/sonic-preview01.png" /></div><div class="details toc" id="toc-static"  data-kept="">
+        alt="/images/SONiC/community-init-gns3/sonic-preview01.png"
+        title="/images/SONiC/community-init-gns3/sonic-preview01.png" /></div><div class="details toc" id="toc-static"  data-kept="">
                 <div class="details-summary toc-title">
                     <span>目錄</span>
                     <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
@@ -168,7 +168,7 @@ patch，畢竟這種情況只能拿實體設備測試設定而已，有點麻煩
 </span></code></pre></td>
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="cp">#!/bin/bash
-</span></span></span><span class="line"><span class="cl"><span class="cp"></span>
+</span></span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="k">for</span> <span class="o">((</span><span class="nv">i</span> <span class="o">=</span> 1, <span class="nv">j</span> <span class="o">=</span> 0<span class="p">;</span> i &lt;<span class="o">=</span> 54, j &lt;<span class="o">=</span> 106<span class="p">;</span> i++, <span class="nv">j</span> <span class="o">+=</span> 2<span class="o">))</span><span class="p">;</span> <span class="k">do</span>
 </span></span><span class="line"><span class="cl">		sudo config interface ip remove Ethernet<span class="nv">$i</span> 10.0.0.<span class="nv">$j</span>/31
 </span></span><span class="line"><span class="cl"><span class="k">done</span>
@@ -221,7 +221,7 @@ patch，畢竟這種情況只能拿實體設備測試設定而已，有點麻煩
 </span></code></pre></td>
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="cp">#!/bin/bash
-</span></span></span><span class="line"><span class="cl"><span class="cp"></span>
+</span></span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="k">for</span> <span class="o">((</span> <span class="nv">i</span><span class="o">=</span>1<span class="p">;</span> i&lt;<span class="o">=</span>107<span class="p">;</span> <span class="nv">i</span><span class="o">+=</span><span class="m">2</span> <span class="o">))</span>
 </span></span><span class="line"><span class="cl"><span class="k">do</span>
 </span></span><span class="line"><span class="cl">    vtysh -c <span class="s2">&#34;conf&#34;</span> -c <span class="s2">&#34;router bgp 65100&#34;</span> -c <span class="s2">&#34;address-family ipv4 unicast&#34;</span> -c <span class="s2">&#34;no neighbor 10.0.0.</span><span class="nv">$i</span><span class="s2">&#34;</span>
@@ -379,7 +379,7 @@ patch，畢竟這種情況只能拿實體設備測試設定而已，有點麻煩
                 Please enable JavaScript to view the comments powered by <a href="https://disqus.com/?ref_noscript">Disqus</a>.
             </noscript></div></article></div>
             </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.152.2">Hugo</a> 強力驅動 | 主題 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.3.0"><i class="far fa-kiss-wink-heart fa-fw" aria-hidden="true"></i> LoveIt</a>
+        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.154.5">Hugo</a> 強力驅動 | 主題 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.3.0"><i class="far fa-kiss-wink-heart fa-fw" aria-hidden="true"></i> LoveIt</a>
                 </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright fa-fw" aria-hidden="true"></i><span itemprop="copyrightYear">2024 - 2026</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/zh-tw/" target="_blank">seisokeii</a></span></div>
         </div>
     </footer></div>

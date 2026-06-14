@@ -8,8 +8,15 @@
     <language>zh-TW</language>
     <managingEditor>Noway@bimbimbambam (seisokeii)</managingEditor>
     <webMaster>Noway@bimbimbambam (seisokeii)</webMaster>
-    <lastBuildDate>Tue, 06 May 2025 23:52:30 +0800</lastBuildDate>
+    <lastBuildDate>Tue, 06 Jan 2026 23:39:27 +0800</lastBuildDate>
     <atom:link href="https://seisokeii.github.io/zh-tw/tags/transceiver/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Fiber Optic Transceiver Module EEPROM 簡介</title>
+      <link>https://seisokeii.github.io/zh-tw/posts/transceiver/transceiver-intro-02/</link>
+      <pubDate>Tue, 06 Jan 2026 23:39:27 +0800</pubDate><author>Noway@bimbimbambam (seisokeii)</author>
+      <guid>https://seisokeii.github.io/zh-tw/posts/transceiver/transceiver-intro-02/</guid>
+      <description>&lt;p&gt;上面這張圖是 Gemini 的 Nano Banana 產的，看起來有點像是 transceiver RD 的桌子(?&lt;br&gt;&#xA;老實說瑕疵還是不少～ 不知道哪天 AI 產圖可以達到沒瑕疵的程度&lt;/p&gt;&#xA;&lt;hr&gt;&#xA;&lt;blockquote&gt;&#xA;&lt;p&gt;Links to the MSA, SFF, and CMIS documentation referenced in the screenshots are available in the Reference section.&lt;/p&gt;</description>
+    </item>
     <item>
       <title>Fiber Optic Transceiver Module 光纖收發器模組型號簡介</title>
       <link>https://seisokeii.github.io/zh-tw/posts/transceiver/transceiver-intro-01/</link>

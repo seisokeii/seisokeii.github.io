@@ -13,7 +13,7 @@
   <meta property="og:type" content="article">
     <meta property="article:section" content="posts">
     <meta property="article:published_time" content="2026-01-02T13:56:12+08:00">
-    <meta property="article:modified_time" content="2026-01-02T13:56:12+08:00">
+    <meta property="article:modified_time" content="2026-01-02T21:17:24+08:00">
     <meta property="article:tag" content="ONIE">
     <meta property="article:tag" content="SONiC">
 
@@ -24,7 +24,7 @@
 <meta name="application-name" content="seisokeii の blog">
 <meta name="apple-mobile-web-app-title" content="seisokeii の blog"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://seisokeii.github.io/zh-tw/posts/sonic/sonic-installation-via-onie/" /><link rel="prev" href="https://seisokeii.github.io/zh-tw/posts/transceiver/transceiver-intro-01/" /><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.1.1/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://seisokeii.github.io/zh-tw/posts/sonic/sonic-installation-via-onie/" /><link rel="prev" href="https://seisokeii.github.io/zh-tw/posts/transceiver/transceiver-intro-01/" /><link rel="next" href="https://seisokeii.github.io/zh-tw/posts/transceiver/transceiver-intro-02/" /><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.1.1/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
         <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.1.1/css/all.min.css"></noscript><link rel="preload" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
         <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css"></noscript><script type="application/ld+json">
     {
@@ -35,8 +35,8 @@
         "mainEntityOfPage": {
             "@type": "WebPage",
             "@id": "https:\/\/seisokeii.github.io\/zh-tw\/posts\/sonic\/sonic-installation-via-onie\/"
-        },"genre": "posts","keywords": "ONIE, SONiC","wordcount":  1267 ,
-        "url": "https:\/\/seisokeii.github.io\/zh-tw\/posts\/sonic\/sonic-installation-via-onie\/","datePublished": "2026-01-02T13:56:12+08:00","dateModified": "2026-01-02T13:56:12+08:00","publisher": {
+        },"genre": "posts","keywords": "ONIE, SONiC","wordcount":  1321 ,
+        "url": "https:\/\/seisokeii.github.io\/zh-tw\/posts\/sonic\/sonic-installation-via-onie\/","datePublished": "2026-01-02T13:56:12+08:00","dateModified": "2026-01-02T21:17:24+08:00","publisher": {
             "@type": "Organization",
             "name": ""},"author": {
                 "@type": "Person",
@@ -115,16 +115,16 @@
             <div class="toc-content" id="toc-content-auto"></div>
         </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">SONiC Image 安裝教學</h1><div class="post-meta">
             <div class="post-meta-line"><span class="post-author"><a href="https://github.com/seisokeii" title="Author" target="_blank" rel="noopener noreffer author" class="author"><i class="fas fa-user-circle fa-fw" aria-hidden="true"></i>seisokeii</a></span>&nbsp;<span class="post-category">收錄於 <a href="/zh-tw/categories/sonic/"><i class="far fa-folder fa-fw" aria-hidden="true"></i>SONiC</a></span></div>
-            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2026-01-02">2026-01-02</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;約 1267 字&nbsp;
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2026-01-02">2026-01-02</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;約 1321 字&nbsp;
                 <i class="far fa-clock fa-fw" aria-hidden="true"></i>&nbsp;預計閱讀 3 分鐘&nbsp;</div>
         </div><div class="featured-image"><img
         class="lazyload"
         src="/svg/loading.min.svg"
-        data-src="/images/SONiC/installation/sonic-AIS800-64O-2pcs.png"
-        data-srcset="/images/SONiC/installation/sonic-AIS800-64O-2pcs.png, /images/SONiC/installation/sonic-AIS800-64O-2pcs.png 1.5x, /images/SONiC/installation/sonic-AIS800-64O-2pcs.png 2x"
+        data-src="/images/SONiC/installation/sonic-ais800-64o-2pcs.png"
+        data-srcset="/images/SONiC/installation/sonic-ais800-64o-2pcs.png, /images/SONiC/installation/sonic-ais800-64o-2pcs.png 1.5x, /images/SONiC/installation/sonic-ais800-64o-2pcs.png 2x"
         data-sizes="auto"
-        alt="/images/SONiC/installation/sonic-AIS800-64O-2pcs.png"
-        title="/images/SONiC/installation/sonic-AIS800-64O-2pcs.png" /></div><div class="details toc" id="toc-static"  data-kept="">
+        alt="/images/SONiC/installation/sonic-ais800-64o-2pcs.png"
+        title="/images/SONiC/installation/sonic-ais800-64o-2pcs.png" /></div><div class="details toc" id="toc-static"  data-kept="">
                 <div class="details-summary toc-title">
                     <span>目錄</span>
                     <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
@@ -188,136 +188,293 @@
 <p>請選擇 <code>MS-DOS (FAT)</code> 與 <code>MBR</code><br>
 Windows 的話自己想辦法不想寫^^</p>
 </blockquote>
-<p><figure><img src="/images/SONiC/installation/sonic-usb-format-operation.png"><figcaption>
-      <h4>Macbook 上格式化操作 FAT&#43;MBR</h4>
-    </figcaption>
-</figure>
-
-<figure><img src="/images/SONiC/installation/sonic-usb-format-info.png"><figcaption>
-      <h4>USB FAT 格式</h4>
-    </figcaption>
-</figure>
-</p>
+<div style="display: flex; justify-content: center;">
+    <div style="width: 70%;">
+        <figure><a class="lightgallery" href="/images/SONiC/installation/sonic-usb-format-operation.png" title="/images/SONiC/installation/sonic-usb-format-operation.png" data-thumbnail="/images/SONiC/installation/sonic-usb-format-operation.png" data-sub-html="<h2>Macbook 上格式化操作 FAT&#43;MBR</h2>">
+                <img
+                    class="lazyload"
+                    src="/svg/loading.min.svg"
+                    data-src="/images/SONiC/installation/sonic-usb-format-operation.png"
+                    data-srcset="/images/SONiC/installation/sonic-usb-format-operation.png, /images/SONiC/installation/sonic-usb-format-operation.png 1.5x, /images/SONiC/installation/sonic-usb-format-operation.png 2x"
+                    data-sizes="auto"
+                    alt="/images/SONiC/installation/sonic-usb-format-operation.png" />
+            </a><figcaption class="image-caption">Macbook 上格式化操作 FAT+MBR</figcaption>
+            </figure>
+    </div>
+</div>
+<div style="display: flex; justify-content: center;">
+    <div style="width: 70%;">
+        <figure><a class="lightgallery" href="/images/SONiC/installation/sonic-usb-format-info.png" title="/images/SONiC/installation/sonic-usb-format-info.png" data-thumbnail="/images/SONiC/installation/sonic-usb-format-info.png" data-sub-html="<h2>USB FAT 格式</h2>">
+                <img
+                    class="lazyload"
+                    src="/svg/loading.min.svg"
+                    data-src="/images/SONiC/installation/sonic-usb-format-info.png"
+                    data-srcset="/images/SONiC/installation/sonic-usb-format-info.png, /images/SONiC/installation/sonic-usb-format-info.png 1.5x, /images/SONiC/installation/sonic-usb-format-info.png 2x"
+                    data-sizes="auto"
+                    alt="/images/SONiC/installation/sonic-usb-format-info.png" />
+            </a><figcaption class="image-caption">USB FAT 格式</figcaption>
+            </figure>
+    </div>
+</div>
 <h3 id="2-把-image-放到-usb-然後命名成-onie-installerbin">2. 把 Image 放到 USB 然後命名成 <code>onie-installer.bin</code></h3>
-<p>雖然已經 2026 了，但還是建議安全退出 USB 吧～
-<figure><img src="/images/SONiC/installation/sonic-usb-file-list.png"><figcaption>
-      <h4>SONiC Image 在 USB 中的檔名</h4>
-    </figcaption>
-</figure>
-</p>
+<p>雖然已經 2026 了，但還是建議安全退出 USB 吧～</p>
+<div style="display: flex; justify-content: center;">
+    <div style="width: 70%;">
+        <figure><a class="lightgallery" href="/images/SONiC/installation/sonic-usb-file-list.png" title="/images/SONiC/installation/sonic-usb-file-list.png" data-thumbnail="/images/SONiC/installation/sonic-usb-file-list.png" data-sub-html="<h2>SONiC Image 在 USB 中的檔名</h2>">
+                <img
+                    class="lazyload"
+                    src="/svg/loading.min.svg"
+                    data-src="/images/SONiC/installation/sonic-usb-file-list.png"
+                    data-srcset="/images/SONiC/installation/sonic-usb-file-list.png, /images/SONiC/installation/sonic-usb-file-list.png 1.5x, /images/SONiC/installation/sonic-usb-file-list.png 2x"
+                    data-sizes="auto"
+                    alt="/images/SONiC/installation/sonic-usb-file-list.png" />
+            </a><figcaption class="image-caption">SONiC Image 在 USB 中的檔名</figcaption>
+            </figure>
+    </div>
+</div>
 <h3 id="3-usb-插到-switch-然後開機有兩種情況">3. USB 插到 Switch 然後開機，有兩種情況:</h3>
 <h4 id="沒-nos-或是全新機器">沒 NOS 或是全新機器</h4>
 <p>這個最簡單，就是真的放置 play 就會自動安裝好了，就等待即可~~~</p>
 <h4 id="已裝有-nos-並且未解除安裝">已裝有 NOS 並且未解除安裝</h4>
 <p>如果原本就裝有 NOS，就看要不要先解除安裝或是直接安裝，反正不能安裝的話會提醒要先解除安裝～</p>
 <h5 id="3-1-onie-選單選擇-install-os">3-1. ONIE 選單選擇 Install OS</h5>
-<figure><img src="/images/SONiC/installation/sonic-onie-menu.png"><figcaption>
-      <h4>ONIE Menu 選單</h4>
-    </figcaption>
-</figure>
-
+<div style="display: flex; justify-content: center;">
+    <div style="width: 70%;">
+        <figure><a class="lightgallery" href="/images/SONiC/installation/sonic-onie-menu.png" title="/images/SONiC/installation/sonic-onie-menu.png" data-thumbnail="/images/SONiC/installation/sonic-onie-menu.png" data-sub-html="<h2>ONIE Menu 選單</h2>">
+                <img
+                    class="lazyload"
+                    src="/svg/loading.min.svg"
+                    data-src="/images/SONiC/installation/sonic-onie-menu.png"
+                    data-srcset="/images/SONiC/installation/sonic-onie-menu.png, /images/SONiC/installation/sonic-onie-menu.png 1.5x, /images/SONiC/installation/sonic-onie-menu.png 2x"
+                    data-sizes="auto"
+                    alt="/images/SONiC/installation/sonic-onie-menu.png" />
+            </a><figcaption class="image-caption">ONIE Menu 選單</figcaption>
+            </figure>
+    </div>
+</div>
 <h5 id="3-2-進入-onie-後自動安裝">3-2. 進入 ONIE 後自動安裝</h5>
 <p>如果機器只有 Type-C USB 其實可以多用一個 USB HUB 也可以<br>
 下圖中框框的部分就是偵測到 USB 然後自動掛載並且安裝，完全自動化。</p>
 <blockquote>
 <p>如果無法偵測到 USB 想要重新偵測，可以手動執行 <code>onie-stop</code> 與 <code>onie-start</code> 來重啟自動偵測</p>
 </blockquote>
-<figure><img src="/images/SONiC/installation/sonic-onie-usb-fetch.png"><figcaption>
-      <h4>ONIE 自動偵測 USB 與自動安裝</h4>
-    </figcaption>
-</figure>
-
+<div style="display: flex; justify-content: center;">
+    <div style="width: 70%;">
+        <figure><a class="lightgallery" href="/images/SONiC/installation/sonic-onie-usb-fetch.png" title="/images/SONiC/installation/sonic-onie-usb-fetch.png" data-thumbnail="/images/SONiC/installation/sonic-onie-usb-fetch.png" data-sub-html="<h2>ONIE 自動偵測 USB 與自動安裝</h2>">
+                <img
+                    class="lazyload"
+                    src="/svg/loading.min.svg"
+                    data-src="/images/SONiC/installation/sonic-onie-usb-fetch.png"
+                    data-srcset="/images/SONiC/installation/sonic-onie-usb-fetch.png, /images/SONiC/installation/sonic-onie-usb-fetch.png 1.5x, /images/SONiC/installation/sonic-onie-usb-fetch.png 2x"
+                    data-sizes="auto"
+                    alt="/images/SONiC/installation/sonic-onie-usb-fetch.png" />
+            </a><figcaption class="image-caption">ONIE 自動偵測 USB 與自動安裝</figcaption>
+            </figure>
+    </div>
+</div>
 <h5 id="3-3-等待安裝後重開機進入登入畫面">3-3. 等待安裝後重開機進入登入畫面</h5>
-<figure><img src="/images/SONiC/installation/sonic-login-screenshot-01.png"><figcaption>
-      <h4>SONiC Login 畫面</h4>
-    </figcaption>
-</figure>
-
+<div style="display: flex; justify-content: center;">
+    <div style="width: 70%;">
+        <figure><a class="lightgallery" href="/images/SONiC/installation/sonic-login-screenshot-01.png" title="/images/SONiC/installation/sonic-login-screenshot-01.png" data-thumbnail="/images/SONiC/installation/sonic-login-screenshot-01.png" data-sub-html="<h2>SONiC Login 畫面</h2>">
+                <img
+                    class="lazyload"
+                    src="/svg/loading.min.svg"
+                    data-src="/images/SONiC/installation/sonic-login-screenshot-01.png"
+                    data-srcset="/images/SONiC/installation/sonic-login-screenshot-01.png, /images/SONiC/installation/sonic-login-screenshot-01.png 1.5x, /images/SONiC/installation/sonic-login-screenshot-01.png 2x"
+                    data-sizes="auto"
+                    alt="/images/SONiC/installation/sonic-login-screenshot-01.png" />
+            </a><figcaption class="image-caption">SONiC Login 畫面</figcaption>
+            </figure>
+    </div>
+</div>
 <h2 id="http">HTTP</h2>
 <p>此方法需要有 FTP Server，條件好的可以再多架 DHCP 與 ZTP Server。</p>
 <h3 id="1-onie-選單選擇-install-os">1. ONIE 選單選擇 Install OS</h3>
-<figure><img src="/images/SONiC/installation/sonic-onie-menu.png"><figcaption>
-      <h4>ONIE Menu 選單</h4>
-    </figcaption>
-</figure>
-
+<div style="display: flex; justify-content: center;">
+    <div style="width: 70%;">
+        <figure><a class="lightgallery" href="/images/SONiC/installation/sonic-onie-menu.png" title="/images/SONiC/installation/sonic-onie-menu.png" data-thumbnail="/images/SONiC/installation/sonic-onie-menu.png" data-sub-html="<h2>ONIE Menu 選單</h2>">
+                <img
+                    class="lazyload"
+                    src="/svg/loading.min.svg"
+                    data-src="/images/SONiC/installation/sonic-onie-menu.png"
+                    data-srcset="/images/SONiC/installation/sonic-onie-menu.png, /images/SONiC/installation/sonic-onie-menu.png 1.5x, /images/SONiC/installation/sonic-onie-menu.png 2x"
+                    data-sizes="auto"
+                    alt="/images/SONiC/installation/sonic-onie-menu.png" />
+            </a><figcaption class="image-caption">ONIE Menu 選單</figcaption>
+            </figure>
+    </div>
+</div>
 <h3 id="2-ztp-auto-discovery-mode">2. ZTP Auto Discovery Mode</h3>
-<p>在這個階段如果有架設好 ZTP 環境的話也一樣放置 play 等待自動安裝即可，如果沒有的話就看下一步
-<figure><img src="/images/SONiC/installation/sonic-onie-http-fetch.png"><figcaption>
-      <h4>ONIE ZTP 安裝模式自動抓取</h4>
-    </figcaption>
-</figure>
-</p>
+<p>在這個階段如果有架設好 ZTP 環境的話也一樣放置 play 等待自動安裝即可，如果沒有的話就看下一步</p>
+<div style="display: flex; justify-content: center;">
+    <div style="width: 70%;">
+        <figure><a class="lightgallery" href="/images/SONiC/installation/sonic-onie-http-fetch.png" title="/images/SONiC/installation/sonic-onie-http-fetch.png" data-thumbnail="/images/SONiC/installation/sonic-onie-http-fetch.png" data-sub-html="<h2>ONIE ZTP 安裝模式自動抓取</h2>">
+                <img
+                    class="lazyload"
+                    src="/svg/loading.min.svg"
+                    data-src="/images/SONiC/installation/sonic-onie-http-fetch.png"
+                    data-srcset="/images/SONiC/installation/sonic-onie-http-fetch.png, /images/SONiC/installation/sonic-onie-http-fetch.png 1.5x, /images/SONiC/installation/sonic-onie-http-fetch.png 2x"
+                    data-sizes="auto"
+                    alt="/images/SONiC/installation/sonic-onie-http-fetch.png" />
+            </a><figcaption class="image-caption">ONIE ZTP 安裝模式自動抓取</figcaption>
+            </figure>
+    </div>
+</div>
 <h3 id="3-手動輸入-ftp-image-url">3. 手動輸入 FTP Image URL</h3>
-<p>首先先停止 ZTP 干擾你的 console 畫面
-<figure><img src="/images/SONiC/installation/sonic-onie-stop-discover.png"><figcaption>
-      <h4>ONIE 關閉 ZTP</h4>
-    </figcaption>
-</figure>
-
-如果沒有 DHCP 的話，手動輸入 IP，可以戳一下看能不能碰到 FTP Server</p>
+<p>首先先停止 ZTP 干擾你的 console 畫面</p>
+<div style="display: flex; justify-content: center;">
+    <div style="width: 70%;">
+        <figure><a class="lightgallery" href="/images/SONiC/installation/sonic-onie-stop-discover.png" title="/images/SONiC/installation/sonic-onie-stop-discover.png" data-thumbnail="/images/SONiC/installation/sonic-onie-stop-discover.png" data-sub-html="<h2>ONIE 關閉 ZTP</h2>">
+                <img
+                    class="lazyload"
+                    src="/svg/loading.min.svg"
+                    data-src="/images/SONiC/installation/sonic-onie-stop-discover.png"
+                    data-srcset="/images/SONiC/installation/sonic-onie-stop-discover.png, /images/SONiC/installation/sonic-onie-stop-discover.png 1.5x, /images/SONiC/installation/sonic-onie-stop-discover.png 2x"
+                    data-sizes="auto"
+                    alt="/images/SONiC/installation/sonic-onie-stop-discover.png" />
+            </a><figcaption class="image-caption">ONIE 關閉 ZTP</figcaption>
+            </figure>
+    </div>
+</div>
+<p>如果沒有 DHCP 的話，手動輸入 IP，可以戳一下看能不能碰到 FTP Server</p>
 <blockquote>
 <p>目前 ONIE 無法從外部使用 SCP 將檔案放到 ONIE 環境中</p>
 </blockquote>
-<figure><img src="/images/SONiC/installation/sonic-onie-assign-ip.png"><figcaption>
-      <h4>ONIE 手動設定 IP</h4>
-    </figcaption>
-</figure>
-
+<div style="display: flex; justify-content: center;">
+    <div style="width: 70%;">
+        <figure><a class="lightgallery" href="/images/SONiC/installation/sonic-onie-assign-ip.png" title="/images/SONiC/installation/sonic-onie-assign-ip.png" data-thumbnail="/images/SONiC/installation/sonic-onie-assign-ip.png" data-sub-html="<h2>ONIE 手動設定 IP</h2>">
+                <img
+                    class="lazyload"
+                    src="/svg/loading.min.svg"
+                    data-src="/images/SONiC/installation/sonic-onie-assign-ip.png"
+                    data-srcset="/images/SONiC/installation/sonic-onie-assign-ip.png, /images/SONiC/installation/sonic-onie-assign-ip.png 1.5x, /images/SONiC/installation/sonic-onie-assign-ip.png 2x"
+                    data-sizes="auto"
+                    alt="/images/SONiC/installation/sonic-onie-assign-ip.png" />
+            </a><figcaption class="image-caption">ONIE 手動設定 IP</figcaption>
+            </figure>
+    </div>
+</div>
 <p>手動敲安裝指令 <code>onie-nos-install http://{IP}/{URL}/{Filename}</code></p>
 <blockquote>
 <p>也可以使用 curl 指令抓取，然後安裝指令一樣，只是改路徑就好，像是 <code>onie-nos-install /tmp/{Filename}</code></p>
 </blockquote>
-<figure><img src="/images/SONiC/installation/sonic-onie-url-install.png"><figcaption>
-      <h4>ONIE 手動輸入 Image URL</h4>
-    </figcaption>
-</figure>
-
-<p>等待安裝完後會自動重開機，到此就結束了，只要等待開機進系統即可～
-<figure><img src="/images/SONiC/installation/sonic-onie-http-success-screenshot.png"><figcaption>
-      <h4>ONIE 安裝成功畫面</h4>
-    </figcaption>
-</figure>
-</p>
-<p>安裝完成後登入畫面
-<figure><img src="/images/SONiC/installation/sonic-login-screenshot-01.png"><figcaption>
-      <h4>SONiC Login 畫面</h4>
-    </figcaption>
-</figure>
-</p>
+<div style="display: flex; justify-content: center;">
+    <div style="width: 70%;">
+        <figure><a class="lightgallery" href="/images/SONiC/installation/sonic-onie-url-install.png" title="/images/SONiC/installation/sonic-onie-url-install.png" data-thumbnail="/images/SONiC/installation/sonic-onie-url-install.png" data-sub-html="<h2>ONIE 手動輸入 Image URL</h2>">
+                <img
+                    class="lazyload"
+                    src="/svg/loading.min.svg"
+                    data-src="/images/SONiC/installation/sonic-onie-url-install.png"
+                    data-srcset="/images/SONiC/installation/sonic-onie-url-install.png, /images/SONiC/installation/sonic-onie-url-install.png 1.5x, /images/SONiC/installation/sonic-onie-url-install.png 2x"
+                    data-sizes="auto"
+                    alt="/images/SONiC/installation/sonic-onie-url-install.png" />
+            </a><figcaption class="image-caption">ONIE 手動輸入 Image URL</figcaption>
+            </figure>
+    </div>
+</div>
+<p>等待安裝完後會自動重開機，到此就結束了，只要等待開機進系統即可～</p>
+<div style="display: flex; justify-content: center;">
+    <div style="width: 70%;">
+        <figure><a class="lightgallery" href="/images/SONiC/installation/sonic-onie-http-success-screenshot.png" title="/images/SONiC/installation/sonic-onie-http-success-screenshot.png" data-thumbnail="/images/SONiC/installation/sonic-onie-http-success-screenshot.png" data-sub-html="<h2>ONIE 安裝成功畫面</h2>">
+                <img
+                    class="lazyload"
+                    src="/svg/loading.min.svg"
+                    data-src="/images/SONiC/installation/sonic-onie-http-success-screenshot.png"
+                    data-srcset="/images/SONiC/installation/sonic-onie-http-success-screenshot.png, /images/SONiC/installation/sonic-onie-http-success-screenshot.png 1.5x, /images/SONiC/installation/sonic-onie-http-success-screenshot.png 2x"
+                    data-sizes="auto"
+                    alt="/images/SONiC/installation/sonic-onie-http-success-screenshot.png" />
+            </a><figcaption class="image-caption">ONIE 安裝成功畫面</figcaption>
+            </figure>
+    </div>
+</div>
+<p>安裝完成後登入畫面</p>
+<div style="display: flex; justify-content: center;">
+    <div style="width: 70%;">
+        <figure><a class="lightgallery" href="/images/SONiC/installation/sonic-login-screenshot-01.png" title="/images/SONiC/installation/sonic-login-screenshot-01.png" data-thumbnail="/images/SONiC/installation/sonic-login-screenshot-01.png" data-sub-html="<h2>SONiC Login 畫面</h2>">
+                <img
+                    class="lazyload"
+                    src="/svg/loading.min.svg"
+                    data-src="/images/SONiC/installation/sonic-login-screenshot-01.png"
+                    data-srcset="/images/SONiC/installation/sonic-login-screenshot-01.png, /images/SONiC/installation/sonic-login-screenshot-01.png 1.5x, /images/SONiC/installation/sonic-login-screenshot-01.png 2x"
+                    data-sizes="auto"
+                    alt="/images/SONiC/installation/sonic-login-screenshot-01.png" />
+            </a><figcaption class="image-caption">SONiC Login 畫面</figcaption>
+            </figure>
+    </div>
+</div>
+<blockquote>
+<p>如果沒有自動安裝，可以自行掛載然後將 URL 改成 image 的絕對路徑即可。<br>
+<code>mount -t vfat /dev/sd? /mnt/usb</code>，可以使用 <code>blkid 查看 /dev/sd? 是哪個</code></p>
+</blockquote>
 <h2 id="sonic-installer-upgrade">sonic-installer (Upgrade)</h2>
 <p>這個方法其實主要是用來升級的，但是同時可以安裝第二個系統～</p>
 <h3 id="1-list-目前硬碟上有裝哪些-nos">1. List 目前硬碟上有裝哪些 NOS</h3>
-<p>如果只有一個系統就會長這樣：
-<figure><img src="/images/SONiC/installation/sonic-installer-list-01.png"><figcaption>
-      <h4>sonic-installer list 一個 NOS 輸出</h4>
-    </figcaption>
-</figure>
-</p>
-<p>如果想要兩個系統會長這樣
-<figure><img src="/images/SONiC/installation/sonic-installer-list-02.png"><figcaption>
-      <h4>sonic-installer list 兩個 NOS 輸出</h4>
-    </figcaption>
-</figure>
-</p>
+<p>如果只有一個系統就會長這樣：</p>
+<div style="display: flex; justify-content: center;">
+    <div style="width: 70%;">
+        <figure><a class="lightgallery" href="/images/SONiC/installation/sonic-installer-list-01.png" title="/images/SONiC/installation/sonic-installer-list-01.png" data-thumbnail="/images/SONiC/installation/sonic-installer-list-01.png" data-sub-html="<h2>sonic-installer list 一個 NOS 輸出</h2>">
+                <img
+                    class="lazyload"
+                    src="/svg/loading.min.svg"
+                    data-src="/images/SONiC/installation/sonic-installer-list-01.png"
+                    data-srcset="/images/SONiC/installation/sonic-installer-list-01.png, /images/SONiC/installation/sonic-installer-list-01.png 1.5x, /images/SONiC/installation/sonic-installer-list-01.png 2x"
+                    data-sizes="auto"
+                    alt="/images/SONiC/installation/sonic-installer-list-01.png" />
+            </a><figcaption class="image-caption">sonic-installer list 一個 NOS 輸出</figcaption>
+            </figure>
+    </div>
+</div>
+<p>如果想要兩個系統會長這樣</p>
+<div style="display: flex; justify-content: center;">
+    <div style="width: 70%;">
+        <figure><a class="lightgallery" href="/images/SONiC/installation/sonic-installer-list-02.png" title="/images/SONiC/installation/sonic-installer-list-02.png" data-thumbnail="/images/SONiC/installation/sonic-installer-list-02.png" data-sub-html="<h2>sonic-installer list 兩個 NOS 輸出</h2>">
+                <img
+                    class="lazyload"
+                    src="/svg/loading.min.svg"
+                    data-src="/images/SONiC/installation/sonic-installer-list-02.png"
+                    data-srcset="/images/SONiC/installation/sonic-installer-list-02.png, /images/SONiC/installation/sonic-installer-list-02.png 1.5x, /images/SONiC/installation/sonic-installer-list-02.png 2x"
+                    data-sizes="auto"
+                    alt="/images/SONiC/installation/sonic-installer-list-02.png" />
+            </a><figcaption class="image-caption">sonic-installer list 兩個 NOS 輸出</figcaption>
+            </figure>
+    </div>
+</div>
 <h3 id="2-install-command">2. Install Command</h3>
-<p>指令就如下，按完之後可以使用 <code>sudo sonic-installer list</code> 來檢查是否有出現第二的 NOS
-<figure><img src="/images/SONiC/installation/sonic-installer-install-command.png"><figcaption>
-      <h4>sonic-installer 安裝指令</h4>
-    </figcaption>
-</figure>
-</p>
+<p>指令就如下，按完之後可以使用 <code>sudo sonic-installer list</code> 來檢查是否有出現第二的 NOS</p>
+<div style="display: flex; justify-content: center;">
+    <div style="width: 70%;">
+        <figure><a class="lightgallery" href="/images/SONiC/installation/sonic-installer-install-command.png" title="/images/SONiC/installation/sonic-installer-install-command.png" data-thumbnail="/images/SONiC/installation/sonic-installer-install-command.png" data-sub-html="<h2>sonic-installer 安裝指令</h2>">
+                <img
+                    class="lazyload"
+                    src="/svg/loading.min.svg"
+                    data-src="/images/SONiC/installation/sonic-installer-install-command.png"
+                    data-srcset="/images/SONiC/installation/sonic-installer-install-command.png, /images/SONiC/installation/sonic-installer-install-command.png 1.5x, /images/SONiC/installation/sonic-installer-install-command.png 2x"
+                    data-sizes="auto"
+                    alt="/images/SONiC/installation/sonic-installer-install-command.png" />
+            </a><figcaption class="image-caption">sonic-installer 安裝指令</figcaption>
+            </figure>
+    </div>
+</div>
 <h3 id="切換-nos">切換 NOS</h3>
 <p>先使用 <code>sudo sonic-installer list</code> 列出有哪些 NOS<br>
 如果不要去 console 手動在 GRUB 選擇另一個 NOS 的話，可以使用該指令去切換。</p>
 <blockquote>
 <p>當然也可以使用 <code>set-default</code> 來設定未來開機都是使用哪一個 NOS</p>
 </blockquote>
-<figure><img src="/images/SONiC/installation/sonic-switch-next-boot-nos.png"><figcaption>
-      <h4>sonic-installer 切換 NOS</h4>
-    </figcaption>
-</figure>
-
+<div style="display: flex; justify-content: center;">
+    <div style="width: 70%;">
+        <figure><a class="lightgallery" href="/images/SONiC/installation/sonic-switch-next-boot-nos.png" title="/images/SONiC/installation/sonic-switch-next-boot-nos.png" data-thumbnail="/images/SONiC/installation/sonic-switch-next-boot-nos.png" data-sub-html="<h2>sonic-installer 切換 NOS</h2>">
+                <img
+                    class="lazyload"
+                    src="/svg/loading.min.svg"
+                    data-src="/images/SONiC/installation/sonic-switch-next-boot-nos.png"
+                    data-srcset="/images/SONiC/installation/sonic-switch-next-boot-nos.png, /images/SONiC/installation/sonic-switch-next-boot-nos.png 1.5x, /images/SONiC/installation/sonic-switch-next-boot-nos.png 2x"
+                    data-sizes="auto"
+                    alt="/images/SONiC/installation/sonic-switch-next-boot-nos.png" />
+            </a><figcaption class="image-caption">sonic-installer 切換 NOS</figcaption>
+            </figure>
+    </div>
+</div>
 <h3 id="升級-sonic-版本">升級 SONiC 版本</h3>
 <p>看完上述後可以知道其實就是安裝，然後再切換版本醬子，沒啥好說的 BJ4 ～</p>
 <h3 id="刪除-nos">刪除 NOS</h3>
@@ -362,13 +519,14 @@ Windows 的話自己想辦法不想寫^^</p>
         </section>
     </div>
 
-    <div class="post-nav"><a href="/zh-tw/posts/transceiver/transceiver-intro-01/" class="prev" rel="prev" title="Fiber Optic Transceiver Module 光纖收發器模組型號簡介"><i class="fas fa-angle-left fa-fw" aria-hidden="true"></i>Fiber Optic Transceiver Module 光纖收發器模組型號簡介</a></div>
+    <div class="post-nav"><a href="/zh-tw/posts/transceiver/transceiver-intro-01/" class="prev" rel="prev" title="Fiber Optic Transceiver Module 光纖收發器模組型號簡介"><i class="fas fa-angle-left fa-fw" aria-hidden="true"></i>Fiber Optic Transceiver Module 光纖收發器模組型號簡介</a>
+            <a href="/zh-tw/posts/transceiver/transceiver-intro-02/" class="next" rel="next" title="Fiber Optic Transceiver Module EEPROM 簡介">Fiber Optic Transceiver Module EEPROM 簡介<i class="fas fa-angle-right fa-fw" aria-hidden="true"></i></a></div>
 </div>
 <div id="comments"><div id="disqus_thread" class="comment"></div><noscript>
                 Please enable JavaScript to view the comments powered by <a href="https://disqus.com/?ref_noscript">Disqus</a>.
             </noscript></div></article></div>
             </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.152.2">Hugo</a> 強力驅動 | 主題 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.3.0"><i class="far fa-kiss-wink-heart fa-fw" aria-hidden="true"></i> LoveIt</a>
+        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.154.5">Hugo</a> 強力驅動 | 主題 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.3.0"><i class="far fa-kiss-wink-heart fa-fw" aria-hidden="true"></i> LoveIt</a>
                 </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright fa-fw" aria-hidden="true"></i><span itemprop="copyrightYear">2024 - 2026</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/zh-tw/" target="_blank">seisokeii</a></span></div>
         </div>
     </footer></div>

@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <title>Fiber Optic Transceiver Module EEPROM 簡介 - seisokeii blog</title><meta name="Description" content="seisokeii&#39;s blog"><meta property="og:url" content="https://seisokeii.github.io/zh-tw/posts/transceiver/transceiver-intro-02/">
+  <meta property="og:site_name" content="seisokeii blog">
+  <meta property="og:title" content="Fiber Optic Transceiver Module EEPROM 簡介">
+  <meta property="og:description" content="上面這張圖是 Gemini 的 Nano Banana 產的，看起來有點像是 transceiver RD 的桌子(?
+老實說瑕疵還是不少～ 不知道哪天 AI 產圖可以達到沒瑕疵的程度
+Links to the MSA, SFF, and CMIS documentation referenced in the screenshots are available in the Reference section.">
+  <meta property="og:locale" content="zh_TW">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2026-01-06T23:39:27+08:00">
+    <meta property="article:modified_time" content="2026-01-06T23:39:27+08:00">
+    <meta property="article:tag" content="Transceiver">
+    <meta property="article:tag" content="Edgecore">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Fiber Optic Transceiver Module EEPROM 簡介">
+  <meta name="twitter:description" content="上面這張圖是 Gemini 的 Nano Banana 產的，看起來有點像是 transceiver RD 的桌子(?
+老實說瑕疵還是不少～ 不知道哪天 AI 產圖可以達到沒瑕疵的程度
+Links to the MSA, SFF, and CMIS documentation referenced in the screenshots are available in the Reference section.">
+<meta name="application-name" content="seisokeii の blog">
+<meta name="apple-mobile-web-app-title" content="seisokeii の blog"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://seisokeii.github.io/zh-tw/posts/transceiver/transceiver-intro-02/" /><link rel="prev" href="https://seisokeii.github.io/zh-tw/posts/sonic/sonic-installation-via-onie/" /><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.1.1/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.1.1/css/all.min.css"></noscript><link rel="preload" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css"></noscript><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "Fiber Optic Transceiver Module EEPROM 簡介",
+        "inLanguage": "zh-TW",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/seisokeii.github.io\/zh-tw\/posts\/transceiver\/transceiver-intro-02\/"
+        },"genre": "posts","keywords": "Transceiver, Edgecore","wordcount":  5758 ,
+        "url": "https:\/\/seisokeii.github.io\/zh-tw\/posts\/transceiver\/transceiver-intro-02\/","datePublished": "2026-01-06T23:39:27+08:00","dateModified": "2026-01-06T23:39:27+08:00","publisher": {
+            "@type": "Organization",
+            "name": ""},"author": {
+                "@type": "Person",
+                "name": "seisokeii"
+            },"description": ""
+    }
+    </script></head>
+    <body data-header-desktop="fixed" data-header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('dark' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'dark' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/zh-tw/" title="seisokeii blog">seisokeii の blog</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/zh-tw/posts/"> 文章 </a><a class="menu-item" href="/zh-tw/tags/"> 標籤 </a><a class="menu-item" href="/zh-tw/categories/"> 分類 </a><a class="menu-item" href="/zh-tw/about/about"> About </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="搜索文章標題或內容..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切換主題">
+                    <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+                </a><a href="javascript:void(0);" class="menu-item language" title="選擇語言">
+                    <i class="fa fa-globe fa-fw" aria-hidden="true"></i>                      
+                    <select class="language-select" id="language-select-desktop" onchange="location = this.value;"><option value="/zh-tw/posts/transceiver/transceiver-intro-02/" selected>繁體中文</option></select>
+                </a></div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/zh-tw/" title="seisokeii blog">seisokeii の blog</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="搜索文章標題或內容..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/zh-tw/posts/" title="">文章</a><a class="menu-item" href="/zh-tw/tags/" title="">標籤</a><a class="menu-item" href="/zh-tw/categories/" title="">分類</a><a class="menu-item" href="/zh-tw/about/about" title="">About</a><a href="javascript:void(0);" class="menu-item theme-switch" title="切換主題">
+                <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+            </a><a href="javascript:void(0);" class="menu-item" title="選擇語言">
+                    <i class="fa fa-globe fa-fw" aria-hidden="true"></i>
+                    <select class="language-select" onchange="location = this.value;"><option value="/zh-tw/posts/transceiver/transceiver-intro-02/" selected>繁體中文</option></select>
+                </a></div>
+    </div>
+</header><div class="search-dropdown desktop">
+        <div id="search-dropdown-desktop"></div>
+    </div>
+    <div class="search-dropdown mobile">
+        <div id="search-dropdown-mobile"></div>
+    </div><main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目錄</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">Fiber Optic Transceiver Module EEPROM 簡介</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="https://github.com/seisokeii" title="Author" target="_blank" rel="noopener noreffer author" class="author"><i class="fas fa-user-circle fa-fw" aria-hidden="true"></i>seisokeii</a></span>&nbsp;<span class="post-category">收錄於 <a href="/zh-tw/categories/transceiver/"><i class="far fa-folder fa-fw" aria-hidden="true"></i>Transceiver</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2026-01-06">2026-01-06</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;約 5758 字&nbsp;
+                <i class="far fa-clock fa-fw" aria-hidden="true"></i>&nbsp;預計閱讀 12 分鐘&nbsp;</div>
+        </div><div class="featured-image"><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="/images/transceiver/xcver-intro-02/xcver-eeprom-01.png"
+        data-srcset="/images/transceiver/xcver-intro-02/xcver-eeprom-01.png, /images/transceiver/xcver-intro-02/xcver-eeprom-01.png 1.5x, /images/transceiver/xcver-intro-02/xcver-eeprom-01.png 2x"
+        data-sizes="auto"
+        alt="/images/transceiver/xcver-intro-02/xcver-eeprom-01.png"
+        title="/images/transceiver/xcver-intro-02/xcver-eeprom-01.png" /></div><div class="details toc" id="toc-static"  data-kept="">
+                <div class="details-summary toc-title">
+                    <span>目錄</span>
+                    <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#標準規範">標準規範</a></li>
+    <li><a href="#sff-8472-sfpsfp">SFF-8472 (SFP/SFP+)</a>
+      <ul>
+        <li><a href="#a0h-memory-map">A0h Memory Map</a></li>
+        <li><a href="#a2h-memory-map">A2h Memory Map</a></li>
+        <li><a href="#實際例子">實際例子</a></li>
+      </ul>
+    </li>
+    <li><a href="#sff-8636-qsfpqsfp28">SFF-8636 (QSFP+/QSFP28)</a></li>
+    <li><a href="#cmis-qsfp56-ddosfp">CMIS (QSFP56-DD/OSFP)</a>
+      <ul>
+        <li><a href="#why-cmis">Why CMIS？</a></li>
+        <li><a href="#module-state-machine">Module State Machine</a></li>
+        <li><a href="#application-advertising">Application Advertising</a></li>
+        <li><a href="#cdb-protocol-command-data-block">CDB Protocol (Command Data Block)</a></li>
+        <li><a href="#memory-map-新增的banks">Memory Map 新增的：Banks</a></li>
+        <li><a href="#vdm-versatile-diagnostics-monitor">VDM (Versatile Diagnostics Monitor)</a></li>
+      </ul>
+    </li>
+    <li><a href="#useful-command">Useful command</a></li>
+    <li><a href="#reference-參考文章">Reference 參考文章</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><p>上面這張圖是 Gemini 的 Nano Banana 產的，看起來有點像是 transceiver RD 的桌子(?<br>
+老實說瑕疵還是不少～ 不知道哪天 AI 產圖可以達到沒瑕疵的程度</p>
+<hr>
+<blockquote>
+<p>Links to the MSA, SFF, and CMIS documentation referenced in the screenshots are available in the Reference section.</p>
+</blockquote>
+<p>之前介紹過 transceiver 要怎麼挑選，那其實都已經是經過許多驗證，確定是可以正常運作的才會拿來賣的產品。<br>
+那最近因為工作的關係，會需要協助測試線材組 (DPO, LPO, LRO, AEC, DAC, &hellip;) 但是過往都沒有碰過硬體，完全沒有相關概念&hellip;
+遇到線材插上去，本來預期是要可以 link up 的，結果卻沒有&hellip; 面對這種時候就好憂鬱，因為根本不知道從何開始 debug。</p>
+<p>面對這種問題，想說就來整理一下這塊相關知識，滿可惜的是網路上對於這部分的文章沒找到太多 (現在的人應該都直接問 AI 了吧XD</p>
+<h2 id="標準規範">標準規範</h2>
+<p>在知道怎麼 debug 前需要先了解一下標準規範:</p>
+<ul>
+<li>MSA
+<ul>
+<li>定義尺寸、散熱、Pin 腳定義，就是硬體的部分啦。例如：QSFP-DD MSA, OSFP MSA</li>
+</ul>
+</li>
+<li>SFF-8024 (SFF Module Management Reference Code Tables)
+<ul>
+<li>這個比較特別，它<strong>不是記憶體格式 (memory map)</strong>，而是一份由 SNIA 維護、給下面這些規範<strong>共用的「代碼字典」</strong>。</li>
+<li>SFF-8472 / SFF-8636 / CMIS 在很多欄位都只存一個「代碼」，至於這代碼代表什麼意思（例如 Byte 0 的 Identifier <code>0x18</code>=QSFP-DD、<code>0x19</code>=OSFP；或 Host/Media Interface code、Connector 類型…），都要回頭查 SFF-8024 的對照表。所以你會在那些文件裡一直看到「see SFF-8024 Table X」。</li>
+<li>它會<strong>持續改版</strong>（有新模組/新介面就加新代碼）。如果 NOS 內附的對照表比模組用的標準舊，就會把查不到的新代碼顯示成 <code>Unknown</code>（後面 SONiC 的 <code>sff8024.py</code> 會再提到）。</li>
+</ul>
+</li>
+<li>SFF-8472 (SFP/SFP+)
+<ul>
+<li>將資訊切成兩個 I2C Address：0xA0 (基本資訊) 和 0xA2 (診斷資訊 DDM)</li>
+</ul>
+</li>
+<li>SFF-8636 (QSFP+/QSFP28)
+<ul>
+<li>只有 Lower Page 00 (0-127 bytes) 是固定的</li>
+<li>Upper Page (128-255 bytes) 需要透過寫入 Page Select Byte (Byte 127) 來切換</li>
+</ul>
+</li>
+<li>CMIS (Common Management Interface Specification) (QSFP56-DD/OSFP)
+<ul>
+<li>以前 SFF-8636 是綁定 QSFP 外型的，但後來 OSFP 出來了，大家不想為每個形狀重寫 Spec 所以推出了 CMIS 這個規範</li>
+</ul>
+</li>
+<li>C-CMIS (Coherent CMIS)
+<ul>
+<li>講白話就是一堆 threshold 的定義跟一些狀態紀錄，像是 OSNR, FEC, Laser Power, &hellip;之類的定義</li>
+</ul>
+</li>
+</ul>
+<p>這裡主要以 CMIS 來看就好，主要是因為目前手邊都在處理 400G/800G/1.6T 的模組測試。</p>
+<p>不過不免俗的還是先從 SFF-8472 開始看起吧，畢竟了解歷史發展總是有助於理解為什麼現在的規範會變成如今這樣～</p>
+<h2 id="sff-8472-sfpsfp">SFF-8472 (SFP/SFP+)</h2>
+<div style="display: flex; justify-content: center;">
+    <div style="width: 70%;">
+        <figure><a class="lightgallery" href="/images/transceiver/xcver-intro-02/xcver-sff-8472-rev12.5-spec-memory-map.png" title="/images/transceiver/xcver-intro-02/xcver-sff-8472-rev12.5-spec-memory-map.png" data-thumbnail="/images/transceiver/xcver-intro-02/xcver-sff-8472-rev12.5-spec-memory-map.png" data-sub-html="<h2>SFF-8472 Memory Map</h2>">
+                <img
+                    class="lazyload"
+                    src="/svg/loading.min.svg"
+                    data-src="/images/transceiver/xcver-intro-02/xcver-sff-8472-rev12.5-spec-memory-map.png"
+                    data-srcset="/images/transceiver/xcver-intro-02/xcver-sff-8472-rev12.5-spec-memory-map.png, /images/transceiver/xcver-intro-02/xcver-sff-8472-rev12.5-spec-memory-map.png 1.5x, /images/transceiver/xcver-intro-02/xcver-sff-8472-rev12.5-spec-memory-map.png 2x"
+                    data-sizes="auto"
+                    alt="/images/transceiver/xcver-intro-02/xcver-sff-8472-rev12.5-spec-memory-map.png" />
+            </a><figcaption class="image-caption">SFF-8472 Memory Map</figcaption>
+            </figure>
+    </div>
+</div>
+<p>(玩硬體的好像都有自動上下顛倒能力&hellip;帕蒂瑪? 從0開始遞增但圖是從上到下)</p>
+<p>上述這個圖可以看到 A0h 就是拿來定義一些這支 transceiver 的基本資料，而 A2h 就是 DDM (Digital Diagnostic Monitoring) 相關功能。</p>
+<p>然後在 A2h 有很多個 128-255，也就是很多個 page 的意思 (這邊 Paging 是 Optional 功能)，可以看到 Page 00h/01h 的虛線部分，那
+page 的切換是在 127 byte 那邊定義的。每個 page 也都有對應不同的功能用途。</p>
+<blockquote>
+<p>根據 Spec 第 8.3 節 Table 8-3 ，A0h Byte 64 Bit 4 必須是 1，才代表這個模組支援 Paging。(之後 A2h Byte 127 用來選 page）。
+（注意：同一個 Byte 64 的 Bit 3 是 Retimer/CDR indicator，不是 paging)</p>
+</blockquote>
+<h3 id="a0h-memory-map">A0h Memory Map</h3>
+<div style="display: flex; justify-content: center;">
+    <div style="width: 60%;">
+        <figure><a class="lightgallery" href="/images/transceiver/xcver-intro-02/xcver-sff8472-A0h-table.png" title="/images/transceiver/xcver-intro-02/xcver-sff8472-A0h-table.png" data-thumbnail="/images/transceiver/xcver-intro-02/xcver-sff8472-A0h-table.png" data-sub-html="<h2>SFF-8472 A0h Table</h2>">
+                <img
+                    class="lazyload"
+                    src="/svg/loading.min.svg"
+                    data-src="/images/transceiver/xcver-intro-02/xcver-sff8472-A0h-table.png"
+                    data-srcset="/images/transceiver/xcver-intro-02/xcver-sff8472-A0h-table.png, /images/transceiver/xcver-intro-02/xcver-sff8472-A0h-table.png 1.5x, /images/transceiver/xcver-intro-02/xcver-sff8472-A0h-table.png 2x"
+                    data-sizes="auto"
+                    alt="/images/transceiver/xcver-intro-02/xcver-sff8472-A0h-table.png" />
+            </a><figcaption class="image-caption">SFF-8472 A0h Table</figcaption>
+            </figure>
+    </div>
+</div>
+<p>可以看到圖表對於每個 byte 的定義，然後這邊會發現在說明後面會有小括弧寫 (see XXX) 這個東西呢就類似關聯資料庫那樣要去參考其他表，
+或是要去參考其他份規範文件，有個比較特別的就是 ASCII (Vendor Name)。<br>
+假設 Vendor Name 是 &ldquo;Edgecore&rdquo;，那就會以以下這種方式存在 EEPROM (注意 byte 只有 16 位而已，只能有 16 個英文字)</p>
+<table>
+  <thead>
+      <tr>
+          <th>Char</th>
+          <th>E</th>
+          <th>d</th>
+          <th>g</th>
+          <th>e</th>
+          <th>c</th>
+          <th>o</th>
+          <th>r</th>
+          <th>e</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>Hex</td>
+          <td>0x45</td>
+          <td>0x64</td>
+          <td>0x67</td>
+          <td>0x65</td>
+          <td>0x63</td>
+          <td>0x6f</td>
+          <td>0x72</td>
+          <td>0x65</td>
+      </tr>
+  </tbody>
+</table>
+<p>raw 會長這樣，這邊 ASCII 會使用 0x20 為空白</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">Address   <span class="m">00</span> <span class="m">01</span> <span class="m">02</span> <span class="m">03</span> <span class="m">04</span> <span class="m">05</span> <span class="m">06</span> <span class="m">07</span>  <span class="m">08</span> <span class="m">09</span> 0A 0B 0C 0D 0E 0F  <span class="p">|</span> ASCII View
+</span></span><span class="line"><span class="cl">-------------------------------------------------------------------------
+</span></span><span class="line"><span class="cl"><span class="m">00000010</span>  xx xx xx xx <span class="m">45</span> <span class="m">64</span> <span class="m">67</span> <span class="m">65</span>  <span class="m">63</span> 6F <span class="m">72</span> <span class="m">65</span> <span class="m">20</span> <span class="m">20</span> <span class="m">20</span> <span class="m">20</span>  <span class="p">|</span> ....Edgecore    <span class="p">|</span>
+</span></span><span class="line"><span class="cl"><span class="m">00000020</span>  <span class="m">20</span> <span class="m">20</span> <span class="m">20</span> <span class="m">20</span> xx xx xx xx  xx xx xx xx xx xx xx xx  <span class="p">|</span>     ............<span class="p">|</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><blockquote>
+<p>文件的 CH7 的 7.1 有這樣寫
+<code>The vendor name is a 16-byte field that contains ASCII characters, left-aligned and padded on the right with ASCII spaces (20h).</code></p>
+</blockquote>
+<p>其他的欄位就大概是這樣的運作方式，只是 value 是要去對應的 table 找對應的值去填寫。</p>
+<h3 id="a2h-memory-map">A2h Memory Map</h3>
+<div style="display: flex; justify-content: center;">
+    <div style="width: 70%;">
+        <figure><a class="lightgallery" href="/images/transceiver/xcver-intro-02/xcver-sff8472-A2h-table.png" title="/images/transceiver/xcver-intro-02/xcver-sff8472-A2h-table.png" data-thumbnail="/images/transceiver/xcver-intro-02/xcver-sff8472-A2h-table.png" data-sub-html="<h2>SFF-8472 A2h Table</h2>">
+                <img
+                    class="lazyload"
+                    src="/svg/loading.min.svg"
+                    data-src="/images/transceiver/xcver-intro-02/xcver-sff8472-A2h-table.png"
+                    data-srcset="/images/transceiver/xcver-intro-02/xcver-sff8472-A2h-table.png, /images/transceiver/xcver-intro-02/xcver-sff8472-A2h-table.png 1.5x, /images/transceiver/xcver-intro-02/xcver-sff8472-A2h-table.png 2x"
+                    data-sizes="auto"
+                    alt="/images/transceiver/xcver-intro-02/xcver-sff8472-A2h-table.png" />
+            </a><figcaption class="image-caption">SFF-8472 A2h Table</figcaption>
+            </figure>
+    </div>
+</div>
+<p>懂了 A0h 後，那 A2h 其實大同小異～</p>
+<div style="display: flex; justify-content: center;">
+    <div style="width: 70%;">
+        <figure><a class="lightgallery" href="/images/transceiver/xcver-intro-02/xcver-sff8472-A2h-page00-temperature.png" title="/images/transceiver/xcver-intro-02/xcver-sff8472-A2h-page00-temperature.png" data-thumbnail="/images/transceiver/xcver-intro-02/xcver-sff8472-A2h-page00-temperature.png" data-sub-html="<h2>SFF-8472 A2h Page0 Temperature</h2>">
+                <img
+                    class="lazyload"
+                    src="/svg/loading.min.svg"
+                    data-src="/images/transceiver/xcver-intro-02/xcver-sff8472-A2h-page00-temperature.png"
+                    data-srcset="/images/transceiver/xcver-intro-02/xcver-sff8472-A2h-page00-temperature.png, /images/transceiver/xcver-intro-02/xcver-sff8472-A2h-page00-temperature.png 1.5x, /images/transceiver/xcver-intro-02/xcver-sff8472-A2h-page00-temperature.png 2x"
+                    data-sizes="auto"
+                    alt="/images/transceiver/xcver-intro-02/xcver-sff8472-A2h-page00-temperature.png" />
+            </a><figcaption class="image-caption">SFF-8472 A2h Page0 Temperature</figcaption>
+            </figure>
+    </div>
+</div>
+<p>在 transceiver 中會有 MCU 或是 DSP，會由這個晶片來負責監控這件事情(裡面有 firmware)，像是讀取溫度然後寫入到 A2h Page 00
+Byte 96-97 中。</p>
+<p>左大右小 (Big Endian)，96 MSB (Most Significant Byte) 與 97 LSB (Least Significant Byte)，
+在溫度欄位這邊當作是整數跟小數醬子比較好理解～ (其他欄位的話就不一定是這樣子摟，通常是兩個 Byte 組成一個 16-bit unsigned
+integer)</p>
+<blockquote>
+<p>在 SFF-8472 Ch3.3 提到: &ldquo;Big Endian, that is the lowest byte address contains the most significant byte of the
+multi-byte value.&rdquo;</p>
+</blockquote>
+<h3 id="實際例子">實際例子</h3>
+<p>找一台 switch 來讀一下 eeprom 吧~
+首先要找到 I2CBUS 是哪一個，這裡我只有插了一支 ET5402-AOC-10M 在 port1 上面。</p>
+<ol>
+<li>使用 <code>show int trans eeprom Ethernet0</code> 可以看到 SONiC 幫我 parse 出 Vendor Name 是 <code>EDGE-CORE</code> 了</li>
+<li>暴力搜尋一下，使用 <code>grep -l -a &quot;EDGE-CORE&quot; /sys/bus/i2c/devices/*/eeprom</code>，找到 <code>/sys/bus/i2c/devices/23-0050/eeprom</code></li>
+<li>由此可以得知 port1 的 I2CBUS 是 <code>23</code>，所以可以使用 <code>sudo i2cdump -y -f 23 0x50</code> 來顯示 raw 格式。</li>
+</ol>
+<p>來看一下實際指令：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">admin@Spine-3:~$ show int trans eeprom Ethernet0
+</span></span><span class="line"><span class="cl">Ethernet0: SFP EEPROM detected
+</span></span><span class="line"><span class="cl">        Connector: LC
+</span></span><span class="line"><span class="cl">        Encoding: 64B/66B
+</span></span><span class="line"><span class="cl">        Extended Identifier: GBIC/SFP defined by twowire interface ID
+</span></span><span class="line"><span class="cl">        Identifier: SFP+
+</span></span><span class="line"><span class="cl">        LengthCable<span class="o">(</span>UnitsOfm<span class="o">)</span>: 10.0
+</span></span><span class="line"><span class="cl">        Nominal Bit Rate<span class="o">(</span>100Mbs<span class="o">)</span>: <span class="m">103</span>
+</span></span><span class="line"><span class="cl">        Specification compliance:
+</span></span><span class="line"><span class="cl">                OptionValues: Power Level 1, RX_LOS, TX_FAULT, TX_DISABLE
+</span></span><span class="line"><span class="cl">                SFP+CableTechnology: Active Cable
+</span></span><span class="line"><span class="cl">        Vendor Date Code<span class="o">(</span>YYYY-MM-DD Lot<span class="o">)</span>: 2016-08-26
+</span></span><span class="line"><span class="cl">        Vendor Name: EDGE-CORE <span class="c1"># &lt;--- 這裏</span>
+</span></span><span class="line"><span class="cl">        Vendor OUI: <span class="m">7</span>
+</span></span><span class="line"><span class="cl">        Vendor PN: ET5402-AOC-10M
+</span></span><span class="line"><span class="cl">        Vendor Rev: A
+</span></span><span class="line"><span class="cl">        Vendor SN: J1
+</span></span><span class="line"><span class="cl">        Wavelength: 0nm
+</span></span><span class="line"><span class="cl">admin@Spine-3:~$ grep -l -a <span class="s2">&#34;EDGE-CORE&#34;</span> /sys/bus/i2c/devices/*/eeprom
+</span></span><span class="line"><span class="cl">grep: /sys/bus/i2c/devices/0-0056/eeprom: Permission denied
+</span></span><span class="line"><span class="cl">/sys/bus/i2c/devices/23-0050/eeprom
+</span></span><span class="line"><span class="cl">^C^C
+</span></span><span class="line"><span class="cl">admin@Spine-3:~$ sudo i2cdump -y -f <span class="m">23</span> 0x50
+</span></span><span class="line"><span class="cl">No size specified <span class="o">(</span>using byte-data access<span class="o">)</span>
+</span></span><span class="line"><span class="cl">     <span class="m">0</span>  <span class="m">1</span>  <span class="m">2</span>  <span class="m">3</span>  <span class="m">4</span>  <span class="m">5</span>  <span class="m">6</span>  <span class="m">7</span>  <span class="m">8</span>  <span class="m">9</span>  a  b  c  d  e  f    0123456789abcdef
+</span></span><span class="line"><span class="cl">00: <span class="m">03</span> <span class="m">04</span> <span class="m">07</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">08</span> <span class="m">00</span> <span class="m">00</span> <span class="m">06</span> <span class="m">67</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span>    ???.....?..?g...
+</span></span><span class="line"><span class="cl">10: <span class="m">00</span> <span class="m">00</span> <span class="m">07</span> <span class="m">00</span> <span class="m">45</span> <span class="m">44</span> <span class="m">47</span> <span class="m">45</span> 2d <span class="m">43</span> 4f <span class="m">52</span> <span class="m">45</span> <span class="m">20</span> <span class="m">20</span> <span class="m">20</span>    ..?.EDGE-CORE
+</span></span><span class="line"><span class="cl">20: <span class="m">20</span> <span class="m">20</span> <span class="m">20</span> <span class="m">20</span> <span class="m">00</span> <span class="m">70</span> <span class="m">72</span> cf <span class="m">45</span> <span class="m">54</span> <span class="m">35</span> <span class="m">34</span> <span class="m">30</span> <span class="m">32</span> 2d <span class="m">41</span>        .pr?ET5402-A
+</span></span><span class="line"><span class="cl">30: 4f <span class="m">43</span> 2d <span class="m">37</span> 4d <span class="m">20</span> <span class="m">20</span> <span class="m">20</span> <span class="m">41</span> <span class="m">20</span> <span class="m">20</span> <span class="m">20</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> 9c    OC-7M   A   ...?
+</span></span><span class="line"><span class="cl">40: <span class="m">00</span> 1a <span class="m">00</span> <span class="m">00</span> 4a <span class="m">31</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span>    .?..J1..........
+</span></span><span class="line"><span class="cl">50: <span class="m">20</span> <span class="m">20</span> <span class="m">20</span> <span class="m">20</span> <span class="m">31</span> <span class="m">36</span> <span class="m">30</span> <span class="m">38</span> <span class="m">32</span> <span class="m">36</span> <span class="m">20</span> <span class="m">20</span> <span class="m">60</span> <span class="m">00</span> <span class="m">03</span> e4        <span class="m">160826</span>  <span class="sb">`</span>.??
+</span></span><span class="line"><span class="cl">60: <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span>    ................
+</span></span><span class="line"><span class="cl">70: <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span>    ................
+</span></span><span class="line"><span class="cl">80: <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span>    ................
+</span></span><span class="line"><span class="cl">90: <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span>    ................
+</span></span><span class="line"><span class="cl">a0: <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span>    ................
+</span></span><span class="line"><span class="cl">b0: <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span>    ................
+</span></span><span class="line"><span class="cl">c0: <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span>    ................
+</span></span><span class="line"><span class="cl">d0: <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span>    ................
+</span></span><span class="line"><span class="cl">e0: <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span>    ................
+</span></span><span class="line"><span class="cl">f0: <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span>    ................
+</span></span></code></pre></td></tr></table>
+</div>
+</div><div style="display: flex; justify-content: center;">
+    <div style="width: 70%;">
+        <figure><a class="lightgallery" href="/images/transceiver/xcver-intro-02/xcver-sfp-eeprom-example-01.png" title="/images/transceiver/xcver-intro-02/xcver-sfp-eeprom-example-01.png" data-thumbnail="/images/transceiver/xcver-intro-02/xcver-sfp-eeprom-example-01.png" data-sub-html="<h2>SFP&#43; EEPROM 例子</h2>">
+                <img
+                    class="lazyload"
+                    src="/svg/loading.min.svg"
+                    data-src="/images/transceiver/xcver-intro-02/xcver-sfp-eeprom-example-01.png"
+                    data-srcset="/images/transceiver/xcver-intro-02/xcver-sfp-eeprom-example-01.png, /images/transceiver/xcver-intro-02/xcver-sfp-eeprom-example-01.png 1.5x, /images/transceiver/xcver-intro-02/xcver-sfp-eeprom-example-01.png 2x"
+                    data-sizes="auto"
+                    alt="/images/transceiver/xcver-intro-02/xcver-sfp-eeprom-example-01.png" />
+            </a><figcaption class="image-caption">SFP+ EEPROM 例子</figcaption>
+            </figure>
+    </div>
+</div>
+<p>Raw 格式的看法不難，看到最左邊的 column，那個是十六進位，拿黃匡舉例，60(0x60) 開始，往右看 hex 依序是 60(0x60),61(0x61),62(
+0x62),&hellip;,6f(0x6f)，然後，去換算成十進位就可以知道是哪個 Byte 了。</p>
+<p>可以看一下 Byte 96-97 (96 = 6*16^1 + 0*16^0)，也就是看左邊 column 的 60 開始，然後依序是顯示 20,47 (0x20,0x47)，
+然後換算一下 <code>2*16^3 + 0 + 4*16^1 + 7*16^0 = 8263</code>，接著 SFF-8472 規定溫度的單位是 1/256°C， <code>8263/256=32.277°C</code>，
+那這邊會發現跟 SONiC 顯示的不一樣，主要是因為 SONiC 並不是隨時去讀取 EEPROM 的，而是定期去讀，然後儲存在 SONiC 自己的 DB
+中，所以是有 delay 的。</p>
+<p>再看個電壓(Vcc)例子，Byte 98-99 也就是接著顯示在溫度後面 82,53 (0x82,0x53)，換算完後是 <code>33363</code>，
+然後 SFF-8472 規定電壓是 100 µV (0.1 mV)，所以 <code>33363*0.1 mV ~= 3.336V</code> 非常接近 SONiC EEPROM 顯示的數值了吧～</p>
+<p>從上述例子來看，其實也是要去讀取規範文件中的單位來換算出對應的數值醬子，所以人工這樣看其實滿費力的。</p>
+<h2 id="sff-8636-qsfpqsfp28">SFF-8636 (QSFP+/QSFP28)</h2>
+<div style="display: flex; justify-content: center;">
+    <div style="width: 60%;">
+        <figure><a class="lightgallery" href="/images/transceiver/xcver-intro-02/xcver-sff8636-memory-map-table.png" title="/images/transceiver/xcver-intro-02/xcver-sff8636-memory-map-table.png" data-thumbnail="/images/transceiver/xcver-intro-02/xcver-sff8636-memory-map-table.png" data-sub-html="<h2>SFF-8636 Memory Map 表格</h2>">
+                <img
+                    class="lazyload"
+                    src="/svg/loading.min.svg"
+                    data-src="/images/transceiver/xcver-intro-02/xcver-sff8636-memory-map-table.png"
+                    data-srcset="/images/transceiver/xcver-intro-02/xcver-sff8636-memory-map-table.png, /images/transceiver/xcver-intro-02/xcver-sff8636-memory-map-table.png 1.5x, /images/transceiver/xcver-intro-02/xcver-sff8636-memory-map-table.png 2x"
+                    data-sizes="auto"
+                    alt="/images/transceiver/xcver-intro-02/xcver-sff8636-memory-map-table.png" />
+            </a><figcaption class="image-caption">SFF-8636 Memory Map 表格</figcaption>
+            </figure>
+    </div>
+</div>
+<p>隨著速度提升到 40G/100G，模組需要紀錄的資訊變多了，但是 I2C Address 資源有限，不能一直由 A0, A2, A4&hellip; 這樣一直開下去。
+於是 QSFP 系列的規範 (SFF-8636) 引入了一個很重要的概念：<strong>Paging (分頁)</strong></p>
+<p>文件中只有表格而沒有畫出立體圖，不過其實類似 SFF-8472 的 Memory Map，只是多的分頁功能。</p>
+<p>這邊就不再長篇寫一堆了，畢竟上一篇說過簡單的到 100G 這邊而已，主要新增的概念就是規範
+將 EEPROM 切分為兩半：</p>
+<ol>
+<li><strong>Lower Page (0-127 bytes)</strong>：這是固定的，不管切到哪一頁，這邊的資訊永遠一樣（例如中斷狀態、監控摘要）</li>
+<li><strong>Upper Page (128-255 bytes)</strong>：這是動態的</li>
+</ol>
+<p>這時候 <strong>Byte 127</strong> 就變成了「電梯按鈕 (Page Select Byte)」。</p>
+<p>常見的功能像是：</p>
+<ul>
+<li>寫入 <code>00</code> -&gt; Upper Page 顯示 Page 00h 的內容 (ID, Vendor Info)</li>
+<li>寫入 <code>03</code> -&gt; Upper Page 顯示 Page 03h 的內容 (Thresholds)</li>
+</ul>
+<p>這個「固定下半部 + 切換上半部」的概念，是後來 CMIS 複雜架構的基礎。懂了這個，看 CMIS 就不會暈。</p>
+<blockquote>
+<p>BTW. Vendor Name 跟一些基本固定資訊改到了 Page 00h，在 SFF-8472 是在 A0 讀取就好。</p>
+</blockquote>
+<h2 id="cmis-qsfp56-ddosfp">CMIS (QSFP56-DD/OSFP)</h2>
+<p>這邊呢要來囉唆一下，因為我在查資料的時候就感覺 spec 好像來源有很多 (SNIA, QSFP-DD MSA, OIF)，每次點下載都會覺得是不是錯誤網站在散佈惡意病毒&hellip;</p>
+<ol>
+<li>為什麼 CMIS 5.0 在 QSFP-DD.com，而 5.2 在 OIF？</li>
+</ol>
+<ul>
+<li>因為 CMIS 的「監護權」移交了。</li>
+<li>CMIS 2.x ~ 5.0 由 QSFP-DD MSA 撫養： 當初為了開發 400G，舊的 SFF-8636 不夠用，所以 QSFP-DD MSA (Multi-Source Agreement)
+這個組織自己跳出來制定了 CMIS。當時這個規範是為了服務 QSFP-DD 這個硬體介面的。 所以 CMIS 2.0~5.0 都是在 qsfp-dd.com 下載</li>
+<li>CMIS 5.1 以後交給 OIF 管理： 後來大家發現，CMIS 寫得太好了，連 OSFP MSA 和 COBO 也想用。既然大家都要用，繼續讓「QSFP-DD
+MSA」來管這個標準就很奇怪（感覺像 OSFP 在寄人籬下）。於是，業界決定把 CMIS 捐出來，交給一個更中立、更巨大的組織 —— OIF (
+Optical Internetworking Forum) 來維護。</li>
+</ul>
+<ol start="2">
+<li>SNIA, QSFP-DD MSA, OIF 三者關係圖</li>
+</ol>
+<ul>
+<li>這三個組織在光通訊模組上是「分層負責」的關係，缺一不可。可以把模組想像成 「一棟大樓」：
+<ul>
+<li>SNIA (SFF TWG) - 「圖書館管理員」 (基礎定義) SNIA 繼承了以前的 SFF 委員會。他們不負責最新的 400G/800G 邏輯，但他們掌管著 「字典」
+<ul>
+<li>角色：維護所有模組共用的代碼表 (Code Tables)</li>
+<li>關鍵文件：SFF-8024</li>
+<li>不管你是 QSFP-DD 還是 OSFP，當你要在 Byte 0 填寫 &ldquo;Identifier&rdquo; 時，你要填什麼代碼？這要去查 SNIA 的書。CMIS 文件中會大量出現：「請參考 SNIA SFF-8024 表格 X」</li>
+</ul>
+</li>
+<li>QSFP-DD MSA - 「硬體建築師」 (硬體規範)
+<ul>
+<li>這是一個由廠商組成的聯盟 (Cisco, Juniper, Molex 等)</li>
+<li>角色：專注於 QSFP-DD 的硬體尺寸、散熱、電的 Pin 腳 (Pinout)</li>
+<li>關鍵文件：QSFP-DD Hardware Specification</li>
+<li>現況：他們現在只管硬體殼要長怎樣，軟體部分就說：「請去遵守 OIF-CMIS」</li>
+</ul>
+</li>
+<li>OIF - 「物業管理」 (通用軟體規範)
+<ul>
+<li>這是一個制定光傳輸協定的國際論壇</li>
+<li>角色：維護 CMIS (軟體介面)</li>
+<li>關鍵文件：OIF-CMIS-05.x</li>
+<li>目標：確保不管你的殼是 QSFP-DD 還是 OSFP，插進 Switch 後，軟體講的語言（I2C 讀寫規則、狀態機）都是同一套</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>搞清以上關係後&hellip; 對了解 CMIS 沒幫助呦呵呵~ 回歸正題。
+來看一下 CMIS 5.0 的 Memory Map 圖：</p>
+<div style="display: flex; justify-content: center;">
+    <div style="width: 70%;">
+        <figure><a class="lightgallery" href="/images/transceiver/xcver-intro-02/xcver-CMIS5.0-memory-map.png" title="/images/transceiver/xcver-intro-02/xcver-CMIS5.0-memory-map.png" data-thumbnail="/images/transceiver/xcver-intro-02/xcver-CMIS5.0-memory-map.png" data-sub-html="<h2>CMIS 5.0 Memory Map</h2>">
+                <img
+                    class="lazyload"
+                    src="/svg/loading.min.svg"
+                    data-src="/images/transceiver/xcver-intro-02/xcver-CMIS5.0-memory-map.png"
+                    data-srcset="/images/transceiver/xcver-intro-02/xcver-CMIS5.0-memory-map.png, /images/transceiver/xcver-intro-02/xcver-CMIS5.0-memory-map.png 1.5x, /images/transceiver/xcver-intro-02/xcver-CMIS5.0-memory-map.png 2x"
+                    data-sizes="auto"
+                    alt="/images/transceiver/xcver-intro-02/xcver-CMIS5.0-memory-map.png" />
+            </a><figcaption class="image-caption">CMIS 5.0 Memory Map</figcaption>
+            </figure>
+    </div>
+</div>
+<p>看到這個圖好複雜<del>怎麼連銀行都多出來了</del>&hellip; 但沒關係先往下看</p>
+<p>如果說 SFF-8636 只是透過分頁來擴充空間，那 CMIS 就是一次徹底的打掉重練。
+主要原因是為了應付 QSFP-DD 和 OSFP 這種 <strong>8 通道 (8 Lanes)</strong> 的高速模組。</p>
+<p>在 CMIS 中，我們不再把模組當成一個單純的「光電轉換器」，而是可以視為一個有自己 CPU、需要開機載入 Firmware 的「嵌入式系統」。</p>
+<h3 id="why-cmis">Why CMIS？</h3>
+<p>在 400G/800G 的時代，模組的功能變得很彈性。
+一顆 400G DR4 的模組，它可能被 Switch 當作一個完整的 400G 使用，也可能被當作 4 個獨立的 100G 介面 (Breakout) 使用。
+SFF-8636 那種固定的暫存器定義，已經無法描述這種動態的需求了。</p>
+<h3 id="module-state-machine">Module State Machine</h3>
+<p>模組插上去沒 Link，就得去看 LOS (Loss of Signal)、LOL (Loss of Lock) 也就是是否有偵測到訊號，以及確認信號沒問題後鎖定。</p>
+<p>CMIS 定義了嚴格的生命週期：</p>
+<ol>
+<li><strong>ModuleLowPwr</strong>: 剛上電的低功率狀態，只開放 I2C 讓你讀 EEPROM 基本資料</li>
+<li><strong>ModulePwrUp</strong>: 升到高功率、跑韌體初始化與自我校正</li>
+<li><strong>ModuleReady</strong>: 模組就緒，等待 Host 設定 Application
+之後就是 <strong>Data Path</strong> 層級的啟動：<code>DPInit → DPInitialized → DPActivated</code>，高速訊號才真正開始傳輸。</li>
+</ol>
+<blockquote>
+<p>另外還有 <strong>ModuleFault</strong> 表示故障。完整狀態機請見 CMIS 6.3.2 Module State Machine。</p>
+</blockquote>
+<p>如果模組卡在 <code>ModulePwrUp</code>，你換再多條光纖都沒用，因為它的 DSP 根本還沒進到 ready 狀態。</p>
+<blockquote>
+<p>以上是建立在 EEPROM 以及 firmware 沒有任何錯誤的情況下&hellip;</p>
+</blockquote>
+<h3 id="application-advertising">Application Advertising</h3>
+<p>CMIS 有個很酷 <del>(麻煩)</del> 的發明，就是把「Switch 這邊的電訊號 (Host)」跟「光纖那邊的光訊號 (Media)」分開來管理。
+中間透過 <strong>Application Advertising</strong> 來實現。</p>
+<ul>
+<li>模組會說：「我支援 A 模式 (800G) 和 B 模式 (2x400G)」</li>
+<li>Switch 讀取後，寫入 <strong>ApSel (Application Select)</strong> 告訴模組：「我要用 B 模式 or A 模式」</li>
+<li>模組載入對應的 DSP 設定，Link 才會起來</li>
+</ul>
+<p>這邊來看個例子:</p>
+<div style="display: flex; justify-content: center;">
+    <div style="width: 90%;">
+        <figure><a class="lightgallery" href="/images/transceiver/xcver-intro-02/xcver-ET8001-2DR4-eeprom-01.png" title="/images/transceiver/xcver-intro-02/xcver-ET8001-2DR4-eeprom-01.png" data-thumbnail="/images/transceiver/xcver-intro-02/xcver-ET8001-2DR4-eeprom-01.png" data-sub-html="<h2>EEPROM Application Advertisement</h2>">
+                <img
+                    class="lazyload"
+                    src="/svg/loading.min.svg"
+                    data-src="/images/transceiver/xcver-intro-02/xcver-ET8001-2DR4-eeprom-01.png"
+                    data-srcset="/images/transceiver/xcver-intro-02/xcver-ET8001-2DR4-eeprom-01.png, /images/transceiver/xcver-intro-02/xcver-ET8001-2DR4-eeprom-01.png 1.5x, /images/transceiver/xcver-intro-02/xcver-ET8001-2DR4-eeprom-01.png 2x"
+                    data-sizes="auto"
+                    alt="/images/transceiver/xcver-intro-02/xcver-ET8001-2DR4-eeprom-01.png" />
+            </a><figcaption class="image-caption">EEPROM Application Advertisement</figcaption>
+            </figure>
+    </div>
+</div>
+<p>首先可以看到在這個版本的 SONiC 的 <code>show int trans eeprom</code> 會寫目前每個 lane 是使用哪個模式(藍色框框)。<br>
+目前是看到 1 這個 1 就是去選擇 <code>Application Advertisement</code> 中的第一個，也就是 800GAUI。</p>
+<p>那再看向上方 raw 格式，這邊要看兩個地方 10h,11h:</p>
+<ul>
+<li>10h 的 0x91~0x98 (RW) 這邊是指 Staged Control 也就是說 EEPROM 會告訴 SONiC 說 &ldquo;我要求每條 lane 用哪個 App&rdquo;, SONiC 要寫進去</li>
+<li>11h 的 0xCE~0xD5 (RO) 這邊是指 Active Control，就是每條 lane 正在使用哪個 App</li>
+</ul>
+<p>SONiC 與 transceiver 的互動會是:</p>
+<ol>
+<li>Host 讀 Application Advertisement（Lower 0x56）→ 知道模組支援哪些 App</li>
+<li>Host 把想要的 ApSel 寫進「Staged」 Page 10h 0x91–0x98   ← 還沒生效，只是草稿</li>
+<li>Host 按下 ApplyDPInit（Page 10h 0x8F）                  ← 觸發「套用」</li>
+<li>模組驗證 →（成功）把 Staged 複製到「Active」，並更新：
+<ul>
+<li>ConfigStatus  Page 11h 0xCA–0xCD = 1(ConfigSuccess)</li>
+<li>Active 設定    Page 11h 0xCE–0xD5  ← 現在才反映出來</li>
+</ul>
+</li>
+<li>Data Path 初始化 → activated，link 起來</li>
+</ol>
+<h3 id="cdb-protocol-command-data-block">CDB Protocol (Command Data Block)</h3>
+<p>如果 transceiver 有問題或是要新增功能，可以使用 CDB 來升級更新 firmware，不過這邊的 firmware 就需要模塊廠商提供了。
+指令大致如下，這是 SONiC 社群就有支援的功能，不過沒意外還是得由 SONiC RD 來修補成可以動的樣子XD</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">Usage: sfputil firmware upgrade <span class="o">{</span>PORT_NAME<span class="o">}</span> <span class="o">{</span>FILEPATH<span class="o">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>之前有廠商給我的步驟大致是這樣:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">sudo sfputil firmware download Ethernet8 XXX.bin <span class="c1">#(執行兩次)</span>
+</span></span><span class="line"><span class="cl">sudo sfputil firmware download Ethernet8 XXX.bin
+</span></span><span class="line"><span class="cl">sudo sfputil firmware run Ethernet8
+</span></span><span class="line"><span class="cl"><span class="c1"># 驗證一下 firmware version 在 Low Memory 的 Byte 39-40 是不是對的版號</span>
+</span></span><span class="line"><span class="cl">sudo sfputil firmware commit Ethernet8 <span class="c1"># Commit 新的 image</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="memory-map-新增的banks">Memory Map 新增的：Banks</h3>
+<p>CMIS 有很多「<strong>每條 lane 各一份</strong>」的暫存器（每條 lane 的控制、狀態、監控…）。
+一個 Page 的 lane-specific 區段最多排得下 <strong>8 條 lane</strong>；可是 QSFP-DD / OSFP 之後還有更多 lane 的模組（最多到 32 條），8 條就不夠分了。
+於是 CMIS 在 Page 之上再加一層 <strong>Bank</strong> 的概念，你可以把它想像成「棟」。</p>
+<ul>
+<li><strong>Byte 126 (Bank Select)</strong>: 選擇去哪一棟樓 (Bank 0 ~ Bank 3)</li>
+<li><strong>Byte 127 (Page Select)</strong>: 選擇去哪一層樓</li>
+</ul>
+<p>每個 <strong>Bank 對應「一組 8 條 lane」</strong>：Bank 0 = lane 1-8、Bank 1 = lane 9-16、Bank 2 = 17-24、Bank 3 = 25-32，
+所以 banking 主要是給<strong>超過 8 lane</strong>的模組用的（最多 4 個 Bank = 32 lane）。像 8-lane 的 QSFP-DD / OSFP <strong>只會用到 Bank 0</strong>（所以平常 dump 不太會碰到 bank 切換）。（C-CMIS coherent 模組另有「每條 media lane 一個 bank」的用法，不在這篇範圍。）這讓寫程式讀取 EEPROM 的複雜度又上升了一個維度。</p>
+<h3 id="vdm-versatile-diagnostics-monitor">VDM (Versatile Diagnostics Monitor)</h3>
+<div style="display: flex; justify-content: center;">
+    <div style="width: 90%;">
+        <figure><a class="lightgallery" href="/images/transceiver/xcver-intro-02/xcver-800G-OSFP-ZR-EEPROM-VDM.png" title="/images/transceiver/xcver-intro-02/xcver-800G-OSFP-ZR-EEPROM-VDM.png" data-thumbnail="/images/transceiver/xcver-intro-02/xcver-800G-OSFP-ZR-EEPROM-VDM.png" data-sub-html="<h2>800G OSFP ZR with Attenuator VDM</h2>">
+                <img
+                    class="lazyload"
+                    src="/svg/loading.min.svg"
+                    data-src="/images/transceiver/xcver-intro-02/xcver-800G-OSFP-ZR-EEPROM-VDM.png"
+                    data-srcset="/images/transceiver/xcver-intro-02/xcver-800G-OSFP-ZR-EEPROM-VDM.png, /images/transceiver/xcver-intro-02/xcver-800G-OSFP-ZR-EEPROM-VDM.png 1.5x, /images/transceiver/xcver-intro-02/xcver-800G-OSFP-ZR-EEPROM-VDM.png 2x"
+                    data-sizes="auto"
+                    alt="/images/transceiver/xcver-intro-02/xcver-800G-OSFP-ZR-EEPROM-VDM.png" />
+            </a><figcaption class="image-caption">800G OSFP ZR with Attenuator VDM</figcaption>
+            </figure>
+    </div>
+</div>
+<p>VDM(Versatile Diagnostics Monitor,Page 20h–2Fh)是 CMIS 的「可自訂監控框架」。
+跟溫度/Vcc 那種固定欄位不同,它是 descriptor 驅動:descriptor 描述「這格監的是什麼(OSNR / pre-FEC BER / 光功率 / Q…)」,值、門檻、告警旗標分散在不同 page(旗標在 Page 2Ch)。
+coherent / ZR 模組的關鍵指標主要靠它。 因為要先讀 descriptor 才解得開,人工 raw 解很痛，可以自己去看文件XD</p>
+<p>既然講到 ZR 這邊貼心提醒一下，如果有拿到 ZR/ZR+/CFP2 這種高功率的 transceiver 請先不要短接光纖，先插上去 switch 上面看 EEPROM。</p>
+<p>就以這個圖片為例子，要先查看 RxPowerHighAlarm 是多少 dBm，然後再看另一端 transceiver 送出的 Supported Max TX Power 會不會大於 RxPowerHighAlarm，會的話請記得加衰減器，不然一隻 ZR 超過 4000 USD 就會燒毀呦～
+圖片上這隻我已經掛上了 -5 dBm 的衰減器了，對端是同型號的 TXPower 對端是 -7 dBm 左右，再加上 -5 dBm 衰減器，所以才會看到 -12 dBm 的 RxPower。</p>
+<hr>
+<h2 id="useful-command">Useful command</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"><span class="c1"># Show xcver EEPROM in SONiC humans readable format</span>
+</span></span><span class="line"><span class="cl">show int trans eeprom
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Show xcver EEPROM in raw format</span>
+</span></span><span class="line"><span class="cl">sudo i2cdump -y -f <span class="o">{</span>I2CBUS<span class="o">}</span> 0x50
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Change EEPROM page</span>
+</span></span><span class="line"><span class="cl">sudo i2cset -y -f <span class="o">{</span>I2CBUS<span class="o">}</span> 0x50 0x7f <span class="o">{</span>Page 0x??<span class="o">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Brute find I2CBUS </span>
+</span></span><span class="line"><span class="cl">grep -l -a <span class="s2">&#34;XX vendor name XX&#34;</span> /sys/bus/i2c/devices/*/eeprom
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># List SFF and CMIS implement code</span>
+</span></span><span class="line"><span class="cl">ls /usr/local/lib/python3.*/dist-packages/sonic_platform_base/sonic_xcvr/codes/public/
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="reference-參考文章">Reference 參考文章</h2>
+<p>非常感謝以下博主寫的文章讓小弟可以參考～</p>
+<ul>
+<li><a href="https://www.dawnraytech.com.tw/blog/memory-map-in-transceiver-module/?srsltid=AfmBOoqvYxR0haerrNWxJh4eD0leWO9Wq-0Y580-neEqmIko0r_wv8X9" target="_blank" rel="noopener noreffer ">光纖收發模組的 Memory Map 存放了甚麼資料?</a></li>
+<li><a href="https://members.snia.org/document/dl/25916" target="_blank" rel="noopener noreffer ">PUBLISHED SFF-8472.pdf</a></li>
+<li><a href="https://members.snia.org/document/dl/26418" target="_blank" rel="noopener noreffer ">PUBLISHED SFF-8636.pdf</a></li>
+<li><a href="https://members.snia.org/document/dl/26423" target="_blank" rel="noopener noreffer ">PUBLISHED SFF-8024.pdf</a></li>
+<li><a href="http://www.qsfp-dd.com/wp-content/uploads/2021/05/CMIS5p0.pdf" target="_blank" rel="noopener noreffer ">CMIS5p0-1.pdf CMIS 5.0</a></li>
+<li><a href="https://www.oiforum.com/wp-content/uploads/OIF-CMIS-05.2.pdf" target="_blank" rel="noopener noreffer ">OIF-CMIS-05.2.pdf CMIS 5.2</a></li>
+<li><a href="https://github.com/sonic-net/SONiC/blob/master/doc/sfp-cmis/cmis-init.md" target="_blank" rel="noopener noreffer ">SONiC cmis-init document</a></li>
+</ul>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新於 2026-01-06</span>
+            </div></div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw" aria-hidden="true"></i>&nbsp;<a href="/zh-tw/tags/transceiver/">Transceiver</a>,&nbsp;<a href="/zh-tw/tags/edgecore/">Edgecore</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/zh-tw/">主頁</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/zh-tw/posts/sonic/sonic-installation-via-onie/" class="prev" rel="prev" title="SONiC Image 安裝教學"><i class="fas fa-angle-left fa-fw" aria-hidden="true"></i>SONiC Image 安裝教學</a></div>
+</div>
+<div id="comments"><div id="disqus_thread" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://disqus.com/?ref_noscript">Disqus</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.154.5">Hugo</a> 強力驅動 | 主題 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.3.0"><i class="far fa-kiss-wink-heart fa-fw" aria-hidden="true"></i> LoveIt</a>
+                </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright fa-fw" aria-hidden="true"></i><span itemprop="copyrightYear">2024 - 2026</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/zh-tw/" target="_blank">seisokeii</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到頂部">
+                <i class="fas fa-arrow-up fa-fw" aria-hidden="true"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="查看評論">
+                <i class="fas fa-comment fa-fw" aria-hidden="true"></i>
+            </a>
+        </div><script type="text/javascript" src="https://.disqus.com/embed.js" defer></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/autocomplete.js@0.38.1/dist/autocomplete.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lunr@2.3.9/lunr.min.js"></script><script type="text/javascript" src="/lib/lunr/lunr.stemmer.support.min.js"></script><script type="text/javascript" src="/lib/lunr/lunr.zh.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lazysizes@5.3.2/lazysizes.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/clipboard@2.0.11/dist/clipboard.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/sharer.js@0.5.1/sharer.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"複製到剪貼板","maxShownLines":30},"comment":{},"search":{"highlightTag":"em","lunrLanguageCode":"zh","lunrSegmentitURL":"/lib/lunr/lunr.segmentit.js","maxResultLength":10,"noResultsFound":"沒有找到結果","snippetLength":30}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

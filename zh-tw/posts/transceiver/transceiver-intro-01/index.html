@@ -13,7 +13,7 @@
   <meta property="og:type" content="article">
     <meta property="article:section" content="posts">
     <meta property="article:published_time" content="2025-05-05T23:39:27+08:00">
-    <meta property="article:modified_time" content="2025-05-06T23:52:30+08:00">
+    <meta property="article:modified_time" content="2026-01-02T21:17:24+08:00">
     <meta property="article:tag" content="Transceiver">
     <meta property="article:tag" content="Edgecore">
 
@@ -36,7 +36,7 @@
             "@type": "WebPage",
             "@id": "https:\/\/seisokeii.github.io\/zh-tw\/posts\/transceiver\/transceiver-intro-01\/"
         },"genre": "posts","keywords": "Transceiver, Edgecore","wordcount":  5977 ,
-        "url": "https:\/\/seisokeii.github.io\/zh-tw\/posts\/transceiver\/transceiver-intro-01\/","datePublished": "2025-05-05T23:39:27+08:00","dateModified": "2025-05-06T23:52:30+08:00","publisher": {
+        "url": "https:\/\/seisokeii.github.io\/zh-tw\/posts\/transceiver\/transceiver-intro-01\/","datePublished": "2025-05-05T23:39:27+08:00","dateModified": "2026-01-02T21:17:24+08:00","publisher": {
             "@type": "Organization",
             "name": ""},"author": {
                 "@type": "Person",
@@ -120,11 +120,11 @@
         </div><div class="featured-image"><img
         class="lazyload"
         src="/svg/loading.min.svg"
-        data-src="/images/transceiver/xcver-32O-cage.png"
-        data-srcset="/images/transceiver/xcver-32O-cage.png, /images/transceiver/xcver-32O-cage.png 1.5x, /images/transceiver/xcver-32O-cage.png 2x"
+        data-src="/images/transceiver/xcver-intro-01/xcver-32O-cage.png"
+        data-srcset="/images/transceiver/xcver-intro-01/xcver-32O-cage.png, /images/transceiver/xcver-intro-01/xcver-32O-cage.png 1.5x, /images/transceiver/xcver-intro-01/xcver-32O-cage.png 2x"
         data-sizes="auto"
-        alt="/images/transceiver/xcver-32O-cage.png"
-        title="/images/transceiver/xcver-32O-cage.png" /></div><div class="details toc" id="toc-static"  data-kept="">
+        alt="/images/transceiver/xcver-intro-01/xcver-32O-cage.png"
+        title="/images/transceiver/xcver-intro-01/xcver-32O-cage.png" /></div><div class="details toc" id="toc-static"  data-kept="">
                 <div class="details-summary toc-title">
                     <span>目錄</span>
                     <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
@@ -161,9 +161,9 @@
     <li><a href="#breakoutfanout">Breakout/Fanout</a>
       <ul>
         <li><a href="#小知識分享">小知識分享</a></li>
-        <li><a href="#reference-參考文章">Reference 參考文章</a></li>
       </ul>
     </li>
+    <li><a href="#reference-參考文章">Reference 參考文章</a></li>
   </ul>
 </nav></div>
             </div><div class="content" id="content"><p>上面這張圖是 OSFP 洞洞的交換器，越來越粗了呢(灬ºωº灬)</p>
@@ -188,12 +188,21 @@
 而對於現在動不動就 400G/800G 網路來說，NRZ 得提高 bit rate and baud 來達到該速率，但這樣就會面臨一些物理問題，光纖耗損也會隨著頻率提高而增加。</p>
 <h3 id="pam4-pulse-amplitude-modulation-4-level">PAM4 (Pulse Amplitude Modulation 4-Level)</h3>
 <p>為了解決 NRZ 問題，PAM4 多了一個相位也就是多了一個 bit，所以從原本的 0 or 1 兩種訊號變成了 00, 01, 10, 11 四種訊號。
-這裡可以直接來看這個圖，圖片來自 <a href="https://blog.samtec.com/post/understanding-nrz-and-pam4-signaling/" target="_blank" rel="noopener noreffer ">https://blog.samtec.com</a>
-<figure><img src="/images/transceiver/xcver-NRZ-PAM4-eyediagram.png"><figcaption>
-      <h4>NRZ 與 PAM4 屁眼圖</h4>
-    </figcaption>
-</figure>
-</p>
+這裡可以直接來看這個圖，圖片來自 <a href="https://blog.samtec.com/post/understanding-nrz-and-pam4-signaling/" target="_blank" rel="noopener noreffer ">https://blog.samtec.com</a></p>
+<div style="display: flex; justify-content: center;">
+    <div style="width: 70%;">
+        <figure><a class="lightgallery" href="/images/transceiver/xcver-intro-01/xcver-NRZ-PAM4-eyediagram.png" title="/images/transceiver/xcver-intro-01/xcver-NRZ-PAM4-eyediagram.png" data-thumbnail="/images/transceiver/xcver-intro-01/xcver-NRZ-PAM4-eyediagram.png" data-sub-html="<h2>NRZ 與 PAM4 屁眼圖</h2>">
+                <img
+                    class="lazyload"
+                    src="/svg/loading.min.svg"
+                    data-src="/images/transceiver/xcver-intro-01/xcver-NRZ-PAM4-eyediagram.png"
+                    data-srcset="/images/transceiver/xcver-intro-01/xcver-NRZ-PAM4-eyediagram.png, /images/transceiver/xcver-intro-01/xcver-NRZ-PAM4-eyediagram.png 1.5x, /images/transceiver/xcver-intro-01/xcver-NRZ-PAM4-eyediagram.png 2x"
+                    data-sizes="auto"
+                    alt="/images/transceiver/xcver-intro-01/xcver-NRZ-PAM4-eyediagram.png" />
+            </a><figcaption class="image-caption">NRZ 與 PAM4 屁眼圖</figcaption>
+            </figure>
+    </div>
+</div>
 <p>相較於 NRZ，在同一個 bit rate 時，PAM4 的 baud 比 NRZ 還少一半，隨著高速頻率變大，較低 baud 的 PAM4 耗損會更少。</p>
 <p>但 PAM4 也不是說就沒缺點屌打 NRZ，因為 PAM4 在同一個空間內壓縮了四個電平，相較於 NRZ 每個眼高只剩下 1/3，受到一點小干擾就會出事，
 也就是 SNR (Signal-to-noise ratio) 更低了，這會導致 BER (bit error rate) 提高，所以就需要有 FEC (forward error correction) 來糾錯。</p>
@@ -201,35 +210,71 @@
 <blockquote>
 <p>PAM4 本身並不會產生多個 Lanes 或 Channels。 它的作用是讓每一個 Lane/Channel 的傳輸速率翻倍（相比於相同 baud 的 NRZ）</p>
 </blockquote>
-<p>這裡補充一個點，就是硬體上大致會長這樣：
-<figure><img src="/images/transceiver/xcver-laser-diode.png"><figcaption>
-      <h4>光纖模組中的雷射二極體</h4>
-    </figcaption>
-</figure>
-</p>
-<p>還有就是窩一直搞不懂光怎麼去有四個訊號，因為光不是連續的嗎？ 但問光模大神同事後他說可以靠電流。光纖的光轉電也差不多是這樣搞的。(如果是電訊號就直接用電壓就好了)
-<figure><img src="/images/transceiver/xcver-optical-intensite.png"><figcaption>
-      <h4>不同電流對應不同的光強度</h4>
-    </figcaption>
-</figure>
-</p>
+<p>這裡補充一個點，就是硬體上大致會長這樣：</p>
+<div style="display: flex; justify-content: center;">
+    <div style="width: 70%;">
+        <figure><a class="lightgallery" href="/images/transceiver/xcver-intro-01/xcver-laser-diode.png" title="/images/transceiver/xcver-intro-01/xcver-laser-diode.png" data-thumbnail="/images/transceiver/xcver-intro-01/xcver-laser-diode.png" data-sub-html="<h2>光纖模組中的雷射二極體</h2>">
+                <img
+                    class="lazyload"
+                    src="/svg/loading.min.svg"
+                    data-src="/images/transceiver/xcver-intro-01/xcver-laser-diode.png"
+                    data-srcset="/images/transceiver/xcver-intro-01/xcver-laser-diode.png, /images/transceiver/xcver-intro-01/xcver-laser-diode.png 1.5x, /images/transceiver/xcver-intro-01/xcver-laser-diode.png 2x"
+                    data-sizes="auto"
+                    alt="/images/transceiver/xcver-intro-01/xcver-laser-diode.png" />
+            </a><figcaption class="image-caption">光纖模組中的雷射二極體</figcaption>
+            </figure>
+    </div>
+</div>
+<p>還有就是窩一直搞不懂光怎麼去有四個訊號，因為光不是連續的嗎？ 但問光模大神同事後他說可以靠電流。光纖的光轉電也差不多是這樣搞的。(如果是電訊號就直接用電壓就好了)</p>
+<div style="display: flex; justify-content: center;">
+    <div style="width: 70%;">
+        <figure><a class="lightgallery" href="/images/transceiver/xcver-intro-01/xcver-optical-intensite.png" title="/images/transceiver/xcver-intro-01/xcver-optical-intensite.png" data-thumbnail="/images/transceiver/xcver-intro-01/xcver-optical-intensite.png" data-sub-html="<h2>不同電流對應不同的光強度</h2>">
+                <img
+                    class="lazyload"
+                    src="/svg/loading.min.svg"
+                    data-src="/images/transceiver/xcver-intro-01/xcver-optical-intensite.png"
+                    data-srcset="/images/transceiver/xcver-intro-01/xcver-optical-intensite.png, /images/transceiver/xcver-intro-01/xcver-optical-intensite.png 1.5x, /images/transceiver/xcver-intro-01/xcver-optical-intensite.png 2x"
+                    data-sizes="auto"
+                    alt="/images/transceiver/xcver-intro-01/xcver-optical-intensite.png" />
+            </a><figcaption class="image-caption">不同電流對應不同的光強度</figcaption>
+            </figure>
+    </div>
+</div>
 <p>另外也可以參考該網站 <a href="https://www.i-pex.com/zh-tw/library/article/what-is-pam" target="_blank" rel="noopener noreffer ">什麼是 PAMx （x=2，3，4&hellip;）信號技術？</a></p>
 <hr>
 <h2 id="wdm">WDM</h2>
 <p>在知道光怎麼傳輸後，接下來就來到了怎麼在單一光纖上同時傳輸多路不同的光信號(如何使用不同波長)，也就是 WDM 技術 (Wavelength Division Multiplexing)。</p>
 <p>WDM 這邊就先簡單的來看兩種類別，分別是 CWDM (Coarse Wavelength Division Multiplexer) 與 DWDM (Dense Wavelength Division Multiplexer)。</p>
 <h3 id="cwdm-coarse-wavelength-division-multiplexer">CWDM (Coarse Wavelength Division Multiplexer)</h3>
-<p>Coarse 有 &ldquo;寬、粗&rdquo; 的意思，CWDM 的寬度通常是 20nm，也就是不同波之間距離 20nm。 CWDM 的波長範圍是 1271 ~ 1611nm，在這之間總共有 18 個波長。可以看到下圖: 圖片來自<a href="https://fibconet.com/zh-tw/what-does-wdm-and-dwdm-meaning/" target="_blank" rel="noopener noreffer ">CWDM DWDM 波長示意圖</a>
-<figure><img src="/images/transceiver/xcver-cwdm-dwdm-wavelength.png"><figcaption>
-      <h4>CWDM DWDM 波長示意圖</h4>
-    </figcaption>
-</figure>
-
-<figure><img src="/images/transceiver/xcver-wdm-band.png"><figcaption>
-      <h4>CWDM DWDM 波段</h4>
-    </figcaption>
-</figure>
-</p>
+<p>Coarse 有 &ldquo;寬、粗&rdquo; 的意思，CWDM 的寬度通常是 20nm，也就是不同波之間距離 20nm。 CWDM 的波長範圍是 1271 ~ 1611nm，在這之間總共有 18 個波長。可以看到下圖: 圖片來自<a href="https://fibconet.com/zh-tw/what-does-wdm-and-dwdm-meaning/" target="_blank" rel="noopener noreffer ">CWDM DWDM 波長示意圖</a></p>
+<div style="display: flex; justify-content: center;">
+    <div style="width: 70%;">
+        <figure><a class="lightgallery" href="/images/transceiver/xcver-intro-01/xcver-cwdm-dwdm-wavelength.png" title="/images/transceiver/xcver-intro-01/xcver-cwdm-dwdm-wavelength.png" data-thumbnail="/images/transceiver/xcver-intro-01/xcver-cwdm-dwdm-wavelength.png" data-sub-html="<h2>CWDM DWDM 波長示意圖</h2>">
+                <img
+                    class="lazyload"
+                    src="/svg/loading.min.svg"
+                    data-src="/images/transceiver/xcver-intro-01/xcver-cwdm-dwdm-wavelength.png"
+                    data-srcset="/images/transceiver/xcver-intro-01/xcver-cwdm-dwdm-wavelength.png, /images/transceiver/xcver-intro-01/xcver-cwdm-dwdm-wavelength.png 1.5x, /images/transceiver/xcver-intro-01/xcver-cwdm-dwdm-wavelength.png 2x"
+                    data-sizes="auto"
+                    alt="/images/transceiver/xcver-intro-01/xcver-cwdm-dwdm-wavelength.png" />
+            </a><figcaption class="image-caption">CWDM DWDM 波長示意圖</figcaption>
+            </figure>
+    </div>
+</div>
+<div style="display: flex; justify-content: center;">
+    <div style="width: 70%;">
+        <figure><a class="lightgallery" href="/images/transceiver/xcver-intro-01/xcver-wdm-band.png" title="/images/transceiver/xcver-intro-01/xcver-wdm-band.png" data-thumbnail="/images/transceiver/xcver-intro-01/xcver-wdm-band.png" data-sub-html="<h2>CWDM DWDM 波段</h2>">
+                <img
+                    class="lazyload"
+                    src="/svg/loading.min.svg"
+                    data-src="/images/transceiver/xcver-intro-01/xcver-wdm-band.png"
+                    data-srcset="/images/transceiver/xcver-intro-01/xcver-wdm-band.png, /images/transceiver/xcver-intro-01/xcver-wdm-band.png 1.5x, /images/transceiver/xcver-intro-01/xcver-wdm-band.png 2x"
+                    data-sizes="auto"
+                    alt="/images/transceiver/xcver-intro-01/xcver-wdm-band.png" />
+            </a><figcaption class="image-caption">CWDM DWDM 波段</figcaption>
+            </figure>
+    </div>
+</div>
 <p>大致有以下種類的波段: (上圖來源於<a href="https://www.thefoa.org/tech/ref/basic/SMbands.html" target="_blank" rel="noopener noreffer ">Fiber Optic Network Optical Wavelength Transmission Bands</a>)</p>
 <ul>
 <li>O-band(1260 – 1360 nm): 低色散、短中距數據通信、PON 上行。</li>
@@ -242,17 +287,35 @@
 <blockquote>
 <p>上述的說明有可能隨著時間改變，像是 C 跟 L 現在已經很擁擠了，可能未來會找其他段去擴充之類的，可以參考<a href="https://yingdapc.com/zh-TW/%E5%85%89%E9%80%9A%E8%A8%8A3%E5%80%8B%E6%96%B0%E9%A0%BB%E6%AE%B5CE-CPP%E5%92%8CCL%E9%A0%BB%E6%AE%B5/" target="_blank" rel="noopener noreffer ">光通訊新頻段：CE、Cpp、C+L 頻段</a>。</p>
 </blockquote>
-<p>WDM 因為是有不同的波長，並且要同時跑在一個光纖上，所以通常會有 MUX/DEMUX (多工器/解多工器) 來做到這件事情，可以看到下圖: 圖片來自<a href="https://fibconet.com/zh-tw/what-does-wdm-and-dwdm-meaning/" target="_blank" rel="noopener noreffer ">MUX DEMUX 示意圖</a>
-<figure><img src="/images/transceiver/xcver-mux-demux-01.png"><figcaption>
-      <h4>MUX DEMUX 示意圖</h4>
-    </figcaption>
-</figure>
-
-<figure><img src="/images/transceiver/xcver-mux-demux-02.png"><figcaption>
-      <h4>MUX DEMUX Lane/Channel 示意圖</h4>
-    </figcaption>
-</figure>
-</p>
+<p>WDM 因為是有不同的波長，並且要同時跑在一個光纖上，所以通常會有 MUX/DEMUX (多工器/解多工器) 來做到這件事情，可以看到下圖: 圖片來自<a href="https://fibconet.com/zh-tw/what-does-wdm-and-dwdm-meaning/" target="_blank" rel="noopener noreffer ">MUX DEMUX 示意圖</a></p>
+<div style="display: flex; justify-content: center;">
+    <div style="width: 70%;">
+        <figure><a class="lightgallery" href="/images/transceiver/xcver-intro-01/xcver-mux-demux-01.png" title="/images/transceiver/xcver-intro-01/xcver-mux-demux-01.png" data-thumbnail="/images/transceiver/xcver-intro-01/xcver-mux-demux-01.png" data-sub-html="<h2>MUX DEMUX 示意圖</h2>">
+                <img
+                    class="lazyload"
+                    src="/svg/loading.min.svg"
+                    data-src="/images/transceiver/xcver-intro-01/xcver-mux-demux-01.png"
+                    data-srcset="/images/transceiver/xcver-intro-01/xcver-mux-demux-01.png, /images/transceiver/xcver-intro-01/xcver-mux-demux-01.png 1.5x, /images/transceiver/xcver-intro-01/xcver-mux-demux-01.png 2x"
+                    data-sizes="auto"
+                    alt="/images/transceiver/xcver-intro-01/xcver-mux-demux-01.png" />
+            </a><figcaption class="image-caption">MUX DEMUX 示意圖</figcaption>
+            </figure>
+    </div>
+</div>
+<div style="display: flex; justify-content: center;">
+    <div style="width: 70%;">
+        <figure><a class="lightgallery" href="/images/transceiver/xcver-intro-01/xcver-mux-demux-02.png" title="/images/transceiver/xcver-intro-01/xcver-mux-demux-02.png" data-thumbnail="/images/transceiver/xcver-intro-01/xcver-mux-demux-02.png" data-sub-html="<h2>MUX DEMUX Lane/Channel 示意圖</h2>">
+                <img
+                    class="lazyload"
+                    src="/svg/loading.min.svg"
+                    data-src="/images/transceiver/xcver-intro-01/xcver-mux-demux-02.png"
+                    data-srcset="/images/transceiver/xcver-intro-01/xcver-mux-demux-02.png, /images/transceiver/xcver-intro-01/xcver-mux-demux-02.png 1.5x, /images/transceiver/xcver-intro-01/xcver-mux-demux-02.png 2x"
+                    data-sizes="auto"
+                    alt="/images/transceiver/xcver-intro-01/xcver-mux-demux-02.png" />
+            </a><figcaption class="image-caption">MUX DEMUX Lane/Channel 示意圖</figcaption>
+            </figure>
+    </div>
+</div>
 <blockquote>
 <p>Lane 跟 Channel 會這樣畫是因為很多時候在 NIC 端會說 lane (Electrical)，而 WDM 會說是 channel (Optical)，混用的話也行反正聽得懂就好XD</p>
 </blockquote>
@@ -272,13 +335,22 @@
 <hr>
 <h2 id="pam4--wdm-應用">PAM4 &amp; WDM 應用</h2>
 <p>在 NRZ 小節那有提到過去都是使用 NRZ 技術去達到 100G，但現在已經進入了 400G/800G 甚至未來即將有 1.6T 的速率，這麼高速已經改採用 PAM4 了。</p>
-<p>拿 400G 來舉例子，CWDM4 有四個波長(1271 nm, 1291 nm, 1311 nm, 1331 nm)，在每個波長通道上應用更高速的 100 Gbps PAM4 調變。
-<figure><img src="/images/transceiver/xcver-pam4-cwdm4.png"><figcaption>
-      <h4>PAM4 應用在 CWDM4</h4>
-    </figcaption>
-</figure>
-
-如果是 100G 的話，就是每個 lane 改成 25G NRZ 就是了。</p>
+<p>拿 400G 來舉例子，CWDM4 有四個波長(1271 nm, 1291 nm, 1311 nm, 1331 nm)，在每個波長通道上應用更高速的 100 Gbps PAM4 調變。</p>
+<div style="display: flex; justify-content: center;">
+    <div style="width: 70%;">
+        <figure><a class="lightgallery" href="/images/transceiver/xcver-intro-01/xcver-pam4-cwdm4.png" title="/images/transceiver/xcver-intro-01/xcver-pam4-cwdm4.png" data-thumbnail="/images/transceiver/xcver-intro-01/xcver-pam4-cwdm4.png" data-sub-html="<h2>PAM4 應用在 CWDM4</h2>">
+                <img
+                    class="lazyload"
+                    src="/svg/loading.min.svg"
+                    data-src="/images/transceiver/xcver-intro-01/xcver-pam4-cwdm4.png"
+                    data-srcset="/images/transceiver/xcver-intro-01/xcver-pam4-cwdm4.png, /images/transceiver/xcver-intro-01/xcver-pam4-cwdm4.png 1.5x, /images/transceiver/xcver-intro-01/xcver-pam4-cwdm4.png 2x"
+                    data-sizes="auto"
+                    alt="/images/transceiver/xcver-intro-01/xcver-pam4-cwdm4.png" />
+            </a><figcaption class="image-caption">PAM4 應用在 CWDM4</figcaption>
+            </figure>
+    </div>
+</div>
+<p>如果是 100G 的話，就是每個 lane 改成 25G NRZ 就是了。</p>
 <blockquote>
 <p>圖中可以看到右邊只畫一條線，這張圖是拿 400G-FR4 (Farm Reach 4-lane) 當舉例，光纖只需要一對(2條)，所以會使用 LC 頭。當然還有其他型號之後會提到，如果超過一對(2條)的話，就需要改用 MPO 接頭了。</p>
 </blockquote>
@@ -336,12 +408,21 @@
 <p>看到 56 的意思就是最高 56Gbps 但實際就約 50Gbps，這邊就是 28 Gbaud 然後使用 PAM4 所以才有了 56Gbps。同樣的 Q 就是 4 lanes 所以這邊拼出來 (4x50G) 的速率就是比較不常見的 200G。</p>
 <h3 id="qsfp56-dd-qsfp-dd">QSFP56-DD (QSFP-DD)</h3>
 <p>這邊開始就是 400G 啦～ 型號的 DD 就是 Double Density，簡單講就是金手指那邊動了一下手腳，出現了第二排，所以就有了兩倍 bandwidth。
-可以看到下圖: (拍謝手邊剛好只有 800G 沒有 400G 但差不多啦)
-<figure><img src="/images/transceiver/xcver-DD-vs-nonDD.jpeg"><figcaption>
-      <h4>有無 DD 金手指差異</h4>
-    </figcaption>
-</figure>
-</p>
+可以看到下圖: (拍謝手邊剛好只有 800G 沒有 400G 但差不多啦)</p>
+<div style="display: flex; justify-content: center;">
+    <div style="width: 70%;">
+        <figure><a class="lightgallery" href="/images/transceiver/xcver-intro-01/xcver-DD-vs-nonDD.jpeg" title="/images/transceiver/xcver-intro-01/xcver-DD-vs-nonDD.jpeg" data-thumbnail="/images/transceiver/xcver-intro-01/xcver-DD-vs-nonDD.jpeg" data-sub-html="<h2>有無 DD 金手指差異</h2>">
+                <img
+                    class="lazyload"
+                    src="/svg/loading.min.svg"
+                    data-src="/images/transceiver/xcver-intro-01/xcver-DD-vs-nonDD.jpeg"
+                    data-srcset="/images/transceiver/xcver-intro-01/xcver-DD-vs-nonDD.jpeg, /images/transceiver/xcver-intro-01/xcver-DD-vs-nonDD.jpeg 1.5x, /images/transceiver/xcver-intro-01/xcver-DD-vs-nonDD.jpeg 2x"
+                    data-sizes="auto"
+                    alt="/images/transceiver/xcver-intro-01/xcver-DD-vs-nonDD.jpeg" />
+            </a><figcaption class="image-caption">有無 DD 金手指差異</figcaption>
+            </figure>
+    </div>
+</div>
 <p>前面有提到型號表示法 <code>光纖頭孔數 + SR/DR/FR/LR/ER/ZR + channel 數量</code> ，那光纖頭超過一個長相就是該圖這樣。</p>
 <p>DD 就是多了第二排金手指，圖中很明顯的長了一截，所以會有 8 lanes，那本來每個 lane 是 50G，所以 8x50G 就是現在的 400G 了。
 簡單講就是看 Q=4 ，型號有多了 DD 就是 4(Q)x2(DD)=8 lanes，然後每 lanes 是 56G (50G)，就 8x50G=400G。未來 OSFP 可能也會出 DD，但也有可能重新再設計。</p>
@@ -351,39 +432,75 @@
 一樣是 Q 四通道，每通道 112G，所以造就了 400G。</p>
 <p>到這邊就是 400G 了，可以看到現在技術再進步，已經將一個通道提高到 112G，
 那要特別注意的就是 QSFP112 跟 QSFP56-DD 雖然同樣是 400G，但是通道數不同，每個通道速率也都不一樣，甚至光纖線規格都不一樣了無法對齊，所以兩端互接是不會通的。
-看圖便知: (下方是光模的 datasheet <a href="https://www.edge-core.com/tw/products/transceiver-and-cables/?query_type_datarate=or&amp;filter_datarate=400g" target="_blank" rel="noopener noreffer ">官網</a>可以下載)
-<figure><img src="/images/transceiver/xcver-qsfp112toqsfp56dd.png"><figcaption>
-      <h4>QSFP112 與 QSFP56-DD 對接</h4>
-    </figcaption>
-</figure>
-</p>
+看圖便知: (下方是光模的 datasheet <a href="https://www.edge-core.com/tw/products/transceiver-and-cables/?query_type_datarate=or&amp;filter_datarate=400g" target="_blank" rel="noopener noreffer ">官網</a>可以下載)</p>
+<div style="display: flex; justify-content: center;">
+    <div style="width: 70%;">
+        <figure><a class="lightgallery" href="/images/transceiver/xcver-intro-01/xcver-qsfp112toqsfp56dd.png" title="/images/transceiver/xcver-intro-01/xcver-qsfp112toqsfp56dd.png" data-thumbnail="/images/transceiver/xcver-intro-01/xcver-qsfp112toqsfp56dd.png" data-sub-html="<h2>QSFP112 與 QSFP56-DD 對接</h2>">
+                <img
+                    class="lazyload"
+                    src="/svg/loading.min.svg"
+                    data-src="/images/transceiver/xcver-intro-01/xcver-qsfp112toqsfp56dd.png"
+                    data-srcset="/images/transceiver/xcver-intro-01/xcver-qsfp112toqsfp56dd.png, /images/transceiver/xcver-intro-01/xcver-qsfp112toqsfp56dd.png 1.5x, /images/transceiver/xcver-intro-01/xcver-qsfp112toqsfp56dd.png 2x"
+                    data-sizes="auto"
+                    alt="/images/transceiver/xcver-intro-01/xcver-qsfp112toqsfp56dd.png" />
+            </a><figcaption class="image-caption">QSFP112 與 QSFP56-DD 對接</figcaption>
+            </figure>
+    </div>
+</div>
 <blockquote>
 <p>有沒有順便發現 SR4/DR4 就是使用 MPO12，SR8/DR8 就是使用 MPO16 呢^^</p>
 </blockquote>
 <h3 id="qsfp112-dd">QSFP112-DD</h3>
 <p>這邊一樣可以借鑑前面的使用方式，Q 配上 DD 就有 8 lanes，然後每 lane 都是 112G (56G PAM4)，相乘一下就是 800G 了，對應的產品是 ET8002-SR8。</p>
 <p>那有另一款就是 ET8002-2DR4，這一個雖然看起來很像，但是 2DR4 就是有兩個光纖頭 (金手指差異那張圖)，該光模是分成兩個 400G 去做到的。
-長這樣: (此圖<a href="https://www.edge-core.com/tw/product/et8002-2dr4/" target="_blank" rel="noopener noreffer ">官網</a>可以下載的到)
-<figure><img src="/images/transceiver/xcver-et8002-2dr4.png"><figcaption>
-      <h4>ET8002-2DR4 構造</h4>
-    </figcaption>
-</figure>
-</p>
+長這樣: (此圖<a href="https://www.edge-core.com/tw/product/et8002-2dr4/" target="_blank" rel="noopener noreffer ">官網</a>可以下載的到)</p>
+<div style="display: flex; justify-content: center;">
+    <div style="width: 70%;">
+        <figure><a class="lightgallery" href="/images/transceiver/xcver-intro-01/xcver-et8002-2dr4.png" title="/images/transceiver/xcver-intro-01/xcver-et8002-2dr4.png" data-thumbnail="/images/transceiver/xcver-intro-01/xcver-et8002-2dr4.png" data-sub-html="<h2>ET8002-2DR4 構造</h2>">
+                <img
+                    class="lazyload"
+                    src="/svg/loading.min.svg"
+                    data-src="/images/transceiver/xcver-intro-01/xcver-et8002-2dr4.png"
+                    data-srcset="/images/transceiver/xcver-intro-01/xcver-et8002-2dr4.png, /images/transceiver/xcver-intro-01/xcver-et8002-2dr4.png 1.5x, /images/transceiver/xcver-intro-01/xcver-et8002-2dr4.png 2x"
+                    data-sizes="auto"
+                    alt="/images/transceiver/xcver-intro-01/xcver-et8002-2dr4.png" />
+            </a><figcaption class="image-caption">ET8002-2DR4 構造</figcaption>
+            </figure>
+    </div>
+</div>
 <h3 id="osfp112--osfp112-rhs">OSFP112 / OSFP112-RHS</h3>
 <p>這裡開始就出現新的封裝方式了，也就是 OSFP (Octal Small Form Factor Pluggable)，而 OSFP 是重新設計的，預設就有 8 (octal) lanes 了。</p>
 <p>那 OSFP112 的速率就是 8x112G 大約就是 800G 這個速率啦～</p>
-<p>在 OSFP 有分兩種，分法就是有沒有散熱鰭片在光模上。可以看到下圖: (圖中兩隻都是 OSFP112)
-<figure><img src="/images/transceiver/xcver-heat-top.jpeg"><figcaption>
-      <h4>有無散熱鰭片</h4>
-    </figcaption>
-</figure>
-</p>
-<p>在交換器上的孔大小也差很多，可以看到下圖: (圖中綠色的是 QSFP112-DD 可以看到放在 OSFP 插槽根本填不滿洞)
-<figure><img src="/images/transceiver/xcver-32O-32D.png"><figcaption>
-      <h4>800G 交換器 OSFP/QSFP cage 差異</h4>
-    </figcaption>
-</figure>
-</p>
+<p>在 OSFP 有分兩種，分法就是有沒有散熱鰭片在光模上。可以看到下圖: (圖中兩隻都是 OSFP112)</p>
+<div style="display: flex; justify-content: center;">
+    <div style="width: 70%;">
+        <figure><a class="lightgallery" href="/images/transceiver/xcver-intro-01/xcver-heat-top.jpeg" title="/images/transceiver/xcver-intro-01/xcver-heat-top.jpeg" data-thumbnail="/images/transceiver/xcver-intro-01/xcver-heat-top.jpeg" data-sub-html="<h2>有無散熱鰭片</h2>">
+                <img
+                    class="lazyload"
+                    src="/svg/loading.min.svg"
+                    data-src="/images/transceiver/xcver-intro-01/xcver-heat-top.jpeg"
+                    data-srcset="/images/transceiver/xcver-intro-01/xcver-heat-top.jpeg, /images/transceiver/xcver-intro-01/xcver-heat-top.jpeg 1.5x, /images/transceiver/xcver-intro-01/xcver-heat-top.jpeg 2x"
+                    data-sizes="auto"
+                    alt="/images/transceiver/xcver-intro-01/xcver-heat-top.jpeg" />
+            </a><figcaption class="image-caption">有無散熱鰭片</figcaption>
+            </figure>
+    </div>
+</div>
+<p>在交換器上的孔大小也差很多，可以看到下圖: (圖中綠色的是 QSFP112-DD 可以看到放在 OSFP 插槽根本填不滿洞)</p>
+<div style="display: flex; justify-content: center;">
+    <div style="width: 70%;">
+        <figure><a class="lightgallery" href="/images/transceiver/xcver-intro-01/xcver-32O-32D.png" title="/images/transceiver/xcver-intro-01/xcver-32O-32D.png" data-thumbnail="/images/transceiver/xcver-intro-01/xcver-32O-32D.png" data-sub-html="<h2>800G 交換器 OSFP/QSFP cage 差異</h2>">
+                <img
+                    class="lazyload"
+                    src="/svg/loading.min.svg"
+                    data-src="/images/transceiver/xcver-intro-01/xcver-32O-32D.png"
+                    data-srcset="/images/transceiver/xcver-intro-01/xcver-32O-32D.png, /images/transceiver/xcver-intro-01/xcver-32O-32D.png 1.5x, /images/transceiver/xcver-intro-01/xcver-32O-32D.png 2x"
+                    data-sizes="auto"
+                    alt="/images/transceiver/xcver-intro-01/xcver-32O-32D.png" />
+            </a><figcaption class="image-caption">800G 交換器 OSFP/QSFP cage 差異</figcaption>
+            </figure>
+    </div>
+</div>
 <p>至於 OSFP112-RHS 就是給 nvidia 網卡在用的，兩面都是平的，沒有散熱鰭片，全靠網卡去散熱。這邊可以參考 <a href="https://mp.weixin.qq.com/s/49GDjAUYjr5S9n5TpmNJyQ" target="_blank" rel="noopener noreffer ">英伟达OSFP 三种封装平替解决方案</a>
 (<del>400G 模組開始超燙</del>)</p>
 <h3 id="結論">結論</h3>
@@ -425,7 +542,7 @@
 或是使用測試設備去看光功率是否在正常數值或是不超過最大功率，這些都可以在光纖模組的 datasheet 看得到。<del>當然有些廠商說的最大功率可能會低於能接受的範圍，這就導致功率過大時會燒掉XD</del></p>
 <p>另外，Link 如果沒有 up 其實也可以檢查一下 low power(LP) mode，為了省電的關係有時候光模會自動關閉 TX/RX，這是 OS 端可能無法操作到的行為。</p>
 <hr>
-<h3 id="reference-參考文章">Reference 參考文章</h3>
+<h2 id="reference-參考文章">Reference 參考文章</h2>
 <p>非常感謝以下博主寫的文章讓小弟可以參考～</p>
 <ul>
 <li><a href="https://www.i-pex.com/zh-tw/library/article/what-is-pam" target="_blank" rel="noopener noreffer ">什麼是 PAMx （x=2，3，4&hellip;）信號技術？</a></li>
@@ -442,7 +559,7 @@
     <div class="post-info">
         <div class="post-info-line">
             <div class="post-info-mod">
-                <span>更新於 2025-05-06</span>
+                <span>更新於 2026-01-02</span>
             </div></div>
         <div class="post-info-line">
             <div class="post-info-md"></div>
@@ -466,7 +583,7 @@
                 Please enable JavaScript to view the comments powered by <a href="https://disqus.com/?ref_noscript">Disqus</a>.
             </noscript></div></article></div>
             </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.152.2">Hugo</a> 強力驅動 | 主題 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.3.0"><i class="far fa-kiss-wink-heart fa-fw" aria-hidden="true"></i> LoveIt</a>
+        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.154.5">Hugo</a> 強力驅動 | 主題 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.3.0"><i class="far fa-kiss-wink-heart fa-fw" aria-hidden="true"></i> LoveIt</a>
                 </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright fa-fw" aria-hidden="true"></i><span itemprop="copyrightYear">2024 - 2026</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/zh-tw/" target="_blank">seisokeii</a></span></div>
         </div>
     </footer></div>
