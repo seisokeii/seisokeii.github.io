@@ -22,10 +22,11 @@
   <meta name="twitter:description" content="每次看到 AIS800-64O 都不會是接滿的狀態… Transceiver 接滿的時候比一台機器還貴…
 近期很常遇到說不會安裝 SONiC 的人，想說就寫了一篇教學以後省得每次在傳教學文件…">
 <meta name="application-name" content="seisokeii の blog">
-<meta name="apple-mobile-web-app-title" content="seisokeii の blog"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+<meta name="apple-mobile-web-app-title" content="seisokeii の blog">
+<meta name="referrer" content="no-referrer" /><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://seisokeii.github.io/zh-tw/posts/sonic/sonic-installation-via-onie/" /><link rel="prev" href="https://seisokeii.github.io/zh-tw/posts/transceiver/transceiver-intro-01/" /><link rel="next" href="https://seisokeii.github.io/zh-tw/posts/transceiver/transceiver-intro-02/" /><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.1.1/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.1.1/css/all.min.css"></noscript><link rel="preload" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://seisokeii.github.io/zh-tw/posts/sonic/sonic-installation-via-onie/" /><link rel="prev" href="https://seisokeii.github.io/zh-tw/posts/transceiver/transceiver-intro-01/" /><link rel="next" href="https://seisokeii.github.io/zh-tw/posts/transceiver/transceiver-intro-02/" /><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css"></noscript><link rel="preload" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
         <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css"></noscript><script type="application/ld+json">
     {
         "@context": "http://schema.org",
@@ -35,7 +36,7 @@
         "mainEntityOfPage": {
             "@type": "WebPage",
             "@id": "https:\/\/seisokeii.github.io\/zh-tw\/posts\/sonic\/sonic-installation-via-onie\/"
-        },"genre": "posts","keywords": "ONIE, SONiC","wordcount":  1321 ,
+        },"genre": "posts","keywords": "ONIE, SONiC","wordcount":  1317 ,
         "url": "https:\/\/seisokeii.github.io\/zh-tw\/posts\/sonic\/sonic-installation-via-onie\/","datePublished": "2026-01-02T13:56:12+08:00","dateModified": "2026-06-14T19:53:07+08:00","publisher": {
             "@type": "Organization",
             "name": ""},"author": {
@@ -44,7 +45,18 @@
             },"description": ""
     }
     </script></head>
-    <body data-header-desktop="fixed" data-header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('dark' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'dark' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+    <body data-header-desktop="fixed" data-header-mobile="auto"><script>
+          const query = window.matchMedia('(prefers-color-scheme: dark)');
+          function applyTheme() {
+            let theme = window.localStorage?.getItem('theme') || 'dark';
+            let isDark = theme === 'dark' || (theme === 'auto' && query.matches);
+            document.body.setAttribute('theme', isDark? 'dark' : 'light');
+            document.body.setAttribute('cfg-theme', theme);
+          }
+
+          applyTheme();
+          query.addEventListener('change', applyTheme);
+        </script>
 
         <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
     <div class="header-wrapper">
@@ -55,18 +67,18 @@
             <div class="menu-inner"><a class="menu-item" href="/zh-tw/posts/"> 文章 </a><a class="menu-item" href="/zh-tw/tags/"> 標籤 </a><a class="menu-item" href="/zh-tw/categories/"> 分類 </a><a class="menu-item" href="/zh-tw/about/about"> About </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
                         <input type="text" placeholder="搜索文章標題或內容..." id="search-input-desktop">
                         <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
-                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
+                            <i class="fas fa-search" aria-hidden="true"></i>
                         </a>
                         <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
-                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
+                            <i class="fas fa-times-circle" aria-hidden="true"></i>
                         </a>
                         <span class="search-button search-loading" id="search-loading-desktop">
-                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+                            <i class="fas fa-spinner fa-spin" aria-hidden="true"></i>
                         </span>
                     </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切換主題">
-                    <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+                    <i class="fas fa-adjust" aria-hidden="true"></i>
                 </a><a href="javascript:void(0);" class="menu-item language" title="選擇語言">
-                    <i class="fa fa-globe fa-fw" aria-hidden="true"></i>                      
+                    <i class="fa fa-globe" aria-hidden="true"></i>
                     <select class="language-select" id="language-select-desktop" onchange="location = this.value;"><option value="/en/posts/sonic/sonic-installation-via-onie/">English</option><option value="/zh-tw/posts/sonic/sonic-installation-via-onie/" selected>繁體中文</option></select>
                 </a></div>
         </div>
@@ -85,22 +97,22 @@
                     <div class="search mobile" id="search-mobile">
                         <input type="text" placeholder="搜索文章標題或內容..." id="search-input-mobile">
                         <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
-                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
+                            <i class="fas fa-search" aria-hidden="true"></i>
                         </a>
                         <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
-                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
+                            <i class="fas fa-times-circle" aria-hidden="true"></i>
                         </a>
                         <span class="search-button search-loading" id="search-loading-mobile">
-                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+                            <i class="fas fa-spinner fa-spin" aria-hidden="true"></i>
                         </span>
                     </div>
                     <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
                         取消
                     </a>
                 </div><a class="menu-item" href="/zh-tw/posts/" title="">文章</a><a class="menu-item" href="/zh-tw/tags/" title="">標籤</a><a class="menu-item" href="/zh-tw/categories/" title="">分類</a><a class="menu-item" href="/zh-tw/about/about" title="">About</a><a href="javascript:void(0);" class="menu-item theme-switch" title="切換主題">
-                <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+                <i class="fas fa-adjust" aria-hidden="true"></i>
             </a><a href="javascript:void(0);" class="menu-item" title="選擇語言">
-                    <i class="fa fa-globe fa-fw" aria-hidden="true"></i>
+                    <i class="fa fa-globe" aria-hidden="true"></i>
                     <select class="language-select" onchange="location = this.value;"><option value="/en/posts/sonic/sonic-installation-via-onie/">English</option><option value="/zh-tw/posts/sonic/sonic-installation-via-onie/" selected>繁體中文</option></select>
                 </a></div>
     </div>
@@ -114,9 +126,9 @@
             <h2 class="toc-title">目錄</h2>
             <div class="toc-content" id="toc-content-auto"></div>
         </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">SONiC Image 安裝教學</h1><div class="post-meta">
-            <div class="post-meta-line"><span class="post-author"><a href="https://github.com/seisokeii" title="Author" target="_blank" rel="noopener noreffer author" class="author"><i class="fas fa-user-circle fa-fw" aria-hidden="true"></i>seisokeii</a></span>&nbsp;<span class="post-category">收錄於 <a href="/zh-tw/categories/sonic/"><i class="far fa-folder fa-fw" aria-hidden="true"></i>SONiC</a></span></div>
-            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2026-01-02">2026-01-02</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;約 1321 字&nbsp;
-                <i class="far fa-clock fa-fw" aria-hidden="true"></i>&nbsp;預計閱讀 3 分鐘&nbsp;</div>
+            <div class="post-meta-line"><span class="post-author"><a href="https://github.com/seisokeii" title="Author" target="_blank" rel="noopener noreffer author" class="author"><i class="fas fa-user-circle" aria-hidden="true"></i>seisokeii</a></span>&nbsp;<span class="post-category">收錄於 <a href="/zh-tw/categories/sonic/"><i class="far fa-folder" aria-hidden="true"></i>SONiC</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt" aria-hidden="true"></i>&nbsp;<time datetime="2026-01-02">2026-01-02</time>&nbsp;<i class="fas fa-pencil-alt" aria-hidden="true"></i>&nbsp;約 1317 字&nbsp;
+                <i class="far fa-clock" aria-hidden="true"></i>&nbsp;預計閱讀 3 分鐘&nbsp;</div>
         </div><div class="featured-image"><img
         class="lazyload"
         src="/svg/loading.min.svg"
@@ -484,21 +496,16 @@ Windows 的話自己想辦法不想寫^^</p>
 <p>當外出幫客人裝系統的時候如果沒有 HTTP Server 就可以用這招~<br>
 只要把檔案放在 <code>/Library/WebServer/Documents</code> 下就可以了，記得使用 <code>sudo</code> 去 copy<br>
 當然 Macbook 與 switch 都要互聯與設定 IP，直接拿一條 RJ45 與 Macbook 對接然後設定 IP 即可，就不多贅述了。</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">sudo apachectl start
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-shell">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="複製到剪貼板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">sudo apachectl start
 </span></span><span class="line"><span class="cl">sudo apachectl restart
 </span></span><span class="line"><span class="cl">sudo apachectl stop
-</span></span><span class="line"><span class="cl"><span class="c1"># 網站根目錄：/Library/WebServer/Documents</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div></div><div class="post-footer" id="post-footer">
+</span></span><span class="line"><span class="cl"><span class="c1"># 網站根目錄：/Library/WebServer/Documents</span></span></span></code></pre></div></div>
+</div><div class="post-footer" id="post-footer">
     <div class="post-info">
         <div class="post-info-line">
             <div class="post-info-mod">
@@ -507,34 +514,37 @@ Windows 的話自己想辦法不想寫^^</p>
         <div class="post-info-line">
             <div class="post-info-md"></div>
             <div class="post-info-share">
-                <span></span>
+                <span><a href="javascript:void(0);" title="分享到 X" data-sharer="x" data-url="https://seisokeii.github.io/zh-tw/posts/sonic/sonic-installation-via-onie/" data-title="SONiC Image 安裝教學" data-hashtags="ONIE,SONiC"><i class="fab fa-x-twitter" aria-hidden="true"></i></a><a href="javascript:void(0);" title="分享到 Threads" data-sharer="threads" data-url="https://seisokeii.github.io/zh-tw/posts/sonic/sonic-installation-via-onie/" data-title="SONiC Image 安裝教學"><i class="fab fa-threads" aria-hidden="true"></i></a><a href="javascript:void(0);" title="分享到 Diaspora" data-sharer="diaspora" data-url="https://seisokeii.github.io/zh-tw/posts/sonic/sonic-installation-via-onie/" data-title="SONiC Image 安裝教學" data-description=""><i class="fab fa-diaspora" aria-hidden="true"></i></a><a href="https://t.me/share/url?url=https%3a%2f%2fseisokeii.github.io%2fzh-tw%2fposts%2fsonic%2fsonic-installation-via-onie%2f&amp;text=SONiC%20Image%20%e5%ae%89%e8%a3%9d%e6%95%99%e5%ad%b8" target="_blank" title="分享到 Telegram"><i class="fab fa-telegram" aria-hidden="true"></i></a></span>
             </div>
         </div>
     </div>
 
     <div class="post-info-more">
-        <section class="post-tags"><i class="fas fa-tags fa-fw" aria-hidden="true"></i>&nbsp;<a href="/zh-tw/tags/onie/">ONIE</a>,&nbsp;<a href="/zh-tw/tags/sonic/">SONiC</a></section>
+        <section class="post-tags"><i class="fas fa-tags" aria-hidden="true"></i>&nbsp;<a href="/zh-tw/tags/onie/">ONIE</a>,&nbsp;<a href="/zh-tw/tags/sonic/">SONiC</a></section>
         <section>
             <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/zh-tw/">主頁</a></span>
         </section>
     </div>
 
-    <div class="post-nav"><a href="/zh-tw/posts/transceiver/transceiver-intro-01/" class="prev" rel="prev" title="Fiber Optic Transceiver Module 光纖收發器模組型號簡介"><i class="fas fa-angle-left fa-fw" aria-hidden="true"></i>Fiber Optic Transceiver Module 光纖收發器模組型號簡介</a>
-            <a href="/zh-tw/posts/transceiver/transceiver-intro-02/" class="next" rel="next" title="Fiber Optic Transceiver Module EEPROM 簡介">Fiber Optic Transceiver Module EEPROM 簡介<i class="fas fa-angle-right fa-fw" aria-hidden="true"></i></a></div>
+    <div class="post-nav"><a href="/zh-tw/posts/transceiver/transceiver-intro-01/" class="prev" rel="prev" title="Fiber Optic Transceiver Module 光纖收發器模組型號簡介"><i class="fas fa-angle-left" aria-hidden="true"></i>Fiber Optic Transceiver Module 光纖收發器模組型號簡介</a>
+            <a href="/zh-tw/posts/transceiver/transceiver-intro-02/" class="next" rel="next" title="Fiber Optic Transceiver Module EEPROM 簡介">Fiber Optic Transceiver Module EEPROM 簡介<i class="fas fa-angle-right" aria-hidden="true"></i></a></div>
 </div>
 <div id="comments"><div id="disqus_thread" class="comment"></div><noscript>
                 Please enable JavaScript to view the comments powered by <a href="https://disqus.com/?ref_noscript">Disqus</a>.
             </noscript></div></article></div>
             </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.154.5">Hugo</a> 強力驅動 | 主題 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.3.0"><i class="far fa-kiss-wink-heart fa-fw" aria-hidden="true"></i> LoveIt</a>
-                </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright fa-fw" aria-hidden="true"></i><span itemprop="copyrightYear">2024 - 2026</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/zh-tw/" target="_blank">seisokeii</a></span></div>
+        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.154.5">Hugo</a> 強力驅動 | 主題 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 1.0.0"><i class="far fa-kiss-wink-heart" aria-hidden="true"></i> LoveIt</a>
+                </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright" aria-hidden="true"></i><span itemprop="copyrightYear">2024 - 2026</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/zh-tw/" target="_blank">seisokeii</a></span></div>
         </div>
     </footer></div>
 
         <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到頂部">
-                <i class="fas fa-arrow-up fa-fw" aria-hidden="true"></i>
-            </a><a href="#" id="view-comments" class="fixed-button" title="查看評論">
-                <i class="fas fa-comment fa-fw" aria-hidden="true"></i>
+                <i class="fas fa-arrow-up" aria-hidden="true"></i>
             </a>
-        </div><script type="text/javascript" src="https://.disqus.com/embed.js" defer></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/autocomplete.js@0.38.1/dist/autocomplete.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lunr@2.3.9/lunr.min.js"></script><script type="text/javascript" src="/lib/lunr/lunr.stemmer.support.min.js"></script><script type="text/javascript" src="/lib/lunr/lunr.zh.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lazysizes@5.3.2/lazysizes.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/clipboard@2.0.11/dist/clipboard.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/sharer.js@0.5.1/sharer.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"複製到剪貼板","maxShownLines":30},"comment":{},"search":{"highlightTag":"em","lunrLanguageCode":"zh","lunrSegmentitURL":"/lib/lunr/lunr.segmentit.js","maxResultLength":10,"noResultsFound":"沒有找到結果","snippetLength":30}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+        </div>
+
+        <div id="fixed-buttons-hidden"><a href="#" id="view-comments" class="fixed-button" title="查看評論">
+                <i class="fas fa-comment" aria-hidden="true"></i>
+            </a>
+        </div><script src="https://.disqus.com/embed.js" defer></script><script src="https://cdn.jsdelivr.net/npm/autocomplete.js@0.38.1/dist/autocomplete.min.js"></script><script src="https://cdn.jsdelivr.net/npm/lunr@2.3.9/lunr.min.js"></script><script src="/lib/lunr/lunr.stemmer.support.min.js"></script><script src="/lib/lunr/lunr.zh.min.js"></script><script src="https://cdn.jsdelivr.net/npm/lazysizes@5.3.2/lazysizes.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.11/dist/clipboard.min.js"></script><script src="https://cdn.jsdelivr.net/npm/sharer.js@0.5.2/sharer.min.js"></script><script>window.config={"comment":{},"search":{"highlightTag":"em","lunrLanguageCode":"zh","lunrSegmentitURL":"/lib/lunr/lunr.segmentit.js","maxResultLength":10,"noResultsFound":"沒有找到結果","snippetLength":30}};</script><script src="/js/theme.js"></script></body>
 </html>

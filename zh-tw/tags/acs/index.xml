@@ -1,21 +1,22 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
-  <channel>
-    <title>ACS on seisokeii blog</title>
-    <link>https://seisokeii.github.io/zh-tw/tags/acs/</link>
-    <description>Recent content in ACS on seisokeii blog</description>
-    <generator>Hugo</generator>
-    <language>zh-TW</language>
-    <managingEditor>Noway@bimbimbambam (seisokeii)</managingEditor>
-    <webMaster>Noway@bimbimbambam (seisokeii)</webMaster>
-    <lastBuildDate>Tue, 06 May 2025 23:52:30 +0800</lastBuildDate>
-    <atom:link href="https://seisokeii.github.io/zh-tw/tags/acs/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>ACS 客製化降噪耳塞</title>
-      <link>https://seisokeii.github.io/zh-tw/posts/earplug/acs-earplug01/</link>
-      <pubDate>Sat, 20 Jul 2024 16:28:06 +0800</pubDate><author>Noway@bimbimbambam (seisokeii)</author>
-      <guid>https://seisokeii.github.io/zh-tw/posts/earplug/acs-earplug01/</guid>
-      <description>&lt;p&gt;上面這圖不用多說了吧~ 就是 ACS 客製化耳塞拿到的盒子，滿意外沒有很大XD&lt;/p&gt;&#xA;&lt;hr&gt;&#xA;&lt;p&gt;想說網路上很少人在分享這東東，就來分享一下唄。&lt;/p&gt;&#xA;&lt;p&gt;那為什麼會想客製化耳塞呢？ 主要是因為朋友會揪一些 hardstyle 的夜店場跟音樂節像是 Defqon.1、Intents、&amp;hellip;&#xA;之類的，然後耳膜可是非常脆弱的，我還不想要這麼快就失聰QQ&lt;/p&gt;</description>
-    </item>
-  </channel>
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title>ACS - 標籤 - seisokeii blog</title>
+        <link>https://seisokeii.github.io/zh-tw/tags/acs/</link>
+        <description>ACS - 標籤 - seisokeii blog</description>
+        <generator>Hugo -- gohugo.io</generator><language>zh-TW</language><managingEditor>Noway@bimbimbambam (seisokeii)</managingEditor>
+            <webMaster>Noway@bimbimbambam (seisokeii)</webMaster><lastBuildDate>Sat, 20 Jul 2024 16:28:06 &#43;0800</lastBuildDate><atom:link href="https://seisokeii.github.io/zh-tw/tags/acs/" rel="self" type="application/rss+xml" /><item>
+    <title>ACS 客製化降噪耳塞</title>
+    <link>https://seisokeii.github.io/zh-tw/posts/earplug/acs-earplug01/</link>
+    <pubDate>Sat, 20 Jul 2024 16:28:06 &#43;0800</pubDate>
+    <author>Noway@bimbimbambam (seisokeii)</author>
+    <guid>https://seisokeii.github.io/zh-tw/posts/earplug/acs-earplug01/</guid>
+    <description><![CDATA[<div class="featured-image">
+                <img src="/images/ACSEarplug/acs_earplug_box.png" referrerpolicy="no-referrer">
+            </div><p>上面這圖不用多說了吧~ 就是 ACS 客製化耳塞拿到的盒子，滿意外沒有很大XD</p>
+<hr>
+<p>想說網路上很少人在分享這東東，就來分享一下唄。</p>
+<p>那為什麼會想客製化耳塞呢？ 主要是因為朋友會揪一些 hardstyle 的夜店場跟音樂節像是 Defqon.1、Intents、&hellip;
+之類的，然後耳膜可是非常脆弱的，我還不想要這麼快就失聰QQ</p>]]></description>
+</item>
+</channel>
 </rss>

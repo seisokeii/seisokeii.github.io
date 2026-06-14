@@ -10,10 +10,10 @@
     <title>SONiC Image Installation Guide</title>
     <link>https://seisokeii.github.io/en/posts/sonic/sonic-installation-via-onie/</link>
     <pubDate>Fri, 02 Jan 2026 13:56:12 &#43;0800</pubDate>
-    <author>seisokeii</author>
+    <author>Noway@bimbimbambam (seisokeii)</author>
     <guid>https://seisokeii.github.io/en/posts/sonic/sonic-installation-via-onie/</guid>
     <description><![CDATA[<div class="featured-image">
-                <img src="/images/SONiC/installation/sonic-AIS800-64O-2pcs.png" referrerpolicy="no-referrer">
+                <img src="/images/SONiC/installation/sonic-ais800-64o-2pcs.png" referrerpolicy="no-referrer">
             </div><p>Every time I look at the AIS800-64O, it’s never fully populated… A full set of transceivers costs more than the switch itself.</p>
 <hr>
 <p>Lately I’ve often met people who don’t know how to install SONiC. To save time sending the same instructions over and over, here’s a simple walkthrough.</p>
@@ -24,10 +24,10 @@
     <title>SONiC Community Image Initial Setup</title>
     <link>https://seisokeii.github.io/en/posts/sonic/sonic-kvm-init-setup/</link>
     <pubDate>Tue, 24 Sep 2024 15:56:33 &#43;0800</pubDate>
-    <author>seisokeii</author>
+    <author>Noway@bimbimbambam (seisokeii)</author>
     <guid>https://seisokeii.github.io/en/posts/sonic/sonic-kvm-init-setup/</guid>
     <description><![CDATA[<div class="featured-image">
-                <img src="/images/SONiC/sonic-preview01.png" referrerpolicy="no-referrer">
+                <img src="/images/SONiC/community-init-gns3/sonic-preview01.png" referrerpolicy="no-referrer">
             </div><p>Above image is just for verifying some concepts then build a small Lab QQ</p>
 <hr>
 <p>In EVE-NG or GNS3 simulator, running the <a href="https://sonic.software/" target="_blank" rel="noopener noreffer ">SONiC KVM image</a> will leave a lot of settings after
@@ -39,7 +39,7 @@ need to use Ansible, pyATS, or Nornir yet. So I use shell script to solve it.</p
     <title>Open Network Install Environment (ONIE) How to build?</title>
     <link>https://seisokeii.github.io/en/posts/onie/onie-build/</link>
     <pubDate>Thu, 19 Sep 2024 17:03:33 &#43;0800</pubDate>
-    <author>seisokeii</author>
+    <author>Noway@bimbimbambam (seisokeii)</author>
     <guid>https://seisokeii.github.io/en/posts/onie/onie-build/</guid>
     <description><![CDATA[<div class="featured-image">
                 <img src="/images/ONIE/onie-dev-machine.jpeg" referrerpolicy="no-referrer">
@@ -55,7 +55,7 @@ look at how a network equipment manufacturer makes this thing.</p>
     <title>Open Network Install Environment (ONIE) Simple Introduction</title>
     <link>https://seisokeii.github.io/en/posts/onie/onie-intro/</link>
     <pubDate>Tue, 13 Aug 2024 17:39:33 &#43;0800</pubDate>
-    <author>seisokeii</author>
+    <author>Noway@bimbimbambam (seisokeii)</author>
     <guid>https://seisokeii.github.io/en/posts/onie/onie-intro/</guid>
     <description><![CDATA[<div class="featured-image">
                 <img src="/images/ONIE/onie-Gemini-Generated-ONIE.jpg" referrerpolicy="no-referrer">
@@ -69,7 +69,7 @@ device compatible with ONIE, which means making ONIE run on the new device.</p>]
     <title>ACS Custom Noise Cancelling Earplugs</title>
     <link>https://seisokeii.github.io/en/posts/earplug/acs-earplug01/</link>
     <pubDate>Sat, 20 Jul 2024 16:28:06 &#43;0800</pubDate>
-    <author>seisokeii</author>
+    <author>Noway@bimbimbambam (seisokeii)</author>
     <guid>https://seisokeii.github.io/en/posts/earplug/acs-earplug01/</guid>
     <description><![CDATA[<div class="featured-image">
                 <img src="/images/ACSEarplug/acs_earplug_box.png" referrerpolicy="no-referrer">
@@ -84,7 +84,7 @@ these reasons, I wanted to find a way to protect my ears.</p>]]></description>
     <title>Halo</title>
     <link>https://seisokeii.github.io/en/posts/halo/</link>
     <pubDate>Tue, 14 May 2024 22:20:52 &#43;0800</pubDate>
-    <author>seisokeii</author>
+    <author>Noway@bimbimbambam (seisokeii)</author>
     <guid>https://seisokeii.github.io/en/posts/halo/</guid>
     <description><![CDATA[<div class="featured-image">
                 <img src="/images/halo/sub-zero-project-halo.jpg" referrerpolicy="no-referrer">

@@ -21,10 +21,11 @@
   <meta name="twitter:description" content="上面這張圖就只是為了驗證一些概念而接上去的一個小小的 Lab 而已QQ
 在 EVE-NG 或 GNS3 模擬器中跑 SONiC KVM image，在開機後都會留下一大堆設定，每次拉一台新機器開機就要拔掉一堆設定有夠惱人。">
 <meta name="application-name" content="seisokeii の blog">
-<meta name="apple-mobile-web-app-title" content="seisokeii の blog"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+<meta name="apple-mobile-web-app-title" content="seisokeii の blog">
+<meta name="referrer" content="no-referrer" /><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://seisokeii.github.io/zh-tw/posts/sonic/sonic-kvm-init-setup/" /><link rel="prev" href="https://seisokeii.github.io/zh-tw/posts/onie/onie-build/" /><link rel="next" href="https://seisokeii.github.io/zh-tw/posts/internship/edgecore-intern/" /><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.1.1/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.1.1/css/all.min.css"></noscript><link rel="preload" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://seisokeii.github.io/zh-tw/posts/sonic/sonic-kvm-init-setup/" /><link rel="prev" href="https://seisokeii.github.io/zh-tw/posts/onie/onie-build/" /><link rel="next" href="https://seisokeii.github.io/zh-tw/posts/internship/edgecore-intern/" /><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css"></noscript><link rel="preload" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
         <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css"></noscript><script type="application/ld+json">
     {
         "@context": "http://schema.org",
@@ -34,7 +35,7 @@
         "mainEntityOfPage": {
             "@type": "WebPage",
             "@id": "https:\/\/seisokeii.github.io\/zh-tw\/posts\/sonic\/sonic-kvm-init-setup\/"
-        },"genre": "posts","keywords": "SONiC","wordcount":  1380 ,
+        },"genre": "posts","keywords": "SONiC","wordcount":  1312 ,
         "url": "https:\/\/seisokeii.github.io\/zh-tw\/posts\/sonic\/sonic-kvm-init-setup\/","datePublished": "2024-09-24T15:56:33+08:00","dateModified": "2026-06-14T19:53:07+08:00","publisher": {
             "@type": "Organization",
             "name": ""},"author": {
@@ -43,7 +44,18 @@
             },"description": ""
     }
     </script></head>
-    <body data-header-desktop="fixed" data-header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('dark' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'dark' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+    <body data-header-desktop="fixed" data-header-mobile="auto"><script>
+          const query = window.matchMedia('(prefers-color-scheme: dark)');
+          function applyTheme() {
+            let theme = window.localStorage?.getItem('theme') || 'dark';
+            let isDark = theme === 'dark' || (theme === 'auto' && query.matches);
+            document.body.setAttribute('theme', isDark? 'dark' : 'light');
+            document.body.setAttribute('cfg-theme', theme);
+          }
+
+          applyTheme();
+          query.addEventListener('change', applyTheme);
+        </script>
 
         <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
     <div class="header-wrapper">
@@ -54,18 +66,18 @@
             <div class="menu-inner"><a class="menu-item" href="/zh-tw/posts/"> 文章 </a><a class="menu-item" href="/zh-tw/tags/"> 標籤 </a><a class="menu-item" href="/zh-tw/categories/"> 分類 </a><a class="menu-item" href="/zh-tw/about/about"> About </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
                         <input type="text" placeholder="搜索文章標題或內容..." id="search-input-desktop">
                         <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
-                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
+                            <i class="fas fa-search" aria-hidden="true"></i>
                         </a>
                         <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
-                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
+                            <i class="fas fa-times-circle" aria-hidden="true"></i>
                         </a>
                         <span class="search-button search-loading" id="search-loading-desktop">
-                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+                            <i class="fas fa-spinner fa-spin" aria-hidden="true"></i>
                         </span>
                     </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切換主題">
-                    <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+                    <i class="fas fa-adjust" aria-hidden="true"></i>
                 </a><a href="javascript:void(0);" class="menu-item language" title="選擇語言">
-                    <i class="fa fa-globe fa-fw" aria-hidden="true"></i>                      
+                    <i class="fa fa-globe" aria-hidden="true"></i>
                     <select class="language-select" id="language-select-desktop" onchange="location = this.value;"><option value="/en/posts/sonic/sonic-kvm-init-setup/">English</option><option value="/zh-tw/posts/sonic/sonic-kvm-init-setup/" selected>繁體中文</option></select>
                 </a></div>
         </div>
@@ -84,22 +96,22 @@
                     <div class="search mobile" id="search-mobile">
                         <input type="text" placeholder="搜索文章標題或內容..." id="search-input-mobile">
                         <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
-                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
+                            <i class="fas fa-search" aria-hidden="true"></i>
                         </a>
                         <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
-                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
+                            <i class="fas fa-times-circle" aria-hidden="true"></i>
                         </a>
                         <span class="search-button search-loading" id="search-loading-mobile">
-                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+                            <i class="fas fa-spinner fa-spin" aria-hidden="true"></i>
                         </span>
                     </div>
                     <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
                         取消
                     </a>
                 </div><a class="menu-item" href="/zh-tw/posts/" title="">文章</a><a class="menu-item" href="/zh-tw/tags/" title="">標籤</a><a class="menu-item" href="/zh-tw/categories/" title="">分類</a><a class="menu-item" href="/zh-tw/about/about" title="">About</a><a href="javascript:void(0);" class="menu-item theme-switch" title="切換主題">
-                <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+                <i class="fas fa-adjust" aria-hidden="true"></i>
             </a><a href="javascript:void(0);" class="menu-item" title="選擇語言">
-                    <i class="fa fa-globe fa-fw" aria-hidden="true"></i>
+                    <i class="fa fa-globe" aria-hidden="true"></i>
                     <select class="language-select" onchange="location = this.value;"><option value="/en/posts/sonic/sonic-kvm-init-setup/">English</option><option value="/zh-tw/posts/sonic/sonic-kvm-init-setup/" selected>繁體中文</option></select>
                 </a></div>
     </div>
@@ -113,9 +125,9 @@
             <h2 class="toc-title">目錄</h2>
             <div class="toc-content" id="toc-content-auto"></div>
         </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">SONiC Community Image 初始化設定</h1><div class="post-meta">
-            <div class="post-meta-line"><span class="post-author"><a href="https://github.com/seisokeii" title="Author" target="_blank" rel="noopener noreffer author" class="author"><i class="fas fa-user-circle fa-fw" aria-hidden="true"></i>seisokeii</a></span>&nbsp;<span class="post-category">收錄於 <a href="/zh-tw/categories/sonic/"><i class="far fa-folder fa-fw" aria-hidden="true"></i>SONiC</a></span></div>
-            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2024-09-24">2024-09-24</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;約 1380 字&nbsp;
-                <i class="far fa-clock fa-fw" aria-hidden="true"></i>&nbsp;預計閱讀 3 分鐘&nbsp;</div>
+            <div class="post-meta-line"><span class="post-author"><a href="https://github.com/seisokeii" title="Author" target="_blank" rel="noopener noreffer author" class="author"><i class="fas fa-user-circle" aria-hidden="true"></i>seisokeii</a></span>&nbsp;<span class="post-category">收錄於 <a href="/zh-tw/categories/sonic/"><i class="far fa-folder" aria-hidden="true"></i>SONiC</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt" aria-hidden="true"></i>&nbsp;<time datetime="2024-09-24">2024-09-24</time>&nbsp;<i class="fas fa-pencil-alt" aria-hidden="true"></i>&nbsp;約 1312 字&nbsp;
+                <i class="far fa-clock" aria-hidden="true"></i>&nbsp;預計閱讀 3 分鐘&nbsp;</div>
         </div><div class="featured-image"><img
         class="lazyload"
         src="/svg/loading.min.svg"
@@ -156,71 +168,28 @@ patch，畢竟這種情況只能拿實體設備測試設定而已，有點麻煩
 <h2 id="1-刪除-interface-ip">1. 刪除 Interface IP</h2>
 <p>使用 <code>show ip int</code> 指令可以看到預設會列出一坨 interface 的資訊，然後會看到每個 interface 上都有一個 /31 的 IP。</p>
 <p>這時候可以參考以下腳本去寫一個刪除腳本:</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span><span class="lnt">5
-</span><span class="lnt">6
-</span><span class="lnt">7
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="cp">#!/bin/bash
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="複製到剪貼板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="cp">#!/bin/bash
 </span></span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="k">for</span> <span class="o">((</span><span class="nv">i</span> <span class="o">=</span> 1, <span class="nv">j</span> <span class="o">=</span> 0<span class="p">;</span> i &lt;<span class="o">=</span> 54, j &lt;<span class="o">=</span> 106<span class="p">;</span> i++, <span class="nv">j</span> <span class="o">+=</span> 2<span class="o">))</span><span class="p">;</span> <span class="k">do</span>
 </span></span><span class="line"><span class="cl">		sudo config interface ip remove Ethernet<span class="nv">$i</span> 10.0.0.<span class="nv">$j</span>/31
 </span></span><span class="line"><span class="cl"><span class="k">done</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">sudo config interface ip remove Loopback0 10.1.0.1/32
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>上面這個腳本中那個 <code>i</code> 要看你有幾個 Interface 跟是從 0 還是從 1 開始，就自己改吧。</p>
+</span></span><span class="line"><span class="cl">sudo config interface ip remove Loopback0 10.1.0.1/32</span></span></code></pre></div></div>
+<p>上面這個腳本中那個 <code>i</code> 要看你有幾個 Interface 跟是從 0 還是從 1 開始，就自己改吧。</p>
 <h2 id="2-刪除-frr-上的設定">2. 刪除 FRR 上的設定</h2>
 <p>接下來可以刪除 FRR 的設定，設定可以用 <code>show run bgp</code> 指令來看，預設會有一堆設定好的 neighbor 很礙眼&hellip;</p>
 <p>這邊可以參考以下腳本進行修改:</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span><span class="lnt">14
-</span><span class="lnt">15
-</span><span class="lnt">16
-</span><span class="lnt">17
-</span><span class="lnt">18
-</span><span class="lnt">19
-</span><span class="lnt">20
-</span><span class="lnt">21
-</span><span class="lnt">22
-</span><span class="lnt">23
-</span><span class="lnt">24
-</span><span class="lnt">25
-</span><span class="lnt">26
-</span><span class="lnt">27
-</span><span class="lnt">28
-</span><span class="lnt">29
-</span><span class="lnt">30
-</span><span class="lnt">31
-</span><span class="lnt">32
-</span><span class="lnt">33
-</span><span class="lnt">34
-</span><span class="lnt">35
-</span><span class="lnt">36
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="cp">#!/bin/bash
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="複製到剪貼板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="cp">#!/bin/bash
 </span></span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="k">for</span> <span class="o">((</span> <span class="nv">i</span><span class="o">=</span>1<span class="p">;</span> i&lt;<span class="o">=</span>107<span class="p">;</span> <span class="nv">i</span><span class="o">+=</span><span class="m">2</span> <span class="o">))</span>
 </span></span><span class="line"><span class="cl"><span class="k">do</span>
@@ -255,10 +224,8 @@ patch，畢竟這種情況只能拿實體設備測試設定而已，有點麻煩
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">vtysh -c <span class="s2">&#34;conf&#34;</span> -c <span class="s2">&#34;no route-map TO_BGP_PEER_V6&#34;</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">vtysh -c <span class="s2">&#34;conf&#34;</span> -c <span class="s2">&#34;no router bgp 65100&#34;</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>這個腳本其實就是看 <code>show run bgp</code> 的輸出，然後貼過來這邊就好， neighbor 的部分類似 interface 那樣記得修改。</p>
+</span></span><span class="line"><span class="cl">vtysh -c <span class="s2">&#34;conf&#34;</span> -c <span class="s2">&#34;no router bgp 65100&#34;</span></span></span></code></pre></div></div>
+<p>這個腳本其實就是看 <code>show run bgp</code> 的輸出，然後貼過來這邊就好， neighbor 的部分類似 interface 那樣記得修改。</p>
 <h2 id="3-刪除-config_dbjson-中的-bgp-相關設定">3. 刪除 config_db.json 中的 BGP 相關設定</h2>
 <p>剛剛已經刪除 FRR 的設定，但是 <code>config_db.json</code> 裡面就是會殘留設定QQ 沒有刪乾淨一樣會讓 SONiC 運作不正常。</p>
 <p>要刪除的有兩個地方:</p>
@@ -269,26 +236,12 @@ patch，畢竟這種情況只能拿實體設備測試設定而已，有點麻煩
 <li>
 <p>BGP_NEIGHBOR</p>
 <p>這邊最煩，因為有好幾十個鄰居的設定，打開 vi/vim 編輯器去修改吧</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span><span class="lnt">14
-</span><span class="lnt">15
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">admin@sonic$ sudo vi /etc/sonic/config_db.json <span class="c1"># 拜託記得要 sudo，不然好不容易刪完後會沒權限儲存</span>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="複製到剪貼板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">admin@sonic$ sudo vi /etc/sonic/config_db.json <span class="c1"># 拜託記得要 sudo，不然好不容易刪完後會沒權限儲存</span>
 </span></span><span class="line"><span class="cl">...
 </span></span><span class="line"><span class="cl"><span class="s2">&#34;BGP_DEVICE_GLOBAL&#34;</span>: <span class="o">{</span>
 </span></span><span class="line"><span class="cl">        <span class="s2">&#34;STATE&#34;</span>: <span class="o">{</span>
@@ -302,28 +255,17 @@ patch，畢竟這種情況只能拿實體設備測試設定而已，有點麻煩
 </span></span><span class="line"><span class="cl">        <span class="s2">&#34;Config&#34;</span>: <span class="o">{</span>
 </span></span><span class="line"><span class="cl">            <span class="s2">&#34;acl_counter_high_threshold&#34;</span>: <span class="s2">&#34;85&#34;</span>,
 </span></span><span class="line"><span class="cl">            <span class="s2">&#34;acl_counter_low_threshold&#34;</span>: <span class="s2">&#34;70&#34;</span>,
-</span></span><span class="line"><span class="cl">            ...
-</span></span></code></pre></td></tr></table>
-</div>
-</div></li>
+</span></span><span class="line"><span class="cl">            ...</span></span></code></pre></div></div>
+</li>
 <li>
 <p>DEVICE_METADATA 的 localhost</p>
 <p>這裡找到 <code>DEVICE_METADATA</code> 的 <code>localhost</code>， 刪除掉 <code>&quot;bgp_asn&quot;: &quot;65100&quot;,</code>，游標移到該行 dd 掉就可以了。</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">        <span class="s2">&#34;snat_entry_low_threshold&#34;</span>: <span class="s2">&#34;70&#34;</span>,
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="複製到剪貼板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">        <span class="s2">&#34;snat_entry_low_threshold&#34;</span>: <span class="s2">&#34;70&#34;</span>,
 </span></span><span class="line"><span class="cl">            <span class="s2">&#34;snat_entry_threshold_type&#34;</span>: <span class="s2">&#34;percentage&#34;</span>
 </span></span><span class="line"><span class="cl">        <span class="o">}</span>
 </span></span><span class="line"><span class="cl">    <span class="o">}</span>,
@@ -332,10 +274,8 @@ patch，畢竟這種情況只能拿實體設備測試設定而已，有點麻煩
 </span></span><span class="line"><span class="cl">            <span class="c1"># 請把 &#34;bgp_asn&#34;: &#34;65100&#34;, 刪除</span>
 </span></span><span class="line"><span class="cl">            <span class="s2">&#34;buffer_model&#34;</span>: <span class="s2">&#34;traditional&#34;</span>,
 </span></span><span class="line"><span class="cl">            <span class="s2">&#34;default_bgp_status&#34;</span>: <span class="s2">&#34;up&#34;</span>,
-</span></span><span class="line"><span class="cl">            <span class="s2">&#34;default_pfcwd_status&#34;</span>: <span class="s2">&#34;disable&#34;</span>,
-</span></span></code></pre></td></tr></table>
-</div>
-</div></li>
+</span></span><span class="line"><span class="cl">            <span class="s2">&#34;default_pfcwd_status&#34;</span>: <span class="s2">&#34;disable&#34;</span>,</span></span></code></pre></div></div>
+</li>
 </ol>
 <p>以上就是要修改的。</p>
 <span style="color: red"> 
@@ -360,34 +300,37 @@ patch，畢竟這種情況只能拿實體設備測試設定而已，有點麻煩
         <div class="post-info-line">
             <div class="post-info-md"></div>
             <div class="post-info-share">
-                <span></span>
+                <span><a href="javascript:void(0);" title="分享到 X" data-sharer="x" data-url="https://seisokeii.github.io/zh-tw/posts/sonic/sonic-kvm-init-setup/" data-title="SONiC Community Image 初始化設定" data-hashtags="SONiC"><i class="fab fa-x-twitter" aria-hidden="true"></i></a><a href="javascript:void(0);" title="分享到 Threads" data-sharer="threads" data-url="https://seisokeii.github.io/zh-tw/posts/sonic/sonic-kvm-init-setup/" data-title="SONiC Community Image 初始化設定"><i class="fab fa-threads" aria-hidden="true"></i></a><a href="javascript:void(0);" title="分享到 Diaspora" data-sharer="diaspora" data-url="https://seisokeii.github.io/zh-tw/posts/sonic/sonic-kvm-init-setup/" data-title="SONiC Community Image 初始化設定" data-description=""><i class="fab fa-diaspora" aria-hidden="true"></i></a><a href="https://t.me/share/url?url=https%3a%2f%2fseisokeii.github.io%2fzh-tw%2fposts%2fsonic%2fsonic-kvm-init-setup%2f&amp;text=SONiC%20Community%20Image%20%e5%88%9d%e5%a7%8b%e5%8c%96%e8%a8%ad%e5%ae%9a" target="_blank" title="分享到 Telegram"><i class="fab fa-telegram" aria-hidden="true"></i></a></span>
             </div>
         </div>
     </div>
 
     <div class="post-info-more">
-        <section class="post-tags"><i class="fas fa-tags fa-fw" aria-hidden="true"></i>&nbsp;<a href="/zh-tw/tags/sonic/">SONiC</a></section>
+        <section class="post-tags"><i class="fas fa-tags" aria-hidden="true"></i>&nbsp;<a href="/zh-tw/tags/sonic/">SONiC</a></section>
         <section>
             <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/zh-tw/">主頁</a></span>
         </section>
     </div>
 
-    <div class="post-nav"><a href="/zh-tw/posts/onie/onie-build/" class="prev" rel="prev" title="Open Network Install Environment (ONIE) How to build?"><i class="fas fa-angle-left fa-fw" aria-hidden="true"></i>Open Network Install Environment (ONIE) How to build?</a>
-            <a href="/zh-tw/posts/internship/edgecore-intern/" class="next" rel="next" title="碩班時期公司實習心得">碩班時期公司實習心得<i class="fas fa-angle-right fa-fw" aria-hidden="true"></i></a></div>
+    <div class="post-nav"><a href="/zh-tw/posts/onie/onie-build/" class="prev" rel="prev" title="Open Network Install Environment (ONIE) How to build?"><i class="fas fa-angle-left" aria-hidden="true"></i>Open Network Install Environment (ONIE) How to build?</a>
+            <a href="/zh-tw/posts/internship/edgecore-intern/" class="next" rel="next" title="碩班時期公司實習心得">碩班時期公司實習心得<i class="fas fa-angle-right" aria-hidden="true"></i></a></div>
 </div>
 <div id="comments"><div id="disqus_thread" class="comment"></div><noscript>
                 Please enable JavaScript to view the comments powered by <a href="https://disqus.com/?ref_noscript">Disqus</a>.
             </noscript></div></article></div>
             </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.154.5">Hugo</a> 強力驅動 | 主題 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.3.0"><i class="far fa-kiss-wink-heart fa-fw" aria-hidden="true"></i> LoveIt</a>
-                </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright fa-fw" aria-hidden="true"></i><span itemprop="copyrightYear">2024 - 2026</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/zh-tw/" target="_blank">seisokeii</a></span></div>
+        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.154.5">Hugo</a> 強力驅動 | 主題 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 1.0.0"><i class="far fa-kiss-wink-heart" aria-hidden="true"></i> LoveIt</a>
+                </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright" aria-hidden="true"></i><span itemprop="copyrightYear">2024 - 2026</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/zh-tw/" target="_blank">seisokeii</a></span></div>
         </div>
     </footer></div>
 
         <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到頂部">
-                <i class="fas fa-arrow-up fa-fw" aria-hidden="true"></i>
-            </a><a href="#" id="view-comments" class="fixed-button" title="查看評論">
-                <i class="fas fa-comment fa-fw" aria-hidden="true"></i>
+                <i class="fas fa-arrow-up" aria-hidden="true"></i>
             </a>
-        </div><script type="text/javascript" src="https://.disqus.com/embed.js" defer></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/autocomplete.js@0.38.1/dist/autocomplete.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lunr@2.3.9/lunr.min.js"></script><script type="text/javascript" src="/lib/lunr/lunr.stemmer.support.min.js"></script><script type="text/javascript" src="/lib/lunr/lunr.zh.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lazysizes@5.3.2/lazysizes.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/clipboard@2.0.11/dist/clipboard.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/sharer.js@0.5.1/sharer.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"複製到剪貼板","maxShownLines":30},"comment":{},"search":{"highlightTag":"em","lunrLanguageCode":"zh","lunrSegmentitURL":"/lib/lunr/lunr.segmentit.js","maxResultLength":10,"noResultsFound":"沒有找到結果","snippetLength":30}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+        </div>
+
+        <div id="fixed-buttons-hidden"><a href="#" id="view-comments" class="fixed-button" title="查看評論">
+                <i class="fas fa-comment" aria-hidden="true"></i>
+            </a>
+        </div><script src="https://.disqus.com/embed.js" defer></script><script src="https://cdn.jsdelivr.net/npm/autocomplete.js@0.38.1/dist/autocomplete.min.js"></script><script src="https://cdn.jsdelivr.net/npm/lunr@2.3.9/lunr.min.js"></script><script src="/lib/lunr/lunr.stemmer.support.min.js"></script><script src="/lib/lunr/lunr.zh.min.js"></script><script src="https://cdn.jsdelivr.net/npm/lazysizes@5.3.2/lazysizes.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.11/dist/clipboard.min.js"></script><script src="https://cdn.jsdelivr.net/npm/sharer.js@0.5.2/sharer.min.js"></script><script>window.config={"comment":{},"search":{"highlightTag":"em","lunrLanguageCode":"zh","lunrSegmentitURL":"/lib/lunr/lunr.segmentit.js","maxResultLength":10,"noResultsFound":"沒有找到結果","snippetLength":30}};</script><script src="/js/theme.js"></script></body>
 </html>

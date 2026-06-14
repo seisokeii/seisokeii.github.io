@@ -26,10 +26,11 @@ Following the previous article ONIE Simple Introduction, let’s briefly share h
 This will be similar to a tutorial, but of course it’s impossible to put company information here~ It’s just a general look at how a network equipment manufacturer makes this thing.
 Preparation - Prepare the development environment Honestly, the development environment is just a standard Linux machine, I use a virtual machine~">
 <meta name="application-name" content="seisokeii の blog">
-<meta name="apple-mobile-web-app-title" content="seisokeii の blog"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+<meta name="apple-mobile-web-app-title" content="seisokeii の blog">
+<meta name="referrer" content="no-referrer" /><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://seisokeii.github.io/en/posts/onie/onie-build/" /><link rel="prev" href="https://seisokeii.github.io/en/posts/onie/onie-intro/" /><link rel="next" href="https://seisokeii.github.io/en/posts/sonic/sonic-kvm-init-setup/" /><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.1.1/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.1.1/css/all.min.css"></noscript><link rel="preload" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://seisokeii.github.io/en/posts/onie/onie-build/" /><link rel="prev" href="https://seisokeii.github.io/en/posts/onie/onie-intro/" /><link rel="next" href="https://seisokeii.github.io/en/posts/sonic/sonic-kvm-init-setup/" /><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css"></noscript><link rel="preload" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
         <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css"></noscript><script type="application/ld+json">
     {
         "@context": "http://schema.org",
@@ -39,7 +40,7 @@ Preparation - Prepare the development environment Honestly, the development envi
         "mainEntityOfPage": {
             "@type": "WebPage",
             "@id": "https:\/\/seisokeii.github.io\/en\/posts\/onie\/onie-build\/"
-        },"genre": "posts","keywords": "ONIE, SONiC","wordcount":  1464 ,
+        },"genre": "posts","keywords": "ONIE, SONiC","wordcount":  1432 ,
         "url": "https:\/\/seisokeii.github.io\/en\/posts\/onie\/onie-build\/","datePublished": "2024-09-19T17:03:33+08:00","dateModified": "2025-05-06T23:52:30+08:00","publisher": {
             "@type": "Organization",
             "name": ""},"author": {
@@ -48,7 +49,18 @@ Preparation - Prepare the development environment Honestly, the development envi
             },"description": ""
     }
     </script></head>
-    <body data-header-desktop="fixed" data-header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('dark' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'dark' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+    <body data-header-desktop="fixed" data-header-mobile="auto"><script>
+          const query = window.matchMedia('(prefers-color-scheme: dark)');
+          function applyTheme() {
+            let theme = window.localStorage?.getItem('theme') || 'dark';
+            let isDark = theme === 'dark' || (theme === 'auto' && query.matches);
+            document.body.setAttribute('theme', isDark? 'dark' : 'light');
+            document.body.setAttribute('cfg-theme', theme);
+          }
+
+          applyTheme();
+          query.addEventListener('change', applyTheme);
+        </script>
 
         <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
     <div class="header-wrapper">
@@ -59,18 +71,18 @@ Preparation - Prepare the development environment Honestly, the development envi
             <div class="menu-inner"><a class="menu-item" href="/en/posts/"> Posts </a><a class="menu-item" href="/en/tags/"> Tags </a><a class="menu-item" href="/en/categories/"> Categories </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
                         <input type="text" placeholder="Search titles or contents..." id="search-input-desktop">
                         <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="Search">
-                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
+                            <i class="fas fa-search" aria-hidden="true"></i>
                         </a>
                         <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="Clear">
-                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
+                            <i class="fas fa-times-circle" aria-hidden="true"></i>
                         </a>
                         <span class="search-button search-loading" id="search-loading-desktop">
-                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+                            <i class="fas fa-spinner fa-spin" aria-hidden="true"></i>
                         </span>
                     </span><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
-                    <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+                    <i class="fas fa-adjust" aria-hidden="true"></i>
                 </a><a href="javascript:void(0);" class="menu-item language" title="Select Language">
-                    <i class="fa fa-globe fa-fw" aria-hidden="true"></i>                      
+                    <i class="fa fa-globe" aria-hidden="true"></i>
                     <select class="language-select" id="language-select-desktop" onchange="location = this.value;"><option value="/en/posts/onie/onie-build/" selected>English</option><option value="/zh-tw/posts/onie/onie-build/">繁體中文</option></select>
                 </a></div>
         </div>
@@ -89,22 +101,22 @@ Preparation - Prepare the development environment Honestly, the development envi
                     <div class="search mobile" id="search-mobile">
                         <input type="text" placeholder="Search titles or contents..." id="search-input-mobile">
                         <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="Search">
-                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
+                            <i class="fas fa-search" aria-hidden="true"></i>
                         </a>
                         <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="Clear">
-                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
+                            <i class="fas fa-times-circle" aria-hidden="true"></i>
                         </a>
                         <span class="search-button search-loading" id="search-loading-mobile">
-                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+                            <i class="fas fa-spinner fa-spin" aria-hidden="true"></i>
                         </span>
                     </div>
                     <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
                         Cancel
                     </a>
                 </div><a class="menu-item" href="/en/posts/" title="">Posts</a><a class="menu-item" href="/en/tags/" title="">Tags</a><a class="menu-item" href="/en/categories/" title="">Categories</a><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
-                <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+                <i class="fas fa-adjust" aria-hidden="true"></i>
             </a><a href="javascript:void(0);" class="menu-item" title="Select Language">
-                    <i class="fa fa-globe fa-fw" aria-hidden="true"></i>
+                    <i class="fa fa-globe" aria-hidden="true"></i>
                     <select class="language-select" onchange="location = this.value;"><option value="/en/posts/onie/onie-build/" selected>English</option><option value="/zh-tw/posts/onie/onie-build/">繁體中文</option></select>
                 </a></div>
     </div>
@@ -118,9 +130,9 @@ Preparation - Prepare the development environment Honestly, the development envi
             <h2 class="toc-title">Contents</h2>
             <div class="toc-content" id="toc-content-auto"></div>
         </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">Open Network Install Environment (ONIE) How to build?</h1><div class="post-meta">
-            <div class="post-meta-line"><span class="post-author"><a href="https://github.com/seisokeii" title="Author" target="_blank" rel="noopener noreffer author" class="author"><i class="fas fa-user-circle fa-fw" aria-hidden="true"></i>seisokeii</a></span>&nbsp;<span class="post-category">included in <a href="/en/categories/onie/"><i class="far fa-folder fa-fw" aria-hidden="true"></i>ONIE</a></span></div>
-            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2024-09-19">2024-09-19</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;1464 words&nbsp;
-                <i class="far fa-clock fa-fw" aria-hidden="true"></i>&nbsp;7 minutes&nbsp;</div>
+            <div class="post-meta-line"><span class="post-author"><a href="https://github.com/seisokeii" title="Author" target="_blank" rel="noopener noreffer author" class="author"><i class="fas fa-user-circle" aria-hidden="true"></i>seisokeii</a></span>&nbsp;<span class="post-category">included in <a href="/en/categories/onie/"><i class="far fa-folder" aria-hidden="true"></i>ONIE</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt" aria-hidden="true"></i>&nbsp;<time datetime="2024-09-19">2024-09-19</time>&nbsp;<i class="fas fa-pencil-alt" aria-hidden="true"></i>&nbsp;1432 words&nbsp;
+                <i class="far fa-clock" aria-hidden="true"></i>&nbsp;7 minutes&nbsp;</div>
         </div><div class="featured-image"><img
         class="lazyload"
         src="/svg/loading.min.svg"
@@ -246,25 +258,12 @@ corresponding patch files, and then rebuild.</p>
 the space between uboot and onie. You can refer to the linux kernel DTS file in fw_printenv, and all space refers to
 uboot + onie</p>
 <p>After that, you can modify the U-boot parameters, the commands are roughly as follows:</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span><span class="lnt">14
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">setenv bootcmd &#39;run check_boot_reason; run nos_bootcmd; run onie_install&#39;
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-text">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="Copy to clipboard"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">setenv bootcmd &#39;run check_boot_reason; run nos_bootcmd; run onie_install&#39;
 </span></span><span class="line"><span class="cl">setenv consoledev &#39;ttyS0&#39;
 </span></span><span class="line"><span class="cl">setenv baudrate &#39;115200&#39;
 </span></span><span class="line"><span class="cl">setenv onie_platform &#39;arm64-sukablyad-r0&#39;
@@ -277,34 +276,15 @@ uboot + onie</p>
 </span></span><span class="line"><span class="cl">setenv nos_bootcmd &#39;echo&#39;
 </span></span><span class="line"><span class="cl">setenv onie_bootcmd &#39;echo Loading Open Network Install Environment ...; echo Platform: $onie_platform ; usb start ; fatload usb 0:1 0x10000000 sukablyad-r0.itb &amp;&amp; run onie_args &amp;&amp; bootm 0x10000000&#39;
 </span></span><span class="line"><span class="cl">setenv onie_boot_reason &#39;install&#39;
-</span></span><span class="line"><span class="cl">saveenv
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>After adding these, you can enter ONIE again and execute the updater file. After execution, you will find that both
+</span></span><span class="line"><span class="cl">saveenv</span></span></code></pre></div></div>
+<p>After adding these, you can enter ONIE again and execute the updater file. After execution, you will find that both
 U-boot and ONIE can be updated through the updater file.</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span><span class="lnt">14
-</span><span class="lnt">15
-</span><span class="lnt">16
-</span><span class="lnt">17
-</span><span class="lnt">18
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">ONIE:/tmp # ./onie-updater-arm64-sukablyad-r0
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-text">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="Copy to clipboard"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">ONIE:/tmp # ./onie-updater-arm64-sukablyad-r0
 </span></span><span class="line"><span class="cl">Verifying image checksum ... OK.
 </span></span><span class="line"><span class="cl">Preparing image archive ... OK.
 </span></span><span class="line"><span class="cl">ONIE: Version       : 2020.02.00.00-dirty
@@ -321,10 +301,8 @@ U-boot and ONIE can be updated through the updater file.</p>
 </span></span><span class="line"><span class="cl">Erasing block: 414/414 (100%)
 </span></span><span class="line"><span class="cl">Writing kb: 1653/1653 (100%)
 </span></span><span class="line"><span class="cl">Verifying kb: 1653/1653 (100%)
-</span></span><span class="line"><span class="cl">ONIE:/tmp #
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>For engineers, ONIE is considered complete at this point.</p>
+</span></span><span class="line"><span class="cl">ONIE:/tmp #</span></span></code></pre></div></div>
+<p>For engineers, ONIE is considered complete at this point.</p>
 <h2 id="conclusion">Conclusion</h2>
 <p>I omit a lot of detail here, but the general process is to get the files, then find the parameters to build an ONIE.</p>
 <p>Company seems to have only one department doing this, but new devices appear quickly, and the RD department is also
@@ -352,34 +330,37 @@ are and how they work XD</p>
         <div class="post-info-line">
             <div class="post-info-md"></div>
             <div class="post-info-share">
-                <span></span>
+                <span><a href="javascript:void(0);" title="Share on X" data-sharer="x" data-url="https://seisokeii.github.io/en/posts/onie/onie-build/" data-title="Open Network Install Environment (ONIE) How to build?" data-hashtags="ONIE,SONiC"><i class="fab fa-x-twitter" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Threads" data-sharer="threads" data-url="https://seisokeii.github.io/en/posts/onie/onie-build/" data-title="Open Network Install Environment (ONIE) How to build?"><i class="fab fa-threads" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Diaspora" data-sharer="diaspora" data-url="https://seisokeii.github.io/en/posts/onie/onie-build/" data-title="Open Network Install Environment (ONIE) How to build?" data-description=""><i class="fab fa-diaspora" aria-hidden="true"></i></a><a href="https://t.me/share/url?url=https%3a%2f%2fseisokeii.github.io%2fen%2fposts%2fonie%2fonie-build%2f&amp;text=Open%20Network%20Install%20Environment%20%28ONIE%29%20How%20to%20build%3f" target="_blank" title="Share on Telegram"><i class="fab fa-telegram" aria-hidden="true"></i></a></span>
             </div>
         </div>
     </div>
 
     <div class="post-info-more">
-        <section class="post-tags"><i class="fas fa-tags fa-fw" aria-hidden="true"></i>&nbsp;<a href="/en/tags/onie/">ONIE</a>,&nbsp;<a href="/en/tags/sonic/">SONiC</a></section>
+        <section class="post-tags"><i class="fas fa-tags" aria-hidden="true"></i>&nbsp;<a href="/en/tags/onie/">ONIE</a>,&nbsp;<a href="/en/tags/sonic/">SONiC</a></section>
         <section>
             <span><a href="javascript:void(0);" onclick="window.history.back();">Back</a></span>&nbsp;|&nbsp;<span><a href="/en/">Home</a></span>
         </section>
     </div>
 
-    <div class="post-nav"><a href="/en/posts/onie/onie-intro/" class="prev" rel="prev" title="Open Network Install Environment (ONIE) Simple Introduction"><i class="fas fa-angle-left fa-fw" aria-hidden="true"></i>Open Network Install Environment (ONIE) Simple Introduction</a>
-            <a href="/en/posts/sonic/sonic-kvm-init-setup/" class="next" rel="next" title="SONiC Community Image Initial Setup">SONiC Community Image Initial Setup<i class="fas fa-angle-right fa-fw" aria-hidden="true"></i></a></div>
+    <div class="post-nav"><a href="/en/posts/onie/onie-intro/" class="prev" rel="prev" title="Open Network Install Environment (ONIE) Simple Introduction"><i class="fas fa-angle-left" aria-hidden="true"></i>Open Network Install Environment (ONIE) Simple Introduction</a>
+            <a href="/en/posts/sonic/sonic-kvm-init-setup/" class="next" rel="next" title="SONiC Community Image Initial Setup">SONiC Community Image Initial Setup<i class="fas fa-angle-right" aria-hidden="true"></i></a></div>
 </div>
 <div id="comments"><div id="disqus_thread" class="comment"></div><noscript>
                 Please enable JavaScript to view the comments powered by <a href="https://disqus.com/?ref_noscript">Disqus</a>.
             </noscript></div></article></div>
             </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line">Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.154.5">Hugo</a> | Theme - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.3.0"><i class="far fa-kiss-wink-heart fa-fw" aria-hidden="true"></i> LoveIt</a>
-                </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright fa-fw" aria-hidden="true"></i><span itemprop="copyrightYear">2024 - 2026</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/en/" target="_blank">seisokeii</a></span></div>
+        <div class="footer-container"><div class="footer-line">Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.154.5">Hugo</a> | Theme - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 1.0.0"><i class="far fa-kiss-wink-heart" aria-hidden="true"></i> LoveIt</a>
+                </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright" aria-hidden="true"></i><span itemprop="copyrightYear">2024 - 2026</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/en/" target="_blank">seisokeii</a></span></div>
         </div>
     </footer></div>
 
         <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="Back to Top">
-                <i class="fas fa-arrow-up fa-fw" aria-hidden="true"></i>
-            </a><a href="#" id="view-comments" class="fixed-button" title="View Comments">
-                <i class="fas fa-comment fa-fw" aria-hidden="true"></i>
+                <i class="fas fa-arrow-up" aria-hidden="true"></i>
             </a>
-        </div><script type="text/javascript" src="https://.disqus.com/embed.js" defer></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/autocomplete.js@0.38.1/dist/autocomplete.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lunr@2.3.9/lunr.min.js"></script><script type="text/javascript" src="/lib/lunr/lunr.stemmer.support.min.js"></script><script type="text/javascript" src="/lib/lunr/lunr.zh.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lazysizes@5.3.2/lazysizes.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/clipboard@2.0.11/dist/clipboard.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/sharer.js@0.5.1/sharer.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":30},"comment":{},"search":{"highlightTag":"em","lunrLanguageCode":"en","lunrSegmentitURL":"/lib/lunr/lunr.segmentit.js","maxResultLength":10,"noResultsFound":"No results found","snippetLength":30}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+        </div>
+
+        <div id="fixed-buttons-hidden"><a href="#" id="view-comments" class="fixed-button" title="View Comments">
+                <i class="fas fa-comment" aria-hidden="true"></i>
+            </a>
+        </div><script src="https://.disqus.com/embed.js" defer></script><script src="https://cdn.jsdelivr.net/npm/autocomplete.js@0.38.1/dist/autocomplete.min.js"></script><script src="https://cdn.jsdelivr.net/npm/lunr@2.3.9/lunr.min.js"></script><script src="/lib/lunr/lunr.stemmer.support.min.js"></script><script src="/lib/lunr/lunr.zh.min.js"></script><script src="https://cdn.jsdelivr.net/npm/lazysizes@5.3.2/lazysizes.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.11/dist/clipboard.min.js"></script><script src="https://cdn.jsdelivr.net/npm/sharer.js@0.5.2/sharer.min.js"></script><script>window.config={"comment":{},"search":{"highlightTag":"em","lunrLanguageCode":"en","lunrSegmentitURL":"/lib/lunr/lunr.segmentit.js","maxResultLength":10,"noResultsFound":"No results found","snippetLength":30}};</script><script src="/js/theme.js"></script></body>
 </html>

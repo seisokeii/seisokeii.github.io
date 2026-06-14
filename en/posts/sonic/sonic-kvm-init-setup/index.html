@@ -23,10 +23,11 @@ In this situation, I would like to automate the solution ( computer science peop
 In EVE-NG or GNS3 simulator, running the SONiC KVM image will leave a lot of settings after booting. It’s annoying to pull out a bunch of settings every time you boot a new machine.
 In this situation, I would like to automate the solution ( computer science people =&gt; lazy), but it seems that I don’t need to use Ansible, pyATS, or Nornir yet. So I use shell script to solve it.">
 <meta name="application-name" content="seisokeii の blog">
-<meta name="apple-mobile-web-app-title" content="seisokeii の blog"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+<meta name="apple-mobile-web-app-title" content="seisokeii の blog">
+<meta name="referrer" content="no-referrer" /><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://seisokeii.github.io/en/posts/sonic/sonic-kvm-init-setup/" /><link rel="prev" href="https://seisokeii.github.io/en/posts/onie/onie-build/" /><link rel="next" href="https://seisokeii.github.io/en/posts/sonic/sonic-installation-via-onie/" /><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.1.1/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.1.1/css/all.min.css"></noscript><link rel="preload" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://seisokeii.github.io/en/posts/sonic/sonic-kvm-init-setup/" /><link rel="prev" href="https://seisokeii.github.io/en/posts/onie/onie-build/" /><link rel="next" href="https://seisokeii.github.io/en/posts/sonic/sonic-installation-via-onie/" /><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css"></noscript><link rel="preload" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
         <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css"></noscript><script type="application/ld+json">
     {
         "@context": "http://schema.org",
@@ -36,7 +37,7 @@ In this situation, I would like to automate the solution ( computer science peop
         "mainEntityOfPage": {
             "@type": "WebPage",
             "@id": "https:\/\/seisokeii.github.io\/en\/posts\/sonic\/sonic-kvm-init-setup\/"
-        },"genre": "posts","keywords": "SONiC","wordcount":  950 ,
+        },"genre": "posts","keywords": "SONiC","wordcount":  882 ,
         "url": "https:\/\/seisokeii.github.io\/en\/posts\/sonic\/sonic-kvm-init-setup\/","datePublished": "2024-09-24T15:56:33+08:00","dateModified": "2025-05-06T23:52:30+08:00","publisher": {
             "@type": "Organization",
             "name": ""},"author": {
@@ -45,7 +46,18 @@ In this situation, I would like to automate the solution ( computer science peop
             },"description": ""
     }
     </script></head>
-    <body data-header-desktop="fixed" data-header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('dark' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'dark' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+    <body data-header-desktop="fixed" data-header-mobile="auto"><script>
+          const query = window.matchMedia('(prefers-color-scheme: dark)');
+          function applyTheme() {
+            let theme = window.localStorage?.getItem('theme') || 'dark';
+            let isDark = theme === 'dark' || (theme === 'auto' && query.matches);
+            document.body.setAttribute('theme', isDark? 'dark' : 'light');
+            document.body.setAttribute('cfg-theme', theme);
+          }
+
+          applyTheme();
+          query.addEventListener('change', applyTheme);
+        </script>
 
         <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
     <div class="header-wrapper">
@@ -56,18 +68,18 @@ In this situation, I would like to automate the solution ( computer science peop
             <div class="menu-inner"><a class="menu-item" href="/en/posts/"> Posts </a><a class="menu-item" href="/en/tags/"> Tags </a><a class="menu-item" href="/en/categories/"> Categories </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
                         <input type="text" placeholder="Search titles or contents..." id="search-input-desktop">
                         <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="Search">
-                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
+                            <i class="fas fa-search" aria-hidden="true"></i>
                         </a>
                         <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="Clear">
-                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
+                            <i class="fas fa-times-circle" aria-hidden="true"></i>
                         </a>
                         <span class="search-button search-loading" id="search-loading-desktop">
-                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+                            <i class="fas fa-spinner fa-spin" aria-hidden="true"></i>
                         </span>
                     </span><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
-                    <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+                    <i class="fas fa-adjust" aria-hidden="true"></i>
                 </a><a href="javascript:void(0);" class="menu-item language" title="Select Language">
-                    <i class="fa fa-globe fa-fw" aria-hidden="true"></i>                      
+                    <i class="fa fa-globe" aria-hidden="true"></i>
                     <select class="language-select" id="language-select-desktop" onchange="location = this.value;"><option value="/en/posts/sonic/sonic-kvm-init-setup/" selected>English</option><option value="/zh-tw/posts/sonic/sonic-kvm-init-setup/">繁體中文</option></select>
                 </a></div>
         </div>
@@ -86,22 +98,22 @@ In this situation, I would like to automate the solution ( computer science peop
                     <div class="search mobile" id="search-mobile">
                         <input type="text" placeholder="Search titles or contents..." id="search-input-mobile">
                         <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="Search">
-                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
+                            <i class="fas fa-search" aria-hidden="true"></i>
                         </a>
                         <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="Clear">
-                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
+                            <i class="fas fa-times-circle" aria-hidden="true"></i>
                         </a>
                         <span class="search-button search-loading" id="search-loading-mobile">
-                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+                            <i class="fas fa-spinner fa-spin" aria-hidden="true"></i>
                         </span>
                     </div>
                     <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
                         Cancel
                     </a>
                 </div><a class="menu-item" href="/en/posts/" title="">Posts</a><a class="menu-item" href="/en/tags/" title="">Tags</a><a class="menu-item" href="/en/categories/" title="">Categories</a><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
-                <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+                <i class="fas fa-adjust" aria-hidden="true"></i>
             </a><a href="javascript:void(0);" class="menu-item" title="Select Language">
-                    <i class="fa fa-globe fa-fw" aria-hidden="true"></i>
+                    <i class="fa fa-globe" aria-hidden="true"></i>
                     <select class="language-select" onchange="location = this.value;"><option value="/en/posts/sonic/sonic-kvm-init-setup/" selected>English</option><option value="/zh-tw/posts/sonic/sonic-kvm-init-setup/">繁體中文</option></select>
                 </a></div>
     </div>
@@ -115,17 +127,17 @@ In this situation, I would like to automate the solution ( computer science peop
             <h2 class="toc-title">Contents</h2>
             <div class="toc-content" id="toc-content-auto"></div>
         </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">SONiC Community Image Initial Setup</h1><div class="post-meta">
-            <div class="post-meta-line"><span class="post-author"><a href="https://github.com/seisokeii" title="Author" target="_blank" rel="noopener noreffer author" class="author"><i class="fas fa-user-circle fa-fw" aria-hidden="true"></i>seisokeii</a></span>&nbsp;<span class="post-category">included in <a href="/en/categories/sonic/"><i class="far fa-folder fa-fw" aria-hidden="true"></i>SONiC</a></span></div>
-            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2024-09-24">2024-09-24</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;950 words&nbsp;
-                <i class="far fa-clock fa-fw" aria-hidden="true"></i>&nbsp;2 minutes&nbsp;</div>
+            <div class="post-meta-line"><span class="post-author"><a href="https://github.com/seisokeii" title="Author" target="_blank" rel="noopener noreffer author" class="author"><i class="fas fa-user-circle" aria-hidden="true"></i>seisokeii</a></span>&nbsp;<span class="post-category">included in <a href="/en/categories/sonic/"><i class="far fa-folder" aria-hidden="true"></i>SONiC</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt" aria-hidden="true"></i>&nbsp;<time datetime="2024-09-24">2024-09-24</time>&nbsp;<i class="fas fa-pencil-alt" aria-hidden="true"></i>&nbsp;882 words&nbsp;
+                <i class="far fa-clock" aria-hidden="true"></i>&nbsp;2 minutes&nbsp;</div>
         </div><div class="featured-image"><img
         class="lazyload"
         src="/svg/loading.min.svg"
-        data-src="/images/SONiC/sonic-preview01.png"
-        data-srcset="/images/SONiC/sonic-preview01.png, /images/SONiC/sonic-preview01.png 1.5x, /images/SONiC/sonic-preview01.png 2x"
+        data-src="/images/SONiC/community-init-gns3/sonic-preview01.png"
+        data-srcset="/images/SONiC/community-init-gns3/sonic-preview01.png, /images/SONiC/community-init-gns3/sonic-preview01.png 1.5x, /images/SONiC/community-init-gns3/sonic-preview01.png 2x"
         data-sizes="auto"
-        alt="/images/SONiC/sonic-preview01.png"
-        title="/images/SONiC/sonic-preview01.png" /></div><div class="details toc" id="toc-static"  data-kept="">
+        alt="/images/SONiC/community-init-gns3/sonic-preview01.png"
+        title="/images/SONiC/community-init-gns3/sonic-preview01.png" /></div><div class="details toc" id="toc-static"  data-kept="">
                 <div class="details-summary toc-title">
                     <span>Contents</span>
                     <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
@@ -162,73 +174,30 @@ not mention how to simulate and escape the need to use ASIC functions.</p>
 <p>Use the <code>show ip int</code> command to see a bunch of interface information by default, and you will see a /31 IP on each
 interface.</p>
 <p>Please refer to the following script to write a deletion script:</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span><span class="lnt">5
-</span><span class="lnt">6
-</span><span class="lnt">7
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="cp">#!/bin/bash
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="Copy to clipboard"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="cp">#!/bin/bash
 </span></span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="k">for</span> <span class="o">((</span><span class="nv">i</span> <span class="o">=</span> 1, <span class="nv">j</span> <span class="o">=</span> 0<span class="p">;</span> i &lt;<span class="o">=</span> 54, j &lt;<span class="o">=</span> 106<span class="p">;</span> i++, <span class="nv">j</span> <span class="o">+=</span> 2<span class="o">))</span><span class="p">;</span> <span class="k">do</span>
 </span></span><span class="line"><span class="cl">		sudo config interface ip remove Ethernet<span class="nv">$i</span> 10.0.0.<span class="nv">$j</span>/31
 </span></span><span class="line"><span class="cl"><span class="k">done</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">sudo config interface ip remove Loopback0 10.1.0.1/32
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>Above this script, the <code>i</code> depends on how many interfaces you have and whether it starts from 0 or 1, just change it
+</span></span><span class="line"><span class="cl">sudo config interface ip remove Loopback0 10.1.0.1/32</span></span></code></pre></div></div>
+<p>Above this script, the <code>i</code> depends on how many interfaces you have and whether it starts from 0 or 1, just change it
 yourself.</p>
 <h2 id="2-delete-frr-configuration">2. Delete FRR configuration</h2>
 <p>Next, you can delete the FRR configuration. You can use the <code>show run bgp</code> command to see the settings, and there will
 be a bunch of pre-configured neighbors that are very annoying&hellip;</p>
 <p>Please refer to the following script to modify:</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span><span class="lnt">14
-</span><span class="lnt">15
-</span><span class="lnt">16
-</span><span class="lnt">17
-</span><span class="lnt">18
-</span><span class="lnt">19
-</span><span class="lnt">20
-</span><span class="lnt">21
-</span><span class="lnt">22
-</span><span class="lnt">23
-</span><span class="lnt">24
-</span><span class="lnt">25
-</span><span class="lnt">26
-</span><span class="lnt">27
-</span><span class="lnt">28
-</span><span class="lnt">29
-</span><span class="lnt">30
-</span><span class="lnt">31
-</span><span class="lnt">32
-</span><span class="lnt">33
-</span><span class="lnt">34
-</span><span class="lnt">35
-</span><span class="lnt">36
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="cp">#!/bin/bash
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="Copy to clipboard"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="cp">#!/bin/bash
 </span></span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="k">for</span> <span class="o">((</span> <span class="nv">i</span><span class="o">=</span>1<span class="p">;</span> i&lt;<span class="o">=</span>107<span class="p">;</span> <span class="nv">i</span><span class="o">+=</span><span class="m">2</span> <span class="o">))</span>
 </span></span><span class="line"><span class="cl"><span class="k">do</span>
@@ -263,10 +232,8 @@ be a bunch of pre-configured neighbors that are very annoying&hellip;</p>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">vtysh -c <span class="s2">&#34;conf&#34;</span> -c <span class="s2">&#34;no route-map TO_BGP_PEER_V6&#34;</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">vtysh -c <span class="s2">&#34;conf&#34;</span> -c <span class="s2">&#34;no router bgp 65100&#34;</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>This script is actually to see the output of <code>show run bgp</code>, and then paste it here, and remember to modify the neighbor
+</span></span><span class="line"><span class="cl">vtysh -c <span class="s2">&#34;conf&#34;</span> -c <span class="s2">&#34;no router bgp 65100&#34;</span></span></span></code></pre></div></div>
+<p>This script is actually to see the output of <code>show run bgp</code>, and then paste it here, and remember to modify the neighbor
 part like the interface.</p>
 <h2 id="3-delete-bgp-related-config-in-config_dbjson">3. Delete BGP Related Config in config_db.json</h2>
 <p>We just deleted the FRR settings, but the <code>config_db.json</code> still left some configs, which will make SONiC not work
@@ -279,26 +246,12 @@ properly if it is not cleaned up.</p>
 <li>
 <p>BGP_NEIGHBOR</p>
 <p>The most annoying part is that there are settings for several neighbors, open the vi/vim editor to modify.</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span><span class="lnt">14
-</span><span class="lnt">15
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">admin@sonic$ sudo vi /etc/sonic/config_db.json <span class="c1"># Plz use sudo or you will not have permission to save after deleting</span>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="Copy to clipboard"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">admin@sonic$ sudo vi /etc/sonic/config_db.json <span class="c1"># Plz use sudo or you will not have permission to save after deleting</span>
 </span></span><span class="line"><span class="cl">...
 </span></span><span class="line"><span class="cl"><span class="s2">&#34;BGP_DEVICE_GLOBAL&#34;</span>: <span class="o">{</span>
 </span></span><span class="line"><span class="cl">        <span class="s2">&#34;STATE&#34;</span>: <span class="o">{</span>
@@ -312,28 +265,17 @@ properly if it is not cleaned up.</p>
 </span></span><span class="line"><span class="cl">        <span class="s2">&#34;Config&#34;</span>: <span class="o">{</span>
 </span></span><span class="line"><span class="cl">            <span class="s2">&#34;acl_counter_high_threshold&#34;</span>: <span class="s2">&#34;85&#34;</span>,
 </span></span><span class="line"><span class="cl">            <span class="s2">&#34;acl_counter_low_threshold&#34;</span>: <span class="s2">&#34;70&#34;</span>,
-</span></span><span class="line"><span class="cl">            ...
-</span></span></code></pre></td></tr></table>
-</div>
-</div></li>
+</span></span><span class="line"><span class="cl">            ...</span></span></code></pre></div></div>
+</li>
 <li>
 <p>DEVICE_METADATA 的 localhost</p>
 <p>Find <code>DEVICE_METADATA</code> and <code>localhost</code>, then delete <code>&quot;bgp_asn&quot;: &quot;65100&quot;,</code>.</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">        <span class="s2">&#34;snat_entry_low_threshold&#34;</span>: <span class="s2">&#34;70&#34;</span>,
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="Copy to clipboard"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">        <span class="s2">&#34;snat_entry_low_threshold&#34;</span>: <span class="s2">&#34;70&#34;</span>,
 </span></span><span class="line"><span class="cl">            <span class="s2">&#34;snat_entry_threshold_type&#34;</span>: <span class="s2">&#34;percentage&#34;</span>
 </span></span><span class="line"><span class="cl">        <span class="o">}</span>
 </span></span><span class="line"><span class="cl">    <span class="o">}</span>,
@@ -342,10 +284,8 @@ properly if it is not cleaned up.</p>
 </span></span><span class="line"><span class="cl">            <span class="c1"># Delete this &#34;bgp_asn&#34;: &#34;65100&#34;,</span>
 </span></span><span class="line"><span class="cl">            <span class="s2">&#34;buffer_model&#34;</span>: <span class="s2">&#34;traditional&#34;</span>,
 </span></span><span class="line"><span class="cl">            <span class="s2">&#34;default_bgp_status&#34;</span>: <span class="s2">&#34;up&#34;</span>,
-</span></span><span class="line"><span class="cl">            <span class="s2">&#34;default_pfcwd_status&#34;</span>: <span class="s2">&#34;disable&#34;</span>,
-</span></span></code></pre></td></tr></table>
-</div>
-</div></li>
+</span></span><span class="line"><span class="cl">            <span class="s2">&#34;default_pfcwd_status&#34;</span>: <span class="s2">&#34;disable&#34;</span>,</span></span></code></pre></div></div>
+</li>
 </ol>
 <p>This is what SONiC community image needs to be modified.</p>
 <span style="color: red">
@@ -371,34 +311,37 @@ a patch file.</p>
         <div class="post-info-line">
             <div class="post-info-md"></div>
             <div class="post-info-share">
-                <span></span>
+                <span><a href="javascript:void(0);" title="Share on X" data-sharer="x" data-url="https://seisokeii.github.io/en/posts/sonic/sonic-kvm-init-setup/" data-title="SONiC Community Image Initial Setup" data-hashtags="SONiC"><i class="fab fa-x-twitter" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Threads" data-sharer="threads" data-url="https://seisokeii.github.io/en/posts/sonic/sonic-kvm-init-setup/" data-title="SONiC Community Image Initial Setup"><i class="fab fa-threads" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Diaspora" data-sharer="diaspora" data-url="https://seisokeii.github.io/en/posts/sonic/sonic-kvm-init-setup/" data-title="SONiC Community Image Initial Setup" data-description=""><i class="fab fa-diaspora" aria-hidden="true"></i></a><a href="https://t.me/share/url?url=https%3a%2f%2fseisokeii.github.io%2fen%2fposts%2fsonic%2fsonic-kvm-init-setup%2f&amp;text=SONiC%20Community%20Image%20Initial%20Setup" target="_blank" title="Share on Telegram"><i class="fab fa-telegram" aria-hidden="true"></i></a></span>
             </div>
         </div>
     </div>
 
     <div class="post-info-more">
-        <section class="post-tags"><i class="fas fa-tags fa-fw" aria-hidden="true"></i>&nbsp;<a href="/en/tags/sonic/">SONiC</a></section>
+        <section class="post-tags"><i class="fas fa-tags" aria-hidden="true"></i>&nbsp;<a href="/en/tags/sonic/">SONiC</a></section>
         <section>
             <span><a href="javascript:void(0);" onclick="window.history.back();">Back</a></span>&nbsp;|&nbsp;<span><a href="/en/">Home</a></span>
         </section>
     </div>
 
-    <div class="post-nav"><a href="/en/posts/onie/onie-build/" class="prev" rel="prev" title="Open Network Install Environment (ONIE) How to build?"><i class="fas fa-angle-left fa-fw" aria-hidden="true"></i>Open Network Install Environment (ONIE) How to build?</a>
-            <a href="/en/posts/sonic/sonic-installation-via-onie/" class="next" rel="next" title="SONiC Image Installation Guide">SONiC Image Installation Guide<i class="fas fa-angle-right fa-fw" aria-hidden="true"></i></a></div>
+    <div class="post-nav"><a href="/en/posts/onie/onie-build/" class="prev" rel="prev" title="Open Network Install Environment (ONIE) How to build?"><i class="fas fa-angle-left" aria-hidden="true"></i>Open Network Install Environment (ONIE) How to build?</a>
+            <a href="/en/posts/sonic/sonic-installation-via-onie/" class="next" rel="next" title="SONiC Image Installation Guide">SONiC Image Installation Guide<i class="fas fa-angle-right" aria-hidden="true"></i></a></div>
 </div>
 <div id="comments"><div id="disqus_thread" class="comment"></div><noscript>
                 Please enable JavaScript to view the comments powered by <a href="https://disqus.com/?ref_noscript">Disqus</a>.
             </noscript></div></article></div>
             </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line">Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.154.5">Hugo</a> | Theme - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.3.0"><i class="far fa-kiss-wink-heart fa-fw" aria-hidden="true"></i> LoveIt</a>
-                </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright fa-fw" aria-hidden="true"></i><span itemprop="copyrightYear">2024 - 2026</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/en/" target="_blank">seisokeii</a></span></div>
+        <div class="footer-container"><div class="footer-line">Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.154.5">Hugo</a> | Theme - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 1.0.0"><i class="far fa-kiss-wink-heart" aria-hidden="true"></i> LoveIt</a>
+                </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright" aria-hidden="true"></i><span itemprop="copyrightYear">2024 - 2026</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/en/" target="_blank">seisokeii</a></span></div>
         </div>
     </footer></div>
 
         <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="Back to Top">
-                <i class="fas fa-arrow-up fa-fw" aria-hidden="true"></i>
-            </a><a href="#" id="view-comments" class="fixed-button" title="View Comments">
-                <i class="fas fa-comment fa-fw" aria-hidden="true"></i>
+                <i class="fas fa-arrow-up" aria-hidden="true"></i>
             </a>
-        </div><script type="text/javascript" src="https://.disqus.com/embed.js" defer></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/autocomplete.js@0.38.1/dist/autocomplete.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lunr@2.3.9/lunr.min.js"></script><script type="text/javascript" src="/lib/lunr/lunr.stemmer.support.min.js"></script><script type="text/javascript" src="/lib/lunr/lunr.zh.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lazysizes@5.3.2/lazysizes.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/clipboard@2.0.11/dist/clipboard.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/sharer.js@0.5.1/sharer.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":30},"comment":{},"search":{"highlightTag":"em","lunrLanguageCode":"en","lunrSegmentitURL":"/lib/lunr/lunr.segmentit.js","maxResultLength":10,"noResultsFound":"No results found","snippetLength":30}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+        </div>
+
+        <div id="fixed-buttons-hidden"><a href="#" id="view-comments" class="fixed-button" title="View Comments">
+                <i class="fas fa-comment" aria-hidden="true"></i>
+            </a>
+        </div><script src="https://.disqus.com/embed.js" defer></script><script src="https://cdn.jsdelivr.net/npm/autocomplete.js@0.38.1/dist/autocomplete.min.js"></script><script src="https://cdn.jsdelivr.net/npm/lunr@2.3.9/lunr.min.js"></script><script src="/lib/lunr/lunr.stemmer.support.min.js"></script><script src="/lib/lunr/lunr.zh.min.js"></script><script src="https://cdn.jsdelivr.net/npm/lazysizes@5.3.2/lazysizes.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.11/dist/clipboard.min.js"></script><script src="https://cdn.jsdelivr.net/npm/sharer.js@0.5.2/sharer.min.js"></script><script>window.config={"comment":{},"search":{"highlightTag":"em","lunrLanguageCode":"en","lunrSegmentitURL":"/lib/lunr/lunr.segmentit.js","maxResultLength":10,"noResultsFound":"No results found","snippetLength":30}};</script><script src="/js/theme.js"></script></body>
 </html>
