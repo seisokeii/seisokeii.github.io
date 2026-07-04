@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <title>CFP2 與 ZR Transceiver 簡介 - seisokeii blog</title><meta name="Description" content="seisokeii&#39;s blog"><meta property="og:url" content="https://seisokeii.github.io/zh-tw/posts/transceiver/transceiver-intro-04/">
+  <meta property="og:site_name" content="seisokeii blog">
+  <meta property="og:title" content="CFP2 與 ZR Transceiver 簡介">
+  <meta property="og:description" content="長這麼大第一次碰到電信級的設備 我目前好像也才碩畢一年多而已 圖片上插了四個 200G CFP2 跟三支 400G ZR，好貴好貴~
+每個縣市都有房且都各有一座 home datacenter 的人都知道，要把自己分散在各個縣市的機房網路串起來會是一個頭痛的問題， 尤其是自己半夜偷拉了光纜把所有機房都串在一起後會發現，好像沒辦法直接把光纖接上去 router 跟 switch 上，這樣更苦惱了。">
+  <meta property="og:locale" content="zh_TW">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2026-07-03T15:20:21+08:00">
+    <meta property="article:modified_time" content="2026-07-03T15:20:21+08:00">
+    <meta property="article:tag" content="Transceiver">
+    <meta property="article:tag" content="SONiC">
+    <meta property="article:tag" content="Edgecore">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="CFP2 與 ZR Transceiver 簡介">
+  <meta name="twitter:description" content="長這麼大第一次碰到電信級的設備 我目前好像也才碩畢一年多而已 圖片上插了四個 200G CFP2 跟三支 400G ZR，好貴好貴~
+每個縣市都有房且都各有一座 home datacenter 的人都知道，要把自己分散在各個縣市的機房網路串起來會是一個頭痛的問題， 尤其是自己半夜偷拉了光纜把所有機房都串在一起後會發現，好像沒辦法直接把光纖接上去 router 跟 switch 上，這樣更苦惱了。">
+<meta name="application-name" content="seisokeii の blog">
+<meta name="apple-mobile-web-app-title" content="seisokeii の blog">
+<meta name="referrer" content="no-referrer" /><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://seisokeii.github.io/zh-tw/posts/transceiver/transceiver-intro-04/" /><link rel="prev" href="https://seisokeii.github.io/zh-tw/posts/transceiver/transceiver-intro-03/" /><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css"></noscript><link rel="preload" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css"></noscript><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "CFP2 與 ZR Transceiver 簡介",
+        "inLanguage": "zh-TW",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/seisokeii.github.io\/zh-tw\/posts\/transceiver\/transceiver-intro-04\/"
+        },"genre": "posts","keywords": "Transceiver, SONiC, Edgecore","wordcount":  8265 ,
+        "url": "https:\/\/seisokeii.github.io\/zh-tw\/posts\/transceiver\/transceiver-intro-04\/","datePublished": "2026-07-03T15:20:21+08:00","dateModified": "2026-07-03T15:20:21+08:00","publisher": {
+            "@type": "Organization",
+            "name": ""},"author": {
+                "@type": "Person",
+                "name": "seisokeii"
+            },"description": ""
+    }
+    </script></head>
+    <body data-header-desktop="fixed" data-header-mobile="auto"><script>
+          const query = window.matchMedia('(prefers-color-scheme: dark)');
+          function applyTheme() {
+            let theme = window.localStorage?.getItem('theme') || 'dark';
+            let isDark = theme === 'dark' || (theme === 'auto' && query.matches);
+            document.body.setAttribute('theme', isDark? 'dark' : 'light');
+            document.body.setAttribute('cfg-theme', theme);
+          }
+
+          applyTheme();
+          query.addEventListener('change', applyTheme);
+        </script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/zh-tw/" title="seisokeii blog">seisokeii の blog</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/zh-tw/posts/"> 文章 </a><a class="menu-item" href="/zh-tw/tags/"> 標籤 </a><a class="menu-item" href="/zh-tw/categories/"> 分類 </a><a class="menu-item" href="/zh-tw/about/about"> About </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="搜索文章標題或內容..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切換主題">
+                    <i class="fas fa-adjust" aria-hidden="true"></i>
+                </a><a href="javascript:void(0);" class="menu-item language" title="選擇語言">
+                    <i class="fa fa-globe" aria-hidden="true"></i>
+                    <select class="language-select" id="language-select-desktop" onchange="location = this.value;"><option value="/zh-tw/posts/transceiver/transceiver-intro-04/" selected>繁體中文</option></select>
+                </a></div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/zh-tw/" title="seisokeii blog">seisokeii の blog</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="搜索文章標題或內容..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/zh-tw/posts/" title="">文章</a><a class="menu-item" href="/zh-tw/tags/" title="">標籤</a><a class="menu-item" href="/zh-tw/categories/" title="">分類</a><a class="menu-item" href="/zh-tw/about/about" title="">About</a><a href="javascript:void(0);" class="menu-item theme-switch" title="切換主題">
+                <i class="fas fa-adjust" aria-hidden="true"></i>
+            </a><a href="javascript:void(0);" class="menu-item" title="選擇語言">
+                    <i class="fa fa-globe" aria-hidden="true"></i>
+                    <select class="language-select" onchange="location = this.value;"><option value="/zh-tw/posts/transceiver/transceiver-intro-04/" selected>繁體中文</option></select>
+                </a></div>
+    </div>
+</header><div class="search-dropdown desktop">
+        <div id="search-dropdown-desktop"></div>
+    </div>
+    <div class="search-dropdown mobile">
+        <div id="search-dropdown-mobile"></div>
+    </div><main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目錄</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">CFP2 與 ZR Transceiver 簡介</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="https://github.com/seisokeii" title="Author" target="_blank" rel="noopener noreffer author" class="author"><i class="fas fa-user-circle" aria-hidden="true"></i>seisokeii</a></span>&nbsp;<span class="post-category">收錄於 <a href="/zh-tw/categories/transceiver/"><i class="far fa-folder" aria-hidden="true"></i>Transceiver</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt" aria-hidden="true"></i>&nbsp;<time datetime="2026-07-03">2026-07-03</time>&nbsp;<i class="fas fa-pencil-alt" aria-hidden="true"></i>&nbsp;約 8265 字&nbsp;
+                <i class="far fa-clock" aria-hidden="true"></i>&nbsp;預計閱讀 17 分鐘&nbsp;</div>
+        </div><div class="featured-image"><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="/images/transceiver/xcver-intro-04/xcver-amx3200-cover.jpeg"
+        data-srcset="/images/transceiver/xcver-intro-04/xcver-amx3200-cover.jpeg, /images/transceiver/xcver-intro-04/xcver-amx3200-cover.jpeg 1.5x, /images/transceiver/xcver-intro-04/xcver-amx3200-cover.jpeg 2x"
+        data-sizes="auto"
+        alt="/images/transceiver/xcver-intro-04/xcver-amx3200-cover.jpeg"
+        title="/images/transceiver/xcver-intro-04/xcver-amx3200-cover.jpeg" /></div><div class="details toc" id="toc-static"  data-kept="">
+                <div class="details-summary toc-title">
+                    <span>目錄</span>
+                    <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#modulation">Modulation</a>
+      <ul>
+        <li><a href="#ask--fsk--psk">ASK / FSK / PSK</a></li>
+        <li><a href="#bpsk--qpsk">BPSK / QPSK</a></li>
+        <li><a href="#qam">QAM</a></li>
+      </ul>
+    </li>
+    <li><a href="#fec">FEC</a>
+      <ul>
+        <li><a href="#cd-chromatic-dispersion">CD (Chromatic Dispersion)</a></li>
+        <li><a href="#pmd-polarization-mode-dispersion">PMD (Polarization Mode Dispersion)</a></li>
+        <li><a href="#cpe-carrier-phase-estimation">CPE (Carrier Phase Estimation)</a></li>
+        <li><a href="#hd-fec--sd-fec">HD-FEC / SD-FEC</a></li>
+        <li><a href="#c-fec--o-fec">C-FEC / O-FEC</a></li>
+      </ul>
+    </li>
+    <li><a href="#grid--dwdm">Grid &amp; DWDM</a>
+      <ul>
+        <li><a href="#fixed-grid">Fixed Grid</a></li>
+        <li><a href="#flex-grid">Flex Grid</a></li>
+        <li><a href="#有趣的小發現">有趣的小發現</a></li>
+      </ul>
+    </li>
+    <li><a href="#實際設定與操作">實際設定與操作</a>
+      <ul>
+        <li><a href="#amx3200-with-csr440">AMX3200 With CSR440</a></li>
+        <li><a href="#zr-transceiver">ZR transceiver</a></li>
+      </ul>
+    </li>
+    <li><a href="#reference-參考文章">Reference 參考文章</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><p>長這麼大第一次碰到電信級的設備 <del>我目前好像也才碩畢一年多而已</del>
+圖片上插了四個 200G CFP2 跟三支 400G ZR，好貴好貴~</p>
+<hr>
+<p>每個縣市都有房且都各有一座 home datacenter 的人都知道，要把自己分散在各個縣市的機房網路串起來會是一個頭痛的問題，
+尤其是自己半夜偷拉了光纜把所有機房都串在一起後會發現，好像沒辦法直接把光纖接上去 router 跟 switch 上，這樣更苦惱了。</p>
+<p>此時你就需要一台 Transponder / Muxponder！</p>
+<p>好啦以上純屬玩笑^^</p>
+<p>最近光領域這一塊被 NV 皮衣男炒起來，然後我也因為有些案子接觸到這種電信級的設備，想說就來記錄分享一下到底碰了什麼東西，因為這邊應該是很少網工可以碰得到的設備。</p>
+<p>那由於 Edgecore 主要是白盒機器為主，所以 NOS 這一塊倒是不會提太多，因為 NOS Vendor 可能有多家，我儘量不要偏袒哪一家～</p>
+<p>這一篇呢主要就是分享一些心得而已，因為技術細節跟原理好多好深奧，我並不是專攻這一塊的，所以講不了太多專業的東西，只能以網工的角度來看。</p>
+<p>關於電信級的設備應該比較常見的就是 ZR transceiver 了吧，那還有另一個就是 CFP2 了。</p>
+<blockquote>
+<p>Links to the MSA, SFF, and CMIS documentation referenced in the screenshots are available in the Reference section.</p>
+</blockquote>
+<h2 id="modulation">Modulation</h2>
+<p>這小標題&hellip; 沒錯！講到 xcver 最重要的就是 modulation 調變了。</p>
+<p>老樣子來講一下歷史演變，在很久以前主要是先出現 AM (Amplitude Modulation)，這東東也就是廣播的那個 AM，講白了就是高電壓低電壓這樣的打出來的波，對應到光就是暗與亮 (0/1)，
+這樣其實蠻容易被干擾的，當然實際沒有我講的這麼簡單還是有衍伸的技術改善 AM。</p>
+<p>後來發明出了 FM (Frequency Modulation)，也就是使用不同頻率，所以會有一個 Limiter 的東西來過濾出特定頻率(波長)，同時又保留這個頻率上的變化(資訊)。
+所以 FM 廣播能夠提供比 AM 廣播更清楚、更乾淨的音質，適合對保真度要求高的音樂節目。</p>
+<blockquote>
+<p>是說現在的小孩還會知道FM廣播電台嗎?</p>
+</blockquote>
+<p>除了 AM/FM 以外，還有一個叫做 PM (Phase Modulation) 也就是多了相位的概念，這邊對我來說就抽象起來了XD</p>
+<p>簡單來說，AM / FM / PM 是『類比世界』的三劍客，常用在傳統廣播。而當我們進入電腦的 0 與 1 世界時，這三劍客就進化成了『數位世界』的版本，
+也就是 ASK / FSK / PSK。在 switch 或 router 的設定裡，我們面對的當然都是這些數位進化的產物。</p>
+<p>大致就是 AM 是很簡單成本低的方式但是抗噪性差，FM 提供比 AM 好的抗噪能力但是要求較寬的頻寬，PM 的頻寬更優於 FM 但是實作更複雜。</p>
+<p>提到數位調變，就要講一下一些術語，這些東西在 switch/router/transponder 的設定指令上應該會看見的詞彙。</p>
+<h3 id="ask--fsk--psk">ASK / FSK / PSK</h3>
+<p>這三個對應到傳統的那三個調變，分別是 Amplitude Shift Keying (ASK)，Frequency Shift Keying (FSK)，Phase Shift Keying (PSK)。</p>
+<ul>
+<li>ASK: Amplitude Shift Keying: 改變載波(高頻正弦波)的振幅來代表不同的位元，白話就類似摩斯密碼那樣 OOK (On-Off Keying) 開跟關代表 0/1。但跟 AM 一樣抗噪能力差。</li>
+<li>FSK: Frequency Shift Keying: 透過切換成不同頻率來代表不同的位元，像是 f1 是 1, f2 是 0。抗噪能力優於 ASK。</li>
+<li>PSK: Phase Shift Keying: 透過改變載波的相位來代表不同的位元，像是 0° 代表 1、180° 代表 0。功率效率高，抗噪性好。</li>
+</ul>
+<p>知道這三個後會發現，相較於 FSK，PSK 在相同的訊號功率下，通常可以提供更低的誤碼率，也就是功率效率更高。
+所以可以看到光纖模組的 datasheet 上面都會出現 BPSK, QPSK 這個字眼。</p>
+<h3 id="bpsk--qpsk">BPSK / QPSK</h3>
+<p>二元相移鍵控 BPSK (Binary PSK)、四元相移鍵控 QPSK (Quadrature PSK)，其實從字面上就可以看到 二元跟四元 <del>廢話XD</del></p>
+<p>BPSK 它使用兩個相隔180度的相位（像是 0° or 180°）來分別代表0/1，每個符號傳輸1個bit，反正就是很穩，對 SNR 的要求很低，適合惡劣環境，所以像是衛星通訊會考慮使用。</p>
+<p>QPSK 它使用四個離散的相位（像是 45°、135°、225°、315°）來代表 00/01/10/11，厲害的是它可以不增加頻寬的前提是 BPSK 傳輸速率的兩倍，像是光纖這樣穩定的環境當然會考慮使用這種方式才有經濟效益。</p>
+<h3 id="qam">QAM</h3>
+<p>這個詞在無線通訊很常見呢～</p>
+<p>正交振幅調變 QAM（Quadrature Amplitude Modulation)，資訊爆炸的時代來了，那怎麼在有限的頻譜資源中壓榨出更高的傳輸效率，而 QAM 就誕生了。</p>
+<p>QAM 融合了 ASK 與 PSK 的原理，所以 QAM 不再是改變載波的單一屬性的東西了，而是同時對載波的 &ldquo;振幅&rdquo; 與 &ldquo;相位&rdquo; 進行調變。所以傳輸量就翻倍再翻倍醬子～</p>
+<p>為了好了解 QAM 所以就有了星座圖出現，每一個點都代表一個振幅與相位的組合。星座圖中的數量就代表 QAM 的 Order，也就是常看到的 16-QAM, 64-QAM。</p>
+<blockquote>
+<p>QAM 前面的數字取 log2(N) 就是可以攜帶的 bit 數</p>
+</blockquote>
+<div style="display: flex; justify-content: center;">
+    <div style="width: 70%;">
+        <figure><a class="lightgallery" href="/images/transceiver/xcver-intro-04/xcver-rectangular_constellation_for_QAM.svg" title="/images/transceiver/xcver-intro-04/xcver-rectangular_constellation_for_QAM.svg" data-thumbnail="/images/transceiver/xcver-intro-04/xcver-rectangular_constellation_for_QAM.svg" data-sub-html="<h2>QAM 星座圖</h2>">
+                <img
+                    class="lazyload"
+                    src="/svg/loading.min.svg"
+                    data-src="/images/transceiver/xcver-intro-04/xcver-rectangular_constellation_for_QAM.svg"
+                    data-srcset="/images/transceiver/xcver-intro-04/xcver-rectangular_constellation_for_QAM.svg, /images/transceiver/xcver-intro-04/xcver-rectangular_constellation_for_QAM.svg 1.5x, /images/transceiver/xcver-intro-04/xcver-rectangular_constellation_for_QAM.svg 2x"
+                    data-sizes="auto"
+                    alt="/images/transceiver/xcver-intro-04/xcver-rectangular_constellation_for_QAM.svg" />
+            </a><figcaption class="image-caption">QAM 星座圖</figcaption>
+            </figure>
+        <figure><a class="lightgallery" href="/images/transceiver/xcver-intro-04/xcver-quantifi-photonics-constellation.png" title="/images/transceiver/xcver-intro-04/xcver-quantifi-photonics-constellation.png" data-thumbnail="/images/transceiver/xcver-intro-04/xcver-quantifi-photonics-constellation.png" data-sub-html="<h2>QuantifiPhotonics 產品 White Paper 中截圖的</h2>">
+                <img
+                    class="lazyload"
+                    src="/svg/loading.min.svg"
+                    data-src="/images/transceiver/xcver-intro-04/xcver-quantifi-photonics-constellation.png"
+                    data-srcset="/images/transceiver/xcver-intro-04/xcver-quantifi-photonics-constellation.png, /images/transceiver/xcver-intro-04/xcver-quantifi-photonics-constellation.png 1.5x, /images/transceiver/xcver-intro-04/xcver-quantifi-photonics-constellation.png 2x"
+                    data-sizes="auto"
+                    alt="/images/transceiver/xcver-intro-04/xcver-quantifi-photonics-constellation.png" />
+            </a><figcaption class="image-caption">QuantifiPhotonics 產品 White Paper 中截圖的</figcaption>
+            </figure>
+    </div>
+</div>
+<p>QAM 的是基於兩個相互正交的載波(相位相差90度)，分別稱為同相 I (In-phase) 分量和正交 Q (Quadrature)分量，
+透過獨立調變 I 和 Q 兩個分量的振幅，可以合成出星座圖上任意一個點所代表的訊號狀態，這也就是 &ldquo;正交振幅調變&rdquo; 名字的由來。</p>
+<p>隨著傳輸速率的倍增需求，更高 order 的 QAM 出現了，也就是可以攜帶更多位元，不過挑戰也來了，相同大小的星座圖中點越來越多，代表點跟點的距離越近，如果環境不穩定就更容易出現互相干擾了。</p>
+<p>通常會看到 DP-16QAM 這樣寫，前面那個 DP (Dual Polarization) 在有些地方會寫 PM (Polarization Multiplexed)，講白了就是有兩個互相垂直的偏振態 (X 軸與 Y 軸)。PM/DP 技術就是把這兩個偏振態當作「兩條獨立的高速公路」，頻寬直接x2。</p>
+<p>這裡要科普一個超級重要的觀念：Bit Rate (位元率) 跟 Baud Rate (鮑率)。</p>
+<ul>
+<li>Bit Rate (Gbps)：是老闆要的業績，也就是你一秒鐘實際傳了多少個 0 和 1。</li>
+<li>Baud Rate (GBaud)：是底層勞工的物理極限，也就是雷射器一秒鐘『閃爍/變化』了多少次。</li>
+</ul>
+<p>舉個例子，為什麼我們需要 16-QAM？假設老闆要求 200G 的業績：</p>
+<p>如果用傳統的 QPSK (1個符號塞 2 bits，00/01/10/11)，雷射器每秒要狂閃 100G 次 (100 GBaud)，硬體會燒掉。
+但如果換成 16-QAM (1個符號塞 4 bits，0000/0001/&hellip;/1111)，雷射器只要閃 50G 次 (50 GBaud) 就達標了！</p>
+<p>記住這個 Baud Rate，因為之後要講的光纖車道寬度 (Grid)，看的就是這個物理閃爍頻率！</p>
+<p>上述這樣看完再回想一下之前講過的 NRZ, PAM4 調變，其實有種既視感對吧~ 在實際傳輸時候兩端是要設定一樣的調變方式，不然就無法正常溝通了。</p>
+<p>其實到這裡我在想有沒有Z偏振軸這東西變提升再多一倍，不過物理好像把這道門封死了XD
+目前查到的方法就是空間多工 SDM (Space-Division Multiplexing)，好像有多核心光纖 MCF (Multi-Core Fiber) 跟 少模光纖 FMF (Few-Mode Fiber)。
+也就是現在科學家在同樣一根光纖的寬度裡，直接挖出 4 條、8 條甚至 19 條微小的玻璃管。這樣不用加粗光纖，傳輸量直接翻倍。
+或是，在同一個稍微粗一點點的管子裡，讓光用「不同的形狀（空間模式 Spatial Modes）」前進。例如有的光走直線，有的光像螺旋一樣旋轉前進，只要它們的形狀不同，到了接收端就可以用 DSP 把它們分開來。</p>
+<blockquote>
+<p>當科學家腦袋是不是要容易 ㄆㄧㄚˇ 一下才會有靈感然後發明新東西呀？？？</p>
+</blockquote>
+<h2 id="fec">FEC</h2>
+<p>不管訊號多好，都是會被外在因素消磨掉的 <del>跟人的耐心一樣</del><br>
+這時候就是需要有方法來善後了，也就是熟悉的糾錯方法～</p>
+<p>在糾錯之前 DSP 主要會用 CD、PMD、CPE 三種方式去修正感光元件收到的爛訊號。</p>
+<p>大致流程是，感光元件收到 Analog 訊號後，會先透過 ADC (類比數位轉換器) 把它切成 Digital 數位訊號。接著就輪到 DSP 來變魔法 (CD/PMD/CPE) 修圖，最後才交給 FEC 演算法去進行最終的錯字糾正。</p>
+<h3 id="cd-chromatic-dispersion">CD (Chromatic Dispersion)</h3>
+<p>你一定聽過三稜鏡可以把白光折射成彩虹，說的就是不同頻率的光跑的速度不一樣。
+打出去的一個光脈衝（代表一個位元），其實是由極微小的一小段頻帶組成的。當這個脈衝在光纖裡跑了幾百公里後，跑得快的頻率會跑到前面，跑得慢的頻率會落在後面。
+原本一個方方正正的訊號，到了接收端就會被「拉長、糊掉」，甚至跟下一個訊號疊在一起（這叫符號間干擾 ISI)。</p>
+<p>在過去其實有個東西叫做色散補償光纖 (DCF)，這就是用來把跑的慢的光拉快用的，不過我沒實際用過就是了QQ</p>
+<p>現在的 DSP 裡面的 FIR 會去把這件事情做掉，因為光纖的色散係數是固定的（像是每公里差多少皮秒），DSP 只要知道這條光纖有多長，它就能寫出一個反向的數學公式，
+故意把跑得快的訊號延遲，把跑得慢的訊號提早。經過矩陣運算後，原本拉稀般的大便般訊號瞬間收斂，變回完美的一束光(?</p>
+<h3 id="pmd-polarization-mode-dispersion">PMD (Polarization Mode Dispersion)</h3>
+<p>之前提到的 DP/PM，打個譬喻就像是 X 軸和 Y 軸那樣兩條獨立的高速公路。
+理想中，光纖是完美的圓柱體。但現實中，光纖可能會因為製造瑕疵、被彎折、甚至是外面的風吹日曬熱脹冷縮，變成稍微橢圓形的。
+這會導致兩個嚴重的後果：</p>
+<ul>
+<li>X 軸跟 Y 軸的光，跑的速度變得不一樣了。</li>
+<li>這兩條車道會發生車禍 (Cross-talk)，X 的能量跑到 Y 去，Y 的能量跑到 X 去。而且這種變形是動態的&hellip;</li>
+</ul>
+<p>DSP 裡面有一個被稱為蝴蝶結構 (Butterfly Structure) 的動態濾波器。
+它不像 CD 是套用固定公式，PMD 補償是動態的，它會無時無刻監控收到訊號的誤差，用機器學習裡常見的演算法(像是 CMA 盲目均衡演算法)，
+以毫秒級的速度動態調整濾波器參數，把混在一起的 X 和 Y 軸訊號拆開拆乾淨。</p>
+<h3 id="cpe-carrier-phase-estimation">CPE (Carrier Phase Estimation)</h3>
+<p>既然我們用的是 QAM / PSK (相位調變)，那接收端要知道現在是 45度 還是 135度，在相干接收器裡面，有一顆雷射叫做本地振盪器 (Local Oscillator, LO)，它就是那把量角器。
+但問題來了，發射端的雷射跟接收端的雷射，是兩顆獨立的物理元件。它們的頻率不可能完全一模一樣，而且雷射先天會有相位雜訊 (Phase Noise)，
+如果頻率差了一點點，你收到的 QAM 星座圖就不會是乖乖停在原地的 16 個點，而是會像 OIIAI 一樣瘋狂旋轉~</p>
+<p>CPE 它會去分析這個正在旋轉的星座圖，算出它旋轉的速度和角度(頻率偏移與相位雜訊)，然後在數位空間裡把它反向轉回來！</p>
+<p>以上三個讓 DSP 就像是魔法師一樣，先用 CD 補償，把時間軸上的殘影收束，再用 PMD 補償，把 X 與 Y 軸的糾纏解開，最後用 CPE，把旋轉的相位牢牢鎖定。
+做完後這才交給下一站的 FEC 去做最後的錯字校對。</p>
+<h3 id="hd-fec--sd-fec">HD-FEC / SD-FEC</h3>
+<ul>
+<li>HD: Hard Decision FEC</li>
+<li>SD: Soft Decision FEC</li>
+</ul>
+<p>HD 白話解釋：這是老派的作法。接收端的晶片看到一個電壓，它只做一翻兩瞪眼的決定，大於 0.5 就是 1，小於 0.5 就是 0。</p>
+<p>SD 就是晶片不再只給 0 或 1，而是會多一個信心指數，像是這個訊號我判斷是 1，但我只有 60% 的把握；另一個訊號我也是 1，但我有 99% 的把握。</p>
+<p>想想也合理，最一開始的東西就是最簡單的想法，不過在速率越來越快後，這樣的方式肯定不夠用，量大引起質變呀～</p>
+<h3 id="c-fec--o-fec">C-FEC / O-FEC</h3>
+<p>C / O 分別是指 Concatenated FEC, OpenROADM FEC。</p>
+<p>進入了 400G 世代，各大廠商發現大家各搞各的 SD-FEC，導致 A 牌模組跟 B 牌模組根本無法互通。為了解決這個問題，業界誕生了兩大主流 FEC 標準。</p>
+<p>C-FEC 這是由 OIF 400ZR 組織制定的標準。它的目的是讓資料中心互連 (DCI) 能夠便宜、省電、且跨廠牌互通。
+採用 Staircase FEC（階梯碼）技術。功耗低、延遲低，但是糾錯能力稍弱。
+通常用在 QSFP-DD 400ZR 模組上，專門跑 80~120 公里的點對點資料中心連線。</p>
+<p>O-FEC 是由 OpenROADM MSA 組織制定，專為電信商等級的嚴苛環境設計。
+它採用更複雜的 Block Turbo Code（區塊渦輪碼）。這是一種極度強悍的 SD-FEC，糾錯能力極強 (NCG 高達 11.6 dB)，但代價就是運算耗電量較高。
+通常用在 400G ZR+ 或是 CFP2-DCO 這種大型模組上，用來跨越好幾個縣市、甚至跑 500~1000 公里的長途骨幹網。</p>
+<p>跑短途的 400ZR，裝上輕量級的 C-FEC，省電且足夠安全。
+跑長途的 ZR+ 或 CFP2，換上重量級的 O-FEC (SD-FEC)，雖然耗電，但能保證訊號在幾百公里的消磨後依然毫髮無傷。</p>
+<h2 id="grid--dwdm">Grid &amp; DWDM</h2>
+<p>前面提到的都是怎麼把資料變成光(QAM)，那傳輸需要通道呀，這時候一個殘酷的物理問題來了，因為加了這麼多嗚欸某欸，光譜的寬度變得超級寬<del>跟我的腰一樣</del>
+這邊講的寬就要提到大學資工工程數學這門課中那位赫赫有名的傅立葉了XD</p>
+<p>傅立葉說過 &ldquo;你在時間上變化的速度越快，你在頻率空間上佔用的範圍就越寬。&rdquo;</p>
+<p><del>傅立葉:才沒有(棺材板要按不住了)</del></p>
+<p>所以現在為了衝上 400G/800G，加上 FEC 額外的 25% 糾錯碼與 OTN 封裝，雷射每秒閃爍的速度 (Baud Rate) 必須越來越快。根據傅立葉的魔法，閃得越快，在光纖裡佔用的實體頻寬就越寬。</p>
+<p>國際電信聯盟 (ITU-T) 在制定 Grid 的時候當初應該有考慮到使用波長去切格子，不過格子的大小會忽大忽小，因為頻率跟波長是倒數關係，不是線性比例。
+為了讓每個格子(Grid)都一樣寬，ITU-T 就統一用頻率 (THz/GHz) 來作為區隔，所以現在在設定 Grid 的時候都是去設定頻率而不是波長。</p>
+<p>這邊突然來講 DWDM 是因為其實一開始我自己也是搞不懂的到底 DWDM 跟 Grid 有啥關係&hellip;
+在之前介紹 xcver 文章提到的 WDM 就是 &ldquo;怎麼在單一光纖上同時傳輸多路不同的光信號(如何使用不同波長)&quot;，那其中的 DWDM 就是「高密度」波長多工，也就是把光纖的頻寬切成超級多個極窄的車道。(色散少的那段)，
+要如何在那一段空間中切出許多通道，頻率/波長的距離的切法就很重要了，這個距離也就是 Grid。</p>
+<p>Grid 定義了絕對的中心座標（例如 193.10THz）以及每個車道的寬度。MUX 廠商照著 Grid 去挖閘門，網工照著 Grid 去設定 Switch 上的雷射頻率（Channel），這樣兩邊才能完美對接。</p>
+<h3 id="fixed-grid">Fixed Grid</h3>
+<p>在以前像是 100G 的時代，訊號都瘦瘦的(Baud小)，所以 ITU-T 就像畫停車格一樣，把光譜切成一個一個固定大小的格子，最常見的就是 50GHz 或 100GHz 為一格。
+那 100G 的訊號寬度大概才 30 幾 GHz，停進 50GHz 的 MUX 閘門裡簡直游刃有餘。</p>
+<h3 id="flex-grid">Flex Grid</h3>
+<p>但時代變了，像是 400G ZR (16QAM) 的寬度高達 69 GHz 啊！
+如果你硬要把這台 69 GHz 的大卡車，開進傳統 50 GHz 的 Fixed Grid 閘門裡&hellip; 阿嬤來了都沒用。</p>
+<p>那如果我給 100GHz 去跑 400G 又浪費掉了約 30 GHz 的頻寬，所以 Flex Grid 就應運而生了。</p>
+<p>現在的做法就是變成樂高那樣，基礎單位縮小到 6.25 GHz，那這樣 400G 需要的 69GHz 可以變成 12 個 6.25Ghz (總共 75GHz)</p>
+<p>這邊來看一下 CFP2 的 datasheet，剛好手上有 200G CFP2~</p>
+<div style="display: flex; justify-content: center;">
+    <div style="width: 70%;">
+        <figure><a class="lightgallery" href="/images/transceiver/xcver-intro-04/xcver-200g-cfp2-datasheet.png" title="/images/transceiver/xcver-intro-04/xcver-200g-cfp2-datasheet.png" data-thumbnail="/images/transceiver/xcver-intro-04/xcver-200g-cfp2-datasheet.png" data-sub-html="<h2>200G CFP2 datasheet</h2>">
+                <img
+                    class="lazyload"
+                    src="/svg/loading.min.svg"
+                    data-src="/images/transceiver/xcver-intro-04/xcver-200g-cfp2-datasheet.png"
+                    data-srcset="/images/transceiver/xcver-intro-04/xcver-200g-cfp2-datasheet.png, /images/transceiver/xcver-intro-04/xcver-200g-cfp2-datasheet.png 1.5x, /images/transceiver/xcver-intro-04/xcver-200g-cfp2-datasheet.png 2x"
+                    data-sizes="auto"
+                    alt="/images/transceiver/xcver-intro-04/xcver-200g-cfp2-datasheet.png" />
+            </a><figcaption class="image-caption">200G CFP2 datasheet</figcaption>
+            </figure>
+    </div>
+</div>
+<p>在上半部 Transmitter 那邊有 <code>Default channel grid spacing</code> 這個就是預設頻道網格間距，代表這顆模組出廠預設的標準 DWDM 車道寬度就是 50 GHz。</p>
+<p>圖中沒寫到但是在 datasheet 第一頁介紹中有提到 <code>Flex-grid DWDM support with gridless tuning (100 MHz resolution)</code> 也就是可以以 0.1 GHz 去 fine-tuning。
+其實在圖中表格有一個 <code>Fine tune frequency resolution</code> 欄位就是指這點，</p>
+<p>那圖中 <code>On-grid tuning range</code> 這個 +/-6GHz 打個譬喻就是車道內的左右偏移，舉個例子：
+你的車子（光訊號）開進 MUX（合波器閘門）時，理論上 MUX 的中心點應該完美對齊 193.150 THz。
+但現實中，MUX 這個鐵盒子在機房裡吹了五年的冷氣，熱脹冷縮老化了，它的中心點可能歪了 2 GHz，變成了 193.148 THz。
+如果你一樣死死對準 193.150 發射，訊號就會一直摩擦到 MUX 的牆壁（Filter Penalty）。
+這參數就是告訴你：「這顆模組的雷射，最多只能幫你修正 6 GHz 的物理誤差，再歪就救不回來了。</p>
+<p>Datasheet 中有一個 <code>Frequency range</code>，從 191.35 THz 到 196.10 THz (注意是 T 嘿!)，這一段其實就是 C-band 也就是色散最少的頻段。
+那這邊我就好奇了，可以塞多少光進去？</p>
+<p>這一段是 4.8 THz (也就是 4800 GHz)</p>
+<ul>
+<li>如果你跑 100G (50GHz Grid) 的話，4800/50=96 個頻道，總容量是 96×100G=9.6 Tbps</li>
+<li>如果你跑 400G (75GHz Flex Grid)，4800/75=64 個頻道，總容量高達 64×400G=25.6 Tbps</li>
+</ul>
+<p>有個有趣的點就是其實</p>
+<p>其實到這裡應該就差不多可以理解 ZR/CFP2 這種長距離傳輸的 xcver 背後原理了，再深入的話就另請高人ＱＱ</p>
+<h3 id="有趣的小發現">有趣的小發現</h3>
+<p>在找這些資料時發現很酷的就是一個 CFP2/ZR 只能打出一束光(只有一種顏色)&hellip;
+誒不對捏！那這樣我幹嘛還需要 DWDM 切成這麼多種頻率(顏色)的光 0.0</p>
+<p>有個方法可以實現多種頻率同時在一條光纖容納不同頻率的光，就是買一堆 CFP2 然後每個 CFP2 打出對應波長的光，最後再由一個 MUX 把所有不同顏色的光塞在一條光纖中。</p>
+<p>到這邊還是滿頭問號，沒回答到問題啊XD</p>
+<p>那目前我感覺比較合理的解釋是現在的雷射元件物理限制，沒辦法只用一個雷射元件同時打出多種頻率的光，像是聲帶一樣應該沒有人的聲帶可以同時發出兩種以上的聲音吧～
+同時熱也是個問題&hellip; 400G 都已經快 20W 了，那 64 個 400G 同時跑不就燒起來。</p>
+<p>如果這個難點可以克服的話，那說不定一顆 CFP2 假設可以打 64 個頻道，總容量高達 64×400G=25.6 Tbps 哇！恭喜發明出了 25.6Tbps 的 xcver XD</p>
+<p>BTW. CPO 說不定可以來解決這個問題呦～</p>
+<p>那回來為什麼還需要 DWDM? 目前應該是光纖海纜站那邊會用到吧，畢竟全球網際網路的命脈再貴也花得下去～</p>
+<p>我的想法是在海纜登陸站那裡面應該會有一台專門 <a href="https://www.ciena.com/products/6500" target="_blank" rel="noopener noreffer ">MUX 光的機器</a>，把一堆不同頻率的光塞到同一個海纜光纖中，這樣才是極致的使用那條光纖吧。
+然後海纜中間再透過 EDFA (摻鉺光纖放大器)，這個鉺離子可以把光給訊號不管好與壞的去放大，讓光有能量繼續跑。</p>
+<p>嘿嘿～ 那另一個問題又來了，EDFA 這個放大器不是被動元件是要<a href="https://www.spellmanhv.com/en/high-voltage-power-supplies/Industries/Applications/Power-Feed-Equipment" target="_blank" rel="noopener noreffer ">供電的</a>，但是海纜這麼遠電阻不就把電壓都消耗光了嗎，更別說電是需要湊成一個回路&hellip;</p>
+<p>目前看到 wiki 是寫說 <code>&quot;Typically both ends share the current generation with one end providing a positive voltage and the other a negative voltage. A virtual earth point exists roughly halfway along the cable under normal operation.&quot;</code></p>
+<p>翻譯: 通常兩端一起發電，一端給正電壓，另一端給負電壓。在正常運作下，電纜大約一半的地方會存在一個「虛擬接地點 (Virtual earth point)」。</p>
+<p>白話文就是：從台灣打 7500V 出去，一路掉電壓，到了太平洋正中央剛好變成 0V，然後一路變成負電壓到達美國，最後透過海水流回台灣完成迴路！</p>
+<p>那再看到<a href="https://ieeexplore.ieee.org/document/10057128" target="_blank" rel="noopener noreffer ">這篇論文</a>，開頭就直接寫到 <code>sea/seabed-return</code> 也就是使用海水接地迴路&hellip; 真的滿神奇的，都不知道是不是在唬爛&hellip;</p>
+<p>以上是查資料中發現的很好玩的小知識，如果未來有認識相關行業的人我再來仔細問問看能不能寫一篇來分享～</p>
+<h2 id="實際設定與操作">實際設定與操作</h2>
+<p>我就是那種沒有試過就不信的人，所以這邊我就簡單做個小實驗。</p>
+<h3 id="amx3200-with-csr440">AMX3200 With CSR440</h3>
+<p>簡單接了一下，透過這樣最簡單的接法來知道說 AMX3200 這種 transponder 實際在做什麼。</p>
+<div style="display: flex; justify-content: center;">
+    <div style="width: 70%;">
+        <figure><a class="lightgallery" href="/images/transceiver/xcver-intro-04/xcver-transponder-simple-topology.png" title="/images/transceiver/xcver-intro-04/xcver-transponder-simple-topology.png" data-thumbnail="/images/transceiver/xcver-intro-04/xcver-transponder-simple-topology.png" data-sub-html="<h2>AMX3200 with CSR440 Topology</h2>">
+                <img
+                    class="lazyload"
+                    src="/svg/loading.min.svg"
+                    data-src="/images/transceiver/xcver-intro-04/xcver-transponder-simple-topology.png"
+                    data-srcset="/images/transceiver/xcver-intro-04/xcver-transponder-simple-topology.png, /images/transceiver/xcver-intro-04/xcver-transponder-simple-topology.png 1.5x, /images/transceiver/xcver-intro-04/xcver-transponder-simple-topology.png 2x"
+                    data-sizes="auto"
+                    alt="/images/transceiver/xcver-intro-04/xcver-transponder-simple-topology.png" />
+            </a><figcaption class="image-caption">AMX3200 with CSR440 Topology</figcaption>
+            </figure>
+    </div>
+</div>
+<p>這邊我使用 CLI 文字截取的方式唄XD</p>
+<p>大致說明一下怎麼回事，
+目前實體拓樸是把兩台 CSR440 的 100G QSFP28 接入到 AMX3200 的第一個 QSFP28 上，AMX3200 左右兩個 SLED 卡板的 CFP2-1 loopback 對接。</p>
+<p>設定的部分 CSR440 的 QSFP 設定成 L3 interface，AMX3200 的部分就是對兩個 SLED 去做第一孔 QSFP28 mapping 到 CFP2-1。</p>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-shell">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="複製到剪貼板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">RU32-CSR440&gt;show ip int b
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="s1">&#39;*&#39;</span> - address is assigned by dhcp client
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Interface            IP-Address      Admin-Status          Link-Status
+</span></span><span class="line"><span class="cl">cd1                  10.44.1.32      up                    down
+</span></span><span class="line"><span class="cl">cd3                  10.44.3.32      up                    down
+</span></span><span class="line"><span class="cl">ce0                  10.44.0.32      up                    up
+</span></span><span class="line"><span class="cl">ce2                  10.44.2.32      up                    down
+</span></span><span class="line"><span class="cl">eth0                *10.101.108.224  up                    up
+</span></span><span class="line"><span class="cl">lo                   127.0.0.1       up                    up
+</span></span><span class="line"><span class="cl">lo.management        127.0.0.1       up                    up
+</span></span><span class="line"><span class="cl">vlan1.1              unassigned      up                    down
+</span></span><span class="line"><span class="cl">vlan1.10             10.44.10.32     up                    down
+</span></span><span class="line"><span class="cl">vlan1.20             10.44.20.32     up                    down
+</span></span><span class="line"><span class="cl">vlan1.30             10.44.30.32     up                    down
+</span></span><span class="line"><span class="cl">xe5                  unassigned      up                    down
+</span></span><span class="line"><span class="cl">xe6                  unassigned      up                    down
+</span></span><span class="line"><span class="cl">xe7                  unassigned      up                    down
+</span></span><span class="line"><span class="cl">xe8                  unassigned      up                    down
+</span></span><span class="line"><span class="cl">xe9                  unassigned      up                    down
+</span></span><span class="line"><span class="cl">xe10                 unassigned      up                    down
+</span></span><span class="line"><span class="cl">xe11                 unassigned      up                    down
+</span></span><span class="line"><span class="cl">xe12                 unassigned      up                    down
+</span></span><span class="line"><span class="cl">RU32-CSR440&gt;ping 10.44.0.33
+</span></span><span class="line"><span class="cl">Press CTRL+C to <span class="nb">exit</span>
+</span></span><span class="line"><span class="cl">PING 10.44.0.33 <span class="o">(</span>10.44.0.33<span class="o">)</span> 100<span class="o">(</span>128<span class="o">)</span> bytes of data.
+</span></span><span class="line"><span class="cl"><span class="m">108</span> bytes from 10.44.0.33: <span class="nv">icmp_seq</span><span class="o">=</span><span class="m">1</span> <span class="nv">ttl</span><span class="o">=</span><span class="m">64</span> <span class="nv">time</span><span class="o">=</span>0.985 ms
+</span></span><span class="line"><span class="cl"><span class="m">108</span> bytes from 10.44.0.33: <span class="nv">icmp_seq</span><span class="o">=</span><span class="m">2</span> <span class="nv">ttl</span><span class="o">=</span><span class="m">64</span> <span class="nv">time</span><span class="o">=</span>0.870 ms
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">--- 10.44.0.33 ping statistics ---
+</span></span><span class="line"><span class="cl"><span class="m">2</span> packets transmitted, <span class="m">2</span> received, 0% packet loss, <span class="nb">time</span> 999ms
+</span></span><span class="line"><span class="cl">rtt min/avg/max/mdev <span class="o">=</span> 0.870/0.927/0.985/0.057 ms
+</span></span><span class="line"><span class="cl">RU32-CSR440&gt;</span></span></code></pre></div></div>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-shell">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="複製到剪貼板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">RU33-CSR440&gt;show ip int b
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="s1">&#39;*&#39;</span> - address is assigned by dhcp client
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Interface            IP-Address      Admin-Status          Link-Status
+</span></span><span class="line"><span class="cl">cd1                  10.44.1.33      up                    down
+</span></span><span class="line"><span class="cl">cd3                  10.44.3.33      up                    down
+</span></span><span class="line"><span class="cl">ce0                  10.44.0.33      up                    up
+</span></span><span class="line"><span class="cl">ce2                  10.44.2.33      up                    down
+</span></span><span class="line"><span class="cl">eth0                *10.101.108.225  up                    up
+</span></span><span class="line"><span class="cl">lo                   127.0.0.1       up                    up
+</span></span><span class="line"><span class="cl">lo.management        127.0.0.1       up                    up
+</span></span><span class="line"><span class="cl">vlan1.1              unassigned      up                    down
+</span></span><span class="line"><span class="cl">vlan1.10             10.44.10.33     up                    down
+</span></span><span class="line"><span class="cl">vlan1.20             10.44.20.33     up                    down
+</span></span><span class="line"><span class="cl">vlan1.30             10.44.30.33     up                    down
+</span></span><span class="line"><span class="cl">xe4                  unassigned      up                    down
+</span></span><span class="line"><span class="cl">xe6                  unassigned      up                    down
+</span></span><span class="line"><span class="cl">xe7                  unassigned      up                    down
+</span></span><span class="line"><span class="cl">xe8                  unassigned      up                    down
+</span></span><span class="line"><span class="cl">xe9                  unassigned      up                    down
+</span></span><span class="line"><span class="cl">xe10                 unassigned      up                    down
+</span></span><span class="line"><span class="cl">xe11                 unassigned      up                    down
+</span></span><span class="line"><span class="cl">xe12                 unassigned      up                    down
+</span></span><span class="line"><span class="cl">RU33-CSR440&gt;ping 10.44.0.32
+</span></span><span class="line"><span class="cl">Press CTRL+C to <span class="nb">exit</span>
+</span></span><span class="line"><span class="cl">PING 10.44.0.32 <span class="o">(</span>10.44.0.32<span class="o">)</span> 100<span class="o">(</span>128<span class="o">)</span> bytes of data.
+</span></span><span class="line"><span class="cl"><span class="m">108</span> bytes from 10.44.0.32: <span class="nv">icmp_seq</span><span class="o">=</span><span class="m">1</span> <span class="nv">ttl</span><span class="o">=</span><span class="m">64</span> <span class="nv">time</span><span class="o">=</span>0.874 ms
+</span></span><span class="line"><span class="cl"><span class="m">108</span> bytes from 10.44.0.32: <span class="nv">icmp_seq</span><span class="o">=</span><span class="m">2</span> <span class="nv">ttl</span><span class="o">=</span><span class="m">64</span> <span class="nv">time</span><span class="o">=</span>0.838 ms
+</span></span><span class="line"><span class="cl"><span class="m">108</span> bytes from 10.44.0.32: <span class="nv">icmp_seq</span><span class="o">=</span><span class="m">3</span> <span class="nv">ttl</span><span class="o">=</span><span class="m">64</span> <span class="nv">time</span><span class="o">=</span>0.902 ms
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">--- 10.44.0.32 ping statistics ---
+</span></span><span class="line"><span class="cl"><span class="m">3</span> packets transmitted, <span class="m">3</span> received, 0% packet loss, <span class="nb">time</span> 2002ms
+</span></span><span class="line"><span class="cl">rtt min/avg/max/mdev <span class="o">=</span> 0.838/0.871/0.902/0.026 ms
+</span></span><span class="line"><span class="cl">RU33-CSR440&gt;</span></span></code></pre></div></div>
+<p>看到這個 ping 截圖後應該會發現，AMX3200 其實可以看成一個很長的光纖線，它不會做任何的 packet switch 還啥的操作，就是左手進右手出這樣而已。(當然還有一些功能我這邊就不多提了)</p>
+<p>那 AMX3200 有個限制就是你單看一個 SLED (卡板)，會有兩個 CFP2 跟八個 QSFP28，其實 QSFP28 又分成左四又四，左四對應到 CFP2-1，右四對應到 CFP2-2，這樣剛剛好可以吃滿 CFP2 的 400G (100G * 4 QSFP28)。</p>
+<p>其實公司還有一個產品叫做 OWS (Optical Wavelength Switch)，這個改天有機會我再來寫一篇介紹一下，因為這個會需要搭配到 ZR transceiver~</p>
+<h3 id="zr-transceiver">ZR transceiver</h3>
+<p>那最後還是要來看一下網工比較常接觸到的 ZR 唄～</p>
+<div style="display: flex; justify-content: center;">
+    <div style="width: 70%;">
+        <figure><a class="lightgallery" href="/images/transceiver/xcver-intro-04/xcver-toolkit-800G-OSFP-ZR-01.png" title="/images/transceiver/xcver-intro-04/xcver-toolkit-800G-OSFP-ZR-01.png" data-thumbnail="/images/transceiver/xcver-intro-04/xcver-toolkit-800G-OSFP-ZR-01.png" data-sub-html="<h2>實際兩個 port 對接 Eth48&lt;-&gt;Eth52</h2>">
+                <img
+                    class="lazyload"
+                    src="/svg/loading.min.svg"
+                    data-src="/images/transceiver/xcver-intro-04/xcver-toolkit-800G-OSFP-ZR-01.png"
+                    data-srcset="/images/transceiver/xcver-intro-04/xcver-toolkit-800G-OSFP-ZR-01.png, /images/transceiver/xcver-intro-04/xcver-toolkit-800G-OSFP-ZR-01.png 1.5x, /images/transceiver/xcver-intro-04/xcver-toolkit-800G-OSFP-ZR-01.png 2x"
+                    data-sizes="auto"
+                    alt="/images/transceiver/xcver-intro-04/xcver-toolkit-800G-OSFP-ZR-01.png" />
+            </a><figcaption class="image-caption">實際兩個 port 對接 Eth48&lt;-&gt;Eth52</figcaption>
+            </figure>
+    </div>
+</div>
+<p>這邊要提醒一下，不管是什麼速度的 ZR 拿到後請先不要直接對接送光，防止的是 TX power 過大而超過 RX power 能接受的最大值，超過了會直接燒壞 RX 端(請不要太依賴硬體保護機制嘿)。</p>
+<div style="display: flex; justify-content: center;">
+    <div style="width: 70%;">
+        <figure><a class="lightgallery" href="/images/transceiver/xcver-intro-04/xcver-800GZR-EEPROM-threshold-01.png" title="/images/transceiver/xcver-intro-04/xcver-800GZR-EEPROM-threshold-01.png" data-thumbnail="/images/transceiver/xcver-intro-04/xcver-800GZR-EEPROM-threshold-01.png" data-sub-html="<h2>ZR EEPROM threshold</h2>">
+                <img
+                    class="lazyload"
+                    src="/svg/loading.min.svg"
+                    data-src="/images/transceiver/xcver-intro-04/xcver-800GZR-EEPROM-threshold-01.png"
+                    data-srcset="/images/transceiver/xcver-intro-04/xcver-800GZR-EEPROM-threshold-01.png, /images/transceiver/xcver-intro-04/xcver-800GZR-EEPROM-threshold-01.png 1.5x, /images/transceiver/xcver-intro-04/xcver-800GZR-EEPROM-threshold-01.png 2x"
+                    data-sizes="auto"
+                    alt="/images/transceiver/xcver-intro-04/xcver-800GZR-EEPROM-threshold-01.png" />
+            </a><figcaption class="image-caption">ZR EEPROM threshold</figcaption>
+            </figure>
+    </div>
+</div>
+<p>在確認完不會超過不需要掛衰減器(attenuators)後就可以接上去了。</p>
+<p>然後其實 ZR 主要的就是調整他的 Frequency(wavelength)、TX Power 而已。</p>
+<div style="display: flex; justify-content: center;">
+    <div style="width: 70%;">
+        <figure><a class="lightgallery" href="/images/transceiver/xcver-intro-04/xcver-ZR-configure-fre-grid-01.png" title="/images/transceiver/xcver-intro-04/xcver-ZR-configure-fre-grid-01.png" data-thumbnail="/images/transceiver/xcver-intro-04/xcver-ZR-configure-fre-grid-01.png" data-sub-html="<h2>SONiC 中設定 Frequency 與 Grid 指令</h2>">
+                <img
+                    class="lazyload"
+                    src="/svg/loading.min.svg"
+                    data-src="/images/transceiver/xcver-intro-04/xcver-ZR-configure-fre-grid-01.png"
+                    data-srcset="/images/transceiver/xcver-intro-04/xcver-ZR-configure-fre-grid-01.png, /images/transceiver/xcver-intro-04/xcver-ZR-configure-fre-grid-01.png 1.5x, /images/transceiver/xcver-intro-04/xcver-ZR-configure-fre-grid-01.png 2x"
+                    data-sizes="auto"
+                    alt="/images/transceiver/xcver-intro-04/xcver-ZR-configure-fre-grid-01.png" />
+            </a><figcaption class="image-caption">SONiC 中設定 Frequency 與 Grid 指令</figcaption>
+            </figure>
+    </div>
+</div>
+<p>其實設定 Frequency Grid 這裡是已經幫忙做好轉換了，有的 NOS 會要你填入一個 offset 值，那這個 offset 其實是需要去參考 CMIS 文件的轉換公式的。</p>
+<div style="display: flex; justify-content: center;">
+    <div style="width: 70%;">
+        <figure><a class="lightgallery" href="/images/transceiver/xcver-intro-04/xcver-cmis5.4-grid-function.png" title="/images/transceiver/xcver-intro-04/xcver-cmis5.4-grid-function.png" data-thumbnail="/images/transceiver/xcver-intro-04/xcver-cmis5.4-grid-function.png" data-sub-html="<h2>CMIS 5.4 文件中計算 Frequency 公式</h2>">
+                <img
+                    class="lazyload"
+                    src="/svg/loading.min.svg"
+                    data-src="/images/transceiver/xcver-intro-04/xcver-cmis5.4-grid-function.png"
+                    data-srcset="/images/transceiver/xcver-intro-04/xcver-cmis5.4-grid-function.png, /images/transceiver/xcver-intro-04/xcver-cmis5.4-grid-function.png 1.5x, /images/transceiver/xcver-intro-04/xcver-cmis5.4-grid-function.png 2x"
+                    data-sizes="auto"
+                    alt="/images/transceiver/xcver-intro-04/xcver-cmis5.4-grid-function.png" />
+            </a><figcaption class="image-caption">CMIS 5.4 文件中計算 Frequency 公式</figcaption>
+            </figure>
+    </div>
+</div>
+<p>我這邊拿 800G OSFP ZR/ZR+ 當作例子，因為 800G 可以使用到 150GHz Grid，那這邊就拿我上面節圖的 191.4THz 來看 n 是多少。
+<code>191.4 = 193.1 + (n+3) x 0.025</code>，計算後 n 為 -71 那會發現一件事情，就是 n 不是 6 的倍數，所以代表 800G 150GHz grid 情況下無法設定 191.4THz 這個頻率。
+那為什麼 100G 可以設定是因為 100GHz Grid 公式是 <code>193.1 + n x 0.1</code> 所以上面截圖那個 n 其實是 -17。</p>
+<p>手算有點麻煩就是了~</p>
+<div style="display: flex; justify-content: center;">
+    <div style="width: 70%;">
+        <figure><a class="lightgallery" href="/images/transceiver/xcver-intro-04/xcver-toolkit-ZR-screenshot-01.png" title="/images/transceiver/xcver-intro-04/xcver-toolkit-ZR-screenshot-01.png" data-thumbnail="/images/transceiver/xcver-intro-04/xcver-toolkit-ZR-screenshot-01.png" data-sub-html="<h2>800G IHS OSFP ZR 溫度</h2>">
+                <img
+                    class="lazyload"
+                    src="/svg/loading.min.svg"
+                    data-src="/images/transceiver/xcver-intro-04/xcver-toolkit-ZR-screenshot-01.png"
+                    data-srcset="/images/transceiver/xcver-intro-04/xcver-toolkit-ZR-screenshot-01.png, /images/transceiver/xcver-intro-04/xcver-toolkit-ZR-screenshot-01.png 1.5x, /images/transceiver/xcver-intro-04/xcver-toolkit-ZR-screenshot-01.png 2x"
+                    data-sizes="auto"
+                    alt="/images/transceiver/xcver-intro-04/xcver-toolkit-ZR-screenshot-01.png" />
+            </a><figcaption class="image-caption">800G IHS OSFP ZR 溫度</figcaption>
+            </figure>
+    </div>
+</div>
+<p>這邊來順便展示一下公司新製作的 transceiver toolkit 軟體，主要是因為 IXIA 好貴，我們只是要測試 link up/down 跟一些 NOS 上面的操作與行為測試而已，所以就搞出這套了。</p>
+<p>剛好有做完一個 24 小時的打流量測試，測試後撈了一下溫度變化(15:00 之前的是還在打流量)，可以看到其實 IHS 有散熱鰭片的 OSFP ZR 還是一樣超燙，那真的可以煎雞蛋了。</p>
+<p>好啦，寫到目前 transceiver 的部分應該可以告個段落了，幾乎網工該要有的知識都已經有了，接下來要來寫一些 AI datacenter 的分享了，畢竟自己算是在做 AI DC 架構規劃的工作XD</p>
+<hr>
+<h2 id="reference-參考文章">Reference 參考文章</h2>
+<p>非常感謝以下博主讓小弟可以參考～</p>
+<ul>
+<li><a href="https://info.support.huawei.com/info-finder/encyclopedia/zh/QAM.html" target="_blank" rel="noopener noreffer ">什么是QAM？</a></li>
+<li><a href="https://www.ultrontek.com/news_detail/evolution-of-rf-modulation-techniques" target="_blank" rel="noopener noreffer ">從AM到6G：一文看懂無線調變技術的演進、應用與未來 | 包含QAM/OFDM詳解</a></li>
+<li><a href="https://www.youtube.com/watch?v=1asY7-NZ93g" target="_blank" rel="noopener noreffer ">Quadrature Amplitude Modlation (QAM): Explained</a></li>
+<li><a href="https://www.cisco.com/c/en/us/td/docs/dcn/nx-os/nexus9000/105x/configuration/interfaces/cisco-nexus-9000-series-nx-os-interfaces-configuration-guide-release-105x/m-configuring-400g-digital-coherent-optics.html" target="_blank" rel="noopener noreffer ">Chapter: Configuring 400G Digital Coherent Optics</a></li>
+<li><a href="https://zh.wikipedia.org/zh-tw/%E6%AD%A3%E4%BA%A4%E5%B9%85%E5%BA%A6%E8%B0%83%E5%88%B6" target="_blank" rel="noopener noreffer ">正交振幅調變 維基百科</a></li>
+<li><a href="https://exdbm.com/article-detail/BOAd14wW" target="_blank" rel="noopener noreffer ">可调光源Tunable Laser/Sweeping Laser相关技术</a></li>
+<li><a href="https://cdn.quantifiphotonics.com/20240501154320/QP_AppNote_Selecting_OMA_v1.3.pdf" target="_blank" rel="noopener noreffer ">QantifiPhotonics 示波器 White Paper</a></li>
+<li><a href="https://www.oiforum.com/wp-content/uploads/OIF-CMIS-05.4.pdf" target="_blank" rel="noopener noreffer ">OIF-CMIS-05.4.pdf CMIS 5.4</a></li>
+<li><a href="https://ieeexplore.ieee.org/document/10057128" target="_blank" rel="noopener noreffer ">Ground-Return Parameters of Submarine Cables Buried in the Seabed</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Submarine_communications_cable" target="_blank" rel="noopener noreffer ">Submarine communications cable</a></li>
+<li><a href="https://www.spellmanhv.com/en/high-voltage-power-supplies/Industries/Applications/Power-Feed-Equipment" target="_blank" rel="noopener noreffer ">Power Feed Equipment (PFE) - Spellman</a></li>
+<li><a href="https://www.ciena.com/products/6500" target="_blank" rel="noopener noreffer ">6500 Series - Ciena</a></li>
+</ul>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新於 2026-07-03</span>
+            </div></div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="分享到 X" data-sharer="x" data-url="https://seisokeii.github.io/zh-tw/posts/transceiver/transceiver-intro-04/" data-title="CFP2 與 ZR Transceiver 簡介" data-hashtags="Transceiver,SONiC,Edgecore"><i class="fab fa-x-twitter" aria-hidden="true"></i></a><a href="javascript:void(0);" title="分享到 Threads" data-sharer="threads" data-url="https://seisokeii.github.io/zh-tw/posts/transceiver/transceiver-intro-04/" data-title="CFP2 與 ZR Transceiver 簡介"><i class="fab fa-threads" aria-hidden="true"></i></a><a href="javascript:void(0);" title="分享到 Diaspora" data-sharer="diaspora" data-url="https://seisokeii.github.io/zh-tw/posts/transceiver/transceiver-intro-04/" data-title="CFP2 與 ZR Transceiver 簡介" data-description=""><i class="fab fa-diaspora" aria-hidden="true"></i></a><a href="https://t.me/share/url?url=https%3a%2f%2fseisokeii.github.io%2fzh-tw%2fposts%2ftransceiver%2ftransceiver-intro-04%2f&amp;text=CFP2%20%e8%88%87%20ZR%20Transceiver%20%e7%b0%a1%e4%bb%8b" target="_blank" title="分享到 Telegram"><i class="fab fa-telegram" aria-hidden="true"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags" aria-hidden="true"></i>&nbsp;<a href="/zh-tw/tags/transceiver/">Transceiver</a>,&nbsp;<a href="/zh-tw/tags/sonic/">SONiC</a>,&nbsp;<a href="/zh-tw/tags/edgecore/">Edgecore</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/zh-tw/">主頁</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/zh-tw/posts/transceiver/transceiver-intro-03/" class="prev" rel="prev" title="Transceiver 與 SONiC 互動"><i class="fas fa-angle-left" aria-hidden="true"></i>Transceiver 與 SONiC 互動</a></div>
+</div>
+<div id="comments"><div id="disqus_thread" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://disqus.com/?ref_noscript">Disqus</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.154.5">Hugo</a> 強力驅動 | 主題 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 1.0.0"><i class="far fa-kiss-wink-heart" aria-hidden="true"></i> LoveIt</a>
+                </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright" aria-hidden="true"></i><span itemprop="copyrightYear">2024 - 2026</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/zh-tw/" target="_blank">seisokeii</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到頂部">
+                <i class="fas fa-arrow-up" aria-hidden="true"></i>
+            </a>
+        </div>
+
+        <div id="fixed-buttons-hidden"><a href="#" id="view-comments" class="fixed-button" title="查看評論">
+                <i class="fas fa-comment" aria-hidden="true"></i>
+            </a>
+        </div><script src="https://.disqus.com/embed.js" defer></script><script src="https://cdn.jsdelivr.net/npm/autocomplete.js@0.38.1/dist/autocomplete.min.js"></script><script src="https://cdn.jsdelivr.net/npm/lunr@2.3.9/lunr.min.js"></script><script src="/lib/lunr/lunr.stemmer.support.min.js"></script><script src="/lib/lunr/lunr.zh.min.js"></script><script src="https://cdn.jsdelivr.net/npm/lazysizes@5.3.2/lazysizes.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.11/dist/clipboard.min.js"></script><script src="https://cdn.jsdelivr.net/npm/sharer.js@0.5.2/sharer.min.js"></script><script>window.config={"comment":{},"search":{"highlightTag":"em","lunrLanguageCode":"zh","lunrSegmentitURL":"/lib/lunr/lunr.segmentit.js","maxResultLength":10,"noResultsFound":"沒有找到結果","snippetLength":30}};</script><script src="/js/theme.js"></script></body>
+</html>

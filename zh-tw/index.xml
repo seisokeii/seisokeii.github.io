@@ -4,9 +4,39 @@
         <link>https://seisokeii.github.io/zh-tw/</link>
         <description>seisokeii&#39;s blog</description>
         <generator>Hugo -- gohugo.io</generator><language>zh-TW</language><managingEditor>Noway@bimbimbambam (seisokeii)</managingEditor>
-            <webMaster>Noway@bimbimbambam (seisokeii)</webMaster><lastBuildDate>Tue, 06 Jan 2026 23:39:27 &#43;0800</lastBuildDate>
+            <webMaster>Noway@bimbimbambam (seisokeii)</webMaster><lastBuildDate>Fri, 03 Jul 2026 15:20:21 &#43;0800</lastBuildDate>
             <atom:link href="https://seisokeii.github.io/zh-tw/index.xml" rel="self" type="application/rss+xml" />
         <item>
+    <title>CFP2 與 ZR Transceiver 簡介</title>
+    <link>https://seisokeii.github.io/zh-tw/posts/transceiver/transceiver-intro-04/</link>
+    <pubDate>Fri, 03 Jul 2026 15:20:21 &#43;0800</pubDate>
+    <author>Noway@bimbimbambam (seisokeii)</author>
+    <guid>https://seisokeii.github.io/zh-tw/posts/transceiver/transceiver-intro-04/</guid>
+    <description><![CDATA[<div class="featured-image">
+                <img src="/images/transceiver/xcver-intro-04/xcver-amx3200-cover.jpeg" referrerpolicy="no-referrer">
+            </div><p>長這麼大第一次碰到電信級的設備 <del>我目前好像也才碩畢一年多而已</del>
+圖片上插了四個 200G CFP2 跟三支 400G ZR，好貴好貴~</p>
+<hr>
+<p>每個縣市都有房且都各有一座 home datacenter 的人都知道，要把自己分散在各個縣市的機房網路串起來會是一個頭痛的問題，
+尤其是自己半夜偷拉了光纜把所有機房都串在一起後會發現，好像沒辦法直接把光纖接上去 router 跟 switch 上，這樣更苦惱了。</p>]]></description>
+</item>
+<item>
+    <title>Transceiver 與 SONiC 互動</title>
+    <link>https://seisokeii.github.io/zh-tw/posts/transceiver/transceiver-intro-03/</link>
+    <pubDate>Sun, 14 Jun 2026 22:07:14 &#43;0800</pubDate>
+    <author>Noway@bimbimbambam (seisokeii)</author>
+    <guid>https://seisokeii.github.io/zh-tw/posts/transceiver/transceiver-intro-03/</guid>
+    <description><![CDATA[<div class="featured-image">
+                <img src="/images/transceiver/xcver-intro-03/xcver-cable-nightmare.jpeg" referrerpolicy="no-referrer">
+            </div><p>AI 一直無法產出我想要的圖片，突然某天在 lab 看到這坨東西就有靈感了。
+根本是網工的噩夢&hellip;</p>
+<hr>
+<p>剛到公司的時候其實剛好趕上 800G 正在起飛，然後隨著速度越來越快 transceiver 有了 CMIS 這個連很多 xcver 廠商都覺得難的東西出現後，
+複雜度開始指數性起飛&hellip;
+過去 100G 以下的 xcver 幾乎是插上去系統就可以讀到就 linkup 了 沒那麼複雜但是讚嘆 CMIS 這咚咚，現在 transceiver 種類越來越多，功能越來越多，
+導致說插上去要做很多判斷動作，這在之前搞維運機房的時候根本沒去在意的點現在都變成坑(跟台灣的路一樣XD)</p>]]></description>
+</item>
+<item>
     <title>Fiber Optic Transceiver Module EEPROM 簡介</title>
     <link>https://seisokeii.github.io/zh-tw/posts/transceiver/transceiver-intro-02/</link>
     <pubDate>Tue, 06 Jan 2026 23:39:27 &#43;0800</pubDate>
@@ -104,31 +134,6 @@
             </div><p>上面這張圖是在公司的某一個角落，就像葬送的芙莉蓮中探索迷宮都要將每個角落都摸透一樣，美妙的地方就是這樣找到的XD</p>
 <hr>
 <p>最近實習生涯即將結束，剛好可以來湊一篇心得順便當作是紀錄唄～</p>]]></description>
-</item>
-<item>
-    <title>SONiC Community Image 初始化設定</title>
-    <link>https://seisokeii.github.io/zh-tw/posts/sonic/sonic-kvm-init-setup/</link>
-    <pubDate>Tue, 24 Sep 2024 15:56:33 &#43;0800</pubDate>
-    <author>Noway@bimbimbambam (seisokeii)</author>
-    <guid>https://seisokeii.github.io/zh-tw/posts/sonic/sonic-kvm-init-setup/</guid>
-    <description><![CDATA[<div class="featured-image">
-                <img src="/images/SONiC/community-init-gns3/sonic-preview01.png" referrerpolicy="no-referrer">
-            </div><p>上面這張圖就只是為了驗證一些概念而接上去的一個小小的 Lab 而已QQ</p>
-<hr>
-<p>在 EVE-NG 或 GNS3 模擬器中跑 <a href="https://sonic.software/" target="_blank" rel="noopener noreffer ">SONiC KVM image</a>，在開機後都會留下一大堆設定，每次拉一台新機器開機就要拔掉一堆設定有夠惱人。</p>]]></description>
-</item>
-<item>
-    <title>Open Network Install Environment (ONIE) How to build?</title>
-    <link>https://seisokeii.github.io/zh-tw/posts/onie/onie-build/</link>
-    <pubDate>Thu, 19 Sep 2024 17:03:33 &#43;0800</pubDate>
-    <author>Noway@bimbimbambam (seisokeii)</author>
-    <guid>https://seisokeii.github.io/zh-tw/posts/onie/onie-build/</guid>
-    <description><![CDATA[<div class="featured-image">
-                <img src="/images/ONIE/onie-dev-machine.jpeg" referrerpolicy="no-referrer">
-            </div><p>上面這張圖是窩在開發用的機器，長得有點像是 1U 的 N3k 誒XD</p>
-<hr>
-<p>繼上一篇 <code>ONIE 白話文簡介</code> ，來稍微分享一下 ONIE 這東東是怎麼 build 起來的唄！</p>
-<p>這邊會類似一個教學文件，但是當然不可能會把公司的資訊放在這~ 就只是大致看一下一間網通廠是怎麼搞出這東東的而已。</p>]]></description>
 </item>
 </channel>
 </rss>

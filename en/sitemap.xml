@@ -2,7 +2,7 @@
     xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
     xmlns:xhtml="http://www.w3.org/1999/xhtml"
     ><url>
-            <loc>https://seisokeii.github.io/en/categories/</loc><lastmod>2026-01-02T21:17:24&#43;08:00</lastmod><xhtml:link
+            <loc>https://seisokeii.github.io/en/categories/</loc><lastmod>2026-06-14T21:58:39&#43;08:00</lastmod><xhtml:link
                         rel="alternate"
                         hreflang="zh-tw"
                         href="https://seisokeii.github.io/zh-tw/categories/"
@@ -11,7 +11,7 @@
                     hreflang="en"
                     href="https://seisokeii.github.io/en/categories/"
                     /></url><url>
-            <loc>https://seisokeii.github.io/en/tags/onie/</loc><lastmod>2026-01-02T21:17:24&#43;08:00</lastmod><xhtml:link
+            <loc>https://seisokeii.github.io/en/tags/onie/</loc><lastmod>2026-06-14T21:58:39&#43;08:00</lastmod><xhtml:link
                         rel="alternate"
                         hreflang="zh-tw"
                         href="https://seisokeii.github.io/zh-tw/tags/onie/"
@@ -20,7 +20,7 @@
                     hreflang="en"
                     href="https://seisokeii.github.io/en/tags/onie/"
                     /></url><url>
-            <loc>https://seisokeii.github.io/en/</loc><lastmod>2026-01-02T21:17:24&#43;08:00</lastmod><xhtml:link
+            <loc>https://seisokeii.github.io/en/</loc><lastmod>2026-06-14T21:58:39&#43;08:00</lastmod><xhtml:link
                         rel="alternate"
                         hreflang="zh-tw"
                         href="https://seisokeii.github.io/zh-tw/"
@@ -29,7 +29,7 @@
                     hreflang="en"
                     href="https://seisokeii.github.io/en/"
                     /></url><url>
-            <loc>https://seisokeii.github.io/en/categories/sonic/</loc><lastmod>2026-01-02T21:17:24&#43;08:00</lastmod><xhtml:link
+            <loc>https://seisokeii.github.io/en/categories/sonic/</loc><lastmod>2026-06-14T21:58:39&#43;08:00</lastmod><xhtml:link
                         rel="alternate"
                         hreflang="zh-tw"
                         href="https://seisokeii.github.io/zh-tw/categories/sonic/"
@@ -38,7 +38,7 @@
                     hreflang="en"
                     href="https://seisokeii.github.io/en/categories/sonic/"
                     /></url><url>
-            <loc>https://seisokeii.github.io/en/tags/sonic/</loc><lastmod>2026-01-02T21:17:24&#43;08:00</lastmod><xhtml:link
+            <loc>https://seisokeii.github.io/en/tags/sonic/</loc><lastmod>2026-06-14T21:58:39&#43;08:00</lastmod><xhtml:link
                         rel="alternate"
                         hreflang="zh-tw"
                         href="https://seisokeii.github.io/zh-tw/tags/sonic/"
@@ -47,7 +47,7 @@
                     hreflang="en"
                     href="https://seisokeii.github.io/en/tags/sonic/"
                     /></url><url>
-            <loc>https://seisokeii.github.io/en/posts/sonic/sonic-installation-via-onie/</loc><lastmod>2026-01-02T21:17:24&#43;08:00</lastmod><xhtml:link
+            <loc>https://seisokeii.github.io/en/posts/sonic/sonic-installation-via-onie/</loc><lastmod>2026-06-14T21:58:39&#43;08:00</lastmod><xhtml:link
                         rel="alternate"
                         hreflang="zh-tw"
                         href="https://seisokeii.github.io/zh-tw/posts/sonic/sonic-installation-via-onie/"
@@ -56,7 +56,7 @@
                     hreflang="en"
                     href="https://seisokeii.github.io/en/posts/sonic/sonic-installation-via-onie/"
                     /></url><url>
-            <loc>https://seisokeii.github.io/en/tags/</loc><lastmod>2026-01-02T21:17:24&#43;08:00</lastmod><xhtml:link
+            <loc>https://seisokeii.github.io/en/tags/</loc><lastmod>2026-06-14T21:58:39&#43;08:00</lastmod><xhtml:link
                         rel="alternate"
                         hreflang="zh-tw"
                         href="https://seisokeii.github.io/zh-tw/tags/"
@@ -65,7 +65,7 @@
                     hreflang="en"
                     href="https://seisokeii.github.io/en/tags/"
                     /></url><url>
-            <loc>https://seisokeii.github.io/en/posts/sonic/sonic-kvm-init-setup/</loc><lastmod>2025-05-06T23:52:30&#43;08:00</lastmod><xhtml:link
+            <loc>https://seisokeii.github.io/en/posts/sonic/sonic-kvm-init-setup/</loc><lastmod>2026-06-14T21:58:39&#43;08:00</lastmod><xhtml:link
                         rel="alternate"
                         hreflang="zh-tw"
                         href="https://seisokeii.github.io/zh-tw/posts/sonic/sonic-kvm-init-setup/"

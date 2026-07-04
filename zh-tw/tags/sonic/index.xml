@@ -4,7 +4,37 @@
         <link>https://seisokeii.github.io/zh-tw/tags/sonic/</link>
         <description>SONiC - 標籤 - seisokeii blog</description>
         <generator>Hugo -- gohugo.io</generator><language>zh-TW</language><managingEditor>Noway@bimbimbambam (seisokeii)</managingEditor>
-            <webMaster>Noway@bimbimbambam (seisokeii)</webMaster><lastBuildDate>Fri, 02 Jan 2026 13:56:12 &#43;0800</lastBuildDate><atom:link href="https://seisokeii.github.io/zh-tw/tags/sonic/" rel="self" type="application/rss+xml" /><item>
+            <webMaster>Noway@bimbimbambam (seisokeii)</webMaster><lastBuildDate>Fri, 03 Jul 2026 15:20:21 &#43;0800</lastBuildDate><atom:link href="https://seisokeii.github.io/zh-tw/tags/sonic/" rel="self" type="application/rss+xml" /><item>
+    <title>CFP2 與 ZR Transceiver 簡介</title>
+    <link>https://seisokeii.github.io/zh-tw/posts/transceiver/transceiver-intro-04/</link>
+    <pubDate>Fri, 03 Jul 2026 15:20:21 &#43;0800</pubDate>
+    <author>Noway@bimbimbambam (seisokeii)</author>
+    <guid>https://seisokeii.github.io/zh-tw/posts/transceiver/transceiver-intro-04/</guid>
+    <description><![CDATA[<div class="featured-image">
+                <img src="/images/transceiver/xcver-intro-04/xcver-amx3200-cover.jpeg" referrerpolicy="no-referrer">
+            </div><p>長這麼大第一次碰到電信級的設備 <del>我目前好像也才碩畢一年多而已</del>
+圖片上插了四個 200G CFP2 跟三支 400G ZR，好貴好貴~</p>
+<hr>
+<p>每個縣市都有房且都各有一座 home datacenter 的人都知道，要把自己分散在各個縣市的機房網路串起來會是一個頭痛的問題，
+尤其是自己半夜偷拉了光纜把所有機房都串在一起後會發現，好像沒辦法直接把光纖接上去 router 跟 switch 上，這樣更苦惱了。</p>]]></description>
+</item>
+<item>
+    <title>Transceiver 與 SONiC 互動</title>
+    <link>https://seisokeii.github.io/zh-tw/posts/transceiver/transceiver-intro-03/</link>
+    <pubDate>Sun, 14 Jun 2026 22:07:14 &#43;0800</pubDate>
+    <author>Noway@bimbimbambam (seisokeii)</author>
+    <guid>https://seisokeii.github.io/zh-tw/posts/transceiver/transceiver-intro-03/</guid>
+    <description><![CDATA[<div class="featured-image">
+                <img src="/images/transceiver/xcver-intro-03/xcver-cable-nightmare.jpeg" referrerpolicy="no-referrer">
+            </div><p>AI 一直無法產出我想要的圖片，突然某天在 lab 看到這坨東西就有靈感了。
+根本是網工的噩夢&hellip;</p>
+<hr>
+<p>剛到公司的時候其實剛好趕上 800G 正在起飛，然後隨著速度越來越快 transceiver 有了 CMIS 這個連很多 xcver 廠商都覺得難的東西出現後，
+複雜度開始指數性起飛&hellip;
+過去 100G 以下的 xcver 幾乎是插上去系統就可以讀到就 linkup 了 沒那麼複雜但是讚嘆 CMIS 這咚咚，現在 transceiver 種類越來越多，功能越來越多，
+導致說插上去要做很多判斷動作，這在之前搞維運機房的時候根本沒去在意的點現在都變成坑(跟台灣的路一樣XD)</p>]]></description>
+</item>
+<item>
     <title>SONiC Image 安裝教學</title>
     <link>https://seisokeii.github.io/zh-tw/posts/sonic/sonic-installation-via-onie/</link>
     <pubDate>Fri, 02 Jan 2026 13:56:12 &#43;0800</pubDate>
