@@ -4,9 +4,35 @@
         <link>https://seisokeii.github.io/zh-tw/</link>
         <description>seisokeii&#39;s blog</description>
         <generator>Hugo -- gohugo.io</generator><language>zh-TW</language><managingEditor>Noway@bimbimbambam (seisokeii)</managingEditor>
-            <webMaster>Noway@bimbimbambam (seisokeii)</webMaster><lastBuildDate>Fri, 03 Jul 2026 15:20:21 &#43;0800</lastBuildDate>
+            <webMaster>Noway@bimbimbambam (seisokeii)</webMaster><lastBuildDate>Sun, 12 Jul 2026 18:26:16 &#43;0800</lastBuildDate>
             <atom:link href="https://seisokeii.github.io/zh-tw/index.xml" rel="self" type="application/rss+xml" />
         <item>
+    <title>GNS3 新增客製化 qcow2</title>
+    <link>https://seisokeii.github.io/zh-tw/posts/gns3/how-to-add-qcow2/</link>
+    <pubDate>Sun, 12 Jul 2026 18:26:16 &#43;0800</pubDate>
+    <author>Noway@bimbimbambam (seisokeii)</author>
+    <guid>https://seisokeii.github.io/zh-tw/posts/gns3/how-to-add-qcow2/</guid>
+    <description><![CDATA[<div class="featured-image">
+                <img src="/images/GNS3/qcow2/gns3-qcow2-page.png" referrerpolicy="no-referrer">
+            </div><p>感覺網工的控制欲是不是都很強啊？ 不管現在已經有很多現成的東西了，最後還是想要客製化成自己想要的形狀&hellip;
+還是說每個人都這樣？？？</p>
+<hr>
+<p>因為要來做一下 Datacenter AI Network 的拓樸，然後每次都覺得 template 要改東改西的好麻煩。
+主要是因為現在 SXM 架構或 OAM server (GPU 焊在 PCB 上) 都是 8 張 NIC 是直通 GPU，然後還會有 4 張 NIC 給 internet 跟 storage (左右 CPU)，還有像是 RJ45 這種 management or BMC 用的。
+有一拖拉庫的網卡&hellip; 因為比較常碰到這類的 case 所以就想說來製作一個模板放在 GNS3 上面模擬一些基本的 routing protocol 拓樸驗證。</p>]]></description>
+</item>
+<item>
+    <title>GNS3 Bare Metal 安裝</title>
+    <link>https://seisokeii.github.io/zh-tw/posts/gns3/bare-metal-installation/</link>
+    <pubDate>Fri, 10 Jul 2026 17:20:24 &#43;0800</pubDate>
+    <author>Noway@bimbimbambam (seisokeii)</author>
+    <guid>https://seisokeii.github.io/zh-tw/posts/gns3/bare-metal-installation/</guid>
+    <description><![CDATA[<div class="featured-image">
+                <img src="/images/GNS3/installation/gns3-installation-page.png" referrerpolicy="no-referrer">
+            </div><p>用過了好多模擬器 (GNS3, EVE-ng, PNETLab, CML, packet <del>bug-it</del> tracer &hellip;) 感覺還是變色龍好用😈
+俗話說的好免錢的最貴&hellip; 但是我倒是覺得其他模擬器付費後好像服務也不是很優&hellip;</p>]]></description>
+</item>
+<item>
     <title>CFP2 與 ZR Transceiver 簡介</title>
     <link>https://seisokeii.github.io/zh-tw/posts/transceiver/transceiver-intro-04/</link>
     <pubDate>Fri, 03 Jul 2026 15:20:21 &#43;0800</pubDate>
@@ -110,30 +136,6 @@
             </div><p>上面這圖是我新訓要帶去營區的東西，也可以空手去啦，但是偶就是想要用自己喜歡的東西而已～</p>
 <hr>
 <p>這一篇就來記錄一下前兩週心得唄～ 單位啥的等當完兵我再來補上XD</p>]]></description>
-</item>
-<item>
-    <title>陽明交通大學資訊科學與工程學系碩士丁組</title>
-    <link>https://seisokeii.github.io/zh-tw/posts/nycucsit/nycu-csit-master-degree/</link>
-    <pubDate>Thu, 26 Sep 2024 10:03:56 &#43;0800</pubDate>
-    <author>Noway@bimbimbambam (seisokeii)</author>
-    <guid>https://seisokeii.github.io/zh-tw/posts/nycucsit/nycu-csit-master-degree/</guid>
-    <description><![CDATA[<div class="featured-image">
-                <img src="/images/CSIT/csit-cht-banqiao-IDC.png" referrerpolicy="no-referrer">
-            </div><p>上面這張圖片是系計中跟另一間實驗室去參觀中華電信板橋資料中心，聽說這裡要參觀很難申請呢XD</p>
-<hr>
-<p>趁著要當兵前趕緊寫一下～ 現在九月好像現在也是大四要準備推甄的時期了呢。</p>]]></description>
-</item>
-<item>
-    <title>碩班時期公司實習心得</title>
-    <link>https://seisokeii.github.io/zh-tw/posts/internship/edgecore-intern/</link>
-    <pubDate>Wed, 25 Sep 2024 16:54:37 &#43;0800</pubDate>
-    <author>Noway@bimbimbambam (seisokeii)</author>
-    <guid>https://seisokeii.github.io/zh-tw/posts/internship/edgecore-intern/</guid>
-    <description><![CDATA[<div class="featured-image">
-                <img src="/images/internship/internship-cafe.png" referrerpolicy="no-referrer">
-            </div><p>上面這張圖是在公司的某一個角落，就像葬送的芙莉蓮中探索迷宮都要將每個角落都摸透一樣，美妙的地方就是這樣找到的XD</p>
-<hr>
-<p>最近實習生涯即將結束，剛好可以來湊一篇心得順便當作是紀錄唄～</p>]]></description>
 </item>
 </channel>
 </rss>

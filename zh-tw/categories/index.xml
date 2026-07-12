@@ -8,8 +8,15 @@
     <language>zh-TW</language>
     <managingEditor>Noway@bimbimbambam (seisokeii)</managingEditor>
     <webMaster>Noway@bimbimbambam (seisokeii)</webMaster>
-    <lastBuildDate>Fri, 03 Jul 2026 15:20:21 +0800</lastBuildDate>
+    <lastBuildDate>Sun, 12 Jul 2026 18:26:16 +0800</lastBuildDate>
     <atom:link href="https://seisokeii.github.io/zh-tw/categories/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>GNS3</title>
+      <link>https://seisokeii.github.io/zh-tw/categories/gns3/</link>
+      <pubDate>Sun, 12 Jul 2026 18:26:16 +0800</pubDate><author>Noway@bimbimbambam (seisokeii)</author>
+      <guid>https://seisokeii.github.io/zh-tw/categories/gns3/</guid>
+      <description></description>
+    </item>
     <item>
       <title>Transceiver</title>
       <link>https://seisokeii.github.io/zh-tw/categories/transceiver/</link>

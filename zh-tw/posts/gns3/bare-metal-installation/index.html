@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <title>GNS3 Bare Metal 安裝 - seisokeii blog</title><meta name="Description" content="seisokeii&#39;s blog"><meta property="og:url" content="https://seisokeii.github.io/zh-tw/posts/gns3/bare-metal-installation/">
+  <meta property="og:site_name" content="seisokeii blog">
+  <meta property="og:title" content="GNS3 Bare Metal 安裝">
+  <meta property="og:description" content="用過了好多模擬器 (GNS3, EVE-ng, PNETLab, CML, packet bug-it tracer …) 感覺還是變色龍好用😈 俗話說的好免錢的最貴… 但是我倒是覺得其他模擬器付費後好像服務也不是很優…">
+  <meta property="og:locale" content="zh_TW">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2026-07-10T17:20:24+08:00">
+    <meta property="article:modified_time" content="2026-07-10T17:20:24+08:00">
+    <meta property="article:tag" content="GNS3">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="GNS3 Bare Metal 安裝">
+  <meta name="twitter:description" content="用過了好多模擬器 (GNS3, EVE-ng, PNETLab, CML, packet bug-it tracer …) 感覺還是變色龍好用😈 俗話說的好免錢的最貴… 但是我倒是覺得其他模擬器付費後好像服務也不是很優…">
+<meta name="application-name" content="seisokeii の blog">
+<meta name="apple-mobile-web-app-title" content="seisokeii の blog">
+<meta name="referrer" content="no-referrer" /><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://seisokeii.github.io/zh-tw/posts/gns3/bare-metal-installation/" /><link rel="prev" href="https://seisokeii.github.io/zh-tw/posts/transceiver/transceiver-intro-04/" /><link rel="next" href="https://seisokeii.github.io/zh-tw/posts/gns3/how-to-add-qcow2/" /><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css"></noscript><link rel="preload" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css"></noscript><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "GNS3 Bare Metal 安裝",
+        "inLanguage": "zh-TW",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/seisokeii.github.io\/zh-tw\/posts\/gns3\/bare-metal-installation\/"
+        },"genre": "posts","keywords": "GNS3","wordcount":  1253 ,
+        "url": "https:\/\/seisokeii.github.io\/zh-tw\/posts\/gns3\/bare-metal-installation\/","datePublished": "2026-07-10T17:20:24+08:00","dateModified": "2026-07-10T17:20:24+08:00","publisher": {
+            "@type": "Organization",
+            "name": ""},"author": {
+                "@type": "Person",
+                "name": "seisokeii"
+            },"description": ""
+    }
+    </script></head>
+    <body data-header-desktop="fixed" data-header-mobile="auto"><script>
+          const query = window.matchMedia('(prefers-color-scheme: dark)');
+          function applyTheme() {
+            let theme = window.localStorage?.getItem('theme') || 'dark';
+            let isDark = theme === 'dark' || (theme === 'auto' && query.matches);
+            document.body.setAttribute('theme', isDark? 'dark' : 'light');
+            document.body.setAttribute('cfg-theme', theme);
+          }
+
+          applyTheme();
+          query.addEventListener('change', applyTheme);
+        </script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/zh-tw/" title="seisokeii blog">seisokeii の blog</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/zh-tw/posts/"> 文章 </a><a class="menu-item" href="/zh-tw/tags/"> 標籤 </a><a class="menu-item" href="/zh-tw/categories/"> 分類 </a><a class="menu-item" href="/zh-tw/about/about"> About </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="搜索文章標題或內容..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切換主題">
+                    <i class="fas fa-adjust" aria-hidden="true"></i>
+                </a><a href="javascript:void(0);" class="menu-item language" title="選擇語言">
+                    <i class="fa fa-globe" aria-hidden="true"></i>
+                    <select class="language-select" id="language-select-desktop" onchange="location = this.value;"><option value="/zh-tw/posts/gns3/bare-metal-installation/" selected>繁體中文</option></select>
+                </a></div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/zh-tw/" title="seisokeii blog">seisokeii の blog</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="搜索文章標題或內容..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/zh-tw/posts/" title="">文章</a><a class="menu-item" href="/zh-tw/tags/" title="">標籤</a><a class="menu-item" href="/zh-tw/categories/" title="">分類</a><a class="menu-item" href="/zh-tw/about/about" title="">About</a><a href="javascript:void(0);" class="menu-item theme-switch" title="切換主題">
+                <i class="fas fa-adjust" aria-hidden="true"></i>
+            </a><a href="javascript:void(0);" class="menu-item" title="選擇語言">
+                    <i class="fa fa-globe" aria-hidden="true"></i>
+                    <select class="language-select" onchange="location = this.value;"><option value="/zh-tw/posts/gns3/bare-metal-installation/" selected>繁體中文</option></select>
+                </a></div>
+    </div>
+</header><div class="search-dropdown desktop">
+        <div id="search-dropdown-desktop"></div>
+    </div>
+    <div class="search-dropdown mobile">
+        <div id="search-dropdown-mobile"></div>
+    </div><main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目錄</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">GNS3 Bare Metal 安裝</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="https://github.com/seisokeii" title="Author" target="_blank" rel="noopener noreffer author" class="author"><i class="fas fa-user-circle" aria-hidden="true"></i>seisokeii</a></span>&nbsp;<span class="post-category">收錄於 <a href="/zh-tw/categories/gns3/"><i class="far fa-folder" aria-hidden="true"></i>GNS3</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt" aria-hidden="true"></i>&nbsp;<time datetime="2026-07-10">2026-07-10</time>&nbsp;<i class="fas fa-pencil-alt" aria-hidden="true"></i>&nbsp;約 1253 字&nbsp;
+                <i class="far fa-clock" aria-hidden="true"></i>&nbsp;預計閱讀 3 分鐘&nbsp;</div>
+        </div><div class="featured-image"><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="/images/GNS3/installation/gns3-installation-page.png"
+        data-srcset="/images/GNS3/installation/gns3-installation-page.png, /images/GNS3/installation/gns3-installation-page.png 1.5x, /images/GNS3/installation/gns3-installation-page.png 2x"
+        data-sizes="auto"
+        alt="/images/GNS3/installation/gns3-installation-page.png"
+        title="/images/GNS3/installation/gns3-installation-page.png" /></div><div class="details toc" id="toc-static"  data-kept="">
+                <div class="details-summary toc-title">
+                    <span>目錄</span>
+                    <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#server-hardware-規格">Server Hardware 規格</a></li>
+    <li><a href="#1-install-vm">1. Install VM</a></li>
+    <li><a href="#2-製作-daemon">2. 製作 Daemon</a></li>
+    <li><a href="#3-讓-gns3-服務跑起來">3. 讓 GNS3 服務跑起來</a></li>
+    <li><a href="#升級-bare-metal-的-gns3">升級 bare metal 的 GNS3</a></li>
+    <li><a href="#reference-參考文章">Reference 參考文章</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><p>用過了好多模擬器 (GNS3, EVE-ng, PNETLab, CML, packet <del>bug-it</del> tracer &hellip;) 感覺還是變色龍好用😈
+俗話說的好免錢的最貴&hellip; 但是我倒是覺得其他模擬器付費後好像服務也不是很優&hellip;</p>
+<hr>
+<p>想必每個學網路的人應該幾乎都會使用模擬器&hellip; 應該吧XD 沒用過的應該都是有錢人直接買機器來玩齁。
+想當初我還特地請朋友幫我拖一台 Dell R6515 回來為了之後在家做 lab 用的，因為當時要畢業離校了已經沒有 vCenter 可以蹭了QQ</p>
+<p>結果我到公司上班後突然就把整個 lab 都讓我管，所以我就在那邊東拼西湊一些公司曾經做的 EOL/EOS 的 server 來當作新的模擬機～
+可惜還是自己買了更多 core 的 CPU 跟一堆記憶體&hellip; 花了好多錢錢又不給報帳QQ</p>
+<p>這邊就做記錄一下 GNS3 bare metal 要怎麼安裝吧～
+可以先參考 <a href="https://docs.gns3.com/docs/getting-started/installation/linux" target="_blank" rel="noopener noreffer ">GNS3 官方安裝文件</a></p>
+<p>記得很久以前都是官方給一個 VMDK 檔案還啥的要我們裝成虛擬機，後來官網好像才出現 bare metal 的方法，也可能是我小時候沒好好看文件XD</p>
+<h2 id="server-hardware-規格">Server Hardware 規格</h2>
+<p>就拿我現在機器的 Spec 來當例子吧:</p>
+<ul>
+<li>Ubuntu LTS version. (24.04.2)</li>
+<li>CPU: 6 core * 2 sockets (E5-2603 v4 @ 1.70GHz)</li>
+<li>Memory: 160 GB</li>
+<li>HDD: 1024 GB</li>
+</ul>
+<h2 id="1-install-vm">1. Install VM</h2>
+<p>第一步就先記得去裝好一台 Ubuntu server 吧 這邊應該就不多寫教學了&hellip;</p>
+<p>有了 VM 後先進去建立一個 GNS3 要使用的帳號</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="複製到剪貼板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># 新增使用者與家目錄</span>
+</span></span><span class="line"><span class="cl">sudo useradd gns3 --create-home
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 改密碼</span>
+</span></span><span class="line"><span class="cl">sudo passwd gns3
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 添加一下相關權限</span>
+</span></span><span class="line"><span class="cl">sudo usermod -aG ubridge,libvirt,kvm,docker gns3</span></span></code></pre></div></div>
+<h2 id="2-製作-daemon">2. 製作 Daemon</h2>
+<p>之前是照其他文章博主去將 gns3server fork 到背景執行，然後 systemd 要靠 PID file 找主程序，後來遇到 PID file 不見還怎樣的就會死去。
+所以就改成目前這樣子了。</p>
+<p>去 <code>/etc/systemd/system/</code> 建立一個 <code>gns3.service</code> 檔案。</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="複製到剪貼板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">sudo vi /etc/systemd/system/gns3.service</span></span></code></pre></div></div>
+<p>貼上以下內容</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-text">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="複製到剪貼板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">[Unit]
+</span></span><span class="line"><span class="cl">Description=GNS3 server
+</span></span><span class="line"><span class="cl">After=network-online.target
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">[Service]
+</span></span><span class="line"><span class="cl">Type=simple
+</span></span><span class="line"><span class="cl">User=gns3
+</span></span><span class="line"><span class="cl">Group=gns3
+</span></span><span class="line"><span class="cl">ExecStart=/usr/bin/gns3server --log /var/log/gns3/gns3.log
+</span></span><span class="line"><span class="cl">Restart=on-failure
+</span></span><span class="line"><span class="cl">RestartSec=5
+</span></span><span class="line"><span class="cl">LimitNOFILE=16384
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">[Install]
+</span></span><span class="line"><span class="cl">WantedBy=multi-user.target</span></span></code></pre></div></div>
+<p>建立完後記得改一下檔案權限</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="複製到剪貼板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">sudo chown root:root /etc/systemd/system/gns3.service
+</span></span><span class="line"><span class="cl">sudo chmod <span class="m">644</span> /etc/systemd/system/gns3.service</span></span></code></pre></div></div>
+<h2 id="3-讓-gns3-服務跑起來">3. 讓 GNS3 服務跑起來</h2>
+<p>剛剛已經將 systemd 需要的檔案建立好了，接下來就是要讓系統認到跟啟動。</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="複製到剪貼板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># 讓 systemd 重新讀一次</span>
+</span></span><span class="line"><span class="cl">sudo systemctl daemon-reload
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># enable + start 一起跑</span>
+</span></span><span class="line"><span class="cl">sudo systemctl <span class="nb">enable</span> --now gns3</span></span></code></pre></div></div>
+<p>檢查服務</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="複製到剪貼板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># 查看服務本身狀態資訊</span>
+</span></span><span class="line"><span class="cl">sudo systemctl status gns3 --no-pager
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 查看 socket port 是否有開放 0.0.0.0:3080</span>
+</span></span><span class="line"><span class="cl">sudo ss -lntp <span class="p">|</span> grep <span class="m">3080</span></span></span></code></pre></div></div>
+<p>如果有錯誤請查看 log</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="複製到剪貼板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">sudo journalctl -u gns3 -n <span class="m">100</span> --no-pager</span></span></code></pre></div></div>
+<h2 id="升級-bare-metal-的-gns3">升級 bare metal 的 GNS3</h2>
+<p>可以用這個指令確認現在套件的來源與可以升級的資訊</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="複製到剪貼板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">apt-cache policy gns3-server gns3-gui gns3-iou</span></span></code></pre></div></div>
+<p>升級指令如下</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="複製到剪貼板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">sudo systemctl stop gns3
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">sudo apt update
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">apt list --upgradable <span class="p">|</span> grep -i gns3
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">sudo apt install --only-upgrade gns3-server gns3-gui gns3-iou
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">sudo systemctl daemon-reload
+</span></span><span class="line"><span class="cl">sudo systemctl start gns3
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">sudo systemctl status gns3 --no-pager
+</span></span><span class="line"><span class="cl">gns3server --version</span></span></code></pre></div></div>
+<p>啊如果怕遠端升級的話，可以直接去 console 登入 gns3 帳號，然後就會有 dialog 的介面，那邊可以按升級比較無腦一點，但是就是要 console。</p>
+<p>其實大致就這樣而已沒有到很難，多裝個幾次就熟了XDDD</p>
+<p>關於 images 的部分就要請大家各憑本事去拿了 像是花個幾塊錢去百度網盤買 VIP 之類的，有大大提供超級多 image 那個查一下就知道了～</p>
+<p>這邊我就沒有去寫 IOU license 啥之類的教學了，因為現在 cisco 他們有允許帳號是可以去免費下載他們的 vIOS, vNXOS, &hellip; 之類的特定 image，
+juniper 其實也有提供 vMX, vEX 可以下載，這些都非常貼近真實機器的指令與功能，然後也可以去 community SONiC 去下載 sonic-vs.img 雖然沒很好用但是足矣。</p>
+<p>至於有些 images 有些功能沒辦法運作或是啥的，其實大多是因為 switch 對於封包處理都是給 ASIC 晶片，而模擬器上沒有呀，所以其實是 NOS 他們用 CPU 去模擬該功能，
+舉例像是 SONiC 的 ACL 功能，這個就是依賴 MAC(ASIC) 去做，然後 community 沒有人去把這個功能使用 CPU 去模擬打包成 sonic-vs.img，這塊 cisco/juniper 應該沒這問題。</p>
+<p>大致就是醬子～ 以後有機會再來多分享一些拓樸跟協定的實作吧～</p>
+<h2 id="reference-參考文章">Reference 參考文章</h2>
+<p>非常感謝以下博主寫的文章讓小弟可以參考～</p>
+<ul>
+<li><a href="https://docs.gns3.com/docs/getting-started/installation/linux" target="_blank" rel="noopener noreffer ">GNS3 官方安裝文件</a></li>
+<li><a href="https://medium.com/virtual-network-environments-gns3-vs-eve-ng/part-2-gns3-installation-on-ubuntu-20-04-gcp-45f47e8f342" target="_blank" rel="noopener noreffer ">Part 2: GNS3 Installation on Ubuntu 20.04 (GCP)</a></li>
+</ul>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新於 2026-07-10</span>
+            </div></div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="分享到 X" data-sharer="x" data-url="https://seisokeii.github.io/zh-tw/posts/gns3/bare-metal-installation/" data-title="GNS3 Bare Metal 安裝" data-hashtags="GNS3"><i class="fab fa-x-twitter" aria-hidden="true"></i></a><a href="javascript:void(0);" title="分享到 Threads" data-sharer="threads" data-url="https://seisokeii.github.io/zh-tw/posts/gns3/bare-metal-installation/" data-title="GNS3 Bare Metal 安裝"><i class="fab fa-threads" aria-hidden="true"></i></a><a href="javascript:void(0);" title="分享到 Diaspora" data-sharer="diaspora" data-url="https://seisokeii.github.io/zh-tw/posts/gns3/bare-metal-installation/" data-title="GNS3 Bare Metal 安裝" data-description=""><i class="fab fa-diaspora" aria-hidden="true"></i></a><a href="https://t.me/share/url?url=https%3a%2f%2fseisokeii.github.io%2fzh-tw%2fposts%2fgns3%2fbare-metal-installation%2f&amp;text=GNS3%20Bare%20Metal%20%e5%ae%89%e8%a3%9d" target="_blank" title="分享到 Telegram"><i class="fab fa-telegram" aria-hidden="true"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags" aria-hidden="true"></i>&nbsp;<a href="/zh-tw/tags/gns3/">GNS3</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/zh-tw/">主頁</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/zh-tw/posts/transceiver/transceiver-intro-04/" class="prev" rel="prev" title="CFP2 與 ZR Transceiver 簡介"><i class="fas fa-angle-left" aria-hidden="true"></i>CFP2 與 ZR Transceiver 簡介</a>
+            <a href="/zh-tw/posts/gns3/how-to-add-qcow2/" class="next" rel="next" title="GNS3 新增客製化 qcow2">GNS3 新增客製化 qcow2<i class="fas fa-angle-right" aria-hidden="true"></i></a></div>
+</div>
+<div id="comments"><div id="disqus_thread" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://disqus.com/?ref_noscript">Disqus</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.154.5">Hugo</a> 強力驅動 | 主題 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 1.0.0"><i class="far fa-kiss-wink-heart" aria-hidden="true"></i> LoveIt</a>
+                </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright" aria-hidden="true"></i><span itemprop="copyrightYear">2024 - 2026</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/zh-tw/" target="_blank">seisokeii</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到頂部">
+                <i class="fas fa-arrow-up" aria-hidden="true"></i>
+            </a>
+        </div>
+
+        <div id="fixed-buttons-hidden"><a href="#" id="view-comments" class="fixed-button" title="查看評論">
+                <i class="fas fa-comment" aria-hidden="true"></i>
+            </a>
+        </div><script src="https://.disqus.com/embed.js" defer></script><script src="https://cdn.jsdelivr.net/npm/autocomplete.js@0.38.1/dist/autocomplete.min.js"></script><script src="https://cdn.jsdelivr.net/npm/lunr@2.3.9/lunr.min.js"></script><script src="/lib/lunr/lunr.stemmer.support.min.js"></script><script src="/lib/lunr/lunr.zh.min.js"></script><script src="https://cdn.jsdelivr.net/npm/lazysizes@5.3.2/lazysizes.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.11/dist/clipboard.min.js"></script><script src="https://cdn.jsdelivr.net/npm/sharer.js@0.5.2/sharer.min.js"></script><script>window.config={"comment":{},"search":{"highlightTag":"em","lunrLanguageCode":"zh","lunrSegmentitURL":"/lib/lunr/lunr.segmentit.js","maxResultLength":10,"noResultsFound":"沒有找到結果","snippetLength":30}};</script><script src="/js/theme.js"></script></body>
+</html>
