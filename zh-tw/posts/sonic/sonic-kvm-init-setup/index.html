@@ -35,7 +35,7 @@
         "mainEntityOfPage": {
             "@type": "WebPage",
             "@id": "https:\/\/seisokeii.github.io\/zh-tw\/posts\/sonic\/sonic-kvm-init-setup\/"
-        },"genre": "posts","keywords": "SONiC","wordcount":  1312 ,
+        },"genre": "posts","keywords": "SONiC","wordcount":  1541 ,
         "url": "https:\/\/seisokeii.github.io\/zh-tw\/posts\/sonic\/sonic-kvm-init-setup\/","datePublished": "2024-09-24T15:56:33+08:00","dateModified": "2026-06-14T19:53:07+08:00","publisher": {
             "@type": "Organization",
             "name": ""},"author": {
@@ -126,8 +126,8 @@
             <div class="toc-content" id="toc-content-auto"></div>
         </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">SONiC Community Image 初始化設定</h1><div class="post-meta">
             <div class="post-meta-line"><span class="post-author"><a href="https://github.com/seisokeii" title="Author" target="_blank" rel="noopener noreffer author" class="author"><i class="fas fa-user-circle" aria-hidden="true"></i>seisokeii</a></span>&nbsp;<span class="post-category">收錄於 <a href="/zh-tw/categories/sonic/"><i class="far fa-folder" aria-hidden="true"></i>SONiC</a></span></div>
-            <div class="post-meta-line"><i class="far fa-calendar-alt" aria-hidden="true"></i>&nbsp;<time datetime="2024-09-24">2024-09-24</time>&nbsp;<i class="fas fa-pencil-alt" aria-hidden="true"></i>&nbsp;約 1312 字&nbsp;
-                <i class="far fa-clock" aria-hidden="true"></i>&nbsp;預計閱讀 3 分鐘&nbsp;</div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt" aria-hidden="true"></i>&nbsp;<time datetime="2024-09-24">2024-09-24</time>&nbsp;<i class="fas fa-pencil-alt" aria-hidden="true"></i>&nbsp;約 1541 字&nbsp;
+                <i class="far fa-clock" aria-hidden="true"></i>&nbsp;預計閱讀 4 分鐘&nbsp;</div>
         </div><div class="featured-image"><img
         class="lazyload"
         src="/svg/loading.min.svg"
@@ -142,6 +142,7 @@
                 </div>
                 <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
   <ul>
+    <li><a href="#20260713-更新-community-202605-version">2026/07/13 更新 (community 202605 version)</a></li>
     <li><a href="#前置">前置</a></li>
     <li><a href="#1-刪除-interface-ip">1. 刪除 Interface IP</a></li>
     <li><a href="#2-刪除-frr-上的設定">2. 刪除 FRR 上的設定</a></li>
@@ -160,6 +161,116 @@
 <li>刪除 FRR configuration</li>
 <li>config_db.json 的 BGP_NEIGHBOR 跟 DEVICE_METADATA 中 localhost 的 bgp_asn</li>
 </ol>
+<hr>
+<h2 id="20260713-更新-community-202605-version">2026/07/13 更新 (community 202605 version)</h2>
+<blockquote>
+<p>溫馨提醒: sonic-vs 在 gns3 上面，第一個網孔其實是 mgmt (eth0) 所以真正的第一孔(Ethernet0) 其實是 gns3 上面的第二孔。</p>
+</blockquote>
+<p>新的 workaround 方式如下:</p>
+<ol>
+<li>直接刪掉 <code>config_db.json</code> 設定檔的以下區塊</li>
+</ol>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="複製到剪貼板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">sudo jq <span class="s1">&#39;
+</span></span></span><span class="line"><span class="cl"><span class="s1">  del(
+</span></span></span><span class="line"><span class="cl"><span class="s1">    .INTERFACE,
+</span></span></span><span class="line"><span class="cl"><span class="s1">    .LOOPBACK_INTERFACE,
+</span></span></span><span class="line"><span class="cl"><span class="s1">    .BGP_NEIGHBOR,
+</span></span></span><span class="line"><span class="cl"><span class="s1">    .BGP_PEER_RANGE,
+</span></span></span><span class="line"><span class="cl"><span class="s1">    .BGP_MONITORS,
+</span></span></span><span class="line"><span class="cl"><span class="s1">    .BGP_GLOBALS,
+</span></span></span><span class="line"><span class="cl"><span class="s1">    .BGP_GLOBALS_AF,
+</span></span></span><span class="line"><span class="cl"><span class="s1">    .BGP_GLOBALS_EVPN_RT,
+</span></span></span><span class="line"><span class="cl"><span class="s1">    .BGP_GLOBALS_EVPN_VNI,
+</span></span></span><span class="line"><span class="cl"><span class="s1">    .BGP_SENTINELS,
+</span></span></span><span class="line"><span class="cl"><span class="s1">    .STATIC_ROUTE,
+</span></span></span><span class="line"><span class="cl"><span class="s1">    .VLAN,
+</span></span></span><span class="line"><span class="cl"><span class="s1">    .VLAN_INTERFACE,
+</span></span></span><span class="line"><span class="cl"><span class="s1">    .VLAN_MEMBER,
+</span></span></span><span class="line"><span class="cl"><span class="s1">    .PORTCHANNEL,
+</span></span></span><span class="line"><span class="cl"><span class="s1">    .PORTCHANNEL_INTERFACE,
+</span></span></span><span class="line"><span class="cl"><span class="s1">    .PORTCHANNEL_MEMBER,
+</span></span></span><span class="line"><span class="cl"><span class="s1">    .ACL_TABLE,
+</span></span></span><span class="line"><span class="cl"><span class="s1">    .ACL_RULE,
+</span></span></span><span class="line"><span class="cl"><span class="s1">    .VXLAN_TUNNEL,
+</span></span></span><span class="line"><span class="cl"><span class="s1">    .VXLAN_TUNNEL_MAP,
+</span></span></span><span class="line"><span class="cl"><span class="s1">    .VNET,
+</span></span></span><span class="line"><span class="cl"><span class="s1">    .VNET_ROUTE,
+</span></span></span><span class="line"><span class="cl"><span class="s1">    .VNET_ROUTE_TUNNEL
+</span></span></span><span class="line"><span class="cl"><span class="s1">  )
+</span></span></span><span class="line"><span class="cl"><span class="s1">  | del(.DEVICE_METADATA.localhost.bgp_asn)
+</span></span></span><span class="line"><span class="cl"><span class="s1">&#39;</span> /etc/sonic/config_db.json <span class="se">\
+</span></span></span><span class="line"><span class="cl">  <span class="p">|</span> sudo tee /etc/sonic/config_db.json.clean &gt;/dev/null</span></span></code></pre></div></div>
+<ol start="2">
+<li>確認 json 沒問題</li>
+</ol>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="複製到剪貼板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">jq empty /etc/sonic/config_db.json.clean <span class="o">&amp;&amp;</span>
+</span></span><span class="line"><span class="cl"><span class="nb">echo</span> <span class="s2">&#34;JSON OK&#34;</span></span></span></code></pre></div></div>
+<ol start="3">
+<li>取代原始設定檔</li>
+</ol>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="複製到剪貼板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">sudo mv /etc/sonic/config_db.json.clean <span class="se">\
+</span></span></span><span class="line"><span class="cl">  /etc/sonic/config_db.json</span></span></code></pre></div></div>
+<ol start="4">
+<li>套用設定
+有任何問題的話就重開機或是重建吧</li>
+</ol>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="複製到剪貼板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">sudo config reload -y</span></span></code></pre></div></div>
+<p>5.檢查
+以下指令應該是沒有輸出才對</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="複製到剪貼板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">sudo sonic-db-cli CONFIG_DB keys <span class="s1">&#39;INTERFACE|*&#39;</span>
+</span></span><span class="line"><span class="cl">sudo sonic-db-cli CONFIG_DB keys <span class="s1">&#39;LOOPBACK_INTERFACE|*&#39;</span>
+</span></span><span class="line"><span class="cl">sudo sonic-db-cli CONFIG_DB keys <span class="s1">&#39;BGP_NEIGHBOR|*&#39;</span>
+</span></span><span class="line"><span class="cl">sudo sonic-db-cli CONFIG_DB keys <span class="s1">&#39;PORTCHANNEL*&#39;</span>
+</span></span><span class="line"><span class="cl">sudo sonic-db-cli CONFIG_DB keys <span class="s1">&#39;VLAN*&#39;</span></span></span></code></pre></div></div>
+<ol start="6">
+<li>儲存設定</li>
+</ol>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="複製到剪貼板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">sudo config save -y</span></span></code></pre></div></div>
+<p>BJ4 直接看圖</p>
+<div style="display: flex; justify-content: center;">
+    <div style="width: 70%;">
+        <figure><a class="lightgallery" href="/images/SONiC/community-init-gns3/sonic-GNS3-vimg-interface.png" title="/images/SONiC/community-init-gns3/sonic-GNS3-vimg-interface.png" data-thumbnail="/images/SONiC/community-init-gns3/sonic-GNS3-vimg-interface.png" data-sub-html="<h2>Macbook 上格式化操作 FAT&#43;MBR</h2>">
+                <img
+                    class="lazyload"
+                    src="/svg/loading.min.svg"
+                    data-src="/images/SONiC/community-init-gns3/sonic-GNS3-vimg-interface.png"
+                    data-srcset="/images/SONiC/community-init-gns3/sonic-GNS3-vimg-interface.png, /images/SONiC/community-init-gns3/sonic-GNS3-vimg-interface.png 1.5x, /images/SONiC/community-init-gns3/sonic-GNS3-vimg-interface.png 2x"
+                    data-sizes="auto"
+                    alt="/images/SONiC/community-init-gns3/sonic-GNS3-vimg-interface.png" />
+            </a><figcaption class="image-caption">Macbook 上格式化操作 FAT+MBR</figcaption>
+            </figure>
+    </div>
+</div>
 <hr>
 <h2 id="前置">前置</h2>
 <p>要刪除設定前，請先查看一下 container 是不是都有正常運作了，可以用 <code>docker ps -a</code> 指令來看，所有的容器狀態都要是 UP。</p>
