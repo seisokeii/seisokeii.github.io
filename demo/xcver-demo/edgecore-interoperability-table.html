@@ -1,0 +1,1100 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Edgecore 交換器 × 光模組互連性查詢</title>
+<style>
+:root{
+  --bg:#fff; --panel:#fff; --ink:#16191d; --muted:#5d6672; --line:#dfe3e8;
+  --accent:#0b62d6; --accent-soft:#e8f0fd; --panel-line:#e6e9ee;
+  --ok:#0d7a3f; --ok-bg:#e6f4ec; --warn:#8a5a00; --warn-bg:#fdf3e0; --err:#b3261e;
+  --info:#1a5fa8; --info-bg:#e8f1fb; --no:#a3211f; --no-bg:#fceceb;
+  --radius:8px; --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,monospace;
+}
+/* ★ 預設一律淺色，不跟隨系統的暗色偏好 ——
+   這頁是給業務在客戶面前開的，背景要能預期，不要因為某人的筆電設了暗色
+   就變成深色。暗色仍然可用，但必須由使用者自己按「切換佈景」。 */
+:root[data-theme="dark"]{
+  --bg:#14171b; --panel:#1b1f24; --ink:#e7eaee; --muted:#98a2af; --line:#2c323a;
+  --accent:#5ea0ff; --accent-soft:#17233a; --panel-line:#2c323a;
+  --ok:#5cc98a; --ok-bg:#132a1e; --warn:#e0ad55; --warn-bg:#2c2413; --err:#f28b82;
+  --info:#7db4ee; --info-bg:#14202f; --no:#f08a86; --no-bg:#2d1817;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font:15px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans TC","PingFang TC",sans-serif}
+.wrap{max-width:1400px;margin:0 auto;padding:20px 18px 60px}
+header{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px 16px;margin-bottom:18px}
+h1{font-size:20px;margin:0;letter-spacing:-.01em}
+.sub{color:var(--muted);font-size:13px}
+.themebtn{margin-left:auto;background:var(--panel);border:1px solid var(--line);color:var(--muted);
+  border-radius:var(--radius);padding:5px 11px;font-size:13px;cursor:pointer}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:900px){.grid{grid-template-columns:1fr}}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:14px}
+.panel h2{font-size:13px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);
+  margin:0 0 11px;font-weight:600}
+.row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:9px}
+select,input[type=search]{flex:1;min-width:130px;background:var(--bg);color:var(--ink);
+  border:1px solid var(--line);border-radius:6px;padding:7px 9px;font-size:14px;font-family:inherit}
+select:focus,input:focus{outline:2px solid var(--accent);outline-offset:-1px}
+.meta{font-size:12.5px;color:var(--muted);margin:8px 0 0}
+/* 埠位模式清單已收進提示框，這個方塊不再需要捲軸 ——
+   而且 overflow:auto 會把提示框裁掉。 */
+.modes{margin:8px 0 0;padding:9px 11px;background:var(--bg);border-radius:6px;
+  font-family:var(--mono);font-size:11.5px;color:var(--muted);overflow:visible}
+.modes b{color:var(--ink);font-weight:600;display:block;margin-bottom:0;
+  font-family:inherit;font-size:12px;position:relative}
+.modes .pn{margin:5px 0 0;font-size:11px;line-height:1.5;opacity:.85}
+.list{margin-top:9px;max-height:340px;overflow:auto;border:1px solid var(--line);border-radius:6px}
+.item{padding:8px 11px;border-bottom:1px solid var(--line);cursor:pointer;font-size:13.5px}
+.item:last-child{border-bottom:none}
+.item:hover{background:var(--accent-soft)}
+.item.sel{background:var(--accent-soft);box-shadow:inset 3px 0 0 var(--accent)}
+.item.dim{opacity:.42}
+.chk{display:flex;align-items:center;gap:6px;font-size:12.5px;color:var(--muted);
+  margin:2px 0 0;cursor:pointer;user-select:none}
+.chk input{accent-color:var(--accent);cursor:pointer}
+.item .mn{font-weight:600;font-family:var(--mono);font-size:13px}
+.item .md{color:var(--muted);font-size:12px;margin-top:1px}
+.tag{display:inline-block;font-size:10.5px;padding:1px 6px;border-radius:99px;
+  border:1px solid var(--line);color:var(--muted);margin-left:5px;vertical-align:1px}
+.tag.avl{font-weight:600;cursor:help}
+.tag.avl-p{background:var(--ok-bg);color:var(--ok);border-color:transparent}
+.tag.avl-n{background:var(--warn-bg);color:var(--warn);border-color:transparent}
+.badge{display:inline-block;font-size:11.5px;font-weight:600;padding:2px 8px;border-radius:99px}
+.b-verified{background:var(--ok-bg);color:var(--ok)}
+.b-supported{background:var(--info-bg);color:var(--info)}
+.b-theoretical{background:var(--warn-bg);color:var(--warn)}
+.results{margin-top:14px}
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+th{text-align:left;font-size:11.5px;text-transform:uppercase;letter-spacing:.05em;
+  color:var(--muted);font-weight:600;padding:8px 10px;border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+tr:last-child td{border-bottom:none}
+tbody tr:hover{background:var(--accent-soft)}
+.mono{font-family:var(--mono);font-size:12.5px}
+.scroll{overflow-x:auto}
+.empty{padding:26px 14px;text-align:center;color:var(--muted);font-size:13.5px}
+.note{font-size:12px;color:var(--warn);margin-top:3px}
+.why{text-align:left;max-width:760px;margin:0 auto}
+.whyh{font-weight:600;font-size:14px;margin-bottom:9px;color:var(--err)}
+.whyr{background:var(--warn-bg);color:var(--warn);border-radius:6px;
+  padding:9px 12px;margin-bottom:8px;font-size:13px;line-height:1.6}
+.whyt{margin-top:10px;font-size:12.5px}
+.whyt td{padding:5px 10px 5px 0;border-bottom:1px solid var(--line);vertical-align:top}
+.whyk{color:var(--muted);font-size:11px;white-space:nowrap;
+  text-transform:uppercase;letter-spacing:.05em}
+.note.danger{color:var(--err);font-weight:600;border-left:2px solid currentColor;
+  padding-left:6px}
+.cbar{margin-bottom:14px}
+.cbrow{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.cbrow .row{display:flex;gap:6px;margin:0}
+.cbrow select{width:auto;min-width:150px}
+.cbk{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+.cbarrow{color:var(--muted);font-size:16px;margin:0 6px}
+.cbmodes{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:9px}
+.cbmodes .modes{margin:0}
+@media (max-width:820px){.cbmodes{grid-template-columns:1fr}}
+tr.dimrow{opacity:.55}
+tr.dimrow td{background:var(--bg)}
+.help{display:inline-flex;align-items:center;justify-content:center;
+  width:16px;height:16px;border-radius:50%;border:1px solid var(--line);
+  color:var(--muted);font-size:11px;font-weight:700;cursor:help;
+  position:relative;vertical-align:1px;margin-left:2px}
+.help:hover,.help:focus{border-color:var(--accent);color:var(--accent);outline:none}
+.help .tip{display:none;position:absolute;left:0;top:22px;z-index:50;
+  width:min(620px,92vw);max-height:70vh;overflow-y:auto;text-align:left;
+  background:var(--panel);border:1px solid var(--line);border-radius:8px;
+  padding:12px 14px;box-shadow:0 6px 24px rgba(0,0,0,.18);
+  font-size:12px;font-weight:400;color:var(--fg);line-height:1.6;cursor:auto}
+.help:hover .tip,.help:focus .tip{display:block}
+.help .tip b{display:block;margin:10px 0 4px;font-size:11.5px;color:var(--muted);
+  text-transform:uppercase;letter-spacing:.04em}
+.help .tip b:first-child{margin-top:0}
+.help .tip table{width:100%;border-collapse:collapse;font-size:11.5px}
+.help .tip td{padding:2px 8px 2px 0;border:none;vertical-align:top}
+.help .tip td.k{font-family:var(--mono);white-space:nowrap;font-weight:600}
+.help .tip td.n{color:var(--muted)}
+.help .tip .tipnote{margin-top:8px;padding-top:7px;border-top:1px solid var(--line);
+  color:var(--muted);font-size:11.5px}
+.help .tip .tipnote b{display:inline;margin:0;font-size:inherit;color:var(--ink);
+  text-transform:none;letter-spacing:0}
+.modes .help .tip{width:min(420px,88vw);font-family:inherit}
+footer{margin-top:26px;padding-top:14px;border-top:1px solid var(--line);
+  font-size:12px;color:var(--muted);line-height:1.7}
+.legend{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:8px}
+.sub{color:var(--muted);font-size:11.5px;margin-top:2px;line-height:1.45}
+.sub2{color:var(--muted);font-weight:400}
+.cmb{display:inline-block;background:var(--bg);border:1px solid var(--line);border-radius:5px;
+  padding:1px 7px;margin:0 4px 4px 0;font-size:12px;font-family:var(--mono);white-space:nowrap}
+.cbl{margin-bottom:7px}.cbl:last-child{margin-bottom:0}
+.pn{font-weight:600;font-size:12.5px}
+.nosku{color:var(--muted);font-style:italic}
+.lnk{background:none;border:none;color:var(--accent);font-size:11.5px;cursor:pointer;
+  padding:2px 0;font-family:inherit}
+.pnlist{margin:5px 0 2px;padding:7px 9px;background:var(--bg);border-radius:6px}
+.pnlist table{font-size:11.5px}
+.pnlist th{padding:2px 8px 4px 0;font-size:10.5px}
+.pnlist td{padding:2px 8px 2px 0;border:none}
+.part{margin-bottom:9px}.part:last-child{margin-bottom:0}
+.prow{display:flex;align-items:center;gap:5px;flex-wrap:wrap}
+.lensel{min-width:0;width:auto;margin:0;padding:1px 4px;font-size:11px}
+.cp{background:none;border:1px solid var(--line);border-radius:5px;color:var(--muted);
+  cursor:pointer;font-size:11px;line-height:1.35;padding:2px 5px;font-family:inherit}
+.cp:hover{color:var(--accent);border-color:var(--accent)}
+.cp.done{color:var(--ok);border-color:var(--ok)}
+.copy.done{color:var(--ok);border-color:var(--ok)}
+td{min-width:150px}
+.seg{display:inline-flex;margin:0 0 14px;border:1px solid var(--line);
+  border-radius:7px;overflow:hidden}
+.seg button{background:var(--panel);border:none;border-right:1px solid var(--line);
+  color:var(--muted);font-size:12.5px;padding:5px 14px;cursor:pointer;
+  font-family:inherit}
+.seg button:last-child{border-right:none}
+.seg button.on{background:var(--accent);color:#fff;font-weight:600}
+.seg button:disabled{opacity:.4;cursor:not-allowed}
+.seg button:not(.on):not(:disabled):hover{background:var(--accent-soft);color:var(--accent)}
+.seg.alt{margin-left:8px}
+.seg.alt button{color:var(--accent)}
+/* 全品項浮層。★ 顯示與否完全由自己管 —— 不經過 layout()，
+   那支函式負責的是 A/B 面板在不同模式下的版面。 */
+.ovl{position:fixed;inset:0;z-index:50;display:flex;align-items:center;
+  justify-content:center;padding:24px;background:rgba(0,0,0,.45)}
+.ovl[hidden]{display:none}
+.ovlbox{background:var(--panel);border:1px solid var(--line);border-radius:10px;
+  width:min(760px,100%);max-height:100%;display:flex;flex-direction:column;
+  box-shadow:0 10px 40px rgba(0,0,0,.3)}
+.ovlhd{display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+  padding:14px 16px;border-bottom:1px solid var(--line)}
+.ovlhd h2{margin:0;font-size:15px}
+.ovlhd .sub{color:var(--muted);font-size:12.5px}
+.ovlhd input{flex:1;min-width:140px}
+.ovlbody{overflow-y:auto;padding:6px 10px 12px}
+.ovlx{background:none;border:none;color:var(--muted);font-size:20px;line-height:1;
+  cursor:pointer;padding:0 4px;font-family:inherit}
+.ovlx:hover{color:var(--fg)}
+.copy{background:var(--panel);border:1px solid var(--line);color:var(--accent);
+  border-radius:6px;padding:5px 10px;font-size:12px;cursor:pointer;white-space:nowrap;
+  font-family:inherit}
+.copy:hover{background:var(--accent-soft)}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <h1>Edgecore 交換器 × 光模組互連性查詢</h1>
+  <span class="sub" id="stat"></span>
+  <button class="themebtn" id="theme">切換佈景</button>
+</header>
+
+<!-- 分類切換。★ 固定在這裡，不隨模式搬動 ——
+     先前它掛在 A 面板裡，切到 AOC/DAC 時要跟著搬到壓縮列，按鈕會跳位置。 -->
+<div class="seg" id="catSel">
+  <button data-cat="x" class="on">光模組</button>
+  <button data-cat="aoc">AOC</button>
+  <button data-cat="dac">DAC</button>
+</div>
+<div class="seg alt" id="allSel">
+  <button data-all="x">全部光模組</button>
+  <button data-all="c">全部線材</button>
+</div>
+
+<!-- 全品項清單。跟 A/B 面板無關，單純把手上的產品全部列出來。 -->
+<div class="ovl" id="allOvl" hidden>
+  <div class="ovlbox" role="dialog" aria-modal="true" aria-labelledby="allTitle">
+    <div class="ovlhd">
+      <h2 id="allTitle"></h2>
+      <span class="sub" id="allCnt"></span>
+      <input id="allQ" placeholder="搜尋…">
+      <button class="ovlx" id="allClose" title="關閉（Esc）">&times;</button>
+    </div>
+    <div class="ovlbody" id="allBody"></div>
+  </div>
+</div>
+
+<!-- AOC/DAC 模式用的壓縮選擇列。裡面的下拉選單是從下方面板「搬」過來的，
+     不是另外複製一份 —— 複製就要同步兩邊狀態，遲早不一致。 -->
+<div class="panel cbar" id="cbar" style="display:none">
+  <div class="cbrow" id="cbrow">
+    <span class="cbk">A 端</span><span id="cbA"></span>
+    <span class="cbarrow">⟷</span>
+    <span class="cbk">B 端</span><span id="cbB"></span>
+  </div>
+  <div class="cbmodes"><span id="cbMA"></span><span id="cbMB"></span></div>
+</div>
+
+<div class="grid" id="grid">
+  <div class="panel">
+    <h2>A 端</h2>
+    <span id="homeA"></span>
+    <div class="row" id="rowA"><select id="swA"></select><select id="pgA"></select></div>
+    <div class="modes" id="modeA"></div>
+    <div class="row" id="qArow" style="margin-top:9px"><input type="search" id="qA" placeholder="搜尋型號或規格…"></div>
+    <div class="meta" id="cntA"></div>
+    <div class="list" id="listA"></div>
+  </div>
+
+  <div class="panel">
+    <h2>B 端（對端）</h2>
+    <span id="homeB"></span>
+    <div class="row" id="rowB"><select id="swB"></select><select id="pgB"></select></div>
+    <div class="modes" id="modeB"></div>
+    <div class="row" id="qBrow" style="margin-top:9px"><input type="search" id="qB" placeholder="搜尋模組型號或規格…"></div>
+    <label class="chk" id="onlyLinkWrap"><input type="checkbox" id="onlyLink" checked> 只顯示可與 A 端對接的模組</label>
+    <div class="meta" id="cntB"></div>
+    <div class="list" id="listB"></div>
+  </div>
+</div>
+
+<div class="panel results">
+  <h2 id="resTitle">可對接的組合</h2>
+  <label class="chk" id="aocOnlyWrap" style="display:none">
+    <input type="checkbox" id="aocOnly" checked> 只顯示接得起來的線材</label>
+  <div class="legend">
+    <span><span class="badge b-verified">verified</span> 已實測</span>
+    <span><span class="badge b-supported">supported</span> 規格已確認</span>
+    <span><span class="badge b-theoretical">theoretical</span> 規格待確認</span>
+  </div>
+  <div class="legend" id="avlLegend">
+    <span><span class="tag avl avl-p">AVL</span> 已通過</span>
+    <span><span class="tag avl avl-n">還沒 AVL</span> 其餘</span>
+    <span>模組清單上的標記，滑過去看哪一家什麼狀態</span>
+  </div>
+  <div class="scroll"><table>
+    <thead id="resHead"></thead>
+    <tbody id="res"></tbody>
+  </table></div>
+  <div class="empty" id="resEmpty">請先在左側選擇 A 端的交換器、埠位與模組。</div>
+</div>
+
+<footer id="foot"></footer>
+</div>
+
+<script>
+const DB = {"P":[{"id":"AIS1600-64O","n":"AIS1600-64O","sc":"1.6T","asic":"Tomahawk 6 Condor","tp":"102.4T","g":[{"id":"front","l":"64 x OSFP224","c":64,"cage":"OSFP224","hs":"","modes":["1 x 1600G (8 lanes 200G PAM4)","1 x 800G (8 lanes 100G PAM4)","2 x 800G (4 lanes 200G PAM4)","1 x 400G (8 lanes 50G PAM4)","2 x 400G (4 lanes 100G PAM4)","4 x 400G (2 lanes 200G PAM4)","2 x 200G (4 lanes 50G PAM4)","4 x 200G (2 lanes 100G PAM4)","8 x 200G (1 lane 200G PAM4)","4 x 100G (2 lanes 50G PAM4)","8 x 100G (1 lane 100G PAM4)","8 x 50G (1 lane 50G PAM4)"],"pm":1}],"cf":1,"note":"","k":"switch","vd":"Edgecore","pn":[]},{"id":"AIS800-128O","n":"AIS800-128O","sc":"800G","asic":"Tomahawk 6 Peregrine","tp":"102.4T","g":[{"id":"front","l":"128 x OSFP112","c":128,"cage":"OSFP112","hs":"","modes":["1 x 800G (8 lanes 100G PAM4)","1 x 400G (8 lanes 50G PAM4)","2 x 400G (4 lanes 100G PAM4)","2 x 200G (4 lanes 50G PAM4)","4 x 200G (2 lanes 100G PAM4)","4 x 100G (2 lanes 50G PAM4)","8 x 100G (1 lane 100G PAM4)","8 x 50G (1 lane 50G PAM4)"],"pm":1}],"cf":1,"note":"","k":"switch","vd":"Edgecore","pn":[]},{"id":"AIS800-64O","n":"AIS800-64O","sc":"800G","asic":"Tomahawk 5","tp":"51.2T","g":[{"id":"front","l":"64 x OSFP112","c":64,"cage":"OSFP112","hs":"","modes":["1 x 800G (8 lanes 100G PAM4)","1 x 400G (8 lanes 50G PAM4)","2 x 400G (4 lanes 100G PAM4)","2 x 200G (4 lanes 50G PAM4)","4 x 200G (2 lanes 100G PAM4)","2 x 100G (4 lanes 25G NRZ)","4 x 100G (2 lanes 50G PAM4)","8 x 100G (1 lane 100G PAM4)","4 x 50G (2 lanes 25G NRZ)","8 x 50G (1 lane 50G PAM4)"],"pm":1}],"cf":1,"note":"","k":"switch","vd":"Edgecore","pn":[]},{"id":"AIS800-64D","n":"AIS800-64D","sc":"800G","asic":"Tomahawk 5","tp":"51.2T","g":[{"id":"front","l":"64 x QSFP112-DD","c":64,"cage":"QSFP112-DD","hs":"","modes":["1 x 800G (8 lanes 100G PAM4)","1 x 400G (8 lanes 50G PAM4)","2 x 400G (4 lanes 100G PAM4)","2 x 200G (4 lanes 50G PAM4)","4 x 200G (2 lanes 100G PAM4)","2 x 100G (4 lanes 25G NRZ)","4 x 100G (2 lanes 50G PAM4)","8 x 100G (1 lane 100G PAM4)","4 x 50G (2 lanes 25G NRZ)","8 x 50G (1 lane 50G PAM4)"],"pm":1}],"cf":1,"note":"","k":"switch","vd":"Edgecore","pn":[]},{"id":"AIS800-32O","n":"AIS800-32O","sc":"800G","asic":"Tomahawk 5","tp":"51.2T","g":[{"id":"front","l":"32 x OSFP112","c":32,"cage":"OSFP112","hs":"","modes":["1 x 800G (8 lanes 100G PAM4)","1 x 400G (8 lanes 50G PAM4)","2 x 400G (4 lanes 100G PAM4)","2 x 200G (4 lanes 50G PAM4)","4 x 200G (2 lanes 100G PAM4)","2 x 100G (4 lanes 25G NRZ)","4 x 100G (2 lanes 50G PAM4)","8 x 100G (1 lane 100G PAM4)","4 x 50G (2 lanes 25G NRZ)","8 x 50G (1 lane 50G PAM4)"],"pm":1}],"cf":1,"note":"","k":"switch","vd":"Edgecore","pn":[]},{"id":"AIS800-32D","n":"AIS800-32D","sc":"800G","asic":"Tomahawk 5","tp":"51.2T","g":[{"id":"front","l":"32 x QSFP112-DD","c":32,"cage":"QSFP112-DD","hs":"","modes":["1 x 800G (8 lanes 100G PAM4)","1 x 400G (8 lanes 50G PAM4)","2 x 400G (4 lanes 100G PAM4)","2 x 200G (4 lanes 50G PAM4)","4 x 200G (2 lanes 100G PAM4)","2 x 100G (4 lanes 25G NRZ)","4 x 100G (2 lanes 50G PAM4)","8 x 100G (1 lane 100G PAM4)","4 x 50G (2 lanes 25G NRZ)","8 x 50G (1 lane 50G PAM4)"],"pm":1}],"cf":1,"note":"","k":"switch","vd":"Edgecore","pn":[]},{"id":"DCS520","n":"DCS520 (AS9736-64D)","sc":"400G","asic":"Tomahawk 4","tp":"25.6T","g":[{"id":"front","l":"64 x QSFP56-DD","c":64,"cage":"QSFP56-DD","hs":"","modes":["1 x 400G (8 lanes 50G PAM4)","2 x 200G (4 lanes 50G PAM4)","2 x 100G (4 lanes 25G NRZ)","4 x 100G (2 lanes 50G PAM4)","4 x 50G (2 lanes 25G NRZ)","2 x 40G (4 lanes 10G NRZ)","8 x 25G (1 lane 25G NRZ)","8 x 10G (1 lane 10G NRZ)"],"pm":1}],"cf":1,"note":"port 1,2,3,4,29,30,31,32,33,34,35,36,61,62,63,64 is 24W, others is 13W","k":"switch","vd":"Edgecore","pn":[]},{"id":"DCS511","n":"DCS511 (AS9737-32DB)","sc":"400G","asic":"Tomahawk 4 Lite","tp":"12.8T","g":[{"id":"front","l":"32 x QSFP56-DD","c":32,"cage":"QSFP56-DD","hs":"","modes":["1 x 400G (8 lanes 50G PAM4)","2 x 200G (4 lanes 50G PAM4)","2 x 100G (4 lanes 25G NRZ)","4 x 100G (2 lanes 50G PAM4)","4 x 50G (2 lanes 25G NRZ)","2 x 40G (4 lanes 10G NRZ)","8 x 25G (1 lane 25G NRZ)","8 x 10G (1 lane 10G NRZ)"],"pm":1}],"cf":1,"note":"upper 16 ports support 24W, others is 14W","k":"switch","vd":"Edgecore","pn":[]},{"id":"DCS510","n":"DCS510 (AS9716-32D)","sc":"400G","asic":"Tomahawk 3","tp":"12.8T","g":[{"id":"front","l":"32 x QSFP56-DD","c":32,"cage":"QSFP56-DD","hs":"","modes":["1 x 400G (8 lanes 50G PAM4)","2 x 200G (4 lanes 50G PAM4)","2 x 100G (4 lanes 25G NRZ)","4 x 100G (2 lanes 50G PAM4)","4 x 50G (2 lanes 25G NRZ)","2 x 40G (4 lanes 10G NRZ)","8 x 25G (1 lane 25G NRZ)","8 x 10G (1 lane 10G NRZ)"],"pm":1}],"cf":1,"note":"upper 16 ports support 24W, others is 14W","k":"switch","vd":"Edgecore","pn":[]},{"id":"DCS240","n":"DCS240 (AS9726-32DB)","sc":"400G","asic":"Trident 4","tp":"12.8T","g":[{"id":"front","l":"32 x QSFP56-DD","c":32,"cage":"QSFP56-DD","hs":"","modes":["1 x 400G (8 lanes 50G PAM4)","2 x 200G (4 lanes 50G PAM4)","2 x 100G (4 lanes 25G NRZ)","4 x 100G (2 lanes 50G PAM4)","4 x 50G (2 lanes 25G NRZ)","2 x 40G (4 lanes 10G NRZ)","8 x 25G (1 lane 25G NRZ)","8 x 10G (1 lane 10G NRZ)"],"pm":1}],"cf":1,"note":"upper 16 ports support 24W, others is 14W","k":"switch","vd":"Edgecore","pn":[]},{"id":"DCS500","n":"DCS500 (AS7816-64X)","sc":"100G","asic":"Tomahawk 2","tp":"6.4T","g":[{"id":"front_breakout","l":"16 x QSFP28 (可分接)","c":16,"cage":"QSFP28","hs":"","modes":["1 x 100G (4 lanes 25G NRZ)","2 x 50G (2 lanes 25G NRZ)","1 x 40G (4 lanes 10G NRZ)","4 x 25G (1 lane 25G NRZ)","4 x 10G (1 lane 10G NRZ)"],"pm":1},{"id":"front","l":"48 x QSFP28","c":48,"cage":"QSFP28","hs":"","modes":["1 x 100G (4 lanes 25G NRZ)","1 x 40G (4 lanes 10G NRZ)"],"pm":1}],"cf":1,"note":"","k":"switch","vd":"Edgecore","pn":[]},{"id":"DCS204","n":"DCS204 (AS7726-32X)","sc":"100G","asic":"Trident 3 X7","tp":"3.2T","g":[{"id":"front","l":"32 x QSFP28","c":32,"cage":"QSFP28","hs":"","modes":["1 x 100G (4 lanes 25G NRZ)","2 x 50G (2 lanes 25G NRZ)","1 x 40G (4 lanes 10G NRZ)","4 x 25G (1 lane 25G NRZ)","4 x 10G (1 lane 10G NRZ)"],"pm":1}],"cf":1,"note":"","k":"switch","vd":"Edgecore","pn":[]},{"id":"DCS203","n":"DCS203 (AS7326-56X)","sc":"25G","asic":"Trident 3 X7","tp":"3.2T","g":[{"id":"access","l":"48 x SFP28","c":48,"cage":"SFP28","hs":"","modes":["1 x 25G (1 lane 25G NRZ)","1 x 10G (1 lane 10G NRZ)","1 x 1G (1 lane 1G NRZ)"],"pm":1},{"id":"uplink","l":"8 x QSFP28","c":8,"cage":"QSFP28","hs":"","modes":["1 x 100G (4 lanes 25G NRZ)","2 x 50G (2 lanes 25G NRZ)","1 x 40G (4 lanes 10G NRZ)","4 x 25G (1 lane 25G NRZ)","4 x 10G (1 lane 10G NRZ)"],"pm":1}],"cf":1,"note":"","k":"switch","vd":"Edgecore","pn":[]},{"id":"DCS202","n":"DCS202 (AS5835-54T)","sc":"10G","asic":"Trident 3 X5","tp":"2.0T","g":[{"id":"uplink_breakout","l":"2 x QSFP28 (可分接)","c":2,"cage":"QSFP28","hs":"","modes":["1 x 100G (4 lanes 25G NRZ)","2 x 50G (2 lanes 25G NRZ)","1 x 40G (4 lanes 10G NRZ)","4 x 25G (1 lane 25G NRZ)","4 x 10G (1 lane 10G NRZ)"],"pm":1},{"id":"uplink","l":"4 x QSFP28","c":4,"cage":"QSFP28","hs":"","modes":["1 x 100G (4 lanes 25G NRZ)","1 x 40G (4 lanes 10G NRZ)"],"pm":1}],"cf":1,"note":"","k":"switch","vd":"Edgecore","pn":[]},{"id":"DCS201","n":"DCS201 (AS5835-54X)","sc":"10G","asic":"Trident 3 X5","tp":"2.0T","g":[{"id":"access","l":"48 x SFP+","c":48,"cage":"SFP+","hs":"","modes":["1 x 10G (1 lane 10G NRZ)","1 x 1G (1 lane 1G NRZ)"],"pm":1},{"id":"uplink_breakout","l":"2 x QSFP28 (可分接)","c":2,"cage":"QSFP28","hs":"","modes":["1 x 100G (4 lanes 25G NRZ)","2 x 50G (2 lanes 25G NRZ)","1 x 40G (4 lanes 10G NRZ)","4 x 25G (1 lane 25G NRZ)","4 x 10G (1 lane 10G NRZ)"],"pm":1},{"id":"uplink","l":"4 x QSFP28","c":4,"cage":"QSFP28","hs":"","modes":["1 x 100G (4 lanes 25G NRZ)","1 x 40G (4 lanes 10G NRZ)"],"pm":1}],"cf":1,"note":"","k":"switch","vd":"Edgecore","pn":[]},{"id":"EPS112","n":"EPS112 (AS4625-30P)","sc":"1G","asic":"Trident 3 X3","tp":"0.8T","g":[{"id":"uplink","l":"6 x SFP+","c":6,"cage":"SFP+","hs":"","modes":["1 x 10G (1 lane 10G NRZ)","1 x 1G (1 lane 1G NRZ)"],"pm":1}],"cf":1,"note":"","k":"switch","vd":"Edgecore","pn":[]},{"id":"EPS122","n":"EPS122 (AS4625-54P)","sc":"1G","asic":"Trident 3 X3","tp":"0.8T","g":[{"id":"uplink","l":"6 x SFP+","c":6,"cage":"SFP+","hs":"","modes":["1 x 10G (1 lane 10G NRZ)","1 x 1G (1 lane 1G NRZ)"],"pm":1}],"cf":1,"note":"","k":"switch","vd":"Edgecore","pn":[]},{"id":"EPS121","n":"EPS121 (AS4625-54T)","sc":"1G","asic":"Trident 3 X3","tp":"0.8T","g":[{"id":"uplink","l":"6 x SFP+","c":6,"cage":"SFP+","hs":"","modes":["1 x 10G (1 lane 10G NRZ)","1 x 1G (1 lane 1G NRZ)"],"pm":1}],"cf":1,"note":"","k":"switch","vd":"Edgecore","pn":[]},{"id":"EPS203","n":"EPS203 (AS4630-54NPE)","sc":"1G","asic":"Trident 3 X3","tp":"0.8T","g":[{"id":"uplink","l":"4 x SFP28","c":4,"cage":"SFP28","hs":"","modes":["1 x 25G (1 lane 25G NRZ)","1 x 10G (1 lane 10G NRZ)","1 x 1G (1 lane 1G NRZ)"],"pm":1},{"id":"qsfp","l":"2 x QSFP28","c":2,"cage":"QSFP28","hs":"","modes":["1 x 100G (4 lanes 25G NRZ)","2 x 50G (2 lanes 25G NRZ)","1 x 40G (4 lanes 10G NRZ)","4 x 25G (1 lane 25G NRZ)","4 x 10G (1 lane 10G NRZ)","4 x 1G (1 lane 1G NRZ)"],"pm":1}],"cf":1,"note":"","k":"switch","vd":"Edgecore","pn":[]},{"id":"EPS202","n":"EPS202 (AS4630-54PE)","sc":"1G","asic":"Trident 3 X3","tp":"0.8T","g":[{"id":"uplink","l":"4 x SFP28","c":4,"cage":"SFP28","hs":"","modes":["1 x 25G (1 lane 25G NRZ)","1 x 10G (1 lane 10G NRZ)","1 x 1G (1 lane 1G NRZ)"],"pm":1},{"id":"qsfp","l":"2 x QSFP28","c":2,"cage":"QSFP28","hs":"","modes":["1 x 100G (4 lanes 25G NRZ)","2 x 50G (2 lanes 25G NRZ)","1 x 40G (4 lanes 10G NRZ)","4 x 25G (1 lane 25G NRZ)","4 x 10G (1 lane 10G NRZ)","4 x 1G (1 lane 1G NRZ)"],"pm":1}],"cf":1,"note":"","k":"switch","vd":"Edgecore","pn":[]},{"id":"EPS201","n":"EPS201 (AS4630-54TE)","sc":"1G","asic":"Trident 3 X3","tp":"0.8T","g":[{"id":"uplink","l":"4 x SFP28","c":4,"cage":"SFP28","hs":"","modes":["1 x 25G (1 lane 25G NRZ)","1 x 10G (1 lane 10G NRZ)","1 x 1G (1 lane 1G NRZ)"],"pm":1},{"id":"qsfp","l":"2 x QSFP28","c":2,"cage":"QSFP28","hs":"","modes":["1 x 100G (4 lanes 25G NRZ)","2 x 50G (2 lanes 25G NRZ)","1 x 40G (4 lanes 10G NRZ)","4 x 25G (1 lane 25G NRZ)","4 x 10G (1 lane 10G NRZ)","4 x 1G (1 lane 1G NRZ)"],"pm":1}],"cf":1,"note":"","k":"switch","vd":"Edgecore","pn":[]},{"id":"CX8-400G-OSFP","n":"ConnectX-8 400G OSFP (C8180，單埠)","sc":"","asic":"NVIDIA ConnectX-8","tp":"800G","g":[{"id":"port","l":"1 x OSFP","c":1,"cage":"OSFP112","hs":"RHS","modes":["1 x 400G (8 lanes 50G PAM4)","2 x 400G (4 lanes 100G PAM4)","2 x 200G (4 lanes 50G PAM4)","4 x 200G (2 lanes 100G PAM4)","2 x 100G (4 lanes 25G NRZ)","4 x 100G (2 lanes 50G PAM4)","8 x 100G (1 lane 100G PAM4)","4 x 50G (2 lanes 25G NRZ)","8 x 50G (1 lane 50G PAM4)","2 x 40G (4 lanes 10G NRZ)","8 x 25G (1 lane 25G NRZ)","8 x 10G (1 lane 10G NRZ)"],"pm":0}],"cf":0,"note":"硬體規格頁載明「ConnectX-8 SuperNICs with OSFP form factor support RHS (Riding Heatsink) cage only」，所以插不進 Edgecore 交換器的 IHS 埠位。 PCIe Gen6 x16。\n","k":"nic","vd":"NVIDIA","pn":["900-9X81E-00EX-ST0","900-9X81E-00EX-DT0","900-9X81E-00EX-SL0"]},{"id":"CX8-400G-QSFP112","n":"ConnectX-8 400G QSFP112 (C8240，雙埠)","sc":"","asic":"NVIDIA ConnectX-8","tp":"800G","g":[{"id":"port","l":"2 x QSFP112","c":2,"cage":"QSFP112","hs":"","modes":["1 x 400G (4 lanes 100G PAM4)","1 x 200G (4 lanes 50G PAM4)","2 x 200G (2 lanes 100G PAM4)","1 x 100G (4 lanes 25G NRZ)","2 x 100G (2 lanes 50G PAM4)","4 x 100G (1 lane 100G PAM4)","2 x 50G (2 lanes 25G NRZ)","4 x 50G (1 lane 50G PAM4)","1 x 40G (4 lanes 10G NRZ)","4 x 25G (1 lane 25G NRZ)","4 x 10G (1 lane 10G NRZ)"],"pm":0}],"cf":0,"note":"兩個埠各 400G，合計 800G。預設協定是乙太網路。PCIe Gen6 x16。","k":"nic","vd":"NVIDIA","pn":["900-9X81Q-00CN-ST0"]},{"id":"CX9-800G-OSFP","n":"ConnectX-9 800G OSFP (C9180，單埠)","sc":"","asic":"NVIDIA ConnectX-9","tp":"800G","g":[{"id":"port","l":"1 x OSFP","c":1,"cage":"OSFP224","hs":"RHS","modes":["1 x 800G (4 lanes 200G PAM4)","1 x 400G (4 lanes 100G PAM4)","2 x 400G (2 lanes 200G PAM4)","1 x 200G (4 lanes 50G PAM4)","2 x 200G (2 lanes 100G PAM4)","4 x 200G (1 lane 200G PAM4)","1 x 100G (4 lanes 25G NRZ)","2 x 100G (2 lanes 50G PAM4)","4 x 100G (1 lane 100G PAM4)","2 x 50G (2 lanes 25G NRZ)","4 x 50G (1 lane 50G PAM4)","1 x 40G (4 lanes 10G NRZ)","4 x 25G (1 lane 25G NRZ)","4 x 10G (1 lane 10G NRZ)"],"pm":0}],"cf":0,"note":"硬體規格頁載明 OSFP 只支援 RHS（平頂）籠。PCIe Gen6 x16。\n","k":"nic","vd":"NVIDIA","pn":["900-9X91E-00EB-ST0","900-9X91E-00EB-DT0"]},{"id":"CX9-400G-QSFP112","n":"ConnectX-9 400G QSFP112 (C9240 / C9220，雙埠)","sc":"","asic":"NVIDIA ConnectX-9","tp":"800G","g":[{"id":"port","l":"2 x QSFP112","c":2,"cage":"QSFP112","hs":"","modes":["1 x 400G (4 lanes 100G PAM4)","1 x 200G (4 lanes 50G PAM4)","2 x 200G (2 lanes 100G PAM4)","1 x 100G (4 lanes 25G NRZ)","2 x 100G (2 lanes 50G PAM4)","4 x 100G (1 lane 100G PAM4)","2 x 50G (2 lanes 25G NRZ)","4 x 50G (1 lane 50G PAM4)","1 x 40G (4 lanes 10G NRZ)","4 x 25G (1 lane 25G NRZ)","4 x 10G (1 lane 10G NRZ)"],"pm":0}],"cf":0,"note":"C9240 與 C9220 只差在 PCIe 世代（Gen6 對 Gen5）， cage、速率、SerDes 完全相同，所以互連性一樣，合成一筆。\n","k":"nic","vd":"NVIDIA","pn":["900-9X91Q-00CN-ST0","900-9X91Q-00RV-ST0"]},{"id":"CX9-200G-QSFP112","n":"ConnectX-9 200G QSFP112 (C9210，雙埠)","sc":"","asic":"NVIDIA ConnectX-9","tp":"800G","g":[{"id":"port","l":"2 x QSFP112","c":2,"cage":"QSFP112","hs":"","modes":["1 x 200G (4 lanes 50G PAM4)","2 x 200G (2 lanes 100G PAM4)","1 x 100G (4 lanes 25G NRZ)","2 x 100G (2 lanes 50G PAM4)","4 x 100G (1 lane 100G PAM4)","2 x 50G (2 lanes 25G NRZ)","4 x 50G (1 lane 50G PAM4)","1 x 40G (4 lanes 10G NRZ)","4 x 25G (1 lane 25G NRZ)","4 x 10G (1 lane 10G NRZ)"],"pm":0}],"cf":0,"note":"PCIe Gen4 x16。每埠上限 200G。","k":"nic","vd":"NVIDIA","pn":["900-9X91Q-00RC-ST0"]},{"id":"THOR-ULTRA-800G-OSFP","n":"Broadcom Thor Ultra 800G OSFP112 (單埠)","sc":"","asic":"Broadcom Thor Ultra","tp":"800G","g":[{"id":"port","l":"1 x OSFP112","c":1,"cage":"OSFP112","hs":"RHS","modes":["1 x 800G (8 lanes 100G PAM4)","1 x 400G (8 lanes 50G PAM4)","2 x 400G (4 lanes 100G PAM4)","2 x 200G (4 lanes 50G PAM4)","4 x 200G (2 lanes 100G PAM4)","4 x 100G (2 lanes 50G PAM4)","8 x 100G (1 lane 100G PAM4)","8 x 50G (1 lane 50G PAM4)"],"pm":0}],"cf":0,"note":"Hot Chips 2026：「An OSFP112 port supports 800G, 2x 400G, 4x 200G, or 8x 100G」，「8-port 100G MAC」「8x 100G Serdes」。PCIe Gen6 x16。 出貨形式有 OCP NIC 3.0 與 PCIe 兩種，互連性相同。\n","k":"nic","vd":"Broadcom","pn":["BCM957708-N1800GOP00","BCM957708-N1800GOE00"]},{"id":"THOR-ULTRA-400G-QSFP112","n":"Broadcom Thor Ultra 400G QSFP112 (雙埠)","sc":"","asic":"Broadcom Thor Ultra","tp":"800G","g":[{"id":"port","l":"2 x QSFP112","c":2,"cage":"QSFP112","hs":"","modes":["1 x 400G (4 lanes 100G PAM4)","1 x 200G (4 lanes 50G PAM4)","2 x 200G (2 lanes 100G PAM4)","2 x 100G (2 lanes 50G PAM4)","4 x 100G (1 lane 100G PAM4)","4 x 50G (1 lane 50G PAM4)"],"pm":0}],"cf":0,"note":"原廠說「configured for one OSFP112 or two QSFP112 ports」，但沒有列出 雙埠版的速率。這裡的 400G 是 QSFP112 籠本身的上限（4 x 100G）推得的， 不是原廠寫的數字。料號未知。\n","k":"nic","vd":"Broadcom","pn":[]},{"id":"CX7-400G-OSFP","n":"ConnectX-7 400G OSFP","sc":"","asic":"NVIDIA ConnectX-7","tp":"400G","g":[{"id":"port","l":"1 x OSFP","c":1,"cage":"OSFP112","hs":"RHS","modes":["1 x 400G (4 lanes 100G PAM4)","1 x 200G (2 lanes 100G PAM4)","1 x 200G (4 lanes 50G PAM4)","1 x 100G (1 lane 100G PAM4)","1 x 100G (2 lanes 50G PAM4)","1 x 100G (4 lanes 25G NRZ)","1 x 50G (1 lane 50G PAM4)","1 x 50G (2 lanes 25G NRZ)","1 x 40G (4 lanes 10G NRZ)","1 x 25G (1 lane 25G NRZ)","1 x 10G (1 lane 10G NRZ)","1 x 1G (1 lane 1G NRZ)"],"pm":0}],"cf":0,"note":"","k":"nic","vd":"NVIDIA","pn":["MCX75310AAC-NEAT","MCX75310AAS-NEAT","MCX75510AAS-NEAT"]},{"id":"CX7-200G-OSFP","n":"ConnectX-7 200G OSFP","sc":"","asic":"NVIDIA ConnectX-7","tp":"400G","g":[{"id":"port","l":"1 x OSFP","c":1,"cage":"OSFP112","hs":"RHS","modes":["1 x 200G (2 lanes 100G PAM4)","1 x 200G (4 lanes 50G PAM4)","1 x 100G (1 lane 100G PAM4)","1 x 100G (2 lanes 50G PAM4)","1 x 100G (4 lanes 25G NRZ)","1 x 50G (1 lane 50G PAM4)","1 x 50G (2 lanes 25G NRZ)","1 x 40G (4 lanes 10G NRZ)","1 x 25G (1 lane 25G NRZ)","1 x 10G (1 lane 10G NRZ)","1 x 1G (1 lane 1G NRZ)"],"pm":0}],"cf":0,"note":"","k":"nic","vd":"NVIDIA","pn":["MCX75310AAS-HEAT","MCX75510AAS-HEAT"]},{"id":"CX7-400G-QSFP112","n":"ConnectX-7 400G QSFP112","sc":"","asic":"NVIDIA ConnectX-7","tp":"400G","g":[{"id":"port","l":"1 x QSFP112","c":1,"cage":"QSFP112","hs":"","modes":["1 x 400G (4 lanes 100G PAM4)","1 x 200G (2 lanes 100G PAM4)","1 x 200G (4 lanes 50G PAM4)","1 x 100G (1 lane 100G PAM4)","1 x 100G (2 lanes 50G PAM4)","1 x 100G (4 lanes 25G NRZ)","1 x 50G (1 lane 50G PAM4)","1 x 50G (2 lanes 25G NRZ)","1 x 40G (4 lanes 10G NRZ)","1 x 25G (1 lane 25G NRZ)","1 x 10G (1 lane 10G NRZ)","1 x 1G (1 lane 1G NRZ)"],"pm":0}],"cf":0,"note":"","k":"nic","vd":"NVIDIA","pn":["MCX715105AS-WEAT"]},{"id":"CX7-200G-QSFP112","n":"ConnectX-7 200G QSFP112 (雙埠)","sc":"","asic":"NVIDIA ConnectX-7","tp":"400G","g":[{"id":"port","l":"2 x QSFP112","c":2,"cage":"QSFP112","hs":"","modes":["1 x 200G (2 lanes 100G PAM4)","1 x 200G (4 lanes 50G PAM4)","1 x 100G (1 lane 100G PAM4)","1 x 100G (2 lanes 50G PAM4)","1 x 100G (4 lanes 25G NRZ)","1 x 50G (1 lane 50G PAM4)","1 x 50G (2 lanes 25G NRZ)","1 x 40G (4 lanes 10G NRZ)","1 x 25G (1 lane 25G NRZ)","1 x 10G (1 lane 10G NRZ)","1 x 1G (1 lane 1G NRZ)"],"pm":0}],"cf":0,"note":"","k":"nic","vd":"NVIDIA","pn":["MCX755106AC-HEAT","MCX755106AS-HEAT","MCX713106AC-VEAT","MCX713106AS-VEAT"]},{"id":"CX7-100G-QSFP112","n":"ConnectX-7 100G QSFP112 (雙埠)","sc":"","asic":"NVIDIA ConnectX-7","tp":"400G","g":[{"id":"port","l":"2 x QSFP112","c":2,"cage":"QSFP112","hs":"","modes":["1 x 100G (1 lane 100G PAM4)","1 x 100G (2 lanes 50G PAM4)","1 x 100G (4 lanes 25G NRZ)","1 x 50G (1 lane 50G PAM4)","1 x 50G (2 lanes 25G NRZ)","1 x 40G (4 lanes 10G NRZ)","1 x 25G (1 lane 25G NRZ)","1 x 10G (1 lane 10G NRZ)","1 x 1G (1 lane 1G NRZ)"],"pm":0}],"cf":0,"note":"","k":"nic","vd":"NVIDIA","pn":["MCX713106AC-CEAT","MCX713106AS-CEAT"]},{"id":"CX7-50G-SFP56","n":"ConnectX-7 50G SFP56 (四埠)","sc":"","asic":"NVIDIA ConnectX-7","tp":"400G","g":[{"id":"port","l":"4 x SFP56","c":4,"cage":"SFP56","hs":"","modes":["1 x 50G (1 lane 50G PAM4)","1 x 25G (1 lane 25G NRZ)","1 x 10G (1 lane 10G NRZ)","1 x 1G (1 lane 1G NRZ)"],"pm":0}],"cf":0,"note":"","k":"nic","vd":"NVIDIA","pn":["MCX713104AC-ADAT","MCX713104AS-ADAT","MCX713114TC-GEAT"]},{"id":"CX6DX-200G-QSFP56","n":"ConnectX-6 Dx 200G QSFP56","sc":"","asic":"NVIDIA ConnectX-6 Dx","tp":"200G","g":[{"id":"port","l":"1 x QSFP56","c":1,"cage":"QSFP56","hs":"","modes":["1 x 200G (4 lanes 50G PAM4)","1 x 100G (2 lanes 50G PAM4)","1 x 100G (4 lanes 25G NRZ)","1 x 50G (1 lane 50G PAM4)","1 x 50G (2 lanes 25G NRZ)","1 x 40G (4 lanes 10G NRZ)","1 x 25G (1 lane 25G NRZ)","1 x 10G (1 lane 10G NRZ)","1 x 1G (1 lane 1G NRZ)"],"pm":0}],"cf":0,"note":"","k":"nic","vd":"NVIDIA","pn":["MCX623105AC-VDAT","MCX623105AN-VDAT","MCX623105AS-VDAT","MCX623105AE-VDAT"]},{"id":"CX6DX-100G-QSFP56","n":"ConnectX-6 Dx 100G QSFP56","sc":"","asic":"NVIDIA ConnectX-6 Dx","tp":"200G","g":[{"id":"port","l":"1~2 x QSFP56","c":2,"cage":"QSFP56","hs":"","modes":["1 x 100G (2 lanes 50G PAM4)","1 x 100G (4 lanes 25G NRZ)","1 x 50G (1 lane 50G PAM4)","1 x 50G (2 lanes 25G NRZ)","1 x 40G (4 lanes 10G NRZ)","1 x 25G (1 lane 25G NRZ)","1 x 10G (1 lane 10G NRZ)","1 x 1G (1 lane 1G NRZ)"],"pm":0}],"cf":0,"note":"","k":"nic","vd":"NVIDIA","pn":["MCX623105AN-CDAT","MCX623105AE-CDAT","MCX623105AC-CDAT","MCX623106AS-CDAT","MCX623106AN-CDAT","MCX623106AC-CDAT","MCX623106AE-CDAT","MCX623106PN-CDAT","MCX623106PC-CDAT","MCX623106TC-CDAT","MCX623106TN-CDAT","MCX623106GN-CDAT","MCX623106GC-CDAT"]},{"id":"CX6DX-50G-SFP56","n":"ConnectX-6 Dx 50G SFP56 (雙埠)","sc":"","asic":"NVIDIA ConnectX-6 Dx","tp":"200G","g":[{"id":"port","l":"2 x SFP56","c":2,"cage":"SFP56","hs":"","modes":["1 x 50G (1 lane 50G PAM4)","1 x 25G (1 lane 25G NRZ)","1 x 10G (1 lane 10G NRZ)","1 x 1G (1 lane 1G NRZ)"],"pm":0}],"cf":0,"note":"","k":"nic","vd":"NVIDIA","pn":["MCX623102AC-GDAT","MCX623102AE-GDAT","MCX623102AN-GDAT","MCX623102AS-GDAT"]},{"id":"CX6DX-25G-SFP28","n":"ConnectX-6 Dx 25G SFP28 (雙埠)","sc":"","asic":"NVIDIA ConnectX-6 Dx","tp":"200G","g":[{"id":"port","l":"2 x SFP28","c":2,"cage":"SFP28","hs":"","modes":["1 x 25G (1 lane 25G NRZ)","1 x 10G (1 lane 10G NRZ)","1 x 1G (1 lane 1G NRZ)"],"pm":0}],"cf":0,"note":"","k":"nic","vd":"NVIDIA","pn":["MCX621102AC-ADAT","MCX621102AN-ADAT","MCX621202AS-ADAT","MCX621202AC-ADAT","MCX623102AC-ADAT","MCX623102AN-ADAT","MCX623102AS-ADAT"]},{"id":"CX5-100G-QSFP28","n":"ConnectX-5 100G QSFP28","sc":"","asic":"NVIDIA ConnectX-5","tp":"100G","g":[{"id":"port","l":"1~2 x QSFP28","c":2,"cage":"QSFP28","hs":"","modes":["1 x 100G (4 lanes 25G NRZ)","1 x 50G (2 lanes 25G NRZ)","1 x 40G (4 lanes 10G NRZ)","1 x 25G (1 lane 25G NRZ)","1 x 10G (1 lane 10G NRZ)","1 x 1G (1 lane 1G NRZ)"],"pm":0}],"cf":0,"note":"","k":"nic","vd":"NVIDIA","pn":["MCX515A-CCAT","MCX515A-CCUT","MCX516A-CCAT","MCX516A-CCHT","MCX516A-CDAT"]},{"id":"CX5-50G-QSFP28","n":"ConnectX-5 50G QSFP28","sc":"","asic":"NVIDIA ConnectX-5","tp":"100G","g":[{"id":"port","l":"1~2 x QSFP28","c":2,"cage":"QSFP28","hs":"","modes":["1 x 50G (2 lanes 25G NRZ)","1 x 40G (4 lanes 10G NRZ)","1 x 25G (1 lane 25G NRZ)","1 x 10G (1 lane 10G NRZ)","1 x 1G (1 lane 1G NRZ)"],"pm":0}],"cf":0,"note":"","k":"nic","vd":"NVIDIA","pn":["MCX515A-GCAT","MCX516A-GCAT"]},{"id":"CX5-40G-QSFP28","n":"ConnectX-5 40G QSFP28 (雙埠)","sc":"","asic":"NVIDIA ConnectX-5","tp":"100G","g":[{"id":"port","l":"2 x QSFP28","c":2,"cage":"QSFP28","hs":"","modes":["1 x 40G (4 lanes 10G NRZ)","1 x 25G (1 lane 25G NRZ)","1 x 10G (1 lane 10G NRZ)","1 x 1G (1 lane 1G NRZ)"],"pm":0}],"cf":0,"note":"","k":"nic","vd":"NVIDIA","pn":["MCX516A-BDAT"]},{"id":"CX5-25G-SFP28","n":"ConnectX-5 25G SFP28 (雙埠)","sc":"","asic":"NVIDIA ConnectX-5","tp":"100G","g":[{"id":"port","l":"2 x SFP28","c":2,"cage":"SFP28","hs":"","modes":["1 x 25G (1 lane 25G NRZ)","1 x 10G (1 lane 10G NRZ)","1 x 1G (1 lane 1G NRZ)"],"pm":0}],"cf":0,"note":"","k":"nic","vd":"NVIDIA","pn":["MCX512A-ACAT","MCX512A-ACUT","MCX512A-ADAT","MCX512F-ACAT","MCX512F-ACHT"]},{"id":"THOR2-400G-QSFPDD","n":"Thor2 400G QSFP-DD (P1400GD)","sc":"","asic":"Broadcom Thor2","tp":"400G","g":[{"id":"port","l":"1 x QSFP-DD","c":1,"cage":"QSFP56-DD","hs":"","modes":["1 x 400G (8 lanes 50G PAM4)","1 x 200G (4 lanes 50G PAM4)","1 x 100G (2 lanes 50G PAM4)","1 x 100G (4 lanes 25G NRZ)","1 x 50G (1 lane 50G PAM4)","1 x 50G (2 lanes 25G NRZ)","1 x 25G (1 lane 25G NRZ)"],"pm":0}],"cf":0,"note":"Broadcom 規格書寫 QSFP-DD。此處用 QSFP56-DD 而非 QSFP112-DD： QSFP-DD 是 8 通道，400G 即每通道 50G，屬 400G 世代。 標成 QSFP112-DD 會變成 8 x 100G = 800G 世代，並讓 800G 模組被誤判為可用。\n","k":"nic","vd":"Broadcom","pn":["BCM957608-P1400GDF00"]},{"id":"THOR2-200G-QSFP112","n":"Thor2 2x200G / 1x400G QSFP112 (P2200G)","sc":"","asic":"Broadcom Thor2","tp":"400G","g":[{"id":"port","l":"2 x QSFP112","c":2,"cage":"QSFP112","hs":"","modes":["1 x 400G (4 lanes 100G PAM4)","1 x 200G (2 lanes 100G PAM4)","1 x 200G (4 lanes 50G PAM4)","1 x 100G (1 lane 100G PAM4)","1 x 100G (2 lanes 50G PAM4)","1 x 100G (4 lanes 25G NRZ)","1 x 50G (1 lane 50G PAM4)","1 x 50G (2 lanes 25G NRZ)","1 x 25G (1 lane 25G NRZ)"],"pm":0}],"cf":0,"note":"雙埠時每埠 200G，亦可設定為單埠 400G（port 1 啟用、port 2 停用）。 此處以 QSFP112 埠位建模，400G 模式下 4 lanes x 100G 仍在同一個埠位內。\n","k":"nic","vd":"Broadcom","pn":["BCM957608-P2200GQF00","BCM957608-N2200G"]},{"id":"POLLARA-400-QSFP112","n":"Pensando Pollara 400 (400G QSFP112)","sc":"","asic":"AMD Pensando Pollara 400","tp":"400G","g":[{"id":"port","l":"1 x QSFP112","c":1,"cage":"QSFP112","hs":"","modes":["1 x 400G (4 lanes 100G PAM4)","1 x 200G (4 lanes 50G PAM4)","2 x 200G (2 lanes 100G PAM4)","1 x 100G (4 lanes 25G NRZ)","4 x 100G (1 lane 100G PAM4)","4 x 50G (1 lane 50G PAM4)","4 x 25G (1 lane 25G NRZ)"],"pm":1}],"cf":0,"note":"原廠 datasheet 明列 2x200G / 4x100G / 4x50G / 4x25G，所以這個埠位支援分接。\n","k":"nic","vd":"AMD","pn":["POLLARA-400-1Q400P"]}],"X":[{"m":"ET8001-2DR4","s":"800G-2DR4","f":"OSFP","d":"800G OSFP-2xDR4, 2xMPO12, 500m","sp":800,"r":500,"gb":0,"cn":"MPO-12 + MPO-12","cat":"800G Optical Module","hs":"IHS","md":"SMF","pn":[],"pn1":"","pnalt":[],"pnwarn":"","av":[],"avl":"","avlt":[],"wl":"SMF-1310","spec":["單模","100G/通道","PAM4","1310 nm","並列可拆","MPO-12/APC + MPO-12/APC","8 個獨立通道","500 m"],"ops":["800G"]},{"m":"ET8001-2FR4","s":"800G-2FR4","f":"OSFP","d":"800G OSFP-2xFR4, 2xDuplexLC, 2km","sp":800,"r":2000,"gb":0,"cn":"LC-duplex + LC-duplex","cat":"800G Optical Module","hs":"IHS","md":"SMF","pn":[],"pn1":"","pnalt":[],"pnwarn":"","av":[],"avl":"","avlt":[],"wl":"SMF-CWDM4","spec":["單模","100G/通道","PAM4","CWDM4 1271/1291/1311/1331 nm","WDM 不可拆","LC-duplex/UPC + LC-duplex/UPC","2 個獨立通道","2000 m"],"ops":["800G"]},{"m":"ET8001-SR8","s":"800G-SR8","f":"OSFP","d":"800G OSFP-SR8, MPO16","sp":800,"r":50,"gb":0,"cn":"MPO-16","cat":"800G Optical Module","hs":"IHS","md":"MMF","pn":[],"pn1":"","pnalt":[],"pnwarn":"","av":[],"avl":"","avlt":[],"wl":"MMF-850","spec":["多模","100G/通道","PAM4","850 nm","並列可拆","MPO-16/APC","8 個獨立通道","50 m"],"ops":["800G","400G"]},{"m":"ET8001-2SR4","s":"800G-2SR4","f":"OSFP","d":"800G OSFP 2xSR4, 2xMPO12","sp":800,"r":50,"gb":0,"cn":"MPO-12 + MPO-12","cat":"800G Optical Module","hs":"IHS","md":"MMF","pn":[],"pn1":"","pnalt":[],"pnwarn":"","av":[],"avl":"","avlt":[],"wl":"MMF-850","spec":["多模","100G/通道","PAM4","850 nm","並列可拆","MPO-12/APC + MPO-12/APC","8 個獨立通道","50 m"],"ops":["800G","400G"]},{"m":"ET8002-2DR4","s":"800G-2DR4","f":"QSFP112-DD","d":"800G QSFP112-DD 2xDR4, 2xMPO12, 500m","sp":800,"r":500,"gb":0,"cn":"MPO-12 + MPO-12","cat":"800G Optical Module","hs":"IHS","md":"SMF","pn":[],"pn1":"","pnalt":[],"pnwarn":"","av":[],"avl":"","avlt":[],"wl":"SMF-1310","spec":["單模","100G/通道","PAM4","1310 nm","並列可拆","MPO-12/APC + MPO-12/APC","8 個獨立通道","500 m"],"ops":["800G"]},{"m":"ET8002-2FR4","s":"800G-2FR4","f":"QSFP112-DD","d":"800G QSFP112-DD 2xFR4, 2xDuplexLC, 2km","sp":800,"r":2000,"gb":0,"cn":"LC-duplex + LC-duplex","cat":"800G Optical Module","hs":"IHS","md":"SMF","pn":[],"pn1":"","pnalt":[],"pnwarn":"","av":[],"avl":"","avlt":[],"wl":"SMF-CWDM4","spec":["單模","100G/通道","PAM4","CWDM4 1271/1291/1311/1331 nm","WDM 不可拆","LC-duplex/UPC + LC-duplex/UPC","2 個獨立通道","2000 m"],"ops":["800G"]},{"m":"ET8002-SR8","s":"800G-SR8","f":"QSFP112-DD","d":"800G QSFP112-DD SR8, MPO16","sp":800,"r":50,"gb":0,"cn":"MPO-16","cat":"800G Optical Module","hs":"IHS","md":"MMF","pn":[],"pn1":"","pnalt":[],"pnwarn":"","av":[],"avl":"","avlt":[],"wl":"MMF-850","spec":["多模","100G/通道","PAM4","850 nm","並列可拆","MPO-16/APC","8 個獨立通道","50 m"],"ops":["800G"]},{"m":"ET8002-2SR4","s":"800G-2SR4","f":"QSFP112-DD","d":"800G QSFP112-DD 2xSR4, 2xMPO12","sp":800,"r":50,"gb":0,"cn":"MPO-12 + MPO-12","cat":"800G Optical Module","hs":"IHS","md":"MMF","pn":[],"pn1":"","pnalt":[],"pnwarn":"","av":[],"avl":"","avlt":[],"wl":"MMF-850","spec":["多模","100G/通道","PAM4","850 nm","並列可拆","MPO-12/APC + MPO-12/APC","8 個獨立通道","50 m"],"ops":["800G"]},{"m":"ET8001-2DR4P","s":"800G-2DR4P","f":"OSFP","d":"800G QSFP112-DD 2xDR4, 2xMPO12, 2km","sp":800,"r":2000,"gb":0,"cn":"MPO-12 + MPO-12","cat":"800G Optical Module","hs":"IHS","md":"SMF","pn":[],"pn1":"","pnalt":[],"pnwarn":"","av":[],"avl":"","avlt":[],"wl":"SMF-1310","spec":["單模","100G/通道","PAM4","1310 nm","並列可拆","MPO-12/APC + MPO-12/APC","8 個獨立通道","2000 m"],"ops":["800G"]},{"m":"ET8001-LPO-2DR4","s":"800G-2DR4","f":"OSFP","d":"800G OSFP-2xDR4, 2xMPO12, 500m, LPO","sp":800,"r":500,"gb":0,"cn":"MPO-12 + MPO-12","cat":"800G LPO Module","hs":"IHS","md":"SMF","pn":[],"pn1":"","pnalt":[],"pnwarn":"","av":[],"avl":"","avlt":[],"wl":"SMF-1310","spec":["單模","100G/通道","PAM4","1310 nm","並列可拆","MPO-12/APC + MPO-12/APC","8 個獨立通道","500 m"],"ops":["800G"]},{"m":"ET7502-SR8","s":"400G-SR8","f":"QSFP56-DD","d":"400G SR8 Multi-Mode QSFP-DD, 100m, MPO-16/APC, Transceiver","sp":400,"r":100,"gb":0,"cn":"MPO-16","cat":"400G Optical Module","hs":"IHS","md":"MMF","pn":[],"pn1":"","pnalt":[],"pnwarn":"","av":[],"avl":"","avlt":[],"wl":"MMF-850","spec":["多模","50G/通道","PAM4","850 nm","並列可拆","MPO-16/APC","8 個獨立通道","100 m"],"ops":["400G"]},{"m":"ET7502-DR4","s":"400G-DR4","f":"QSFP56-DD","d":"400G DR4 Single-Mode QSFP-DD, 4x100G, 500m, MPO-12, Transceiver","sp":400,"r":500,"gb":1,"cn":"MPO-12","cat":"400G Optical Module","hs":"IHS","md":"SMF","pn":[],"pn1":"","pnalt":[],"pnwarn":"","av":[],"avl":"","avlt":[],"wl":"SMF-1310","spec":["單模","100G/通道","PAM4","1310 nm","並列可拆","MPO-12/APC","4 個獨立通道","500 m"],"ops":["400G"]},{"m":"ET7502-XDR4","s":"400G-XDR4","f":"QSFP56-DD","d":"400G xDR4 Single-Mode QSFP-DD, 4x100G, 2km, MPO-12, Transceiver","sp":400,"r":2000,"gb":1,"cn":"MPO-12","cat":"400G Optical Module","hs":"IHS","md":"SMF","pn":[],"pn1":"","pnalt":[],"pnwarn":"","av":[],"avl":"","avlt":[],"wl":"SMF-1310","spec":["單模","100G/通道","PAM4","1310 nm","並列可拆","MPO-12/APC","4 個獨立通道","2000 m"],"ops":["400G"]},{"m":"ET7502-PLR4","s":"400G-PLR4","f":"QSFP56-DD","d":"400G PLR4 Single-Mode QSFP-DD, 10km, MPO, Transceiver","sp":400,"r":10000,"gb":1,"cn":"MPO-12","cat":"400G Optical Module","hs":"IHS","md":"SMF","pn":[],"pn1":"","pnalt":[],"pnwarn":"","av":[],"avl":"","avlt":[],"wl":"SMF-1310","spec":["單模","100G/通道","PAM4","1310 nm","並列可拆","MPO-12/APC","4 個獨立通道","10000 m"],"ops":["400G"]},{"m":"ET7502-FR4","s":"400G-FR4","f":"QSFP56-DD","d":"400G FR4 Single-Mode QSFP-DD, 2km, LC duplex, Transceiver","sp":400,"r":2000,"gb":1,"cn":"LC-duplex","cat":"400G Optical Module","hs":"IHS","md":"SMF","pn":[],"pn1":"","pnalt":[],"pnwarn":"","av":[],"avl":"","avlt":[],"wl":"SMF-CWDM4","spec":["單模","100G/通道","PAM4","CWDM4 1271/1291/1311/1331 nm","WDM 不可拆","LC-duplex/UPC","1 個獨立通道","2000 m"],"ops":["400G"]},{"m":"ET7502-LR4","s":"400G-LR4","f":"QSFP56-DD","d":"400G LR4 Single-Mode QSFP-DD, 10km, LC duplex, Transceiver","sp":400,"r":10000,"gb":1,"cn":"LC-duplex","cat":"400G Optical Module","hs":"IHS","md":"SMF","pn":[],"pn1":"","pnalt":[],"pnwarn":"","av":[],"avl":"","avlt":[],"wl":"SMF-CWDM4","spec":["單模","100G/通道","PAM4","CWDM4 1271/1291/1311/1331 nm","WDM 不可拆","LC-duplex/UPC","1 個獨立通道","10000 m"],"ops":["400G"]},{"m":"ET7502-SR4.2-BD","s":"400G-SR4.2-BD","f":"QSFP56-DD","d":"400G QSFP-DD SR4.2 Multi-Mode, 100m, MPO-12, Transceiver","sp":400,"r":100,"gb":0,"cn":"MPO-12","cat":"400G Optical Module","hs":"IHS","md":"MMF","pn":[],"pn1":"","pnalt":[],"pnwarn":"","av":[],"avl":"","avlt":[],"wl":"MMF-BiDi-850-910","spec":["多模","50G/通道","PAM4","BiDi 850/910 nm","BiDi 單纖","MPO-12/APC","1 個獨立通道","100 m"],"ops":["400G"]},{"m":"ET7511-DR4","s":"400G-DR4","f":"OSFP112","d":"400G OSFP112-DR4, MPO12/APC,1310nm 500m SMF Optical Transceiver Module","sp":400,"r":500,"gb":0,"cn":"MPO-12","cat":"400G Optical Module","hs":"RHS","md":"SMF","pn":[],"pn1":"","pnalt":[],"pnwarn":"","av":[],"avl":"","avlt":[],"wl":"SMF-1310","spec":["單模","100G/通道","PAM4","1310 nm","並列可拆","MPO-12/APC","4 個獨立通道","500 m"],"ops":["400G"]},{"m":"ET7512-DR4","s":"400G-DR4","f":"QSFP112","d":"400G QSFP112 DR4, MPO12/APC,1310nm 500m SMF Optical Transceiver Module","sp":400,"r":500,"gb":0,"cn":"MPO-12","cat":"400G Optical Module","hs":"IHS","md":"SMF","pn":[],"pn1":"","pnalt":[],"pnwarn":"","av":[],"avl":"","avlt":[],"wl":"SMF-1310","spec":["單模","100G/通道","PAM4","1310 nm","並列可拆","MPO-12/APC","4 個獨立通道","500 m"],"ops":["400G"]},{"m":"ET7511-SR4","s":"400G-SR4","f":"OSFP112","d":"400G OSFP112-SR4, MPO12/APC,850nm 50m MMF Optical Transceiver Module","sp":400,"r":50,"gb":0,"cn":"MPO-12","cat":"400G Optical Module","hs":"RHS","md":"MMF","pn":[],"pn1":"","pnalt":[],"pnwarn":"","av":[],"avl":"","avlt":[],"wl":"MMF-850","spec":["多模","100G/通道","PAM4","850 nm","並列可拆","MPO-12/APC","4 個獨立通道","50 m"],"ops":["400G"]},{"m":"ET7512-SR4","s":"400G-SR4","f":"QSFP112","d":"400G QSFP112 SR4, MPO12/APC,850nm 50m MMF Optical Transceiver Module","sp":400,"r":50,"gb":0,"cn":"MPO-12","cat":"400G Optical Module","hs":"IHS","md":"MMF","pn":[],"pn1":"","pnalt":[],"pnwarn":"","av":[],"avl":"","avlt":[],"wl":"MMF-850","spec":["多模","100G/通道","PAM4","850 nm","並列可拆","MPO-12/APC","4 個獨立通道","50 m"],"ops":["400G"]},{"m":"ET7512-DR4P","s":"400G-XDR4","f":"QSFP112","d":"400G QSFP112 DR4, MPO12/APC,1310nm 2km SMF Optical Transceiver Module","sp":400,"r":2000,"gb":0,"cn":"MPO-12","cat":"400G Optical Module","hs":"IHS","md":"SMF","pn":[],"pn1":"","pnalt":[],"pnwarn":"","av":[],"avl":"","avlt":[],"wl":"SMF-1310","spec":["單模","100G/通道","PAM4","1310 nm","並列可拆","MPO-12/APC","4 個獨立通道","2000 m"],"ops":["400G"]},{"m":"ET7512-LPO-DR4","s":"400G-DR4","f":"QSFP112","d":"400G QSFP-DR4, MPO12, 500m, LPO","sp":400,"r":500,"gb":0,"cn":"MPO-12","cat":"400G LPO Module","hs":"IHS","md":"SMF","pn":[],"pn1":"","pnalt":[],"pnwarn":"","av":[],"avl":"","avlt":[],"wl":"SMF-1310","spec":["單模","100G/通道","PAM4","1310 nm","並列可拆","MPO-12/APC","4 個獨立通道","500 m"],"ops":["400G"]},{"m":"ET7452-SR4","s":"200G-SR4","f":"QSFP56","d":"200G QSFP56-SR4 Multi-Mode,100m, MPO-12, Transceiver","sp":200,"r":100,"gb":0,"cn":"MPO-12","cat":"200 QSFP56 Transceiver","hs":"IHS","md":"MMF","pn":[],"pn1":"","pnalt":[],"pnwarn":"","av":[],"avl":"","avlt":[],"wl":"MMF-850","spec":["多模","50G/通道","PAM4","850 nm","並列可拆","MPO-12/UPC","4 個獨立通道","100 m"],"ops":["200G"]},{"m":"ET7402-SR4","s":"100G-SR4","f":"QSFP28","d":"100G SR4 QSFP28 850nm MM 100M Transceiver","sp":100,"r":100,"gb":0,"cn":"MPO-12","cat":"100GE QSFP28 Transceiver","hs":"IHS","md":"MMF","pn":[],"pn1":"","pnalt":[],"pnwarn":"","av":[],"avl":"","avlt":[],"wl":"MMF-850","spec":["多模","25G/通道","NRZ","850 nm","並列可拆","MPO-12/UPC","4 個獨立通道","100 m"],"ops":["100G"]},{"m":"ET7402-SR2-BD","s":"100G-SR2-BD","f":"QSFP28","d":"100G QSFP28 SR2-BiDi Transceiver Dual Bidi LCs 70M/100M (OM3/OM4)","sp":100,"r":70,"gb":1,"cn":"LC-duplex","cat":"100GE QSFP28 Transceiver","hs":"IHS","md":"MMF","pn":[],"pn1":"","pnalt":[],"pnwarn":"","av":[],"avl":"","avlt":[],"wl":"MMF-BiDi-850-910","spec":["多模","50G/通道","PAM4","BiDi 850/910 nm","BiDi 單纖","LC-duplex/UPC","1 個獨立通道","70 m"],"ops":["100G"]},{"m":"ET7402-SWDM4","s":"100G-SWDM4","f":"QSFP28","d":"100G QSFP28 SWDM4 Transceiver, Duplex LC, SWDM  850/880/910/940nm VCSEL, MMF OM4 100M","sp":100,"r":100,"gb":0,"cn":"LC-duplex","cat":"100GE QSFP28 Transceiver","hs":"IHS","md":"MMF","pn":[],"pn1":"","pnalt":[],"pnwarn":"","av":[],"avl":"","avlt":[],"wl":"MMF-SWDM4","spec":["多模","25G/通道","NRZ","SWDM4 850/880/910/940 nm","WDM 不可拆","LC-duplex/UPC","1 個獨立通道","100 m"],"ops":["100G"]},{"m":"ET7402-CWDM4","s":"100G-CWDM4","f":"QSFP28","d":"100G CWDM4 QSFP28 1310nm SM 2KM Transceiver","sp":100,"r":2000,"gb":0,"cn":"LC-duplex","cat":"100GE QSFP28 Transceiver","hs":"IHS","md":"SMF","pn":[],"pn1":"","pnalt":[],"pnwarn":"","av":[],"avl":"","avlt":[],"wl":"SMF-CWDM4","spec":["單模","25G/通道","NRZ","CWDM4 1271/1291/1311/1331 nm","WDM 不可拆","LC-duplex/UPC","1 個獨立通道","2000 m"],"ops":["100G"]},{"m":"ET7402-CWDM4-10","s":"100G-CWDM4-10","f":"QSFP28","d":"100G CWDM4 QSFP28 1310nm SM 10KM Transceiver","sp":100,"r":10000,"gb":0,"cn":"LC-duplex","cat":"100GE QSFP28 Transceiver","hs":"IHS","md":"SMF","pn":[],"pn1":"","pnalt":[],"pnwarn":"","av":[],"avl":"","avlt":[],"wl":"SMF-CWDM4","spec":["單模","25G/通道","NRZ","CWDM4 1271/1291/1311/1331 nm","WDM 不可拆","LC-duplex/UPC","1 個獨立通道","10000 m"],"ops":["100G"]},{"m":"ET7402-LR4","s":"100G-LR4","f":"QSFP28","d":"100G LR4 QSFP28 1310nm SM 10KM Transceiver","sp":100,"r":10000,"gb":0,"cn":"LC-duplex","cat":"100GE QSFP28 Transceiver","hs":"IHS","md":"SMF","pn":[],"pn1":"","pnalt":[],"pnwarn":"","av":[],"avl":"","avlt":[],"wl":"SMF-LAN-WDM4","spec":["單模","25G/通道","NRZ","LAN-WDM 1295/1300/1304/1309 nm","WDM 不可拆","LC-duplex/UPC","1 個獨立通道","10000 m"],"ops":["100G"]},{"m":"ET7402-LR4-I1","s":"100G-LR4","f":"QSFP28","d":"100G LR4 QSFP28 1310nm SM 10KM Transceiver, I-temp","sp":100,"r":10000,"gb":0,"cn":"LC-duplex","cat":"100GE QSFP28 Transceiver","hs":"IHS","md":"SMF","pn":[],"pn1":"","pnalt":[],"pnwarn":"","av":[],"avl":"","avlt":[],"wl":"SMF-LAN-WDM4","spec":["單模","25G/通道","NRZ","LAN-WDM 1295/1300/1304/1309 nm","WDM 不可拆","LC-duplex/UPC","1 個獨立通道","10000 m"],"ops":["100G"]},{"m":"ET7402-ER4","s":"100G-ER4","f":"QSFP28","d":"100G ER4 QSFP28 1310nm SM 40KM (w/ FEC) Transceiver","sp":100,"r":40000,"gb":0,"cn":"LC-duplex","cat":"100GE QSFP28 Transceiver","hs":"IHS","md":"SMF","pn":[],"pn1":"","pnalt":[],"pnwarn":"","av":[],"avl":"","avlt":[],"wl":"SMF-LAN-WDM4","spec":["單模","25G/通道","NRZ","LAN-WDM 1295/1300/1304/1309 nm","WDM 不可拆","LC-duplex/UPC","1 個獨立通道","40000 m"],"ops":["100G"]},{"m":"ET7402-ZR4","s":"100G-ZR4","f":"QSFP28","d":"100G ZR4 QSFP28 1310nm SM 80KM Transceiver","sp":100,"r":80000,"gb":0,"cn":"LC-duplex","cat":"100GE QSFP28 Transceiver","hs":"IHS","md":"SMF","pn":[],"pn1":"","pnalt":[],"pnwarn":"","av":[],"avl":"","avlt":[],"wl":"SMF-LAN-WDM4","spec":["單模","25G/通道","NRZ","LAN-WDM 1295/1300/1304/1309 nm","WDM 不可拆","LC-duplex/UPC","1 個獨立通道","80000 m"],"ops":["100G"]},{"m":"ET7402-PSM4-2","s":"100G-PSM4","f":"QSFP28","d":"100G PSM4 QSFP28 1310nm SM 2KM MPO DDM","sp":100,"r":2000,"gb":0,"cn":"MPO-12","cat":"100GE QSFP28 Transceiver","hs":"IHS","md":"SMF","pn":[],"pn1":"","pnalt":[],"pnwarn":"","av":[],"avl":"","avlt":[],"wl":"SMF-1310","spec":["單模","25G/通道","NRZ","1310 nm","並列可拆","MPO-12/APC","4 個獨立通道","2000 m"],"ops":["100G","40G"]},{"m":"ET7402-DR1","s":"100G-DR1","f":"QSFP28","d":"100G DR1 Single-Mode QSFP28, 100G, 500m, Transceiver","sp":100,"r":500,"gb":1,"cn":"LC-duplex","cat":"100GE QSFP28 Transceiver","hs":"IHS","md":"SMF","pn":[],"pn1":"","pnalt":[],"pnwarn":"","av":[],"avl":"","avlt":[],"wl":"SMF-1310","spec":["單模","100G/通道","PAM4","1310 nm","並列可拆","LC-duplex/UPC","1 個獨立通道","500 m"],"ops":["100G"]},{"m":"ET7402-FR1","s":"100G-FR1","f":"QSFP28","d":"100G FR1 Single-Mode QSFP28, 100G, 2km, Transceiver","sp":100,"r":2000,"gb":1,"cn":"LC-duplex","cat":"100GE QSFP28 Transceiver","hs":"IHS","md":"SMF","pn":[],"pn1":"","pnalt":[],"pnwarn":"","av":[],"avl":"","avlt":[],"wl":"SMF-1310","spec":["單模","100G/通道","PAM4","1310 nm","並列可拆","LC-duplex/UPC","1 個獨立通道","2000 m"],"ops":["100G"]},{"m":"ET7402-LR1","s":"100G-LR1","f":"QSFP28","d":"100G LR1 Single-Mode QSFP28, 100G, 10km, Transceiver","sp":100,"r":10000,"gb":1,"cn":"LC-duplex","cat":"100GE QSFP28 Transceiver","hs":"IHS","md":"SMF","pn":[],"pn1":"","pnalt":[],"pnwarn":"","av":[],"avl":"","avlt":[],"wl":"SMF-1310","spec":["單模","100G/通道","PAM4","1310 nm","並列可拆","LC-duplex/UPC","1 個獨立通道","10000 m"],"ops":["100G"]},{"m":"ET7402-BX-10A","s":"100G-BX-A","f":"QSFP28","d":"100G QSFP28 LR1 bidi 10km Transceiver (TX 1270nm)","sp":100,"r":10000,"gb":1,"cn":"LC-simplex","cat":"100GE QSFP28 Transceiver","hs":"IHS","md":"SMF","pn":[],"pn1":"","pnalt":[],"pnwarn":"","av":[],"avl":"","avlt":[],"wl":"SMF-BiDi-1270-1330","spec":["單模","100G/通道","PAM4","BiDi Tx1270 / Rx1330 nm","BiDi 單纖","LC-simplex/UPC","1 個獨立通道","10000 m"],"ops":["100G"]},{"m":"ET7402-BX-10B","s":"100G-BX-B","f":"QSFP28","d":"100G QSFP28 LR1 bidi 10km Transceiver (TX 1330nm)","sp":100,"r":10000,"gb":1,"cn":"LC-simplex","cat":"100GE QSFP28 Transceiver","hs":"IHS","md":"SMF","pn":[],"pn1":"","pnalt":[],"pnwarn":"","av":[],"avl":"","avlt":[],"wl":"SMF-BiDi-1330-1270","spec":["單模","100G/通道","PAM4","BiDi Tx1330 / Rx1270 nm","BiDi 單纖","LC-simplex/UPC","1 個獨立通道","10000 m"],"ops":["100G"]},{"m":"ET7402-BX-20A","s":"100G-BX-A","f":"QSFP28","d":"100G QSFP28 LR1 bidi 20km Transceiver (TX 1270nm)","sp":100,"r":20000,"gb":1,"cn":"LC-simplex","cat":"100GE QSFP28 Transceiver","hs":"IHS","md":"SMF","pn":[],"pn1":"","pnalt":[],"pnwarn":"","av":[],"avl":"","avlt":[],"wl":"SMF-BiDi-1270-1330","spec":["單模","100G/通道","PAM4","BiDi Tx1270 / Rx1330 nm","BiDi 單纖","LC-simplex/UPC","1 個獨立通道","20000 m"],"ops":["100G"]},{"m":"ET7402-BX-20B","s":"100G-BX-B","f":"QSFP28","d":"100G QSFP28 LR1 bidi 20km Transceiver (TX 1330nm)","sp":100,"r":20000,"gb":1,"cn":"LC-simplex","cat":"100GE QSFP28 Transceiver","hs":"IHS","md":"SMF","pn":[],"pn1":"","pnalt":[],"pnwarn":"","av":[],"avl":"","avlt":[],"wl":"SMF-BiDi-1330-1270","spec":["單模","100G/通道","PAM4","BiDi Tx1330 / Rx1270 nm","BiDi 單纖","LC-simplex/UPC","1 個獨立通道","20000 m"],"ops":["100G"]},{"m":"ET6401-SR4","s":"40G-SR4","f":"QSFP+","d":"40G QSFP+ short reach transciever 100/150-m Link Length via OM3 / OM4(MMF) with MPO Optical Connector","sp":40,"r":150,"gb":0,"cn":"MPO-12","cat":"40G QSFP+ Transceiver","hs":"IHS","md":"MMF","pn":[],"pn1":"","pnalt":[],"pnwarn":"","av":[],"avl":"","avlt":[],"wl":"MMF-850","spec":["多模","10G/通道","NRZ","850 nm","並列可拆","MPO-12/UPC","4 個獨立通道","150 m"],"ops":["40G"]},{"m":"ET6401-SRBD","s":"40G-SR-BD","f":"QSFP+","d":"40G QSFP+ SR2-BiDi Transceiver Dual Bidi LC, 850/908nm VCSEL, MMF 100M/150M reach over OM3/OM4 fiber","sp":40,"r":100,"gb":1,"cn":"LC-duplex","cat":"40G QSFP+ Transceiver","hs":"IHS","md":"MMF","pn":[],"pn1":"","pnalt":[],"pnwarn":"","av":[],"avl":"","avlt":[],"wl":"MMF-BiDi-850-910","spec":["多模","20G/通道","NRZ","BiDi 850/910 nm","BiDi 單纖","LC-duplex/UPC","1 個獨立通道","100 m"],"ops":["40G"]},{"m":"ET6401-SWDM4","s":"40G-SWDM4","f":"QSFP+","d":"40G QSFP+ long reach transceiver OM4/350m  with LC Optical Connector","sp":40,"r":350,"gb":0,"cn":"LC-duplex","cat":"40G QSFP+ Transceiver","hs":"IHS","md":"MMF","pn":[],"pn1":"","pnalt":[],"pnwarn":"","av":[],"avl":"","avlt":[],"wl":"MMF-SWDM4","spec":["多模","10G/通道","NRZ","SWDM4 850/880/910/940 nm","WDM 不可拆","LC-duplex/UPC","1 個獨立通道","350 m"],"ops":["40G"]},{"m":"ET6401-LR4","s":"40G-LR4","f":"QSFP+","d":"40G QSFP+ long reach transceiver SM 10KM  with LC Optical Connector","sp":40,"r":10000,"gb":0,"cn":"LC-duplex","cat":"40G QSFP+ Transceiver","hs":"IHS","md":"SMF","pn":[],"pn1":"","pnalt":[],"pnwarn":"","av":[],"avl":"","avlt":[],"wl":"SMF-LAN-WDM4","spec":["單模","10G/通道","NRZ","LAN-WDM 1295/1300/1304/1309 nm","WDM 不可拆","LC-duplex/UPC","1 個獨立通道","10000 m"],"ops":["40G"]},{"m":"ET6401-LR4-I","s":"40G-LR4","f":"QSFP+","d":"40G QSFP+ long reach transceiver SM 10KM  with LC Optical Connector, I-temp","sp":40,"r":10000,"gb":0,"cn":"LC-duplex","cat":"40G QSFP+ Transceiver","hs":"IHS","md":"SMF","pn":[],"pn1":"","pnalt":[],"pnwarn":"","av":[],"avl":"","avlt":[],"wl":"SMF-LAN-WDM4","spec":["單模","10G/通道","NRZ","LAN-WDM 1295/1300/1304/1309 nm","WDM 不可拆","LC-duplex/UPC","1 個獨立通道","10000 m"],"ops":["40G"]},{"m":"ET6401-PSM4","s":"40G-PLR4","f":"QSFP+","d":"40G QSFP+ long reach transceiver 10KM Link Length via Signal Mode Fiber(SMF) with MPO Optical Connector","sp":40,"r":10000,"gb":0,"cn":"MPO-12","cat":"40G QSFP+ Transceiver","hs":"IHS","md":"SMF","pn":[],"pn1":"","pnalt":[],"pnwarn":"","av":[],"avl":"","avlt":[],"wl":"SMF-1310","spec":["單模","10G/通道","NRZ","1310 nm","並列可拆","MPO-12/APC","4 個獨立通道","10000 m"],"ops":["40G"]},{"m":"ET6401-ER4","s":"40G-ER4","f":"QSFP+","d":"40G QSFP+ long reach transceiver SM 40KM  with LC Optical Connectors","sp":40,"r":40000,"gb":0,"cn":"LC-duplex","cat":"40G QSFP+ Transceiver","hs":"IHS","md":"SMF","pn":[],"pn1":"","pnalt":[],"pnwarn":"","av":[],"avl":"","avlt":[],"wl":"SMF-LAN-WDM4","spec":["單模","10G/通道","NRZ","LAN-WDM 1295/1300/1304/1309 nm","WDM 不可拆","LC-duplex/UPC","1 個獨立通道","40000 m"],"ops":["40G"]},{"m":"ET7302-SR","s":"25G-SR","f":"SFP28","d":"25Gbps SFP28 short reach transceiver 70/100m OM3/OM4","sp":25,"r":100,"gb":0,"cn":"LC-duplex","cat":"25GE SFP28 Transceiver","hs":"IHS","md":"MMF","pn":[],"pn1":"","pnalt":[],"pnwarn":"","av":[],"avl":"","avlt":[],"wl":"MMF-850","spec":["多模","25G/通道","NRZ","850 nm","並列可拆","LC-duplex/UPC","1 個獨立通道","100 m"],"ops":["25G"]},{"m":"ET7302-LR","s":"25G-LR","f":"SFP28","d":"25Gbps SFP28 long reach transceiver","sp":25,"r":10000,"gb":0,"cn":"LC-duplex","cat":"25GE SFP28 Transceiver","hs":"IHS","md":"SMF","pn":[],"pn1":"","pnalt":[],"pnwarn":"","av":[],"avl":"","avlt":[],"wl":"SMF-1310","spec":["單模","25G/通道","NRZ","1310 nm","並列可拆","LC-duplex/UPC","1 個獨立通道","10000 m"],"ops":["25G"]},{"m":"ET7302-LRI","s":"25G-LR","f":"SFP28","d":"25Gbps SFP28 long reach transceiver. I-temp","sp":25,"r":10000,"gb":0,"cn":"LC-duplex","cat":"25GE SFP28 Transceiver","hs":"IHS","md":"SMF","pn":[],"pn1":"","pnalt":[],"pnwarn":"","av":[],"avl":"","avlt":[],"wl":"SMF-1310","spec":["單模","25G/通道","NRZ","1310 nm","並列可拆","LC-duplex/UPC","1 個獨立通道","10000 m"],"ops":["25G"]},{"m":"ET7312-LRI","s":"25G-LR","f":"SFP28","d":"25Gbps SFP28 long reach transceiver. I-temp (dual rate)","sp":25,"r":10000,"gb":0,"cn":"LC-duplex","cat":"25GE SFP28 Transceiver","hs":"IHS","md":"SMF","pn":[],"pn1":"","pnalt":[],"pnwarn":"","av":[],"avl":"","avlt":[],"wl":"SMF-1310","spec":["單模","25G/通道","NRZ","1310 nm","並列可拆","LC-duplex/UPC","1 個獨立通道","10000 m"],"ops":["25G"]},{"m":"ET7302-BD23-10-I","s":"25G-BD23","f":"SFP28","d":"25G SFP28 BIDI TX1270nm/RX1330nm, 10km, LC duplex (I-Temp)","sp":25,"r":10000,"gb":0,"cn":"LC-simplex","cat":"25GE SFP28 Transceiver","hs":"IHS","md":"SMF","pn":[],"pn1":"","pnalt":[],"pnwarn":"","av":[],"avl":"","avlt":[],"wl":"SMF-BiDi-1270-1330","spec":["單模","25G/通道","NRZ","BiDi Tx1270 / Rx1330 nm","BiDi 單纖","LC-simplex/UPC","1 個獨立通道","10000 m"],"ops":["25G"]},{"m":"ET7302-BD32-10-I","s":"25G-BD32","f":"SFP28","d":"25G SFP28 BIDI TX1330nm/RX1270nm, 10km, LC duplex (I-Temp)","sp":25,"r":10000,"gb":0,"cn":"LC-simplex","cat":"25GE SFP28 Transceiver","hs":"IHS","md":"SMF","pn":[],"pn1":"","pnalt":[],"pnwarn":"","av":[],"avl":"","avlt":[],"wl":"SMF-BiDi-1330-1270","spec":["單模","25G/通道","NRZ","BiDi Tx1330 / Rx1270 nm","BiDi 單纖","LC-simplex/UPC","1 個獨立通道","10000 m"],"ops":["25G"]},{"m":"ET5402-RJ45","s":"10G-T","f":"SFP+","d":"10GBase-T SFP+,  RJ45 transceiver","sp":10,"r":30,"gb":0,"cn":"RJ45","cat":"10GE SFP+ Transceiver","hs":"IHS","md":"COPPER-TP","pn":[],"pn1":"","pnalt":[],"pnwarn":"","av":[],"avl":"","avlt":[],"wl":"COPPER-TP","spec":["雙絞線","10G/通道","NRZ","Twisted pair (BASE-T)","銅線","RJ45","1 個獨立通道","30 m"],"ops":["10G"]},{"m":"ET5402-SR","s":"10G-SR","f":"SFP+","d":"10G SFP+ SR, 850nm Multimode, 300m, LC duplex","sp":10,"r":300,"gb":0,"cn":"LC-duplex","cat":"10GE SFP+ Transceiver","hs":"IHS","md":"MMF","pn":[],"pn1":"","pnalt":[],"pnwarn":"","av":[],"avl":"","avlt":[],"wl":"MMF-850","spec":["多模","10G/通道","NRZ","850 nm","並列可拆","LC-duplex/UPC","1 個獨立通道","300 m"],"ops":["10G"]},{"m":"ET5402-LR","s":"10G-LR","f":"SFP+","d":"10G SFP+ LR, 1310nm, 10km, LC duplex","sp":10,"r":10000,"gb":0,"cn":"LC-duplex","cat":"10GE SFP+ Transceiver","hs":"IHS","md":"SMF","pn":[],"pn1":"","pnalt":[],"pnwarn":"","av":[],"avl":"","avlt":[],"wl":"SMF-1310","spec":["單模","10G/通道","NRZ","1310 nm","並列可拆","LC-duplex/UPC","1 個獨立通道","10000 m"],"ops":["10G"]},{"m":"ET5402-ER","s":"10G-ER","f":"SFP+","d":"10G SFP+ ER, 1550nm, 40km, LC duplex","sp":10,"r":40000,"gb":0,"cn":"LC-duplex","cat":"10GE SFP+ Transceiver","hs":"IHS","md":"SMF","pn":[],"pn1":"","pnalt":[],"pnwarn":"","av":[],"avl":"","avlt":[],"wl":"SMF-1550","spec":["單模","10G/通道","NRZ","1550 nm","並列可拆","LC-duplex/UPC","1 個獨立通道","40000 m"],"ops":["10G"]},{"m":"ET5402-ZR","s":"10G-ZR","f":"SFP+","d":"10G SFP+ ZR, 1550nm, 80km, LC duplex","sp":10,"r":80000,"gb":0,"cn":"LC-duplex","cat":"10GE SFP+ Transceiver","hs":"IHS","md":"SMF","pn":[],"pn1":"","pnalt":[],"pnwarn":"","av":[],"avl":"","avlt":[],"wl":"SMF-1550","spec":["單模","10G/通道","NRZ","1550 nm","並列可拆","LC-duplex/UPC","1 個獨立通道","80000 m"],"ops":["10G"]},{"m":"ET5402-SRI","s":"10G-SR","f":"SFP+","d":"10G SFP+ SR, 850nm Multimode, 300m, LC duplex, I-temp","sp":10,"r":300,"gb":0,"cn":"LC-duplex","cat":"10GE SFP+ Transceiver","hs":"IHS","md":"MMF","pn":[],"pn1":"","pnalt":[],"pnwarn":"","av":[],"avl":"","avlt":[],"wl":"MMF-850","spec":["多模","10G/通道","NRZ","850 nm","並列可拆","LC-duplex/UPC","1 個獨立通道","300 m"],"ops":["10G"]},{"m":"ET5402-LRI","s":"10G-LR","f":"SFP+","d":"10G SFP+ LR, 1310nm, 10km, LC duplex, I-temp","sp":10,"r":10000,"gb":0,"cn":"LC-duplex","cat":"10GE SFP+ Transceiver","hs":"IHS","md":"SMF","pn":[],"pn1":"","pnalt":[],"pnwarn":"","av":[],"avl":"","avlt":[],"wl":"SMF-1310","spec":["單模","10G/通道","NRZ","1310 nm","並列可拆","LC-duplex/UPC","1 個獨立通道","10000 m"],"ops":["10G"]},{"m":"ET5402-ERI","s":"10G-ER","f":"SFP+","d":"10G SFP+ ER, 1550nm, 40km, LC duplex, I-temp","sp":10,"r":40000,"gb":0,"cn":"LC-duplex","cat":"10GE SFP+ Transceiver","hs":"IHS","md":"SMF","pn":[],"pn1":"","pnalt":[],"pnwarn":"","av":[],"avl":"","avlt":[],"wl":"SMF-1550","spec":["單模","10G/通道","NRZ","1550 nm","並列可拆","LC-duplex/UPC","1 個獨立通道","40000 m"],"ops":["10G"]},{"m":"ET5402-ZRI","s":"10G-ZR","f":"SFP+","d":"10G SFP+ ZR, 1550nm, 80km, LC duplex, I-temp","sp":10,"r":80000,"gb":0,"cn":"LC-duplex","cat":"10GE SFP+ Transceiver","hs":"IHS","md":"SMF","pn":[],"pn1":"","pnalt":[],"pnwarn":"","av":[],"avl":"","avlt":[],"wl":"SMF-1550","spec":["單模","10G/通道","NRZ","1550 nm","並列可拆","LC-duplex/UPC","1 個獨立通道","80000 m"],"ops":["10G"]},{"m":"ET5402-ER-DW-Cxy","s":"10G-DWDM","f":"SFP+","d":"10G DWDM SFP+ (with CDR), Channel Cxy, 40km,  C-Temp","sp":10,"r":40000,"gb":0,"cn":"LC-duplex","cat":"10GE SFP+ Transceiver","hs":"IHS","md":"SMF","pn":[],"pn1":"","pnalt":[],"pnwarn":"","av":[],"avl":"","avlt":[],"wl":"SMF-DWDM-Cband","spec":["單模","10G/通道","NRZ","DWDM C-band tunable","並列可拆","LC-duplex/UPC","1 個獨立通道","40000 m"],"ops":["10G"]},{"m":"ET5402-ER-DW-Ixy","s":"10G-DWDM","f":"SFP+","d":"10G DWDM SFP+ (with CDR), Channel Cxy, 40km,  I-Temp","sp":10,"r":40000,"gb":0,"cn":"LC-duplex","cat":"10GE SFP+ Transceiver","hs":"IHS","md":"SMF","pn":[],"pn1":"","pnalt":[],"pnwarn":"","av":[],"avl":"","avlt":[],"wl":"SMF-DWDM-Cband","spec":["單模","10G/通道","NRZ","DWDM C-band tunable","並列可拆","LC-duplex/UPC","1 個獨立通道","40000 m"],"ops":["10G"]},{"m":"ET5402-ZR-DW-Cxy","s":"10G-DWDM","f":"SFP+","d":"10G DWDM SFP+ (with CDR), Channel Cxy, 80km,  C-Temp","sp":10,"r":80000,"gb":0,"cn":"LC-duplex","cat":"10GE SFP+ Transceiver","hs":"IHS","md":"SMF","pn":[],"pn1":"","pnalt":[],"pnwarn":"","av":[],"avl":"","avlt":[],"wl":"SMF-DWDM-Cband","spec":["單模","10G/通道","NRZ","DWDM C-band tunable","並列可拆","LC-duplex/UPC","1 個獨立通道","80000 m"],"ops":["10G"]},{"m":"ET5402-ZR-DW-Ixy","s":"10G-DWDM","f":"SFP+","d":"10G DWDM SFP+ (with CDR), Channel Cxy, 80km,  I-Temp","sp":10,"r":80000,"gb":0,"cn":"LC-duplex","cat":"10GE SFP+ Transceiver","hs":"IHS","md":"SMF","pn":[],"pn1":"","pnalt":[],"pnwarn":"","av":[],"avl":"","avlt":[],"wl":"SMF-DWDM-Cband","spec":["單模","10G/通道","NRZ","DWDM C-band tunable","並列可拆","LC-duplex/UPC","1 個獨立通道","80000 m"],"ops":["10G"]},{"m":"ET5402-BD23-10-I","s":"10G-BD23","f":"SFP+","d":"10G SFP+ BIDI TX1270nm/RX1330nm, 10km, LC (I-Temp)","sp":10,"r":10000,"gb":0,"cn":"LC-simplex","cat":"10GE SFP+ Transceiver","hs":"IHS","md":"SMF","pn":[],"pn1":"","pnalt":[],"pnwarn":"","av":[],"avl":"","avlt":[],"wl":"SMF-BiDi-1270-1330","spec":["單模","10G/通道","NRZ","BiDi Tx1270 / Rx1330 nm","BiDi 單纖","LC-simplex/UPC","1 個獨立通道","10000 m"],"ops":["10G"]},{"m":"ET5402-BD32-10-I","s":"10G-BD32","f":"SFP+","d":"10G SFP+ BIDI TX1330nm/RX1270nm, 10km, LC (I-Temp)","sp":10,"r":10000,"gb":0,"cn":"LC-simplex","cat":"10GE SFP+ Transceiver","hs":"IHS","md":"SMF","pn":[],"pn1":"","pnalt":[],"pnwarn":"","av":[],"avl":"","avlt":[],"wl":"SMF-BiDi-1330-1270","spec":["單模","10G/通道","NRZ","BiDi Tx1330 / Rx1270 nm","BiDi 單纖","LC-simplex/UPC","1 個獨立通道","10000 m"],"ops":["10G"]},{"m":"ET4202-RJ45","s":"1G-T","f":"SFP","d":"1000BASE-T RJ45 transceiver, 100m","sp":1,"r":100,"gb":0,"cn":"RJ45","cat":"1.25G Gigabit Ethernet","hs":"IHS","md":"COPPER-TP","pn":[],"pn1":"","pnalt":[],"pnwarn":"","av":[],"avl":"","avlt":[],"wl":"COPPER-TP","spec":["雙絞線","1G/通道","NRZ","Twisted pair (BASE-T)","銅線","RJ45","1 個獨立通道","100 m"],"ops":["1G"]},{"m":"ET4202-SX","s":"1G-SX","f":"SFP","d":"1000BASE-SX Multimode LC Duplex SFP transceiver, up to 550m (850nm)","sp":1,"r":550,"gb":0,"cn":"LC-duplex","cat":"1.25G Gigabit Ethernet","hs":"IHS","md":"MMF","pn":[],"pn1":"","pnalt":[],"pnwarn":"","av":[],"avl":"","avlt":[],"wl":"MMF-850","spec":["多模","1G/通道","NRZ","850 nm","並列可拆","LC-duplex/UPC","1 個獨立通道","550 m"],"ops":["1G"]},{"m":"ET4202-LX","s":"1G-LX","f":"SFP","d":"1000BASE-LX Single mode LC Duplex SFP transceiver, up to 10Km (1310nm)","sp":1,"r":10000,"gb":0,"cn":"LC-duplex","cat":"1.25G Gigabit Ethernet","hs":"IHS","md":"SMF","pn":[],"pn1":"","pnalt":[],"pnwarn":"","av":[],"avl":"","avlt":[],"wl":"SMF-1310","spec":["單模","1G/通道","NRZ","1310 nm","並列可拆","LC-duplex/UPC","1 個獨立通道","10000 m"],"ops":["1G"]},{"m":"ET4202-EX","s":"1G-EX","f":"SFP","d":"1000BASE-EX Single mode SFP transceiver, up to 40Km (1310nm)","sp":1,"r":40000,"gb":0,"cn":"LC-duplex","cat":"1.25G Gigabit Ethernet","hs":"IHS","md":"SMF","pn":[],"pn1":"","pnalt":[],"pnwarn":"","av":[],"avl":"","avlt":[],"wl":"SMF-1310","spec":["單模","1G/通道","NRZ","1310 nm","並列可拆","LC-duplex/UPC","1 個獨立通道","40000 m"],"ops":["1G"]},{"m":"ET4202-ZX","s":"1G-ZX","f":"SFP","d":"1000BASE-ZX Single mode SFP transceiver, up to 80Km (1550nm)","sp":1,"r":80000,"gb":0,"cn":"LC-duplex","cat":"1.25G Gigabit Ethernet","hs":"IHS","md":"SMF","pn":[],"pn1":"","pnalt":[],"pnwarn":"","av":[],"avl":"","avlt":[],"wl":"SMF-1550","spec":["單模","1G/通道","NRZ","1550 nm","並列可拆","LC-duplex/UPC","1 個獨立通道","80000 m"],"ops":["1G"]},{"m":"ET4202-RJ45I","s":"1G-T","f":"SFP","d":"1000BASE-T RJ45 transceiver, 100m, I-temp","sp":1,"r":100,"gb":0,"cn":"RJ45","cat":"1.25G Gigabit Ethernet","hs":"IHS","md":"COPPER-TP","pn":[],"pn1":"","pnalt":[],"pnwarn":"","av":[],"avl":"","avlt":[],"wl":"COPPER-TP","spec":["雙絞線","1G/通道","NRZ","Twisted pair (BASE-T)","銅線","RJ45","1 個獨立通道","100 m"],"ops":["1G"]},{"m":"ET4202-SXI","s":"1G-SX","f":"SFP","d":"1000BASE-SX Multimode LC Duplex SFP transceiver, up to 550m (850nm), I-temp","sp":1,"r":550,"gb":0,"cn":"LC-duplex","cat":"1.25G Gigabit Ethernet","hs":"IHS","md":"MMF","pn":[],"pn1":"","pnalt":[],"pnwarn":"","av":[],"avl":"","avlt":[],"wl":"MMF-850","spec":["多模","1G/通道","NRZ","850 nm","並列可拆","LC-duplex/UPC","1 個獨立通道","550 m"],"ops":["1G"]},{"m":"ET4202-LXI","s":"1G-LX","f":"SFP","d":"1000BASE-LX Single mode LC Duplex SFP transceiver, up to 10Km (1310nm), I-temp","sp":1,"r":10000,"gb":0,"cn":"LC-duplex","cat":"1.25G Gigabit Ethernet","hs":"IHS","md":"SMF","pn":[],"pn1":"","pnalt":[],"pnwarn":"","av":[],"avl":"","avlt":[],"wl":"SMF-1310","spec":["單模","1G/通道","NRZ","1310 nm","並列可拆","LC-duplex/UPC","1 個獨立通道","10000 m"],"ops":["1G"]},{"m":"ET4202-EXI","s":"1G-EX","f":"SFP","d":"1000BASE-EX Single mode SFP transceiver, up to 40Km (1310nm), I-temp","sp":1,"r":40000,"gb":0,"cn":"LC-duplex","cat":"1.25G Gigabit Ethernet","hs":"IHS","md":"SMF","pn":[],"pn1":"","pnalt":[],"pnwarn":"","av":[],"avl":"","avlt":[],"wl":"SMF-1310","spec":["單模","1G/通道","NRZ","1310 nm","並列可拆","LC-duplex/UPC","1 個獨立通道","40000 m"],"ops":["1G"]},{"m":"ET4202-ZXI","s":"1G-ZX","f":"SFP","d":"1000BASE-ZX Single mode SFP transceiver, up to 80Km (1550nm), I-temp","sp":1,"r":80000,"gb":0,"cn":"LC-duplex","cat":"1.25G Gigabit Ethernet","hs":"IHS","md":"SMF","pn":[],"pn1":"","pnalt":[],"pnwarn":"","av":[],"avl":"","avlt":[],"wl":"SMF-1550","spec":["單模","1G/通道","NRZ","1550 nm","並列可拆","LC-duplex/UPC","1 個獨立通道","80000 m"],"ops":["1G"]},{"m":"ET4202-BD34-10-I","s":"1G-BD34","f":"SFP","d":"1G SFP BIDI TX1310nm/RX 1490nm, 10km, I-temp","sp":1,"r":10000,"gb":0,"cn":"LC-simplex","cat":"1.25G Gigabit Ethernet","hs":"IHS","md":"SMF","pn":[],"pn1":"","pnalt":[],"pnwarn":"","av":[],"avl":"","avlt":[],"wl":"SMF-BiDi-1310-1490","spec":["單模","1G/通道","NRZ","BiDi Tx1310 / Rx1490 nm","BiDi 單纖","LC-simplex/UPC","1 個獨立通道","10000 m"],"ops":["1G"]},{"m":"ET4202-BD43-10-I","s":"1G-BD43","f":"SFP","d":"1G SFP BIDI TX1490nm/RX 1310nm, 10km, I-temp","sp":1,"r":10000,"gb":0,"cn":"LC-simplex","cat":"1.25G Gigabit Ethernet","hs":"IHS","md":"SMF","pn":[],"pn1":"","pnalt":[],"pnwarn":"","av":[],"avl":"","avlt":[],"wl":"SMF-BiDi-1490-1310","spec":["單模","1G/通道","NRZ","BiDi Tx1490 / Rx1310 nm","BiDi 單纖","LC-simplex/UPC","1 個獨立通道","10000 m"],"ops":["1G"]},{"m":"ET4202-BD34-20-I","s":"1G-BD34","f":"SFP","d":"1G SFP BIDI TX1310nm/RX 1490nm, 20km, I-temp","sp":1,"r":20000,"gb":0,"cn":"LC-simplex","cat":"1.25G Gigabit Ethernet","hs":"IHS","md":"SMF","pn":[],"pn1":"","pnalt":[],"pnwarn":"","av":[],"avl":"","avlt":[],"wl":"SMF-BiDi-1310-1490","spec":["單模","1G/通道","NRZ","BiDi Tx1310 / Rx1490 nm","BiDi 單纖","LC-simplex/UPC","1 個獨立通道","20000 m"],"ops":["1G"]},{"m":"ET4202-BD43-20-I","s":"1G-BD43","f":"SFP","d":"1G SFP BIDI TX1490nm/RX 1310nm, 20km, I-temp","sp":1,"r":20000,"gb":0,"cn":"LC-simplex","cat":"1.25G Gigabit Ethernet","hs":"IHS","md":"SMF","pn":[],"pn1":"","pnalt":[],"pnwarn":"","av":[],"avl":"","avlt":[],"wl":"SMF-BiDi-1490-1310","spec":["單模","1G/通道","NRZ","BiDi Tx1490 / Rx1310 nm","BiDi 單纖","LC-simplex/UPC","1 個獨立通道","20000 m"],"ops":["1G"]},{"m":"ET4202-BD34-40-I","s":"1G-BD34","f":"SFP","d":"1G SFP BIDI TX1310nm/RX 1490nm, 40km, I-temp","sp":1,"r":40000,"gb":0,"cn":"LC-simplex","cat":"1.25G Gigabit Ethernet","hs":"IHS","md":"SMF","pn":[],"pn1":"","pnalt":[],"pnwarn":"","av":[],"avl":"","avlt":[],"wl":"SMF-BiDi-1310-1490","spec":["單模","1G/通道","NRZ","BiDi Tx1310 / Rx1490 nm","BiDi 單纖","LC-simplex/UPC","1 個獨立通道","40000 m"],"ops":["1G"]},{"m":"ET4202-BD43-40-I","s":"1G-BD43","f":"SFP","d":"1G SFP BIDI TX1490nm/RX 1310nm, 40km, I-temp","sp":1,"r":40000,"gb":0,"cn":"LC-simplex","cat":"1.25G Gigabit Ethernet","hs":"IHS","md":"SMF","pn":[],"pn1":"","pnalt":[],"pnwarn":"","av":[],"avl":"","avlt":[],"wl":"SMF-BiDi-1490-1310","spec":["單模","1G/通道","NRZ","BiDi Tx1490 / Rx1310 nm","BiDi 單纖","LC-simplex/UPC","1 個獨立通道","40000 m"],"ops":["1G"]},{"m":"ECPO-QDDZR400G","s":"400G-ZR","f":"QSFP-DD","d":"400G QSFP-DD ZR Coherent Transceiver,  C-band 75/100GHz Grids, C-temp","sp":400,"r":120000,"gb":1,"cn":"LC-duplex","cat":"400G QSFP-DD ZR Coherent Transceiver","hs":"IHS","md":"SMF","pn":[],"pn1":"","pnalt":[],"pnwarn":"","av":[],"avl":"","avlt":[],"wl":"SMF-DWDM-Cband","spec":["單模","400G/通道","DP-16QAM","DWDM C-band tunable","相干光","LC-duplex/UPC","1 個獨立通道","120000 m"],"ops":["400G"]},{"m":"ECPO-QDDZR400LT","s":"400G-ZRLITE","f":"QSFP-DD","d":"400G QSFP-DD ZR-Lite Coherent Transceiver,  C-band 75/100GHz Grids, C-temp","sp":400,"r":40000,"gb":1,"cn":"LC-duplex","cat":"400G QSFP-DD ZR Lite Coherent Transceiver","hs":"IHS","md":"SMF","pn":[],"pn1":"","pnalt":[],"pnwarn":"","av":[],"avl":"","avlt":[],"wl":"SMF-DWDM-Cband","spec":["單模","400G/通道","DP-16QAM","DWDM C-band tunable","相干光","LC-duplex/UPC","1 個獨立通道","40000 m"],"ops":["400G"]},{"m":"ECPO-QDDZRP400G","s":"400G-ZRP","f":"QSFP-DD","d":"400G QSFP-DD ZR+ coherent,  C-band 75/100GHz grids, C-temp, Duplex LC","sp":400,"r":1000000,"gb":1,"cn":"LC-duplex","cat":"400G QSFP-DD ZR+ Coherent Transceiver","hs":"IHS","md":"SMF","pn":[],"pn1":"","pnalt":[],"pnwarn":"","av":[],"avl":"","avlt":[],"wl":"SMF-DWDM-Cband","spec":["單模","400G/通道","DP-16QAM","DWDM C-band tunable","相干光","LC-duplex/UPC","1 個獨立通道","1000000 m"],"ops":["400G"]},{"m":"ET8001-2DR4-R","s":"800G-2DR4","f":"OSFP","d":"800G OSFP-2xDR4, 2xMPO12, 500m, RHS","sp":800,"r":500,"gb":0,"cn":"MPO-12 + MPO-12","cat":"800G Optical Module","hs":"RHS","md":"SMF","pn":[],"pn1":"","pnalt":[],"pnwarn":"","av":[],"avl":"","avlt":[],"wl":"SMF-1310","spec":["單模","100G/通道","PAM4","1310 nm","並列可拆","MPO-12/APC + MPO-12/APC","8 個獨立通道","500 m"],"ops":["800G"]}],"C":[{"id":"ET-D-LCU-J-01A","l":"Duplex LC Jumper (SMF, LC/UPC)","note":"","sku":1,"md":"SMF","po":"UPC","pol":null,"len":[1,2,3,4,5,6,7,8,9,10,15,20,25,30],"desc":"DLC-DLC SM 9/125 Z2.0 OFNP <L>M,Yellow","spec":"","skus":[],"issue":[]},{"id":"ET-D-LCU-J-01M","l":"Duplex LC Jumper (OM4 MMF, LC/UPC)","note":"","sku":1,"md":"MMF","po":"UPC","pol":null,"len":[1,2,3,4,5,6,7,8,9,10,15,20,25,30],"desc":"DLC-DLC OM4 50/125 Z2.0 OFNP <L>M,Aqua","spec":"","skus":[],"issue":[]},{"id":"ET-JPMM-MPO12AF-01B","l":"400G SR4 female OM4 MPO12/APC Jumper (Type-B)","note":"","sku":1,"md":"MMF","po":"APC","pol":"type-B","len":[1,2,3,4,5,6,7,8,9,10,15,20,25,30,50],"desc":"MPOF/A-MPOF/A OM4 50/125 R3.0X8C OFNP/PVC <L>M,Aqua,Type B","spec":"","skus":[],"issue":[]},{"id":"ET-JPMM-MPO12AF-4XLCU","l":"400G SR4 female OM4 MPO12/APC to 4x Duplex LC/UPC breakout","note":"","sku":1,"md":"MMF","po":"APC / UPC","pol":null,"len":[1,2,3,4,5,6,7,8,9,10,15,20,25,30],"desc":"MPOF/A-DLC OM4 R3.0X8C OFNP/PVC <L>M,Aqua","spec":"","skus":[],"issue":[]},{"id":"ET-JPMM-MPO16AF-2XMPO8AF","l":"400G SR8 to 2xSR4 breakout cables (OM4)--- female MPO16/APC to 2x MPO8/APC)","note":"","sku":1,"md":"MMF","po":"APC","pol":"type-X","len":[1,2,3,4,5,6,7,8,9,10,15,20,25,30],"desc":"MPOA/F-2MPOA/F OM4 50/125 R3.0X16C OFNP <L>M,Aqua,TypeX","spec":"","skus":[],"issue":[]},{"id":"ET-JPSM-MPO12AF-4XLCU","l":"400G DR4 QSFP-DD (female SMF MPO12/APC) to 4x Duplex LC/UPC breakout","note":"","sku":1,"md":"SMF","po":"APC / UPC","pol":null,"len":[1,2,3,4,5,6,7,8,9,10,15,20,25,30],"desc":"MPOF/A-DLC SM/A1 R3.0X8C OFNP <L>M, Yellow","spec":"","skus":[],"issue":[]},{"id":"ET7402-SR4-J-01B","l":"100G SR4 QSFP28 (female OM4 MPO12/UPC) Jumper","note":"","sku":1,"md":"MMF","po":"UPC","pol":"type-B","len":[1,2,3,4,5,6,7,8,9,10,15,20,25,30],"desc":"MPO/F-MPO/F OM4 50/125 R3.0X8C OFNP/PVC <L>M,Aqua,Type B","spec":"","skus":[],"issue":[]},{"id":"ET7502-DR4-J-01B","l":"400G DR4 female SMF MPO12/APC Jumper (Type B)","note":"","sku":1,"md":"SMF","po":"APC","pol":"type-B","len":[1,2,3,4,5,6,7,8,9,10,15,20,25,30],"desc":"MPOF/A-MPOF/A SM 9/125 R3.0X8C OFNP/PVC <L>M,Yellow,Type B","spec":"","skus":[],"issue":[]},{"id":"ET7502-SR8-J-01B","l":"400G SR8 QSFP-DD (female OM4 MPO16/APC) Jumper","note":"","sku":1,"md":"MMF","po":"APC","pol":"type-B","len":[1,2,3,4,5,6,7,8,9,10,15,20,25,30],"desc":"MPOF/A-MPOF/A OM4 50/125 R3.0X16C OFNP/PVC <L>M,Aqua,Type B","spec":"","skus":[],"issue":[]},{"id":"ET8501-DR8-J-01B","l":"800G DR8 OSFP/QSFP112-DD (female SMF MPO16/APC) Jumper","note":"","sku":1,"md":"SMF","po":"APC","pol":"type-B","len":[1,2,3,4,5,6,7,8,9,10,15,20,25,30],"desc":"MPOF/A-MPOF/A SM 9/125 R3.0X16C OFNP/PVC <L>M,Yellow,Type B","spec":"","skus":[],"issue":[]},{"id":"LC-duplex-LC-duplex-SMF","l":"LC Duplex 單模跳線","note":"","sku":0,"md":"SMF","po":"UPC","pol":"","len":[],"desc":"","spec":"LC Duplex 單模跳線 ｜ 單模 (OS2) ｜ LC-duplex/UPC 轉 LC-duplex/UPC","skus":[],"issue":[]},{"id":"LC-duplex-LC-duplex-MMF","l":"LC Duplex 多模跳線 (OM3/OM4)","note":"","sku":0,"md":"MMF","po":"UPC","pol":"","len":[],"desc":"","spec":"LC Duplex 多模跳線 (OM3/OM4) ｜ OM3/OM4 多模 ｜ LC-duplex/UPC 轉 LC-duplex/UPC","skus":[],"issue":[]},{"id":"LC-simplex-LC-simplex-SMF","l":"LC Simplex 單芯跳線 (BiDi 用)","note":"","sku":0,"md":"SMF","po":"UPC","pol":"","len":[],"desc":"","spec":"LC Simplex 單芯跳線 (BiDi 用) ｜ 單模 (OS2) ｜ LC-simplex/UPC 轉 LC-simplex/UPC","skus":[],"issue":[]},{"id":"LC-simplex-LC-simplex-MMF","l":"LC Simplex 單芯跳線 (MMF BiDi 用)","note":"","sku":0,"md":"MMF","po":"UPC","pol":"","len":[],"desc":"","spec":"LC Simplex 單芯跳線 (MMF BiDi 用) ｜ OM3/OM4 多模 ｜ LC-simplex/UPC 轉 LC-simplex/UPC","skus":[],"issue":[]},{"id":"MPO-12-MPO-12-SMF","l":"MPO-12 單模幹線","note":"","sku":0,"md":"SMF","po":"APC","pol":"type-B","len":[],"desc":"","spec":"MPO-12 單模幹線 ｜ 單模 (OS2) ｜ MPO-12/APC 轉 MPO-12/APC ｜ 極性 type-B","skus":[],"issue":[]},{"id":"MPO-12-MPO-12-MMF-APC","l":"MPO-12 多模幹線（400G 以上世代）","note":"","sku":0,"md":"MMF","po":"APC","pol":"type-B","len":[],"desc":"","spec":"MPO-12 多模幹線（400G 以上世代） ｜ OM3/OM4 多模 ｜ MPO-12/APC 轉 MPO-12/APC ｜ 極性 type-B","skus":[],"issue":[]},{"id":"MPO-12-MPO-12-MMF-UPC","l":"MPO-12 多模幹線（100G 世代）","note":"","sku":0,"md":"MMF","po":"UPC","pol":"type-B","len":[],"desc":"","spec":"MPO-12 多模幹線（100G 世代） ｜ OM3/OM4 多模 ｜ MPO-12/UPC 轉 MPO-12/UPC ｜ 極性 type-B","skus":[],"issue":[]},{"id":"MPO-16-MPO-16-SMF","l":"MPO-16 單模幹線","note":"","sku":0,"md":"SMF","po":"APC","pol":"type-B","len":[],"desc":"","spec":"MPO-16 單模幹線 ｜ 單模 (OS2) ｜ MPO-16/APC 轉 MPO-16/APC ｜ 極性 type-B","skus":[],"issue":[]},{"id":"MPO-16-MPO-16-MMF-APC","l":"MPO-16 多模幹線","note":"","sku":0,"md":"MMF","po":"APC","pol":"type-B","len":[],"desc":"","spec":"MPO-16 多模幹線 ｜ OM3/OM4 多模 ｜ MPO-16/APC 轉 MPO-16/APC ｜ 極性 type-B","skus":[],"issue":[]},{"id":"RJ45-RJ45-COPPER-TP","l":"Cat6a 雙絞線","note":"","sku":0,"md":"COPPER-TP","po":"","pol":"","len":[],"desc":"","spec":"Cat6a 雙絞線 ｜ 雙絞線 ｜ RJ45 轉 RJ45","skus":[],"issue":[]},{"id":"MPO-12-4xLC-duplex-SMF","l":"MPO-12 轉 4x LC Duplex 單模分接線","note":"","sku":0,"md":"SMF","po":"APC / UPC","pol":"","len":[],"desc":"","spec":"MPO-12 轉 4x LC Duplex 單模分接線 ｜ 單模 (OS2) ｜ MPO-12/APC 轉 4x LC-duplex/UPC","skus":[],"issue":[]},{"id":"MPO-12-4xLC-duplex-MMF-APC","l":"MPO-12 轉 4x LC Duplex 多模分接線（400G 以上世代）","note":"","sku":0,"md":"MMF","po":"APC / UPC","pol":"","len":[],"desc":"","spec":"MPO-12 轉 4x LC Duplex 多模分接線（400G 以上世代） ｜ OM3/OM4 多模 ｜ MPO-12/APC 轉 4x LC-duplex/UPC","skus":[],"issue":[]},{"id":"MPO-12-4xLC-duplex-MMF-UPC","l":"MPO-12 轉 4x LC Duplex 多模分接線（100G 世代）","note":"","sku":0,"md":"MMF","po":"UPC","pol":"","len":[],"desc":"","spec":"MPO-12 轉 4x LC Duplex 多模分接線（100G 世代） ｜ OM3/OM4 多模 ｜ MPO-12/UPC 轉 4x LC-duplex/UPC","skus":[],"issue":[]},{"id":"MPO-16-8xLC-duplex-SMF","l":"MPO-16 轉 8x LC Duplex 單模分接線","note":"","sku":0,"md":"SMF","po":"APC / UPC","pol":"","len":[],"desc":"","spec":"MPO-16 轉 8x LC Duplex 單模分接線 ｜ 單模 (OS2) ｜ MPO-16/APC 轉 8x LC-duplex/UPC","skus":[],"issue":[]},{"id":"MPO-16-8xLC-duplex-MMF-APC","l":"MPO-16 轉 8x LC Duplex 多模分接線","note":"","sku":0,"md":"MMF","po":"APC / UPC","pol":"","len":[],"desc":"","spec":"MPO-16 轉 8x LC Duplex 多模分接線 ｜ OM3/OM4 多模 ｜ MPO-16/APC 轉 8x LC-duplex/UPC","skus":[],"issue":[]},{"id":"MPO-16-2xMPO-12-SMF","l":"MPO-16 轉 2x MPO-12 單模分接線","note":"","sku":0,"md":"SMF","po":"APC","pol":"","len":[],"desc":"","spec":"MPO-16 轉 2x MPO-12 單模分接線 ｜ 單模 (OS2) ｜ MPO-16/APC 轉 2x MPO-12/APC","skus":[],"issue":[]},{"id":"MPO-16-2xMPO-12-MMF-APC","l":"MPO-16 轉 2x MPO-12 多模分接線","note":"","sku":0,"md":"MMF","po":"APC","pol":"","len":[],"desc":"","spec":"MPO-16 轉 2x MPO-12 多模分接線 ｜ OM3/OM4 多模 ｜ MPO-16/APC 轉 2x MPO-12/APC","skus":[],"issue":[]}],"E":[{"p":0,"k":1,"sp":800,"app":8},{"p":0,"k":2,"sp":400,"app":4},{"p":0,"k":4,"sp":200,"app":2},{"p":0,"k":8,"sp":100,"app":1},{"p":1,"k":1,"sp":800,"app":2},{"p":1,"k":2,"sp":400,"app":1},{"p":2,"k":1,"sp":800,"app":8},{"p":2,"k":2,"sp":400,"app":4},{"p":2,"k":4,"sp":200,"app":2},{"p":2,"k":8,"sp":100,"app":1},{"p":3,"k":1,"sp":400,"app":8},{"p":3,"k":2,"sp":200,"app":4},{"p":3,"k":4,"sp":100,"app":2},{"p":3,"k":8,"sp":50,"app":1},{"p":4,"k":1,"sp":800,"app":8},{"p":4,"k":2,"sp":400,"app":4},{"p":4,"k":4,"sp":200,"app":2},{"p":4,"k":8,"sp":100,"app":1},{"p":5,"k":1,"sp":400,"app":8},{"p":5,"k":2,"sp":200,"app":4},{"p":5,"k":4,"sp":100,"app":2},{"p":5,"k":8,"sp":50,"app":1},{"p":6,"k":1,"sp":800,"app":8},{"p":6,"k":2,"sp":400,"app":4},{"p":6,"k":4,"sp":200,"app":2},{"p":6,"k":8,"sp":100,"app":1},{"p":7,"k":1,"sp":400,"app":8},{"p":7,"k":2,"sp":200,"app":4},{"p":7,"k":4,"sp":100,"app":2},{"p":7,"k":8,"sp":50,"app":1},{"p":8,"k":1,"sp":400,"app":4},{"p":8,"k":2,"sp":200,"app":2},{"p":8,"k":4,"sp":100,"app":1},{"p":9,"k":1,"sp":400,"app":4},{"p":9,"k":2,"sp":200,"app":2},{"p":9,"k":4,"sp":100,"app":1},{"p":10,"k":1,"sp":400,"app":4},{"p":10,"k":2,"sp":200,"app":2},{"p":10,"k":4,"sp":100,"app":1},{"p":11,"k":1,"sp":400,"app":1},{"p":12,"k":1,"sp":400,"app":1},{"p":13,"k":1,"sp":400,"app":1},{"p":14,"k":1,"sp":400,"app":4},{"p":14,"k":2,"sp":200,"app":2},{"p":14,"k":4,"sp":100,"app":1},{"p":15,"k":1,"sp":200,"app":4},{"p":15,"k":2,"sp":100,"app":2},{"p":15,"k":4,"sp":50,"app":1},{"p":16,"k":1,"sp":100,"app":4},{"p":16,"k":2,"sp":50,"app":2},{"p":17,"k":1,"sp":100,"app":1},{"p":18,"k":1,"sp":100,"app":1},{"p":19,"k":1,"sp":100,"app":1},{"p":20,"k":1,"sp":100,"app":1},{"p":21,"k":1,"sp":100,"app":1},{"p":22,"k":1,"sp":100,"app":1},{"p":23,"k":1,"sp":100,"app":1},{"p":24,"k":1,"sp":100,"app":4},{"p":24,"k":2,"sp":50,"app":2},{"p":25,"k":1,"sp":100,"app":1},{"p":26,"k":1,"sp":100,"app":1},{"p":27,"k":1,"sp":100,"app":1},{"p":28,"k":1,"sp":100,"app":1},{"p":29,"k":1,"sp":100,"app":1},{"p":30,"k":1,"sp":100,"app":1},{"p":31,"k":1,"sp":100,"app":1},{"p":32,"k":1,"sp":400,"app":1},{"p":33,"k":1,"sp":400,"app":1},{"p":34,"k":1,"sp":400,"app":1},{"p":16,"k":4,"sp":25,"app":1},{"p":24,"k":4,"sp":25,"app":1},{"p":35,"k":1,"sp":40,"app":4},{"p":35,"k":4,"sp":10,"app":1},{"p":36,"k":1,"sp":40,"app":4},{"p":36,"k":4,"sp":10,"app":1},{"p":37,"k":1,"sp":40,"app":1},{"p":38,"k":1,"sp":40,"app":1},{"p":39,"k":1,"sp":40,"app":1},{"p":40,"k":1,"sp":40,"app":4},{"p":40,"k":4,"sp":10,"app":1},{"p":41,"k":1,"sp":40,"app":1},{"p":42,"k":1,"sp":25,"app":1},{"p":43,"k":1,"sp":25,"app":1},{"p":44,"k":1,"sp":25,"app":1},{"p":45,"k":1,"sp":25,"app":1},{"p":46,"k":1,"sp":10,"app":1},{"p":47,"k":1,"sp":10,"app":1},{"p":48,"k":1,"sp":10,"app":1},{"p":49,"k":1,"sp":10,"app":1},{"p":50,"k":1,"sp":10,"app":1},{"p":51,"k":1,"sp":10,"app":1},{"p":52,"k":1,"sp":10,"app":1},{"p":53,"k":1,"sp":10,"app":1},{"p":54,"k":1,"sp":10,"app":1},{"p":55,"k":1,"sp":1,"app":1},{"p":56,"k":1,"sp":1,"app":1},{"p":57,"k":1,"sp":1,"app":1},{"p":58,"k":1,"sp":1,"app":1},{"p":59,"k":1,"sp":1,"app":1},{"p":60,"k":1,"sp":1,"app":1},{"p":61,"k":1,"sp":1,"app":1},{"p":62,"k":1,"sp":1,"app":1},{"p":63,"k":1,"sp":1,"app":1},{"p":64,"k":1,"sp":1,"app":1},{"p":65,"k":1,"sp":1,"app":1}],"H":{"0.0":{"0":[[0,0,0,0],[1,0,0,1],[2,0,0,2],[3,0,0,3]],"1":[[4,0,0,0],[5,0,0,1]],"2":[[6,0,0,0],[7,0,0,1],[8,0,0,2],[9,0,0,3],[10,1,0,4],[11,1,0,5],[12,1,0,6],[13,1,0,7]],"3":[[14,0,0,0],[15,0,0,1],[16,0,0,2],[17,0,0,3],[18,1,0,4],[19,1,0,5],[20,1,0,6],[21,1,0,7]],"8":[[22,0,0,0],[23,0,0,1],[24,0,0,2],[25,0,0,3]],"9":[[0,0,0,0],[1,0,0,1],[2,0,0,2],[3,0,0,3]]},"1.0":{"0":[[0,0,0,0],[1,0,0,1],[2,0,0,2],[3,0,0,3]],"1":[[4,0,0,0],[5,0,0,1]],"2":[[6,0,0,0],[7,0,0,1],[8,0,0,2],[9,0,0,3],[10,1,0,4],[11,1,0,5],[12,1,0,6],[13,1,0,7]],"3":[[14,0,0,0],[15,0,0,1],[16,0,0,2],[17,0,0,3],[18,1,0,4],[19,1,0,5],[20,1,0,6],[21,1,0,7]],"8":[[22,0,0,0],[23,0,0,1],[24,0,0,2],[25,0,0,3]],"9":[[0,0,0,0],[1,0,0,1],[2,0,0,2],[3,0,0,3]]},"2.0":{"0":[[0,0,0,0],[1,0,0,1],[2,0,0,2],[3,0,0,3]],"1":[[4,0,0,0],[5,0,0,1]],"2":[[6,0,0,0],[7,0,0,1],[8,0,0,2],[9,0,0,3],[10,1,0,4],[11,1,0,5],[12,1,0,6],[13,1,0,7]],"3":[[14,0,0,0],[15,0,0,1],[16,0,0,2],[17,0,0,3],[18,1,0,4],[19,1,0,5],[20,1,0,6],[21,1,0,7]],"8":[[22,0,0,0],[23,0,0,1],[24,0,0,2],[25,0,0,3]],"9":[[0,0,0,0],[1,0,0,1],[2,0,0,2],[3,0,0,3]]},"3.0":{"4":[[0,0,0,0],[1,0,0,1],[2,0,0,2],[3,0,0,3]],"5":[[4,0,0,0],[5,0,0,1]],"6":[[6,0,0,0],[7,0,0,1],[8,0,0,2],[9,0,0,3]],"7":[[14,0,0,0],[15,0,0,1],[16,0,0,2],[17,0,0,3]],"10":[[26,0,0,4],[27,0,0,5],[28,0,0,6],[29,0,0,7]],"11":[[30,0,0,4],[31,0,0,5],[32,0,0,6]],"12":[[33,0,0,4],[34,0,0,5],[35,0,0,6]],"13":[[36,0,0,4],[37,0,0,5],[38,0,0,6]],"14":[[39,0,0,4]],"15":[[40,0,0,4]],"16":[[41,0,0,4]],"18":[[30,0,0,8],[31,0,0,9],[32,0,0,10]],"20":[[42,0,0,8],[43,0,0,9],[44,0,0,10]],"21":[[33,0,0,8],[34,0,0,9],[35,0,0,10]],"22":[[30,0,0,8],[31,0,0,9],[32,0,0,10]],"23":[[45,0,0,11],[46,0,0,12],[47,0,0,13]],"24":[[48,0,0,14],[49,0,0,15]],"25":[[50,0,0,14]],"26":[[51,0,0,14]],"27":[[52,0,0,14]],"28":[[53,0,0,14]],"29":[[54,0,0,14]],"30":[[54,0,0,14]],"31":[[55,0,0,14]],"32":[[56,0,0,14]],"33":[[57,0,0,14],[58,0,0,15]],"34":[[59,0,0,14]],"35":[[60,0,0,14]],"36":[[61,0,0,14]],"37":[[62,0,0,14]],"38":[[63,0,0,14]],"39":[[64,0,0,14]],"40":[[65,0,0,14]],"85":[[66,0,0,4]],"86":[[67,0,0,4]],"87":[[68,0,0,4]]},"4.0":{"0":[[0,0,0,0],[1,0,0,1],[2,0,0,2],[3,0,0,3]],"1":[[4,0,0,0],[5,0,0,1]],"2":[[6,0,0,0],[7,0,0,1],[8,0,0,2],[9,0,0,3],[10,1,0,4],[11,1,0,5],[12,1,0,6],[13,1,0,7]],"3":[[14,0,0,0],[15,0,0,1],[16,0,0,2],[17,0,0,3],[18,1,0,4],[19,1,0,5],[20,1,0,6],[21,1,0,7]],"8":[[22,0,0,0],[23,0,0,1],[24,0,0,2],[25,0,0,3]],"9":[[0,0,0,0],[1,0,0,1],[2,0,0,2],[3,0,0,3]]},"5.0":{"4":[[0,0,0,0],[1,0,0,1],[2,0,0,2],[3,0,0,3]],"5":[[4,0,0,0],[5,0,0,1]],"6":[[6,0,0,0],[7,0,0,1],[8,0,0,2],[9,0,0,3]],"7":[[14,0,0,0],[15,0,0,1],[16,0,0,2],[17,0,0,3]],"10":[[26,0,0,4],[27,0,0,5],[28,0,0,6],[29,0,0,7]],"11":[[30,0,0,4],[31,0,0,5],[32,0,0,6]],"12":[[33,0,0,4],[34,0,0,5],[35,0,0,6]],"13":[[36,0,0,4],[37,0,0,5],[38,0,0,6]],"14":[[39,0,0,4]],"15":[[40,0,0,4]],"16":[[41,0,0,4]],"18":[[30,0,0,8],[31,0,0,9],[32,0,0,10]],"20":[[42,0,0,8],[43,0,0,9],[44,0,0,10]],"21":[[33,0,0,8],[34,0,0,9],[35,0,0,10]],"22":[[30,0,0,8],[31,0,0,9],[32,0,0,10]],"23":[[45,0,0,11],[46,0,0,12],[47,0,0,13]],"24":[[48,0,0,14],[49,0,0,15]],"25":[[50,0,0,14]],"26":[[51,0,0,14]],"27":[[52,0,0,14]],"28":[[53,0,0,14]],"29":[[54,0,0,14]],"30":[[54,0,0,14]],"31":[[55,0,0,14]],"32":[[56,0,0,14]],"33":[[57,0,0,14],[58,0,0,15]],"34":[[59,0,0,14]],"35":[[60,0,0,14]],"36":[[61,0,0,14]],"37":[[62,0,0,14]],"38":[[63,0,0,14]],"39":[[64,0,0,14]],"40":[[65,0,0,14]],"85":[[66,0,0,4]],"86":[[67,0,0,4]],"87":[[68,0,0,4]]},"6.0":{"10":[[26,0,0,4],[27,0,0,5],[28,0,0,6]],"11":[[30,0,0,4],[31,0,0,5],[32,0,0,6]],"12":[[33,0,0,4],[34,0,0,5],[35,0,0,6]],"13":[[36,0,0,4],[37,0,0,5],[38,0,0,6]],"14":[[39,0,0,4]],"15":[[40,0,0,4]],"16":[[41,0,0,4]],"23":[[45,0,0,11],[46,0,0,12]],"24":[[48,0,0,14],[49,0,0,15],[69,0,0,16]],"25":[[50,0,0,14]],"26":[[51,0,0,14]],"27":[[52,0,0,14]],"28":[[53,0,0,14]],"29":[[54,0,0,14]],"30":[[54,0,0,14]],"31":[[55,0,0,14]],"32":[[56,0,0,14]],"33":[[57,0,0,14],[58,0,0,15],[70,0,0,16],[71,1,0,17],[72,1,0,18]],"34":[[59,0,0,14]],"35":[[60,0,0,14]],"36":[[61,0,0,14]],"37":[[62,0,0,14]],"38":[[63,0,0,14]],"39":[[64,0,0,14]],"40":[[65,0,0,14]],"41":[[73,0,0,17],[74,0,0,18]],"42":[[75,0,0,17]],"43":[[76,0,0,17]],"44":[[77,0,0,17]],"45":[[77,0,0,17]],"46":[[78,0,0,17],[79,0,0,18]],"47":[[80,0,0,17]],"85":[[66,0,0,4]],"86":[[67,0,0,4]],"87":[[68,0,0,4]]},"7.0":{"10":[[26,0,0,4],[27,0,0,5],[28,0,0,6]],"11":[[30,0,0,4],[31,0,0,5],[32,0,0,6]],"12":[[33,0,0,4],[34,0,0,5],[35,0,0,6]],"13":[[36,0,0,4],[37,0,0,5],[38,0,0,6]],"14":[[39,0,0,4]],"15":[[40,0,0,4]],"16":[[41,0,0,4]],"23":[[45,0,0,11],[46,0,0,12]],"24":[[48,0,0,14],[49,0,0,15],[69,0,0,16]],"25":[[50,0,0,14]],"26":[[51,0,0,14]],"27":[[52,0,0,14]],"28":[[53,0,0,14]],"29":[[54,0,0,14]],"30":[[54,0,0,14]],"31":[[55,0,0,14]],"32":[[56,0,0,14]],"33":[[57,0,0,14],[58,0,0,15],[70,0,0,16],[71,1,0,17],[72,1,0,18]],"34":[[59,0,0,14]],"35":[[60,0,0,14]],"36":[[61,0,0,14]],"37":[[62,0,0,14]],"38":[[63,0,0,14]],"39":[[64,0,0,14]],"40":[[65,0,0,14]],"41":[[73,0,0,17],[74,0,0,18]],"42":[[75,0,0,17]],"43":[[76,0,0,17]],"44":[[77,0,0,17]],"45":[[77,0,0,17]],"46":[[78,0,0,17],[79,0,0,18]],"47":[[80,0,0,17]],"85":[[66,0,0,4]],"86":[[67,0,0,4]],"87":[[68,0,0,4]]},"8.0":{"10":[[26,0,0,4],[27,0,0,5],[28,0,0,6]],"11":[[30,0,0,4],[31,0,0,5],[32,0,0,6]],"12":[[33,0,0,4],[34,0,0,5],[35,0,0,6]],"13":[[36,0,0,4],[37,0,0,5],[38,0,0,6]],"14":[[39,0,0,4]],"15":[[40,0,0,4]],"16":[[41,0,0,4]],"23":[[45,0,0,11],[46,0,0,12]],"24":[[48,0,0,14],[49,0,0,15],[69,0,0,16]],"25":[[50,0,0,14]],"26":[[51,0,0,14]],"27":[[52,0,0,14]],"28":[[53,0,0,14]],"29":[[54,0,0,14]],"30":[[54,0,0,14]],"31":[[55,0,0,14]],"32":[[56,0,0,14]],"33":[[57,0,0,14],[58,0,0,15],[70,0,0,16],[71,1,0,17],[72,1,0,18]],"34":[[59,0,0,14]],"35":[[60,0,0,14]],"36":[[61,0,0,14]],"37":[[62,0,0,14]],"38":[[63,0,0,14]],"39":[[64,0,0,14]],"40":[[65,0,0,14]],"41":[[73,0,0,17],[74,0,0,18]],"42":[[75,0,0,17]],"43":[[76,0,0,17]],"44":[[77,0,0,17]],"45":[[77,0,0,17]],"46":[[78,0,0,17],[79,0,0,18]],"47":[[80,0,0,17]],"85":[[66,0,0,4]],"86":[[67,0,0,4]],"87":[[68,0,0,4]]},"9.0":{"10":[[26,0,0,4],[27,0,0,5],[28,0,0,6]],"11":[[30,0,0,4],[31,0,0,5],[32,0,0,6]],"12":[[33,0,0,4],[34,0,0,5],[35,0,0,6]],"13":[[36,0,0,4],[37,0,0,5],[38,0,0,6]],"14":[[39,0,0,4]],"15":[[40,0,0,4]],"16":[[41,0,0,4]],"23":[[45,0,0,11],[46,0,0,12]],"24":[[48,0,0,14],[49,0,0,15],[69,0,0,16]],"25":[[50,0,0,14]],"26":[[51,0,0,14]],"27":[[52,0,0,14]],"28":[[53,0,0,14]],"29":[[54,0,0,14]],"30":[[54,0,0,14]],"31":[[55,0,0,14]],"32":[[56,0,0,14]],"33":[[57,0,0,14],[58,0,0,15],[70,0,0,16],[71,1,0,17],[72,1,0,18]],"34":[[59,0,0,14]],"35":[[60,0,0,14]],"36":[[61,0,0,14]],"37":[[62,0,0,14]],"38":[[63,0,0,14]],"39":[[64,0,0,14]],"40":[[65,0,0,14]],"41":[[73,0,0,17],[74,0,0,18]],"42":[[75,0,0,17]],"43":[[76,0,0,17]],"44":[[77,0,0,17]],"45":[[77,0,0,17]],"46":[[78,0,0,17],[79,0,0,18]],"47":[[80,0,0,17]],"85":[[66,0,0,4]],"86":[[67,0,0,4]],"87":[[68,0,0,4]]},"10.0":{"24":[[48,0,0,14],[49,0,0,15],[69,0,0,16]],"25":[[50,0,0,14]],"26":[[51,0,0,14]],"27":[[52,0,0,14]],"28":[[53,0,0,14]],"29":[[54,0,0,14]],"30":[[54,0,0,14]],"31":[[55,0,0,14]],"32":[[56,0,0,14]],"33":[[57,0,0,14],[58,0,0,15],[70,0,0,16],[71,1,0,17],[72,1,0,18]],"34":[[59,0,0,14]],"35":[[60,0,0,14]],"36":[[61,0,0,14]],"37":[[62,0,0,14]],"38":[[63,0,0,14]],"39":[[64,0,0,14]],"40":[[65,0,0,14]],"41":[[73,0,0,17],[74,0,0,18]],"42":[[75,0,0,17]],"43":[[76,0,0,17]],"44":[[77,0,0,17]],"45":[[77,0,0,17]],"46":[[78,0,0,17],[79,0,0,18]],"47":[[80,0,0,17]]},"10.1":{"24":[[48,0,0,14]],"25":[[50,0,0,14]],"26":[[51,0,0,14]],"27":[[52,0,0,14]],"28":[[53,0,0,14]],"29":[[54,0,0,14]],"30":[[54,0,0,14]],"31":[[55,0,0,14]],"32":[[56,0,0,14]],"33":[[57,0,0,14],[71,1,0,17]],"34":[[59,0,0,14]],"35":[[60,0,0,14]],"36":[[61,0,0,14]],"37":[[62,0,0,14]],"38":[[63,0,0,14]],"39":[[64,0,0,14]],"40":[[65,0,0,14]],"41":[[73,0,0,17]],"42":[[75,0,0,17]],"43":[[76,0,0,17]],"44":[[77,0,0,17]],"45":[[77,0,0,17]],"46":[[78,0,0,17]],"47":[[80,0,0,17]]},"11.0":{"24":[[48,0,0,14],[49,0,0,15],[69,0,0,16]],"25":[[50,0,0,14]],"26":[[51,0,0,14]],"27":[[52,0,0,14]],"28":[[53,0,0,14]],"29":[[54,0,0,14]],"30":[[54,0,0,14]],"31":[[55,0,0,14]],"32":[[56,0,0,14]],"33":[[57,0,0,14],[58,0,0,15],[70,0,0,16],[71,1,0,17],[72,1,0,18]],"34":[[59,0,0,14]],"35":[[60,0,0,14]],"36":[[61,0,0,14]],"37":[[62,0,0,14]],"38":[[63,0,0,14]],"39":[[64,0,0,14]],"40":[[65,0,0,14]],"41":[[73,0,0,17],[74,0,0,18]],"42":[[75,0,0,17]],"43":[[76,0,0,17]],"44":[[77,0,0,17]],"45":[[77,0,0,17]],"46":[[78,0,0,17],[79,0,0,18]],"47":[[80,0,0,17]]},"12.0":{"48":[[81,0,0,19]],"49":[[82,0,0,19]],"50":[[82,0,0,19]],"51":[[82,0,0,19]],"52":[[83,0,0,19]],"53":[[84,0,0,19]],"54":[[85,0,0,20]],"55":[[86,0,0,20]],"56":[[87,0,0,20]],"57":[[88,0,0,20]],"58":[[89,0,0,20]],"59":[[86,0,0,20]],"60":[[87,0,0,20]],"61":[[88,0,0,20]],"62":[[89,0,0,20]],"63":[[90,0,0,20]],"64":[[90,0,0,20]],"65":[[91,0,0,20]],"66":[[91,0,0,20]],"67":[[92,0,0,20]],"68":[[93,0,0,20]],"69":[[94,0,0,21]],"70":[[95,0,0,21]],"71":[[96,0,0,21]],"72":[[97,0,0,21]],"73":[[98,0,0,21]],"74":[[94,0,0,21]],"75":[[95,0,0,21]],"76":[[96,0,0,21]],"77":[[97,0,0,21]],"78":[[98,0,0,21]],"79":[[99,0,0,21]],"80":[[100,0,0,21]],"81":[[101,0,0,21]],"82":[[102,0,0,21]],"83":[[103,0,0,21]],"84":[[104,0,0,21]]},"12.1":{"24":[[48,0,0,14],[49,0,0,15],[69,0,0,16]],"25":[[50,0,0,14]],"26":[[51,0,0,14]],"27":[[52,0,0,14]],"28":[[53,0,0,14]],"29":[[54,0,0,14]],"30":[[54,0,0,14]],"31":[[55,0,0,14]],"32":[[56,0,0,14]],"33":[[57,0,0,14],[58,0,0,15],[70,0,0,16],[71,1,0,17],[72,1,0,18]],"34":[[59,0,0,14]],"35":[[60,0,0,14]],"36":[[61,0,0,14]],"37":[[62,0,0,14]],"38":[[63,0,0,14]],"39":[[64,0,0,14]],"40":[[65,0,0,14]],"41":[[73,0,0,17],[74,0,0,18]],"42":[[75,0,0,17]],"43":[[76,0,0,17]],"44":[[77,0,0,17]],"45":[[77,0,0,17]],"46":[[78,0,0,17],[79,0,0,18]],"47":[[80,0,0,17]]},"13.0":{"24":[[48,0,0,14],[49,0,0,15],[69,0,0,16]],"25":[[50,0,0,14]],"26":[[51,0,0,14]],"27":[[52,0,0,14]],"28":[[53,0,0,14]],"29":[[54,0,0,14]],"30":[[54,0,0,14]],"31":[[55,0,0,14]],"32":[[56,0,0,14]],"33":[[57,0,0,14],[58,0,0,15],[70,0,0,16],[71,1,0,17],[72,1,0,18]],"34":[[59,0,0,14]],"35":[[60,0,0,14]],"36":[[61,0,0,14]],"37":[[62,0,0,14]],"38":[[63,0,0,14]],"39":[[64,0,0,14]],"40":[[65,0,0,14]],"41":[[73,0,0,17],[74,0,0,18]],"42":[[75,0,0,17]],"43":[[76,0,0,17]],"44":[[77,0,0,17]],"45":[[77,0,0,17]],"46":[[78,0,0,17],[79,0,0,18]],"47":[[80,0,0,17]]},"13.1":{"24":[[48,0,0,14]],"25":[[50,0,0,14]],"26":[[51,0,0,14]],"27":[[52,0,0,14]],"28":[[53,0,0,14]],"29":[[54,0,0,14]],"30":[[54,0,0,14]],"31":[[55,0,0,14]],"32":[[56,0,0,14]],"33":[[57,0,0,14],[71,1,0,17]],"34":[[59,0,0,14]],"35":[[60,0,0,14]],"36":[[61,0,0,14]],"37":[[62,0,0,14]],"38":[[63,0,0,14]],"39":[[64,0,0,14]],"40":[[65,0,0,14]],"41":[[73,0,0,17]],"42":[[75,0,0,17]],"43":[[76,0,0,17]],"44":[[77,0,0,17]],"45":[[77,0,0,17]],"46":[[78,0,0,17]],"47":[[80,0,0,17]]},"14.0":{"54":[[85,0,0,20]],"55":[[86,0,0,20]],"56":[[87,0,0,20]],"57":[[88,0,0,20]],"58":[[89,0,0,20]],"59":[[86,0,0,20]],"60":[[87,0,0,20]],"61":[[88,0,0,20]],"62":[[89,0,0,20]],"63":[[90,0,0,20]],"64":[[90,0,0,20]],"65":[[91,0,0,20]],"66":[[91,0,0,20]],"67":[[92,0,0,20]],"68":[[93,0,0,20]],"69":[[94,0,0,21]],"70":[[95,0,0,21]],"71":[[96,0,0,21]],"72":[[97,0,0,21]],"73":[[98,0,0,21]],"74":[[94,0,0,21]],"75":[[95,0,0,21]],"76":[[96,0,0,21]],"77":[[97,0,0,21]],"78":[[98,0,0,21]],"79":[[99,0,0,21]],"80":[[100,0,0,21]],"81":[[101,0,0,21]],"82":[[102,0,0,21]],"83":[[103,0,0,21]],"84":[[104,0,0,21]]},"14.1":{"24":[[48,0,0,14],[49,0,0,15],[69,0,0,16]],"25":[[50,0,0,14]],"26":[[51,0,0,14]],"27":[[52,0,0,14]],"28":[[53,0,0,14]],"29":[[54,0,0,14]],"30":[[54,0,0,14]],"31":[[55,0,0,14]],"32":[[56,0,0,14]],"33":[[57,0,0,14],[58,0,0,15],[70,0,0,16],[71,1,0,17],[72,1,0,18]],"34":[[59,0,0,14]],"35":[[60,0,0,14]],"36":[[61,0,0,14]],"37":[[62,0,0,14]],"38":[[63,0,0,14]],"39":[[64,0,0,14]],"40":[[65,0,0,14]],"41":[[73,0,0,17],[74,0,0,18]],"42":[[75,0,0,17]],"43":[[76,0,0,17]],"44":[[77,0,0,17]],"45":[[77,0,0,17]],"46":[[78,0,0,17],[79,0,0,18]],"47":[[80,0,0,17]]},"14.2":{"24":[[48,0,0,14]],"25":[[50,0,0,14]],"26":[[51,0,0,14]],"27":[[52,0,0,14]],"28":[[53,0,0,14]],"29":[[54,0,0,14]],"30":[[54,0,0,14]],"31":[[55,0,0,14]],"32":[[56,0,0,14]],"33":[[57,0,0,14],[71,1,0,17]],"34":[[59,0,0,14]],"35":[[60,0,0,14]],"36":[[61,0,0,14]],"37":[[62,0,0,14]],"38":[[63,0,0,14]],"39":[[64,0,0,14]],"40":[[65,0,0,14]],"41":[[73,0,0,17]],"42":[[75,0,0,17]],"43":[[76,0,0,17]],"44":[[77,0,0,17]],"45":[[77,0,0,17]],"46":[[78,0,0,17]],"47":[[80,0,0,17]]},"15.0":{"54":[[85,0,0,20]],"55":[[86,0,0,20]],"56":[[87,0,0,20]],"57":[[88,0,0,20]],"58":[[89,0,0,20]],"59":[[86,0,0,20]],"60":[[87,0,0,20]],"61":[[88,0,0,20]],"62":[[89,0,0,20]],"63":[[90,0,0,20]],"64":[[90,0,0,20]],"65":[[91,0,0,20]],"66":[[91,0,0,20]],"67":[[92,0,0,20]],"68":[[93,0,0,20]],"69":[[94,0,0,21]],"70":[[95,0,0,21]],"71":[[96,0,0,21]],"72":[[97,0,0,21]],"73":[[98,0,0,21]],"74":[[94,0,0,21]],"75":[[95,0,0,21]],"76":[[96,0,0,21]],"77":[[97,0,0,21]],"78":[[98,0,0,21]],"79":[[99,0,0,21]],"80":[[100,0,0,21]],"81":[[101,0,0,21]],"82":[[102,0,0,21]],"83":[[103,0,0,21]],"84":[[104,0,0,21]]},"16.0":{"54":[[85,0,0,20]],"55":[[86,0,0,20]],"56":[[87,0,0,20]],"57":[[88,0,0,20]],"58":[[89,0,0,20]],"59":[[86,0,0,20]],"60":[[87,0,0,20]],"61":[[88,0,0,20]],"62":[[89,0,0,20]],"63":[[90,0,0,20]],"64":[[90,0,0,20]],"65":[[91,0,0,20]],"66":[[91,0,0,20]],"67":[[92,0,0,20]],"68":[[93,0,0,20]],"69":[[94,0,0,21]],"70":[[95,0,0,21]],"71":[[96,0,0,21]],"72":[[97,0,0,21]],"73":[[98,0,0,21]],"74":[[94,0,0,21]],"75":[[95,0,0,21]],"76":[[96,0,0,21]],"77":[[97,0,0,21]],"78":[[98,0,0,21]],"79":[[99,0,0,21]],"80":[[100,0,0,21]],"81":[[101,0,0,21]],"82":[[102,0,0,21]],"83":[[103,0,0,21]],"84":[[104,0,0,21]]},"17.0":{"54":[[85,0,0,20]],"55":[[86,0,0,20]],"56":[[87,0,0,20]],"57":[[88,0,0,20]],"58":[[89,0,0,20]],"59":[[86,0,0,20]],"60":[[87,0,0,20]],"61":[[88,0,0,20]],"62":[[89,0,0,20]],"63":[[90,0,0,20]],"64":[[90,0,0,20]],"65":[[91,0,0,20]],"66":[[91,0,0,20]],"67":[[92,0,0,20]],"68":[[93,0,0,20]],"69":[[94,0,0,21]],"70":[[95,0,0,21]],"71":[[96,0,0,21]],"72":[[97,0,0,21]],"73":[[98,0,0,21]],"74":[[94,0,0,21]],"75":[[95,0,0,21]],"76":[[96,0,0,21]],"77":[[97,0,0,21]],"78":[[98,0,0,21]],"79":[[99,0,0,21]],"80":[[100,0,0,21]],"81":[[101,0,0,21]],"82":[[102,0,0,21]],"83":[[103,0,0,21]],"84":[[104,0,0,21]]},"18.0":{"48":[[81,0,0,19]],"49":[[82,0,0,19]],"50":[[82,0,0,19]],"51":[[82,0,0,19]],"52":[[83,0,0,19]],"53":[[84,0,0,19]],"54":[[85,0,0,20]],"55":[[86,0,0,20]],"56":[[87,0,0,20]],"57":[[88,0,0,20]],"58":[[89,0,0,20]],"59":[[86,0,0,20]],"60":[[87,0,0,20]],"61":[[88,0,0,20]],"62":[[89,0,0,20]],"63":[[90,0,0,20]],"64":[[90,0,0,20]],"65":[[91,0,0,20]],"66":[[91,0,0,20]],"67":[[92,0,0,20]],"68":[[93,0,0,20]],"69":[[94,0,0,21]],"70":[[95,0,0,21]],"71":[[96,0,0,21]],"72":[[97,0,0,21]],"73":[[98,0,0,21]],"74":[[94,0,0,21]],"75":[[95,0,0,21]],"76":[[96,0,0,21]],"77":[[97,0,0,21]],"78":[[98,0,0,21]],"79":[[99,0,0,21]],"80":[[100,0,0,21]],"81":[[101,0,0,21]],"82":[[102,0,0,21]],"83":[[103,0,0,21]],"84":[[104,0,0,21]]},"18.1":{"24":[[48,0,0,14],[49,0,0,15],[69,0,0,16]],"25":[[50,0,0,14]],"26":[[51,0,0,14]],"27":[[52,0,0,14]],"28":[[53,0,0,14]],"29":[[54,0,0,14]],"30":[[54,0,0,14]],"31":[[55,0,0,14]],"32":[[56,0,0,14]],"33":[[57,0,0,14],[58,0,0,15],[70,0,0,16],[71,1,0,17],[72,1,0,18]],"34":[[59,0,0,14]],"35":[[60,0,0,14]],"36":[[61,0,0,14]],"37":[[62,0,0,14]],"38":[[63,0,0,14]],"39":[[64,0,0,14]],"40":[[65,0,0,14]],"41":[[73,0,0,17],[74,0,0,18]],"42":[[75,0,0,17]],"43":[[76,0,0,17]],"44":[[77,0,0,17]],"45":[[77,0,0,17]],"46":[[78,0,0,17],[79,0,0,18]],"47":[[80,0,0,17]]},"19.0":{"48":[[81,0,0,19]],"49":[[82,0,0,19]],"50":[[82,0,0,19]],"51":[[82,0,0,19]],"52":[[83,0,0,19]],"53":[[84,0,0,19]],"54":[[85,0,0,20]],"55":[[86,0,0,20]],"56":[[87,0,0,20]],"57":[[88,0,0,20]],"58":[[89,0,0,20]],"59":[[86,0,0,20]],"60":[[87,0,0,20]],"61":[[88,0,0,20]],"62":[[89,0,0,20]],"63":[[90,0,0,20]],"64":[[90,0,0,20]],"65":[[91,0,0,20]],"66":[[91,0,0,20]],"67":[[92,0,0,20]],"68":[[93,0,0,20]],"69":[[94,0,0,21]],"70":[[95,0,0,21]],"71":[[96,0,0,21]],"72":[[97,0,0,21]],"73":[[98,0,0,21]],"74":[[94,0,0,21]],"75":[[95,0,0,21]],"76":[[96,0,0,21]],"77":[[97,0,0,21]],"78":[[98,0,0,21]],"79":[[99,0,0,21]],"80":[[100,0,0,21]],"81":[[101,0,0,21]],"82":[[102,0,0,21]],"83":[[103,0,0,21]],"84":[[104,0,0,21]]},"19.1":{"24":[[48,0,0,14],[49,0,0,15],[69,0,0,16]],"25":[[50,0,0,14]],"26":[[51,0,0,14]],"27":[[52,0,0,14]],"28":[[53,0,0,14]],"29":[[54,0,0,14]],"30":[[54,0,0,14]],"31":[[55,0,0,14]],"32":[[56,0,0,14]],"33":[[57,0,0,14],[58,0,0,15],[70,0,0,16],[71,1,0,17],[72,1,0,18]],"34":[[59,0,0,14]],"35":[[60,0,0,14]],"36":[[61,0,0,14]],"37":[[62,0,0,14]],"38":[[63,0,0,14]],"39":[[64,0,0,14]],"40":[[65,0,0,14]],"41":[[73,0,0,17],[74,0,0,18]],"42":[[75,0,0,17]],"43":[[76,0,0,17]],"44":[[77,0,0,17]],"45":[[77,0,0,17]],"46":[[78,0,0,17],[79,0,0,18]],"47":[[80,0,0,17]]},"20.0":{"48":[[81,0,0,19]],"49":[[82,0,0,19]],"50":[[82,0,0,19]],"51":[[82,0,0,19]],"52":[[83,0,0,19]],"53":[[84,0,0,19]],"54":[[85,0,0,20]],"55":[[86,0,0,20]],"56":[[87,0,0,20]],"57":[[88,0,0,20]],"58":[[89,0,0,20]],"59":[[86,0,0,20]],"60":[[87,0,0,20]],"61":[[88,0,0,20]],"62":[[89,0,0,20]],"63":[[90,0,0,20]],"64":[[90,0,0,20]],"65":[[91,0,0,20]],"66":[[91,0,0,20]],"67":[[92,0,0,20]],"68":[[93,0,0,20]],"69":[[94,0,0,21]],"70":[[95,0,0,21]],"71":[[96,0,0,21]],"72":[[97,0,0,21]],"73":[[98,0,0,21]],"74":[[94,0,0,21]],"75":[[95,0,0,21]],"76":[[96,0,0,21]],"77":[[97,0,0,21]],"78":[[98,0,0,21]],"79":[[99,0,0,21]],"80":[[100,0,0,21]],"81":[[101,0,0,21]],"82":[[102,0,0,21]],"83":[[103,0,0,21]],"84":[[104,0,0,21]]},"20.1":{"24":[[48,0,0,14],[49,0,0,15],[69,0,0,16]],"25":[[50,0,0,14]],"26":[[51,0,0,14]],"27":[[52,0,0,14]],"28":[[53,0,0,14]],"29":[[54,0,0,14]],"30":[[54,0,0,14]],"31":[[55,0,0,14]],"32":[[56,0,0,14]],"33":[[57,0,0,14],[58,0,0,15],[70,0,0,16],[71,1,0,17],[72,1,0,18]],"34":[[59,0,0,14]],"35":[[60,0,0,14]],"36":[[61,0,0,14]],"37":[[62,0,0,14]],"38":[[63,0,0,14]],"39":[[64,0,0,14]],"40":[[65,0,0,14]],"41":[[73,0,0,17],[74,0,0,18]],"42":[[75,0,0,17]],"43":[[76,0,0,17]],"44":[[77,0,0,17]],"45":[[77,0,0,17]],"46":[[78,0,0,17],[79,0,0,18]],"47":[[80,0,0,17]]},"21.0":{"17":[[30,0,0,8],[31,0,0,9],[32,0,0,10]],"19":[[42,0,0,8],[43,0,0,9],[44,0,0,10]],"88":[[1,0,0,1],[2,0,0,2],[3,0,0,3]]},"22.0":{"18":[[30,0,0,8],[31,0,0,9],[32,0,0,10]],"20":[[42,0,0,8],[43,0,0,9],[44,0,0,10]],"21":[[33,0,0,8],[34,0,0,9],[35,0,0,10]],"22":[[30,0,0,8],[31,0,0,9],[32,0,0,10]],"23":[[45,0,0,11],[46,0,0,12],[47,0,0,13]],"24":[[48,0,0,14],[49,0,0,15],[69,0,0,16]],"25":[[50,0,0,14]],"26":[[51,0,0,14]],"27":[[52,0,0,14]],"28":[[53,0,0,14]],"29":[[54,0,0,14]],"30":[[54,0,0,14]],"31":[[55,0,0,14]],"32":[[56,0,0,14]],"33":[[57,0,0,14],[58,0,0,15],[70,0,0,16],[71,1,0,17],[72,1,0,18]],"34":[[59,0,0,14]],"35":[[60,0,0,14]],"36":[[61,0,0,14]],"37":[[62,0,0,14]],"38":[[63,0,0,14]],"39":[[64,0,0,14]],"40":[[65,0,0,14]],"41":[[73,0,0,17],[74,0,0,18]],"42":[[75,0,0,17]],"43":[[76,0,0,17]],"44":[[77,0,0,17]],"45":[[77,0,0,17]],"46":[[78,0,0,17],[79,0,0,18]],"47":[[80,0,0,17]]},"23.0":{"17":[[30,0,0,8],[31,0,0,9],[32,0,0,10]],"19":[[42,0,0,8],[43,0,0,9],[44,0,0,10]]},"24.0":{"18":[[30,0,0,8],[31,0,0,9],[32,0,0,10]],"20":[[42,0,0,8],[43,0,0,9],[44,0,0,10]],"21":[[33,0,0,8],[34,0,0,9],[35,0,0,10]],"22":[[30,0,0,8],[31,0,0,9],[32,0,0,10]],"23":[[45,0,0,11],[46,0,0,12],[47,0,0,13]],"24":[[48,0,0,14],[49,0,0,15],[69,0,0,16]],"25":[[50,0,0,14]],"26":[[51,0,0,14]],"27":[[52,0,0,14]],"28":[[53,0,0,14]],"29":[[54,0,0,14]],"30":[[54,0,0,14]],"31":[[55,0,0,14]],"32":[[56,0,0,14]],"33":[[57,0,0,14],[58,0,0,15],[70,0,0,16],[71,1,0,17],[72,1,0,18]],"34":[[59,0,0,14]],"35":[[60,0,0,14]],"36":[[61,0,0,14]],"37":[[62,0,0,14]],"38":[[63,0,0,14]],"39":[[64,0,0,14]],"40":[[65,0,0,14]],"41":[[73,0,0,17],[74,0,0,18]],"42":[[75,0,0,17]],"43":[[76,0,0,17]],"44":[[77,0,0,17]],"45":[[77,0,0,17]],"46":[[78,0,0,17],[79,0,0,18]],"47":[[80,0,0,17]]},"25.0":{"18":[[31,0,0,9],[32,0,0,10]],"20":[[43,0,0,9],[44,0,0,10]],"21":[[34,0,0,9],[35,0,0,10]],"22":[[31,0,0,9],[32,0,0,10]],"23":[[45,0,0,11],[46,0,0,12],[47,0,0,13]],"24":[[48,0,0,14],[49,0,0,15],[69,0,0,16]],"25":[[50,0,0,14]],"26":[[51,0,0,14]],"27":[[52,0,0,14]],"28":[[53,0,0,14]],"29":[[54,0,0,14]],"30":[[54,0,0,14]],"31":[[55,0,0,14]],"32":[[56,0,0,14]],"33":[[57,0,0,14],[58,0,0,15],[70,0,0,16],[71,1,0,17],[72,1,0,18]],"34":[[59,0,0,14]],"35":[[60,0,0,14]],"36":[[61,0,0,14]],"37":[[62,0,0,14]],"38":[[63,0,0,14]],"39":[[64,0,0,14]],"40":[[65,0,0,14]],"41":[[73,0,0,17],[74,0,0,18]],"42":[[75,0,0,17]],"43":[[76,0,0,17]],"44":[[77,0,0,17]],"45":[[77,0,0,17]],"46":[[78,0,0,17],[79,0,0,18]],"47":[[80,0,0,17]]},"26.0":{"17":[[30,0,0,8],[31,0,0,9],[32,0,0,10]],"19":[[42,0,0,8],[43,0,0,9],[44,0,0,10]],"88":[[0,0,0,0],[1,0,0,1],[2,0,0,2],[3,0,0,3]]},"27.0":{"18":[[30,0,0,8],[31,0,0,9],[32,0,0,10]],"20":[[42,0,0,8],[43,0,0,9],[44,0,0,10]],"21":[[33,0,0,8],[34,0,0,9],[35,0,0,10]],"22":[[30,0,0,8],[31,0,0,9],[32,0,0,10]],"23":[[45,0,0,11],[46,0,0,12],[47,0,0,13]]},"28.0":{"17":[[30,0,0,8]],"19":[[42,0,0,8]]},"30.0":{"18":[[30,0,0,8]],"20":[[42,0,0,8]],"21":[[33,0,0,8]],"22":[[30,0,0,8]],"23":[[45,0,0,11]],"24":[[48,0,0,14]],"25":[[50,0,0,14]],"26":[[51,0,0,14]],"27":[[52,0,0,14]],"28":[[53,0,0,14]],"29":[[54,0,0,14]],"30":[[54,0,0,14]],"31":[[55,0,0,14]],"32":[[56,0,0,14]],"33":[[57,0,0,14],[71,1,0,17]],"34":[[59,0,0,14]],"35":[[60,0,0,14]],"36":[[61,0,0,14]],"37":[[62,0,0,14]],"38":[[63,0,0,14]],"39":[[64,0,0,14]],"40":[[65,0,0,14]],"41":[[73,0,0,17]],"42":[[75,0,0,17]],"43":[[76,0,0,17]],"44":[[77,0,0,17]],"45":[[77,0,0,17]],"46":[[78,0,0,17]],"47":[[80,0,0,17]]},"31.0":{"23":[[45,0,0,11]],"24":[[48,0,0,14]],"25":[[50,0,0,14]],"26":[[51,0,0,14]],"27":[[52,0,0,14]],"28":[[53,0,0,14]],"29":[[54,0,0,14]],"30":[[54,0,0,14]],"31":[[55,0,0,14]],"32":[[56,0,0,14]],"33":[[57,0,0,14],[71,1,0,17]],"34":[[59,0,0,14]],"35":[[60,0,0,14]],"36":[[61,0,0,14]],"37":[[62,0,0,14]],"38":[[63,0,0,14]],"39":[[64,0,0,14]],"40":[[65,0,0,14]],"41":[[73,0,0,17]],"42":[[75,0,0,17]],"43":[[76,0,0,17]],"44":[[77,0,0,17]],"45":[[77,0,0,17]],"46":[[78,0,0,17]],"47":[[80,0,0,17]]},"32.0":{"24":[[48,0,0,14]],"25":[[50,0,0,14]],"26":[[51,0,0,14]],"27":[[52,0,0,14]],"28":[[53,0,0,14]],"29":[[54,0,0,14]],"30":[[54,0,0,14]],"31":[[55,0,0,14]],"32":[[56,0,0,14]],"33":[[57,0,0,14],[71,1,0,17]],"34":[[59,0,0,14]],"35":[[60,0,0,14]],"36":[[61,0,0,14]],"37":[[62,0,0,14]],"38":[[63,0,0,14]],"39":[[64,0,0,14]],"40":[[65,0,0,14]],"41":[[73,0,0,17]],"42":[[75,0,0,17]],"43":[[76,0,0,17]],"44":[[77,0,0,17]],"45":[[77,0,0,17]],"46":[[78,0,0,17]],"47":[[80,0,0,17]]},"33.0":{"48":[[81,0,0,19]],"49":[[82,0,0,19]],"50":[[82,0,0,19]],"51":[[82,0,0,19]],"52":[[83,0,0,19]],"53":[[84,0,0,19]],"54":[[85,0,0,20]],"55":[[86,0,0,20]],"56":[[87,0,0,20]],"57":[[88,0,0,20]],"58":[[89,0,0,20]],"59":[[86,0,0,20]],"60":[[87,0,0,20]],"61":[[88,0,0,20]],"62":[[89,0,0,20]],"63":[[90,0,0,20]],"64":[[90,0,0,20]],"65":[[91,0,0,20]],"66":[[91,0,0,20]],"67":[[92,0,0,20]],"68":[[93,0,0,20]],"69":[[94,0,0,21]],"70":[[95,0,0,21]],"71":[[96,0,0,21]],"72":[[97,0,0,21]],"73":[[98,0,0,21]],"74":[[94,0,0,21]],"75":[[95,0,0,21]],"76":[[96,0,0,21]],"77":[[97,0,0,21]],"78":[[98,0,0,21]],"79":[[99,0,0,21]],"80":[[100,0,0,21]],"81":[[101,0,0,21]],"82":[[102,0,0,21]],"83":[[103,0,0,21]],"84":[[104,0,0,21]]},"34.0":{"23":[[45,0,0,11]],"24":[[48,0,0,14]],"25":[[50,0,0,14]],"26":[[51,0,0,14]],"27":[[52,0,0,14]],"28":[[53,0,0,14]],"29":[[54,0,0,14]],"30":[[54,0,0,14]],"31":[[55,0,0,14]],"32":[[56,0,0,14]],"33":[[57,0,0,14],[71,1,0,17]],"34":[[59,0,0,14]],"35":[[60,0,0,14]],"36":[[61,0,0,14]],"37":[[62,0,0,14]],"38":[[63,0,0,14]],"39":[[64,0,0,14]],"40":[[65,0,0,14]],"41":[[73,0,0,17]],"42":[[75,0,0,17]],"43":[[76,0,0,17]],"44":[[77,0,0,17]],"45":[[77,0,0,17]],"46":[[78,0,0,17]],"47":[[80,0,0,17]]},"35.0":{"24":[[48,0,0,14]],"25":[[50,0,0,14]],"26":[[51,0,0,14]],"27":[[52,0,0,14]],"28":[[53,0,0,14]],"29":[[54,0,0,14]],"30":[[54,0,0,14]],"31":[[55,0,0,14]],"32":[[56,0,0,14]],"33":[[57,0,0,14],[71,1,0,17]],"34":[[59,0,0,14]],"35":[[60,0,0,14]],"36":[[61,0,0,14]],"37":[[62,0,0,14]],"38":[[63,0,0,14]],"39":[[64,0,0,14]],"40":[[65,0,0,14]],"41":[[73,0,0,17]],"42":[[75,0,0,17]],"43":[[76,0,0,17]],"44":[[77,0,0,17]],"45":[[77,0,0,17]],"46":[[78,0,0,17]],"47":[[80,0,0,17]]},"36.0":{"48":[[81,0,0,19]],"49":[[82,0,0,19]],"50":[[82,0,0,19]],"51":[[82,0,0,19]],"52":[[83,0,0,19]],"53":[[84,0,0,19]],"54":[[85,0,0,20]],"55":[[86,0,0,20]],"56":[[87,0,0,20]],"57":[[88,0,0,20]],"58":[[89,0,0,20]],"59":[[86,0,0,20]],"60":[[87,0,0,20]],"61":[[88,0,0,20]],"62":[[89,0,0,20]],"63":[[90,0,0,20]],"64":[[90,0,0,20]],"65":[[91,0,0,20]],"66":[[91,0,0,20]],"67":[[92,0,0,20]],"68":[[93,0,0,20]],"69":[[94,0,0,21]],"70":[[95,0,0,21]],"71":[[96,0,0,21]],"72":[[97,0,0,21]],"73":[[98,0,0,21]],"74":[[94,0,0,21]],"75":[[95,0,0,21]],"76":[[96,0,0,21]],"77":[[97,0,0,21]],"78":[[98,0,0,21]],"79":[[99,0,0,21]],"80":[[100,0,0,21]],"81":[[101,0,0,21]],"82":[[102,0,0,21]],"83":[[103,0,0,21]],"84":[[104,0,0,21]]},"37.0":{"48":[[81,0,0,19]],"49":[[82,0,0,19]],"50":[[82,0,0,19]],"51":[[82,0,0,19]],"52":[[83,0,0,19]],"53":[[84,0,0,19]],"54":[[85,0,0,20]],"55":[[86,0,0,20]],"56":[[87,0,0,20]],"57":[[88,0,0,20]],"58":[[89,0,0,20]],"59":[[86,0,0,20]],"60":[[87,0,0,20]],"61":[[88,0,0,20]],"62":[[89,0,0,20]],"63":[[90,0,0,20]],"64":[[90,0,0,20]],"65":[[91,0,0,20]],"66":[[91,0,0,20]],"67":[[92,0,0,20]],"68":[[93,0,0,20]],"69":[[94,0,0,21]],"70":[[95,0,0,21]],"71":[[96,0,0,21]],"72":[[97,0,0,21]],"73":[[98,0,0,21]],"74":[[94,0,0,21]],"75":[[95,0,0,21]],"76":[[96,0,0,21]],"77":[[97,0,0,21]],"78":[[98,0,0,21]],"79":[[99,0,0,21]],"80":[[100,0,0,21]],"81":[[101,0,0,21]],"82":[[102,0,0,21]],"83":[[103,0,0,21]],"84":[[104,0,0,21]]},"38.0":{"24":[[48,0,0,14]],"25":[[50,0,0,14]],"26":[[51,0,0,14]],"27":[[52,0,0,14]],"28":[[53,0,0,14]],"29":[[54,0,0,14]],"30":[[54,0,0,14]],"31":[[55,0,0,14]],"32":[[56,0,0,14]],"33":[[57,0,0,14],[71,1,0,17]],"34":[[59,0,0,14]],"35":[[60,0,0,14]],"36":[[61,0,0,14]],"37":[[62,0,0,14]],"38":[[63,0,0,14]],"39":[[64,0,0,14]],"40":[[65,0,0,14]],"41":[[73,0,0,17]],"42":[[75,0,0,17]],"43":[[76,0,0,17]],"44":[[77,0,0,17]],"45":[[77,0,0,17]],"46":[[78,0,0,17]],"47":[[80,0,0,17]]},"39.0":{"33":[[71,1,0,17]],"41":[[73,0,0,17]],"42":[[75,0,0,17]],"43":[[76,0,0,17]],"44":[[77,0,0,17]],"45":[[77,0,0,17]],"46":[[78,0,0,17]],"47":[[80,0,0,17]]},"40.0":{"33":[[71,1,0,17]],"41":[[73,0,0,17]],"42":[[75,0,0,17]],"43":[[76,0,0,17]],"44":[[77,0,0,17]],"45":[[77,0,0,17]],"46":[[78,0,0,17]],"47":[[80,0,0,17]]},"41.0":{"48":[[81,0,0,19]],"49":[[82,0,0,19]],"50":[[82,0,0,19]],"51":[[82,0,0,19]],"52":[[83,0,0,19]],"53":[[84,0,0,19]],"54":[[85,0,0,20]],"55":[[86,0,0,20]],"56":[[87,0,0,20]],"57":[[88,0,0,20]],"58":[[89,0,0,20]],"59":[[86,0,0,20]],"60":[[87,0,0,20]],"61":[[88,0,0,20]],"62":[[89,0,0,20]],"63":[[90,0,0,20]],"64":[[90,0,0,20]],"65":[[91,0,0,20]],"66":[[91,0,0,20]],"67":[[92,0,0,20]],"68":[[93,0,0,20]],"69":[[94,0,0,21]],"70":[[95,0,0,21]],"71":[[96,0,0,21]],"72":[[97,0,0,21]],"73":[[98,0,0,21]],"74":[[94,0,0,21]],"75":[[95,0,0,21]],"76":[[96,0,0,21]],"77":[[97,0,0,21]],"78":[[98,0,0,21]],"79":[[99,0,0,21]],"80":[[100,0,0,21]],"81":[[101,0,0,21]],"82":[[102,0,0,21]],"83":[[103,0,0,21]],"84":[[104,0,0,21]]},"42.0":{"10":[[26,0,0,4]],"11":[[30,0,0,4]],"12":[[33,0,0,4]],"13":[[36,0,0,4]],"14":[[39,0,0,4]],"15":[[40,0,0,4]],"16":[[41,0,0,4]],"23":[[45,0,0,11]],"24":[[48,0,0,14]],"25":[[50,0,0,14]],"26":[[51,0,0,14]],"27":[[52,0,0,14]],"28":[[53,0,0,14]],"29":[[54,0,0,14]],"30":[[54,0,0,14]],"31":[[55,0,0,14]],"32":[[56,0,0,14]],"33":[[57,0,0,14]],"34":[[59,0,0,14]],"35":[[60,0,0,14]],"36":[[61,0,0,14]],"37":[[62,0,0,14]],"38":[[63,0,0,14]],"39":[[64,0,0,14]],"40":[[65,0,0,14]],"85":[[66,0,0,4]],"86":[[67,0,0,4]],"87":[[68,0,0,4]]},"43.0":{"18":[[30,0,0,8]],"20":[[42,0,0,8]],"21":[[33,0,0,8]],"22":[[30,0,0,8]],"23":[[45,0,0,11]],"24":[[48,0,0,14]],"25":[[50,0,0,14]],"26":[[51,0,0,14]],"27":[[52,0,0,14]],"28":[[53,0,0,14]],"29":[[54,0,0,14]],"30":[[54,0,0,14]],"31":[[55,0,0,14]],"32":[[56,0,0,14]],"33":[[57,0,0,14]],"34":[[59,0,0,14]],"35":[[60,0,0,14]],"36":[[61,0,0,14]],"37":[[62,0,0,14]],"38":[[63,0,0,14]],"39":[[64,0,0,14]],"40":[[65,0,0,14]]},"44.0":{"18":[[30,0,0,8],[31,0,0,9],[32,0,0,10]],"20":[[42,0,0,8],[43,0,0,9],[44,0,0,10]],"21":[[33,0,0,8],[34,0,0,9],[35,0,0,10]],"22":[[30,0,0,8],[31,0,0,9],[32,0,0,10]],"23":[[45,0,0,11],[47,0,0,13]],"24":[[48,0,0,14],[69,0,0,16]],"25":[[50,0,0,14]],"26":[[51,0,0,14]],"27":[[52,0,0,14]],"28":[[53,0,0,14]],"29":[[54,0,0,14]],"30":[[54,0,0,14]],"31":[[55,0,0,14]],"32":[[56,0,0,14]],"33":[[57,0,0,14],[70,0,0,16]],"34":[[59,0,0,14]],"35":[[60,0,0,14]],"36":[[61,0,0,14]],"37":[[62,0,0,14]],"38":[[63,0,0,14]],"39":[[64,0,0,14]],"40":[[65,0,0,14]]}},"M":{"0":{"0":[1,"A",[7,14],22,[],2]},"1":{"1":[1,"A",[7,14],22,[],2],"30":[2,"A",[7,14],22,[],2]},"30":{"1":[2,"B",[7,14],22,[],2],"30":[1,"A",[7,14],24,[],1]},"2":{"2":[1,"A",[7,14],22,[],2],"31":[2,"A",[7,14],22,[],2]},"31":{"2":[2,"B",[7,14],22,[],2],"31":[1,"A",[7,14],24,[],1]},"3":{"3":[1,"A",[7,14],22,[],2],"32":[2,"A",[7,14],22,[],2],"59":[8,"A",[5,20],23,[],2]},"32":{"3":[2,"B",[7,14],22,[],2],"32":[1,"A",[7,14],24,[],1],"59":[4,"A",[5,20],27,[],1]},"59":{"3":[8,"B",[5,20],23,[],2],"32":[4,"B",[5,20],27,[],1],"59":[1,"A",[0,10],24,[],1]},"4":{"4":[1,"A",[0,10],22,[],2]},"5":{"5":[1,"A",[0,10],22,[],2],"39":[2,"A",[0,10],22,[],2]},"39":{"5":[2,"B",[0,10],22,[],2],"39":[1,"A",[0,10],24,[],1]},"6":{"6":[1,"A",[8,18],24,[],1]},"7":{"7":[1,"A",[8,18],24,[],1],"42":[2,"A",[4,26],25,[],1]},"42":{"7":[2,"B",[4,26],25,[],1],"15":[2,"B",[2,15],22,[],2],"42":[1,"A",[2,15],24,[],1]},"8":{"8":[1,"A",[8,18],24,[],1],"43":[2,"A",[4,26],25,[],1]},"43":{"8":[2,"B",[4,26],25,[],1],"16":[2,"B",[2,15],22,[],2],"43":[1,"A",[2,15],24,[],1]},"9":{"9":[1,"A",[8,18],24,[],1],"44":[2,"A",[4,26],25,[],1]},"44":{"9":[2,"B",[4,26],25,[],1],"17":[2,"B",[2,15],22,[],2],"44":[1,"A",[2,15],24,[],1]},"10":{"10":[1,"A",[8,18],24,[],1],"26":[1,"A",[8,18],24,[26],1]},"26":{"10":[1,"B",[8,18],24,[26],1],"26":[1,"A",[8,18],24,[],1]},"11":{"11":[1,"A",[8,18],24,[],1],"27":[1,"A",[8,18],24,[26],1]},"27":{"11":[1,"B",[8,18],24,[26],1],"27":[1,"A",[8,18],24,[],1]},"12":{"12":[1,"A",[8,18],24,[],1],"28":[1,"A",[8,18],24,[26],1]},"28":{"12":[1,"B",[8,18],24,[26],1],"28":[1,"A",[8,18],24,[],1]},"13":{"13":[1,"A",[8,18],24,[],1],"29":[1,"A",[8,18],24,[26],1]},"29":{"13":[1,"B",[8,18],24,[26],1],"29":[1,"A",[8,18],24,[],1]},"14":{"14":[1,"A",[2,15],22,[],2]},"15":{"15":[1,"A",[2,15],22,[],2],"42":[2,"A",[2,15],22,[],2]},"16":{"16":[1,"A",[2,15],22,[],2],"43":[2,"A",[2,15],22,[],2]},"17":{"17":[1,"A",[2,15],22,[],2],"44":[2,"A",[2,15],22,[],2]},"18":{"18":[1,"A",[2,15],22,[],2]},"19":{"19":[1,"A",[2,15],22,[],2]},"20":{"20":[1,"A",[2,15],22,[],2]},"21":{"21":[1,"A",[2,15],22,[],2]},"22":{"22":[1,"A",[7,14],22,[],2]},"23":{"23":[1,"A",[7,14],22,[],2],"33":[2,"A",[7,14],22,[],2]},"33":{"23":[2,"B",[7,14],22,[],2],"33":[1,"A",[7,14],24,[],1]},"24":{"24":[1,"A",[7,14],22,[],2],"34":[2,"A",[7,14],22,[],2]},"34":{"24":[2,"B",[7,14],22,[],2],"34":[1,"A",[7,14],24,[],1]},"25":{"25":[1,"A",[7,14],22,[],2],"35":[2,"A",[7,14],22,[],2],"60":[8,"A",[5,20],23,[],2]},"35":{"25":[2,"B",[7,14],22,[],2],"35":[1,"A",[7,14],24,[],1],"60":[4,"A",[5,20],27,[],1]},"60":{"25":[8,"B",[5,20],23,[],2],"35":[4,"B",[5,20],27,[],1],"60":[1,"A",[0,10],24,[],1]},"36":{"36":[1,"A",[7,14],24,[],1]},"37":{"37":[1,"A",[7,14],24,[],1]},"38":{"38":[1,"A",[7,14],24,[],1],"61":[4,"A",[5,20],27,[],1]},"61":{"38":[4,"B",[5,20],27,[],1],"61":[1,"A",[0,10],24,[],1]},"40":{"40":[1,"A",[0,10],24,[],1]},"41":{"41":[1,"A",[2,15],24,[],1]},"45":{"45":[1,"A",[6,16],24,[],1]},"46":{"46":[1,"A",[6,16],24,[],1]},"47":{"47":[1,"A",[6,16],24,[],1]},"48":{"48":[1,"A",[6,16],24,[],1]},"49":{"49":[1,"A",[6,16],24,[],1]},"50":{"50":[1,"A",[1,11],24,[],1]},"51":{"51":[1,"A",[1,11],24,[],1]},"52":{"52":[1,"A",[0,10],24,[],1]},"53":{"53":[1,"A",[0,10],24,[28],1]},"54":{"54":[1,"A",[0,10],24,[],1]},"55":{"55":[1,"A",[0,10],24,[29],1]},"56":{"56":[1,"A",[0,10],24,[30],1]},"57":{"57":[1,"A",[7,14],24,[],1]},"58":{"58":[1,"A",[7,14],24,[],1]},"62":{"63":[1,"A",[12],24,[],1]},"63":{"62":[1,"B",[12],24,[],1]},"64":{"65":[1,"A",[12],24,[31],1]},"65":{"64":[1,"B",[12],24,[31],1]},"66":{"66":[1,"A",[0,10],24,[32,31],1]},"67":{"67":[1,"A",[0,10],24,[32,31],1]},"68":{"68":[1,"A",[0,10],24,[32,31],1]},"69":{"69":[1,"A",[6,16],24,[],1],"81":[4,"A",[22],27,[],1]},"81":{"69":[4,"B",[22],27,[],1],"81":[1,"A",[1,11],24,[],1]},"70":{"70":[1,"A",[7,14],24,[],1]},"71":{"71":[1,"A",[7,14],24,[],1]},"72":{"72":[1,"A",[7,14],24,[],1],"87":[4,"A",[5,20],27,[33,34,35],1]},"87":{"72":[4,"B",[5,20],27,[33,34,35],1],"79":[4,"B",[5,20],27,[],1],"87":[1,"A",[0,10],24,[],1]},"73":{"73":[1,"A",[6,16],24,[],1]},"74":{"74":[1,"A",[6,16],24,[],1],"86":[4,"A",[22],27,[36],1]},"86":{"74":[4,"B",[22],27,[36],1],"86":[1,"A",[1,11],24,[],1]},"75":{"75":[1,"A",[1,11],24,[],1]},"76":{"76":[1,"A",[1,11],24,[],1]},"77":{"77":[1,"A",[0,10],24,[],1]},"78":{"78":[1,"A",[7,14],24,[],1]},"79":{"79":[1,"A",[7,14],24,[],1],"87":[4,"A",[5,20],27,[],1]},"80":{"80":[1,"A",[0,10],24,[31],1]},"82":{"82":[1,"A",[0,10],24,[],1]},"83":{"84":[1,"A",[12],24,[],1]},"84":{"83":[1,"B",[12],24,[],1]},"85":{"85":[1,"A",[19],24,[],1]},"88":{"88":[1,"A",[0,10],24,[37],1]},"89":{"89":[1,"A",[0,10],24,[38],1]},"90":{"90":[1,"A",[0,10],24,[39,31],1]},"91":{"91":[1,"A",[0,10],24,[39,31],1]},"92":{"93":[1,"A",[12],24,[],1]},"93":{"92":[1,"B",[12],24,[],1]},"94":{"94":[1,"A",[19],24,[],1]},"95":{"95":[1,"A",[1,11],24,[],1]},"96":{"96":[1,"A",[0,10],24,[],1]},"97":{"97":[1,"A",[0,10],24,[31],1]},"98":{"98":[1,"A",[0,10],24,[31],1]},"99":{"100":[1,"A",[12],24,[],1]},"100":{"99":[1,"B",[12],24,[],1]},"101":{"102":[1,"A",[12],24,[31],1]},"102":{"101":[1,"B",[12],24,[31],1]},"103":{"104":[1,"A",[12],24,[31],1]},"104":{"103":[1,"B",[12],24,[31],1]}},"R":{"0":{"1":40,"2":41,"3":41,"4":41,"5":41,"6":42,"7":41,"9":42,"10":43,"11":40,"12":40,"13":41,"14":41,"15":41,"16":41,"17":41,"18":41,"19":44,"20":44,"21":44,"22":44,"23":44,"24":44,"26":42,"27":43,"28":45,"29":46,"30":45,"31":46,"32":47,"33":48,"34":49,"35":50,"36":41,"37":41,"38":41,"39":50,"40":50,"41":50,"42":41,"43":44,"44":44,"45":44,"46":51,"47":41,"48":50,"49":50,"50":50,"51":50,"52":50,"53":50,"54":50,"55":51,"56":41,"57":52,"58":52,"59":52,"60":52,"61":52,"62":52,"63":52,"64":52,"65":52},"1":{"2":41,"3":41,"4":41,"5":41,"6":53,"7":41,"8":53,"9":53,"10":53,"12":54,"13":41,"14":41,"15":41,"16":41,"17":41,"18":41,"19":44,"20":44,"21":44,"22":44,"23":44,"24":44,"25":53,"26":53,"27":53,"28":55,"29":56,"30":55,"31":56,"32":57,"33":58,"34":59,"35":50,"36":41,"37":41,"38":41,"39":50,"40":50,"41":50,"42":41,"43":44,"44":44,"45":44,"46":51,"47":41,"48":50,"49":50,"50":50,"51":50,"52":50,"53":50,"54":50,"55":51,"56":41,"57":52,"58":52,"59":52,"60":52,"61":52,"62":52,"63":52,"64":52,"65":52},"2":{"3":60,"4":61,"5":60,"6":62,"7":60,"8":62,"9":62,"10":62,"11":62,"12":62,"13":60,"15":60,"16":44,"17":60,"18":44,"19":62,"20":62,"21":62,"22":62,"23":62,"24":62,"25":62,"26":62,"27":62,"28":62,"29":62,"30":62,"31":62,"32":63,"33":64,"34":65,"35":62,"36":50,"37":66,"38":50,"39":62,"40":62,"41":62,"42":44,"43":62,"44":62,"45":62,"46":67,"47":50,"48":62,"49":62,"50":62,"51":62,"52":62,"53":62,"54":62,"55":67,"56":52,"57":62,"58":62,"59":62,"60":62,"61":62,"62":62,"63":62,"64":62,"65":62},"3":{"4":68,"5":61,"6":62,"8":62,"9":62,"10":62,"11":62,"12":62,"13":69,"14":68,"15":70,"16":71,"17":69,"18":71,"19":62,"20":62,"21":62,"22":62,"23":62,"24":62,"25":62,"26":62,"27":62,"28":62,"29":62,"30":62,"31":62,"32":63,"33":64,"34":65,"35":62,"36":72,"37":73,"38":72,"39":62,"40":62,"41":62,"42":71,"43":62,"44":62,"45":62,"46":67,"47":72,"48":62,"49":62,"50":62,"51":62,"52":62,"53":62,"54":62,"55":67,"56":74,"57":62,"58":62,"59":62,"60":62,"61":62,"62":62,"63":62,"64":62,"65":62},"4":{"5":60,"6":62,"7":60,"8":62,"9":62,"10":62,"11":62,"12":62,"13":60,"15":60,"16":44,"17":60,"18":44,"19":62,"20":62,"21":62,"22":62,"23":62,"24":62,"25":62,"26":62,"27":62,"28":62,"29":62,"30":62,"31":62,"32":75,"33":76,"34":77,"35":62,"36":50,"37":66,"38":50,"39":62,"40":62,"41":62,"42":44,"43":62,"44":62,"45":62,"46":67,"47":50,"48":62,"49":62,"50":62,"51":62,"52":62,"53":62,"54":62,"55":67,"56":52,"57":62,"58":62,"59":62,"60":62,"61":62,"62":62,"63":62,"64":62,"65":62},"5":{"6":62,"7":78,"8":62,"9":62,"10":62,"11":62,"12":62,"13":69,"14":68,"15":79,"16":71,"17":69,"18":71,"19":62,"20":62,"21":62,"22":62,"23":62,"24":62,"25":62,"26":62,"27":62,"28":62,"29":62,"30":62,"31":62,"32":75,"33":76,"34":77,"35":62,"36":72,"37":73,"38":72,"39":62,"40":62,"41":62,"42":71,"43":62,"44":62,"45":62,"46":67,"47":72,"48":62,"49":62,"50":62,"51":62,"52":62,"53":62,"54":62,"55":67,"56":74,"57":62,"58":62,"59":62,"60":62,"61":62,"62":62,"63":62,"64":62,"65":62},"6":{"7":41,"8":42,"10":54,"11":40,"12":40,"13":41,"14":41,"15":41,"16":41,"17":41,"18":41,"19":44,"20":44,"21":44,"22":44,"23":44,"24":44,"25":42,"27":54,"28":45,"29":46,"30":45,"31":46,"32":80,"33":81,"34":82,"35":50,"36":41,"37":41,"38":41,"39":50,"40":50,"41":50,"42":41,"43":44,"44":44,"45":44,"46":51,"47":41,"48":50,"49":50,"50":50,"51":50,"52":50,"53":50,"54":50,"55":51,"56":41,"57":52,"58":52,"59":52,"60":52,"61":52,"62":52,"63":52,"64":52,"65":52},"7":{"8":62,"9":62,"10":62,"11":62,"12":62,"13":69,"14":68,"15":70,"16":71,"17":69,"18":71,"19":62,"20":62,"21":62,"22":62,"23":62,"24":62,"25":62,"26":62,"27":62,"28":62,"29":62,"30":62,"31":62,"32":83,"33":84,"34":85,"35":62,"36":72,"37":73,"38":72,"39":62,"40":62,"41":62,"42":71,"43":62,"44":62,"45":62,"46":67,"47":72,"48":62,"49":62,"50":62,"51":62,"52":62,"53":62,"54":62,"55":67,"56":74,"57":62,"58":62,"59":62,"60":62,"61":62,"62":62,"63":62,"64":62,"65":62},"8":{"9":42,"10":43,"11":40,"12":40,"13":41,"14":41,"15":41,"16":41,"17":41,"18":41,"19":44,"20":44,"21":44,"22":44,"23":44,"24":44,"26":42,"27":43,"28":45,"29":46,"30":45,"31":46,"32":86,"33":87,"34":88,"35":50,"36":41,"37":41,"38":41,"39":50,"40":50,"41":50,"42":41,"43":44,"44":44,"45":44,"46":51,"47":41,"48":50,"49":50,"50":50,"51":50,"52":50,"53":50,"54":50,"55":51,"56":41,"57":52,"58":52,"59":52,"60":52,"61":52,"62":52,"63":52,"64":52,"65":52},"9":{"10":54,"11":40,"12":40,"13":41,"14":41,"15":41,"16":41,"17":41,"18":41,"19":44,"20":44,"21":44,"22":44,"23":44,"24":44,"25":42,"27":54,"28":45,"29":46,"30":45,"31":46,"32":89,"33":90,"34":91,"35":50,"36":41,"37":41,"38":41,"39":50,"40":50,"41":50,"42":41,"43":44,"44":44,"45":44,"46":51,"47":41,"48":50,"49":50,"50":50,"51":50,"52":50,"53":50,"54":50,"55":51,"56":41,"57":52,"58":52,"59":52,"60":52,"61":52,"62":52,"63":52,"64":52,"65":52},"10":{"11":40,"12":40,"13":41,"14":41,"15":41,"16":41,"17":41,"18":41,"19":44,"20":44,"21":44,"22":44,"23":44,"24":44,"25":43,"26":54,"28":45,"29":46,"30":45,"31":46,"32":92,"33":93,"34":94,"35":50,"36":41,"37":41,"38":41,"39":50,"40":50,"41":50,"42":41,"43":44,"44":44,"45":44,"46":51,"47":41,"48":50,"49":50,"50":50,"51":50,"52":50,"53":50,"54":50,"55":51,"56":41,"57":52,"58":52,"59":52,"60":52,"61":52,"62":52,"63":52,"64":52,"65":52},"11":{"12":54,"13":41,"14":41,"15":41,"16":41,"17":41,"18":41,"19":44,"20":44,"21":44,"22":44,"23":44,"24":44,"25":53,"26":53,"27":53,"28":55,"29":56,"30":55,"31":56,"32":95,"33":96,"34":97,"35":50,"36":41,"37":41,"38":41,"39":50,"40":50,"41":50,"42":41,"43":44,"44":44,"45":44,"46":51,"47":41,"48":50,"49":50,"50":50,"51":50,"52":50,"53":50,"54":50,"55":51,"56":41,"57":52,"58":52,"59":52,"60":52,"61":52,"62":52,"63":52,"64":52,"65":52},"12":{"13":41,"14":41,"15":41,"16":41,"17":41,"18":41,"19":44,"20":44,"21":44,"22":44,"23":44,"24":44,"25":53,"26":53,"27":53,"28":55,"29":56,"30":55,"31":56,"32":98,"33":99,"34":100,"35":50,"36":41,"37":41,"38":41,"39":50,"40":50,"41":50,"42":41,"43":44,"44":44,"45":44,"46":51,"47":41,"48":50,"49":50,"50":50,"51":50,"52":50,"53":50,"54":50,"55":51,"56":41,"57":52,"58":52,"59":52,"60":52,"61":52,"62":52,"63":52,"64":52,"65":52},"13":{"14":68,"15":101,"16":71,"17":102,"18":71,"19":62,"20":62,"21":62,"22":62,"23":62,"24":62,"25":62,"26":62,"27":62,"28":62,"29":62,"30":62,"31":62,"32":103,"33":104,"34":105,"35":62,"36":72,"37":73,"38":72,"39":62,"40":62,"41":62,"42":71,"43":62,"44":62,"45":62,"46":67,"47":72,"48":62,"49":62,"50":62,"51":62,"52":62,"53":62,"54":62,"55":67,"56":74,"57":62,"58":62,"59":62,"60":62,"61":62,"62":62,"63":62,"64":62,"65":62},"14":{"15":60,"16":44,"17":60,"18":44,"19":62,"20":62,"21":62,"22":62,"23":62,"24":62,"25":62,"26":62,"27":62,"28":62,"29":62,"30":62,"31":62,"32":106,"33":107,"34":108,"35":62,"36":50,"37":66,"38":50,"39":62,"40":62,"41":62,"42":44,"43":62,"44":62,"45":62,"46":67,"47":50,"48":62,"49":62,"50":62,"51":62,"52":62,"53":62,"54":62,"55":67,"56":52,"57":62,"58":62,"59":62,"60":62,"61":62,"62":62,"63":62,"64":62,"65":62},"15":{"16":71,"17":69,"18":71,"19":62,"20":62,"21":62,"22":62,"23":62,"24":62,"25":62,"26":62,"27":62,"28":62,"29":62,"30":62,"31":62,"32":109,"33":110,"34":111,"35":62,"36":72,"37":73,"38":72,"39":62,"40":62,"41":62,"42":71,"43":62,"44":62,"45":62,"46":67,"47":72,"48":62,"49":62,"50":62,"51":62,"52":62,"53":62,"54":62,"55":67,"56":74,"57":62,"58":62,"59":62,"60":62,"61":62,"62":62,"63":62,"64":62,"65":62},"16":{"17":112,"18":113,"19":62,"20":62,"21":62,"22":62,"23":62,"24":62,"25":62,"26":62,"27":62,"28":62,"29":62,"30":62,"31":62,"32":114,"33":115,"34":116,"35":62,"36":117,"37":118,"38":117,"39":62,"40":62,"41":62,"43":62,"44":62,"45":62,"46":67,"47":117,"48":62,"49":62,"50":62,"51":62,"52":62,"53":62,"54":62,"55":67,"56":119,"57":62,"58":62,"59":62,"60":62,"61":62,"62":62,"63":62,"64":62,"65":62},"17":{"18":71,"19":62,"20":62,"21":62,"22":62,"23":62,"24":62,"25":62,"26":62,"27":62,"28":62,"29":62,"30":62,"31":62,"32":120,"33":121,"34":122,"35":62,"36":72,"37":73,"38":72,"39":62,"40":62,"41":62,"42":71,"43":62,"44":62,"45":62,"46":67,"47":72,"48":62,"49":62,"50":62,"51":62,"52":62,"53":62,"54":62,"55":67,"56":74,"57":62,"58":62,"59":62,"60":62,"61":62,"62":62,"63":62,"64":62,"65":62},"18":{"19":62,"20":62,"21":62,"22":62,"23":62,"24":62,"25":62,"26":62,"27":62,"28":62,"29":62,"30":62,"31":62,"32":123,"33":124,"34":125,"35":62,"36":117,"37":118,"38":117,"39":62,"40":62,"41":62,"42":126,"43":62,"44":62,"45":62,"46":67,"47":117,"48":62,"49":62,"50":62,"51":62,"52":62,"53":62,"54":62,"55":67,"56":119,"57":62,"58":62,"59":62,"60":62,"61":62,"62":62,"63":62,"64":62,"65":62},"19":{"20":54,"21":127,"22":127,"23":127,"24":53,"25":128,"26":128,"27":128,"28":128,"29":128,"30":128,"31":128,"32":129,"33":130,"34":131,"35":117,"36":41,"37":41,"38":41,"39":117,"40":117,"41":117,"42":41,"43":53,"44":55,"45":56,"46":51,"47":41,"48":117,"49":117,"50":117,"51":117,"52":117,"53":117,"54":117,"55":51,"56":41,"57":119,"58":119,"59":119,"60":119,"61":119,"62":119,"63":119,"64":119,"65":119},"20":{"21":127,"22":127,"23":127,"24":53,"25":128,"26":128,"27":128,"28":128,"29":128,"30":128,"31":128,"32":132,"33":133,"34":134,"35":117,"36":41,"37":41,"38":41,"39":117,"40":117,"41":117,"42":41,"43":53,"44":55,"45":56,"46":51,"47":41,"48":117,"49":117,"50":117,"51":117,"52":117,"53":117,"54":117,"55":51,"56":41,"57":119,"58":119,"59":119,"60":119,"61":119,"62":119,"63":119,"64":119,"65":119},"21":{"22":135,"23":136,"24":137,"25":128,"26":128,"27":128,"28":128,"29":128,"30":128,"31":128,"32":138,"33":139,"34":140,"35":117,"36":41,"37":41,"38":41,"39":117,"40":117,"41":117,"42":41,"43":137,"44":141,"45":142,"46":51,"47":41,"48":117,"49":117,"50":117,"51":117,"52":117,"53":117,"54":117,"55":51,"56":41,"57":119,"58":119,"59":119,"60":119,"61":119,"62":119,"63":119,"64":119,"65":119},"22":{"23":143,"24":137,"25":128,"26":128,"27":128,"28":128,"29":128,"30":128,"31":128,"32":144,"33":145,"34":146,"35":117,"36":41,"37":41,"38":41,"39":117,"40":117,"41":117,"42":41,"43":137,"44":141,"45":142,"46":51,"47":41,"48":117,"49":117,"50":117,"51":117,"52":117,"53":117,"54":117,"55":51,"56":41,"57":119,"58":119,"59":119,"60":119,"61":119,"62":119,"63":119,"64":119,"65":119},"23":{"24":137,"25":128,"26":128,"27":128,"28":128,"29":128,"30":128,"31":128,"32":147,"33":148,"34":149,"35":117,"36":41,"37":41,"38":41,"39":117,"40":117,"41":117,"42":41,"43":137,"44":141,"45":142,"46":51,"47":41,"48":117,"49":117,"50":117,"51":117,"52":117,"53":117,"54":117,"55":51,"56":41,"57":119,"58":119,"59":119,"60":119,"61":119,"62":119,"63":119,"64":119,"65":119},"24":{"25":128,"26":128,"27":128,"28":128,"29":128,"30":128,"31":128,"32":150,"33":151,"34":152,"35":117,"36":41,"37":41,"38":41,"39":117,"40":117,"41":117,"42":41,"43":54,"44":45,"45":46,"46":51,"47":41,"48":117,"49":117,"50":117,"51":117,"52":117,"53":117,"54":117,"55":51,"56":41,"57":119,"58":119,"59":119,"60":119,"61":119,"62":119,"63":119,"64":119,"65":119},"25":{"26":42,"27":43,"28":45,"29":46,"30":45,"31":46,"32":153,"33":154,"34":155,"35":50,"36":41,"37":41,"38":41,"39":50,"40":50,"41":50,"42":41,"43":44,"44":44,"45":44,"46":51,"47":41,"48":50,"49":50,"50":50,"51":50,"52":50,"53":50,"54":50,"55":51,"56":41,"57":52,"58":52,"59":52,"60":52,"61":52,"62":52,"63":52,"64":52,"65":52},"26":{"27":54,"28":45,"29":46,"30":45,"31":46,"32":156,"33":157,"34":158,"35":50,"36":41,"37":41,"38":41,"39":50,"40":50,"41":50,"42":41,"43":44,"44":44,"45":44,"46":51,"47":41,"48":50,"49":50,"50":50,"51":50,"52":50,"53":50,"54":50,"55":51,"56":41,"57":52,"58":52,"59":52,"60":52,"61":52,"62":52,"63":52,"64":52,"65":52},"27":{"28":45,"29":46,"30":45,"31":46,"32":159,"33":160,"34":161,"35":50,"36":41,"37":41,"38":41,"39":50,"40":50,"41":50,"42":41,"43":44,"44":44,"45":44,"46":51,"47":41,"48":50,"49":50,"50":50,"51":50,"52":50,"53":50,"54":50,"55":51,"56":41,"57":52,"58":52,"59":52,"60":52,"61":52,"62":52,"63":52,"64":52,"65":52},"28":{"28":162,"30":162,"31":163,"32":164,"33":165,"34":166,"35":50,"36":41,"37":167,"38":41,"39":50,"40":50,"41":50,"42":41,"43":44,"44":162,"45":44,"46":51,"47":41,"48":50,"49":50,"50":50,"51":50,"52":50,"53":162,"54":50,"55":51,"56":41,"57":52,"58":52,"59":52,"60":168,"61":169,"62":168,"63":169,"64":168,"65":169},"29":{"29":170,"30":163,"31":170,"32":171,"33":172,"34":173,"35":50,"36":41,"37":174,"38":41,"39":50,"40":50,"41":50,"42":41,"43":44,"44":44,"45":170,"46":51,"47":41,"48":50,"49":50,"50":50,"51":50,"52":50,"53":50,"54":170,"55":51,"56":41,"57":52,"58":52,"59":52,"60":175,"61":176,"62":175,"63":176,"64":175,"65":176},"30":{"30":162,"32":164,"33":165,"34":166,"35":50,"36":41,"37":167,"38":41,"39":50,"40":50,"41":50,"42":41,"43":44,"44":162,"45":44,"46":51,"47":41,"48":50,"49":50,"50":50,"51":50,"52":50,"53":162,"54":50,"55":51,"56":41,"57":52,"58":52,"59":52,"60":168,"61":169,"62":168,"63":169,"64":168,"65":169},"31":{"31":170,"32":171,"33":172,"34":173,"35":50,"36":41,"37":174,"38":41,"39":50,"40":50,"41":50,"42":41,"43":44,"44":44,"45":170,"46":51,"47":41,"48":50,"49":50,"50":50,"51":50,"52":50,"53":50,"54":170,"55":51,"56":41,"57":52,"58":52,"59":52,"60":175,"61":176,"62":175,"63":176,"64":175,"65":176},"32":{"33":177,"34":178,"35":179,"36":180,"37":181,"38":182,"39":183,"40":184,"41":185,"42":186,"43":187,"44":188,"45":189,"46":190,"47":191,"48":192,"49":193,"50":194,"51":195,"52":195,"53":196,"54":197,"55":198,"56":199,"57":200,"58":201,"59":202,"60":203,"61":204,"62":203,"63":204,"64":203,"65":204},"33":{"34":205,"35":206,"36":207,"37":208,"38":209,"39":210,"40":211,"41":212,"42":213,"43":214,"44":215,"45":216,"46":217,"47":218,"48":219,"49":220,"50":221,"51":222,"52":222,"53":223,"54":224,"55":225,"56":226,"57":227,"58":228,"59":229,"60":230,"61":231,"62":230,"63":231,"64":230,"65":231},"34":{"35":232,"36":233,"37":234,"38":235,"39":236,"40":237,"41":238,"42":239,"43":240,"44":241,"45":242,"46":243,"47":244,"48":245,"49":246,"50":247,"51":248,"52":248,"53":249,"54":250,"55":251,"56":252,"57":253,"58":254,"59":255,"60":256,"61":257,"62":256,"63":257,"64":256,"65":257},"35":{"36":41,"37":41,"38":41,"39":258,"40":54,"41":258,"42":41,"43":259,"44":259,"45":259,"46":51,"47":41,"49":260,"50":260,"51":261,"52":261,"53":45,"54":46,"55":51,"56":41,"57":262,"58":262,"59":262,"60":262,"61":262,"62":262,"63":262,"64":262,"65":262},"36":{"37":263,"38":113,"39":62,"40":62,"41":62,"42":259,"43":62,"44":62,"45":62,"46":67,"48":62,"49":62,"50":62,"51":62,"52":62,"53":62,"54":62,"55":67,"56":262,"57":62,"58":62,"59":62,"60":62,"61":62,"62":62,"63":62,"64":62,"65":62},"37":{"38":264,"39":62,"40":62,"41":62,"42":265,"43":62,"44":62,"45":62,"46":67,"47":264,"48":62,"49":62,"50":62,"51":62,"52":62,"53":62,"54":62,"55":67,"56":266,"57":62,"58":62,"59":62,"60":62,"61":62,"62":62,"63":62,"64":62,"65":62},"38":{"39":62,"40":62,"41":62,"42":259,"43":62,"44":62,"45":62,"46":67,"47":126,"48":62,"49":62,"50":62,"51":62,"52":62,"53":62,"54":62,"55":67,"56":262,"57":62,"58":62,"59":62,"60":62,"61":62,"62":62,"63":62,"64":62,"65":62},"39":{"40":137,"41":135,"42":41,"43":259,"44":259,"45":259,"46":51,"47":41,"48":137,"49":267,"50":267,"51":268,"52":268,"53":141,"54":142,"55":51,"56":41,"57":262,"58":262,"59":262,"60":262,"61":262,"62":262,"63":262,"64":262,"65":262},"40":{"41":258,"42":41,"43":259,"44":259,"45":259,"46":51,"47":41,"49":260,"50":260,"51":261,"52":261,"53":45,"54":46,"55":51,"56":41,"57":262,"58":262,"59":262,"60":262,"61":262,"62":262,"63":262,"64":262,"65":262},"41":{"42":41,"43":259,"44":259,"45":259,"46":51,"47":41,"48":137,"49":267,"50":267,"51":268,"52":268,"53":141,"54":142,"55":51,"56":41,"57":262,"58":262,"59":262,"60":262,"61":262,"62":262,"63":262,"64":262,"65":262},"42":{"43":62,"44":62,"45":62,"46":67,"47":117,"48":62,"49":62,"50":62,"51":62,"52":62,"53":62,"54":62,"55":67,"56":119,"57":62,"58":62,"59":62,"60":62,"61":62,"62":62,"63":62,"64":62,"65":62},"43":{"44":45,"45":46,"46":51,"47":41,"48":117,"49":117,"50":117,"51":117,"52":117,"53":117,"54":117,"55":51,"56":41,"57":119,"58":119,"59":119,"60":119,"61":119,"62":119,"63":119,"64":119,"65":119},"44":{"44":162,"46":51,"47":41,"48":117,"49":117,"50":117,"51":117,"52":117,"53":162,"54":117,"55":51,"56":41,"57":119,"58":119,"59":119,"60":168,"61":169,"62":168,"63":169,"64":168,"65":169},"45":{"45":170,"46":51,"47":41,"48":117,"49":117,"50":117,"51":117,"52":117,"53":117,"54":170,"55":51,"56":41,"57":119,"58":119,"59":119,"60":175,"61":176,"62":175,"63":176,"64":175,"65":176},"46":{"47":269,"48":270,"49":270,"50":270,"51":270,"52":270,"53":270,"54":270,"55":262,"56":269,"57":270,"58":270,"59":270,"60":270,"61":270,"62":270,"63":270,"64":270,"65":270},"47":{"48":62,"49":62,"50":62,"51":62,"52":62,"53":62,"54":62,"55":67,"56":262,"57":62,"58":62,"59":62,"60":62,"61":62,"62":62,"63":62,"64":62,"65":62},"48":{"49":260,"50":260,"51":261,"52":261,"53":45,"54":46,"55":51,"56":41,"57":262,"58":262,"59":262,"60":262,"61":262,"62":262,"63":262,"64":262,"65":262},"49":{"50":143,"51":271,"52":271,"53":272,"54":273,"55":51,"56":41,"57":262,"58":262,"59":262,"60":262,"61":262,"62":262,"63":262,"64":262,"65":262},"50":{"51":271,"52":271,"53":272,"54":273,"55":51,"56":41,"57":262,"58":262,"59":262,"60":262,"61":262,"62":262,"63":262,"64":262,"65":262},"51":{"52":143,"53":274,"54":275,"55":51,"56":41,"57":262,"58":262,"59":262,"60":262,"61":262,"62":262,"63":262,"64":262,"65":262},"52":{"53":274,"54":275,"55":51,"56":41,"57":262,"58":262,"59":262,"60":262,"61":262,"62":262,"63":262,"64":262,"65":262},"53":{"53":162,"55":51,"56":41,"57":262,"58":262,"59":262,"60":168,"61":169,"62":168,"63":169,"64":168,"65":169},"54":{"54":170,"55":51,"56":41,"57":262,"58":262,"59":262,"60":175,"61":176,"62":175,"63":176,"64":175,"65":176},"55":{"56":269,"57":270,"58":270,"59":270,"60":270,"61":270,"62":270,"63":270,"64":270,"65":270},"56":{"57":62,"58":62,"59":62,"60":62,"61":62,"62":62,"63":62,"64":62,"65":62},"57":{"58":135,"59":260,"60":276,"61":277,"62":276,"63":277,"64":276,"65":277},"58":{"59":260,"60":276,"61":277,"62":276,"63":277,"64":276,"65":277},"59":{"60":278,"61":279,"62":278,"63":279,"64":278,"65":279},"60":{"60":280,"62":280,"63":163,"64":280,"65":135},"61":{"61":281,"62":163,"63":281,"64":135,"65":281},"62":{"62":280,"64":280,"65":282},"63":{"63":281,"64":282,"65":281},"64":{"64":280},"65":{"65":281}},"T":{"DCS240|ET7402-PSM4-2|DCS203|ET5402-LR":"PLM 回報","DCS203|ET5402-LR|DCS240|ET7402-PSM4-2":"PLM 回報","AIS800-64O|ET8001-2DR4|DCS240|ET7502-DR4":"none","DCS240|ET7502-DR4|AIS800-64O|ET8001-2DR4":"none","AIS800-64O|ET8001-SR8|AIS800-64O|ET8001-SR8":"none","AIS800-64O|ET8001-2DR4|CX7-400G-QSFP112|ET7512-DR4":"none","CX7-400G-QSFP112|ET7512-DR4|AIS800-64O|ET8001-2DR4":"none","AIS800-64O|ET8001-2DR4|DCS204|ET7402-DR1":"none","DCS204|ET7402-DR1|AIS800-64O|ET8001-2DR4":"none"},"S":["1 x 800G (8 lanes 100G PAM4)","2 x 400G (4 lanes 100G PAM4)","4 x 200G (2 lanes 100G PAM4)","8 x 100G (1 lane 100G PAM4)","1 x 400G (8 lanes 50G PAM4)","2 x 200G (4 lanes 50G PAM4)","4 x 100G (2 lanes 50G PAM4)","8 x 50G (1 lane 50G PAM4)","1 x 400G (4 lanes 100G PAM4)","2 x 200G (2 lanes 100G PAM4)","4 x 100G (1 lane 100G PAM4)","1 x 200G (4 lanes 50G PAM4)","2 x 100G (2 lanes 50G PAM4)","4 x 50G (1 lane 50G PAM4)","1 x 100G (4 lanes 25G NRZ)","2 x 50G (2 lanes 25G NRZ)","4 x 25G (1 lane 25G NRZ)","1 x 40G (4 lanes 10G NRZ)","4 x 10G (1 lane 10G NRZ)","1 x 25G (1 lane 25G NRZ)","1 x 10G (1 lane 10G NRZ)","1 x 1G (1 lane 1G NRZ)","2 條直通線","2 條 1 對 4 分接線","1 條直通線","1 條 1 對 2 分接線","兩端距離規格不同，實際可達距離取較短者 50 m","1 條 1 對 4 分接線","A 端最大發射功率 2.5 dBm 高於對端接收上限 0.0 dBm，短跨距需加裝約 2 dB 衰減器","⚠ A 端最大發射功率 2.9 dBm 超過對端損壞門檻 -3.9 dBm（高 6.8 dB）。短跨距直接對接會打壞對端接收器，務必先加裝至少 8 dB 衰減器","⚠ A 端最大發射功率 6.5 dBm 超過對端損壞門檻 4.5 dBm（高 2.0 dB）。短跨距直接對接會打壞對端接收器，務必先加裝至少 4 dB 衰減器","有一端是 ER/ZR 級（APD 接收器，過載門檻通常在 -5 dBm 上下），短跨距對接容易過載甚至損壞接收器；請查該型號 datasheet 的 overload / damage threshold 並加裝衰減器","相干光模組：兩端須為同型號並設定相同的線路速率與調變","距離規格不同（2000 m 對 10000 m），一般不建議混搭，但有實測記錄佐證此組合可用","兩端距離規格不同，實際可達距離取較短者 2000 m","A 端最大發射功率 2.0 dBm 高於對端接收上限 0.5 dBm，短跨距需加裝約 2 dB 衰減器","兩端距離規格不同，實際可達距離取較短者 150 m","A 端最大發射功率 3.0 dBm 高於對端接收上限 0.0 dBm，短跨距需加裝約 3 dB 衰減器","A 端最大發射功率 4.0 dBm 高於對端接收上限 -6.0 dBm，短跨距需加裝約 10 dB 衰減器","固定波長 DWDM：兩端必須指定同一個通道","波長不同：1310 nm 與 CWDM4 1271/1291/1311/1331 nm，兩者波長不重疊","介質不同：單模 與 多模，光纖種類不同無法互接","距離規格不同：500 m 與 2000 m。光學上其實可通，但工具的配對政策只推薦同規格對接（避免責任與功率預算爭議）","距離規格不同：500 m 與 10000 m。光學上其實可通，但工具的配對政策只推薦同規格對接（避免責任與功率預算爭議）","每通道速率不同：100G 與 25G","波長不同：1310 nm 與 BiDi Tx1270 / Rx1330 nm，兩者波長不重疊","波長不同：1310 nm 與 BiDi Tx1330 / Rx1270 nm，兩者波長不重疊","相干光模組必須兩端同標準：800G-2DR4 與 400G-ZR 不同","相干光模組必須兩端同標準：800G-2DR4 與 400G-ZRLITE 不同","相干光模組必須兩端同標準：800G-2DR4 與 400G-ZRP 不同","每通道速率不同：100G 與 10G","介質不同：單模 與 雙絞線，光纖種類不同無法互接","每通道速率不同：100G 與 1G","波長不同：CWDM4 1271/1291/1311/1331 nm 與 1310 nm，兩者波長不重疊","距離規格不同：2000 m 與 10000 m。光學上其實可通，但工具的配對政策只推薦同規格對接（避免責任與功率預算爭議）","波長不同：CWDM4 1271/1291/1311/1331 nm 與 BiDi Tx1270 / Rx1330 nm，兩者波長不重疊","波長不同：CWDM4 1271/1291/1311/1331 nm 與 BiDi Tx1330 / Rx1270 nm，兩者波長不重疊","相干光模組必須兩端同標準：800G-2FR4 與 400G-ZR 不同","相干光模組必須兩端同標準：800G-2FR4 與 400G-ZRLITE 不同","相干光模組必須兩端同標準：800G-2FR4 與 400G-ZRP 不同","每通道速率不同：100G 與 50G","連接器數量不同：1 個 與 2 個","介質不同：多模 與 單模，光纖種類不同無法互接","相干光模組必須兩端同標準：800G-SR8 與 400G-ZR 不同","相干光模組必須兩端同標準：800G-SR8 與 400G-ZRLITE 不同","相干光模組必須兩端同標準：800G-SR8 與 400G-ZRP 不同","每通道速率不同：100G 與 20G","介質不同：多模 與 雙絞線，光纖種類不同無法互接","每通道速率不同：50G 與 100G","波長不同：850 nm 與 BiDi 850/910 nm，兩者波長不重疊","找不到相容線材：需要 MPO-16/APC 轉 2 x MPO-12/UPC。型別相符的線材有 2 條，但都對不上 —— ET-JPMM-MPO16AF-2XMPO8AF 的 MPO-12 端是 APC，模組需要 UPC","每通道速率不同：50G 與 25G","每通道速率不同：50G 與 10G","每通道速率不同：50G 與 20G","每通道速率不同：50G 與 1G","相干光模組必須兩端同標準：800G-2SR4 與 400G-ZR 不同","相干光模組必須兩端同標準：800G-2SR4 與 400G-ZRLITE 不同","相干光模組必須兩端同標準：800G-2SR4 與 400G-ZRP 不同","連接器數量不同：2 個 與 1 個","找不到相容線材：需要 MPO-12/APC 對 MPO-12/UPC。型別相符的線材有 4 條，但都對不上 —— ET-JPMM-MPO12AF-01B 的 MPO-12 端是 APC，模組需要 UPC","相干光模組必須兩端同標準：800G-2DR4P 與 400G-ZR 不同","相干光模組必須兩端同標準：800G-2DR4P 與 400G-ZRLITE 不同","相干光模組必須兩端同標準：800G-2DR4P 與 400G-ZRP 不同","相干光模組必須兩端同標準：400G-SR8 與 400G-ZR 不同","相干光模組必須兩端同標準：400G-SR8 與 400G-ZRLITE 不同","相干光模組必須兩端同標準：400G-SR8 與 400G-ZRP 不同","相干光模組必須兩端同標準：400G-DR4 與 400G-ZR 不同","相干光模組必須兩端同標準：400G-DR4 與 400G-ZRLITE 不同","相干光模組必須兩端同標準：400G-DR4 與 400G-ZRP 不同","相干光模組必須兩端同標準：400G-XDR4 與 400G-ZR 不同","相干光模組必須兩端同標準：400G-XDR4 與 400G-ZRLITE 不同","相干光模組必須兩端同標準：400G-XDR4 與 400G-ZRP 不同","相干光模組必須兩端同標準：400G-PLR4 與 400G-ZR 不同","相干光模組必須兩端同標準：400G-PLR4 與 400G-ZRLITE 不同","相干光模組必須兩端同標準：400G-PLR4 與 400G-ZRP 不同","相干光模組必須兩端同標準：400G-FR4 與 400G-ZR 不同","相干光模組必須兩端同標準：400G-FR4 與 400G-ZRLITE 不同","相干光模組必須兩端同標準：400G-FR4 與 400G-ZRP 不同","相干光模組必須兩端同標準：400G-LR4 與 400G-ZR 不同","相干光模組必須兩端同標準：400G-LR4 與 400G-ZRLITE 不同","相干光模組必須兩端同標準：400G-LR4 與 400G-ZRP 不同","波長不同：BiDi 850/910 nm 與 850 nm，兩者波長不重疊","每個連接器承載的通道數不同：8 與 2","相干光模組必須兩端同標準：400G-SR4.2-BD 與 400G-ZR 不同","相干光模組必須兩端同標準：400G-SR4.2-BD 與 400G-ZRLITE 不同","相干光模組必須兩端同標準：400G-SR4.2-BD 與 400G-ZRP 不同","相干光模組必須兩端同標準：400G-SR4 與 400G-ZR 不同","相干光模組必須兩端同標準：400G-SR4 與 400G-ZRLITE 不同","相干光模組必須兩端同標準：400G-SR4 與 400G-ZRP 不同","相干光模組必須兩端同標準：200G-SR4 與 400G-ZR 不同","相干光模組必須兩端同標準：200G-SR4 與 400G-ZRLITE 不同","相干光模組必須兩端同標準：200G-SR4 與 400G-ZRP 不同","每通道速率不同：25G 與 50G","波長不同：850 nm 與 SWDM4 850/880/910/940 nm，兩者波長不重疊","相干光模組必須兩端同標準：100G-SR4 與 400G-ZR 不同","相干光模組必須兩端同標準：100G-SR4 與 400G-ZRLITE 不同","相干光模組必須兩端同標準：100G-SR4 與 400G-ZRP 不同","每通道速率不同：25G 與 10G","每通道速率不同：25G 與 20G","每通道速率不同：25G 與 1G","相干光模組必須兩端同標準：100G-SR2-BD 與 400G-ZR 不同","相干光模組必須兩端同標準：100G-SR2-BD 與 400G-ZRLITE 不同","相干光模組必須兩端同標準：100G-SR2-BD 與 400G-ZRP 不同","相干光模組必須兩端同標準：100G-SWDM4 與 400G-ZR 不同","相干光模組必須兩端同標準：100G-SWDM4 與 400G-ZRLITE 不同","相干光模組必須兩端同標準：100G-SWDM4 與 400G-ZRP 不同","波長不同：SWDM4 850/880/910/940 nm 與 850 nm，兩者波長不重疊","波長不同：CWDM4 1271/1291/1311/1331 nm 與 LAN-WDM 1295/1300/1304/1309 nm，兩者波長不重疊","每通道速率不同：25G 與 100G","相干光模組必須兩端同標準：100G-CWDM4 與 400G-ZR 不同","相干光模組必須兩端同標準：100G-CWDM4 與 400G-ZRLITE 不同","相干光模組必須兩端同標準：100G-CWDM4 與 400G-ZRP 不同","相干光模組必須兩端同標準：100G-CWDM4-10 與 400G-ZR 不同","相干光模組必須兩端同標準：100G-CWDM4-10 與 400G-ZRLITE 不同","相干光模組必須兩端同標準：100G-CWDM4-10 與 400G-ZRP 不同","距離規格不同：10000 m 與 40000 m。光學上其實可通，但工具的配對政策只推薦同規格對接（避免責任與功率預算爭議）","距離規格不同：10000 m 與 80000 m。光學上其實可通，但工具的配對政策只推薦同規格對接（避免責任與功率預算爭議）","波長不同：LAN-WDM 1295/1300/1304/1309 nm 與 1310 nm，兩者波長不重疊","相干光模組必須兩端同標準：100G-LR4 與 400G-ZR 不同","相干光模組必須兩端同標準：100G-LR4 與 400G-ZRLITE 不同","相干光模組必須兩端同標準：100G-LR4 與 400G-ZRP 不同","波長不同：LAN-WDM 1295/1300/1304/1309 nm 與 BiDi Tx1270 / Rx1330 nm，兩者波長不重疊","波長不同：LAN-WDM 1295/1300/1304/1309 nm 與 BiDi Tx1330 / Rx1270 nm，兩者波長不重疊","距離規格不同：40000 m 與 80000 m。光學上其實可通，但工具的配對政策只推薦同規格對接（避免責任與功率預算爭議）","相干光模組必須兩端同標準：100G-ER4 與 400G-ZR 不同","相干光模組必須兩端同標準：100G-ER4 與 400G-ZRLITE 不同","相干光模組必須兩端同標準：100G-ER4 與 400G-ZRP 不同","相干光模組必須兩端同標準：100G-ZR4 與 400G-ZR 不同","相干光模組必須兩端同標準：100G-ZR4 與 400G-ZRLITE 不同","相干光模組必須兩端同標準：100G-ZR4 與 400G-ZRP 不同","相干光模組必須兩端同標準：100G-PSM4 與 400G-ZR 不同","相干光模組必須兩端同標準：100G-PSM4 與 400G-ZRLITE 不同","相干光模組必須兩端同標準：100G-PSM4 與 400G-ZRP 不同","相干光模組必須兩端同標準：100G-DR1 與 400G-ZR 不同","相干光模組必須兩端同標準：100G-DR1 與 400G-ZRLITE 不同","相干光模組必須兩端同標準：100G-DR1 與 400G-ZRP 不同","相干光模組必須兩端同標準：100G-FR1 與 400G-ZR 不同","相干光模組必須兩端同標準：100G-FR1 與 400G-ZRLITE 不同","相干光模組必須兩端同標準：100G-FR1 與 400G-ZRP 不同","相干光模組必須兩端同標準：100G-LR1 與 400G-ZR 不同","相干光模組必須兩端同標準：100G-LR1 與 400G-ZRLITE 不同","相干光模組必須兩端同標準：100G-LR1 與 400G-ZRP 不同","BiDi 收發波長必須互補：BiDi Tx1270 / Rx1330 nm 與 BiDi Tx1270 / Rx1330 nm，兩顆都往同方向送，接不起來","距離規格不同：10000 m 與 20000 m。光學上其實可通，但工具的配對政策只推薦同規格對接（避免責任與功率預算爭議）","相干光模組必須兩端同標準：100G-BX-A 與 400G-ZR 不同","相干光模組必須兩端同標準：100G-BX-A 與 400G-ZRLITE 不同","相干光模組必須兩端同標準：100G-BX-A 與 400G-ZRP 不同","BiDi 收發波長必須互補：BiDi Tx1270 / Rx1330 nm 與 BiDi 850/910 nm，兩顆都往同方向送，接不起來","BiDi 收發波長必須互補：BiDi Tx1270 / Rx1330 nm 與 BiDi Tx1310 / Rx1490 nm，兩顆都往同方向送，接不起來","BiDi 收發波長必須互補：BiDi Tx1270 / Rx1330 nm 與 BiDi Tx1490 / Rx1310 nm，兩顆都往同方向送，接不起來","BiDi 收發波長必須互補：BiDi Tx1330 / Rx1270 nm 與 BiDi Tx1330 / Rx1270 nm，兩顆都往同方向送，接不起來","相干光模組必須兩端同標準：100G-BX-B 與 400G-ZR 不同","相干光模組必須兩端同標準：100G-BX-B 與 400G-ZRLITE 不同","相干光模組必須兩端同標準：100G-BX-B 與 400G-ZRP 不同","BiDi 收發波長必須互補：BiDi Tx1330 / Rx1270 nm 與 BiDi 850/910 nm，兩顆都往同方向送，接不起來","BiDi 收發波長必須互補：BiDi Tx1330 / Rx1270 nm 與 BiDi Tx1310 / Rx1490 nm，兩顆都往同方向送，接不起來","BiDi 收發波長必須互補：BiDi Tx1330 / Rx1270 nm 與 BiDi Tx1490 / Rx1310 nm，兩顆都往同方向送，接不起來","相干光模組必須兩端同標準：400G-ZR 與 400G-ZRLITE 不同","相干光模組必須兩端同標準：400G-ZR 與 400G-ZRP 不同","相干光模組必須兩端同標準：400G-ZR 與 100G-PSM4 不同","相干光模組必須兩端同標準：400G-ZR 與 40G-SR4 不同","相干光模組必須兩端同標準：400G-ZR 與 40G-SR-BD 不同","相干光模組必須兩端同標準：400G-ZR 與 40G-SWDM4 不同","相干光模組必須兩端同標準：400G-ZR 與 40G-LR4 不同","相干光模組必須兩端同標準：400G-ZR 與 40G-PLR4 不同","相干光模組必須兩端同標準：400G-ZR 與 40G-ER4 不同","相干光模組必須兩端同標準：400G-ZR 與 25G-SR 不同","相干光模組必須兩端同標準：400G-ZR 與 25G-LR 不同","相干光模組必須兩端同標準：400G-ZR 與 25G-BD23 不同","相干光模組必須兩端同標準：400G-ZR 與 25G-BD32 不同","相干光模組必須兩端同標準：400G-ZR 與 10G-T 不同","相干光模組必須兩端同標準：400G-ZR 與 10G-SR 不同","相干光模組必須兩端同標準：400G-ZR 與 10G-LR 不同","相干光模組必須兩端同標準：400G-ZR 與 10G-ER 不同","相干光模組必須兩端同標準：400G-ZR 與 10G-ZR 不同","相干光模組必須兩端同標準：400G-ZR 與 10G-DWDM 不同","相干光模組必須兩端同標準：400G-ZR 與 10G-BD23 不同","相干光模組必須兩端同標準：400G-ZR 與 10G-BD32 不同","相干光模組必須兩端同標準：400G-ZR 與 1G-T 不同","相干光模組必須兩端同標準：400G-ZR 與 1G-SX 不同","相干光模組必須兩端同標準：400G-ZR 與 1G-LX 不同","相干光模組必須兩端同標準：400G-ZR 與 1G-EX 不同","相干光模組必須兩端同標準：400G-ZR 與 1G-ZX 不同","相干光模組必須兩端同標準：400G-ZR 與 1G-BD34 不同","相干光模組必須兩端同標準：400G-ZR 與 1G-BD43 不同","相干光模組必須兩端同標準：400G-ZRLITE 與 400G-ZRP 不同","相干光模組必須兩端同標準：400G-ZRLITE 與 100G-PSM4 不同","相干光模組必須兩端同標準：400G-ZRLITE 與 40G-SR4 不同","相干光模組必須兩端同標準：400G-ZRLITE 與 40G-SR-BD 不同","相干光模組必須兩端同標準：400G-ZRLITE 與 40G-SWDM4 不同","相干光模組必須兩端同標準：400G-ZRLITE 與 40G-LR4 不同","相干光模組必須兩端同標準：400G-ZRLITE 與 40G-PLR4 不同","相干光模組必須兩端同標準：400G-ZRLITE 與 40G-ER4 不同","相干光模組必須兩端同標準：400G-ZRLITE 與 25G-SR 不同","相干光模組必須兩端同標準：400G-ZRLITE 與 25G-LR 不同","相干光模組必須兩端同標準：400G-ZRLITE 與 25G-BD23 不同","相干光模組必須兩端同標準：400G-ZRLITE 與 25G-BD32 不同","相干光模組必須兩端同標準：400G-ZRLITE 與 10G-T 不同","相干光模組必須兩端同標準：400G-ZRLITE 與 10G-SR 不同","相干光模組必須兩端同標準：400G-ZRLITE 與 10G-LR 不同","相干光模組必須兩端同標準：400G-ZRLITE 與 10G-ER 不同","相干光模組必須兩端同標準：400G-ZRLITE 與 10G-ZR 不同","相干光模組必須兩端同標準：400G-ZRLITE 與 10G-DWDM 不同","相干光模組必須兩端同標準：400G-ZRLITE 與 10G-BD23 不同","相干光模組必須兩端同標準：400G-ZRLITE 與 10G-BD32 不同","相干光模組必須兩端同標準：400G-ZRLITE 與 1G-T 不同","相干光模組必須兩端同標準：400G-ZRLITE 與 1G-SX 不同","相干光模組必須兩端同標準：400G-ZRLITE 與 1G-LX 不同","相干光模組必須兩端同標準：400G-ZRLITE 與 1G-EX 不同","相干光模組必須兩端同標準：400G-ZRLITE 與 1G-ZX 不同","相干光模組必須兩端同標準：400G-ZRLITE 與 1G-BD34 不同","相干光模組必須兩端同標準：400G-ZRLITE 與 1G-BD43 不同","相干光模組必須兩端同標準：400G-ZRP 與 100G-PSM4 不同","相干光模組必須兩端同標準：400G-ZRP 與 40G-SR4 不同","相干光模組必須兩端同標準：400G-ZRP 與 40G-SR-BD 不同","相干光模組必須兩端同標準：400G-ZRP 與 40G-SWDM4 不同","相干光模組必須兩端同標準：400G-ZRP 與 40G-LR4 不同","相干光模組必須兩端同標準：400G-ZRP 與 40G-PLR4 不同","相干光模組必須兩端同標準：400G-ZRP 與 40G-ER4 不同","相干光模組必須兩端同標準：400G-ZRP 與 25G-SR 不同","相干光模組必須兩端同標準：400G-ZRP 與 25G-LR 不同","相干光模組必須兩端同標準：400G-ZRP 與 25G-BD23 不同","相干光模組必須兩端同標準：400G-ZRP 與 25G-BD32 不同","相干光模組必須兩端同標準：400G-ZRP 與 10G-T 不同","相干光模組必須兩端同標準：400G-ZRP 與 10G-SR 不同","相干光模組必須兩端同標準：400G-ZRP 與 10G-LR 不同","相干光模組必須兩端同標準：400G-ZRP 與 10G-ER 不同","相干光模組必須兩端同標準：400G-ZRP 與 10G-ZR 不同","相干光模組必須兩端同標準：400G-ZRP 與 10G-DWDM 不同","相干光模組必須兩端同標準：400G-ZRP 與 10G-BD23 不同","相干光模組必須兩端同標準：400G-ZRP 與 10G-BD32 不同","相干光模組必須兩端同標準：400G-ZRP 與 1G-T 不同","相干光模組必須兩端同標準：400G-ZRP 與 1G-SX 不同","相干光模組必須兩端同標準：400G-ZRP 與 1G-LX 不同","相干光模組必須兩端同標準：400G-ZRP 與 1G-EX 不同","相干光模組必須兩端同標準：400G-ZRP 與 1G-ZX 不同","相干光模組必須兩端同標準：400G-ZRP 與 1G-BD34 不同","相干光模組必須兩端同標準：400G-ZRP 與 1G-BD43 不同","波長不同：1310 nm 與 LAN-WDM 1295/1300/1304/1309 nm，兩者波長不重疊","每通道速率不同：10G 與 25G","波長不同：1310 nm 與 1550 nm，兩者波長不重疊","波長不同：1310 nm 與 DWDM C-band tunable，兩者波長不重疊","每通道速率不同：10G 與 1G","每通道速率不同：10G 與 20G","每通道速率不同：20G 與 10G","每通道速率不同：20G 與 25G","每通道速率不同：20G 與 1G","波長不同：LAN-WDM 1295/1300/1304/1309 nm 與 1550 nm，兩者波長不重疊","波長不同：LAN-WDM 1295/1300/1304/1309 nm 與 DWDM C-band tunable，兩者波長不重疊","介質不同：雙絞線 與 多模，光纖種類不同無法互接","介質不同：雙絞線 與 單模，光纖種類不同無法互接","波長不同：1550 nm 與 DWDM C-band tunable，兩者波長不重疊","波長不同：1550 nm 與 BiDi Tx1270 / Rx1330 nm，兩者波長不重疊","波長不同：1550 nm 與 BiDi Tx1330 / Rx1270 nm，兩者波長不重疊","波長不同：DWDM C-band tunable 與 BiDi Tx1270 / Rx1330 nm，兩者波長不重疊","波長不同：DWDM C-band tunable 與 BiDi Tx1330 / Rx1270 nm，兩者波長不重疊","波長不同：1310 nm 與 BiDi Tx1310 / Rx1490 nm，兩者波長不重疊","波長不同：1310 nm 與 BiDi Tx1490 / Rx1310 nm，兩者波長不重疊","波長不同：1550 nm 與 BiDi Tx1310 / Rx1490 nm，兩者波長不重疊","波長不同：1550 nm 與 BiDi Tx1490 / Rx1310 nm，兩者波長不重疊","BiDi 收發波長必須互補：BiDi Tx1310 / Rx1490 nm 與 BiDi Tx1310 / Rx1490 nm，兩顆都往同方向送，接不起來","BiDi 收發波長必須互補：BiDi Tx1490 / Rx1310 nm 與 BiDi Tx1490 / Rx1310 nm，兩顆都往同方向送，接不起來","距離規格不同：20000 m 與 40000 m。光學上其實可通，但工具的配對政策只推薦同規格對接（避免責任與功率預算爭議）"],"AC":[{"id":"ET5402-DAC","l":"10G,SFP+ TO SFP+ PASSIVE CABLE","md":"","kind":"dac","a":{"ff":"SFP+","n":1,"sp":10,"h":"1x10G"},"b":{"ff":"SFP+","n":1,"sp":10,"h":"1x10G"},"skus":[{"L":2.0,"m":"ET5402-DAC-2M"},{"L":3.0,"m":"ET5402-DAC-3M"},{"L":5.0,"m":"ET5402-DAC-5M"},{"L":7.0,"m":"ET5402-DAC-7M"}],"issue":[]},{"id":"ET6402-10DAC","l":"QSFP+ TO 4XSFP+ PASSIVE CABLE","md":"","kind":"dac","a":{"ff":"QSFP+","n":1,"sp":40,"h":"4x10G"},"b":{"ff":"SFP+","n":4,"sp":10,"h":"1x10G"},"skus":[{"L":1.0,"m":"ET6402-10DAC-1M"},{"L":2.0,"m":"ET6402-10DAC-2M"},{"L":3.0,"m":"ET6402-10DAC-3M"},{"L":5.0,"m":"ET6402-10DAC-5M"}],"issue":[]},{"id":"ET6402-DAC","l":"40G,QSFP+ TO QSFP+ PASSIVE CABLE","md":"","kind":"dac","a":{"ff":"QSFP+","n":1,"sp":40,"h":"4x10G"},"b":{"ff":"QSFP+","n":1,"sp":40,"h":"4x10G"},"skus":[{"L":1.0,"m":"ET6402-DAC-1M"},{"L":3.0,"m":"ET6402-DAC-3M"},{"L":7.0,"m":"ET6402-DAC-7M"}],"issue":[]},{"id":"ET7302-DAC","l":"SFP28 DAC","md":"","kind":"dac","a":{"ff":"SFP28","n":1,"sp":25,"h":"1x25G"},"b":{"ff":"SFP28","n":1,"sp":25,"h":"1x25G"},"skus":[{"L":3.0,"m":"ET7302-DAC-3M"},{"L":5.0,"m":"ET7302-DAC-5M"}],"issue":[]},{"id":"ET7402-25DAC","l":"Q28 to S28*4","md":"","kind":"dac","a":{"ff":"QSFP28","n":1,"sp":100,"h":"4x25G"},"b":{"ff":"SFP28","n":4,"sp":25,"h":"1x25G"},"skus":[{"L":3.0,"m":"ET7402-25DAC-3M"},{"L":5.0,"m":"ET7402-25DAC-5M"}],"issue":[]},{"id":"ET7402-DAC","l":"QSFP28 DAC","md":"","kind":"dac","a":{"ff":"QSFP28","n":1,"sp":100,"h":"4x25G"},"b":{"ff":"QSFP28","n":1,"sp":100,"h":"4x25G"},"skus":[{"L":1.0,"m":"ET7402-DAC-1M"},{"L":3.0,"m":"ET7402-DAC-3M"},{"L":5.0,"m":"ET7402-DAC-5M"}],"issue":[]},{"id":"ET7502-B2D","l":"QDD 400G to 2x QSFP56","md":"","kind":"dac","a":{"ff":"QSFP56-DD","n":1,"sp":400,"h":"8x50G"},"b":{"ff":"QSFP56","n":2,"sp":200,"h":"4x50G"},"skus":[{"L":2.0,"m":"ET7502-B2D-2M"},{"L":3.0,"m":"ET7502-B2D-3M"}],"issue":[]},{"id":"ET7502-B4D","l":"QDD 400G TO 4XQSFP56 PASSIVE CABLE","md":"","kind":"dac","a":{"ff":"QSFP56-DD","n":1,"sp":400,"h":"8x50G"},"b":{"ff":"QSFP56","n":4,"sp":100,"h":"2x50G"},"skus":[{"L":1.0,"m":"ET7502-B4D-1M"},{"L":2.0,"m":"ET7502-B4D-2M"},{"L":3.0,"m":"ET7502-B4D-3M"}],"issue":[]},{"id":"ET7502-DAC","l":"QDD 400G","md":"","kind":"dac","a":{"ff":"QSFP56-DD","n":1,"sp":400,"h":"8x50G"},"b":{"ff":"QSFP56-DD","n":1,"sp":400,"h":"8x50G"},"skus":[{"L":1.0,"m":"ET7502-DAC-1M"},{"L":2.0,"m":"ET7502-DAC-2M"},{"L":3.0,"m":"ET7502-DAC-3M"}],"issue":[]},{"id":"ET8001B2D-Q","l":"OSFP 800G to QSFP112x2","md":"","kind":"dac","a":{"ff":"OSFP","n":1,"sp":800,"h":"8x100G"},"b":{"ff":"QSFP112","n":2,"sp":400,"h":"4x100G"},"skus":[{"L":1.0,"m":"ET8001B2D-1M-Q"},{"L":2.0,"m":"ET8001B2D-2M-Q"},{"L":3.0,"m":"ET8001B2D-3M-Q"}],"issue":[]},{"id":"ET8001B4D-Q","l":"800G OSFP to 4 x 200G QSFP112","md":"","kind":"dac","a":{"ff":"OSFP","n":1,"sp":800,"h":"8x100G"},"b":{"ff":"QSFP112","n":4,"sp":200,"h":"2x100G"},"skus":[{"L":1.0,"m":"ET8001B4D-1M-Q"},{"L":3.0,"m":"ET8001B4D-3M-Q"}],"issue":[]},{"id":"ET8001DAC","l":"OSFP 800G","md":"","kind":"dac","a":{"ff":"OSFP","n":1,"sp":800,"h":"8x100G"},"b":{"ff":"OSFP","n":1,"sp":800,"h":"8x100G"},"skus":[{"L":0.5,"m":"ET8001DAC-0.5M"},{"L":2.0,"m":"ET8001DAC-2M"},{"L":3.0,"m":"ET8001DAC-3M"}],"issue":[]},{"id":"ET5402-AOC","l":"10G SFP+ AOC","md":"MMF","kind":"aoc","a":{"ff":"SFP+","n":1,"sp":10,"h":"1x10G"},"b":{"ff":"SFP+","n":1,"sp":10,"h":"1x10G"},"skus":[{"L":1.0,"m":"ET5402-AOC-1M"},{"L":3.0,"m":"ET5402-AOC-3M"},{"L":5.0,"m":"ET5402-AOC-5M"},{"L":7.0,"m":"ET5402-AOC-7M"},{"L":10.0,"m":"ET5402-AOC-10M"},{"L":15.0,"m":"ET5402-AOC-15M"},{"L":30.0,"m":"ET5402-AOC-30M"}],"issue":[]},{"id":"ET5402-AOC-I","l":"10G SFP+ AOC","md":"MMF","kind":"aoc","a":{"ff":"SFP+","n":1,"sp":10,"h":"1x10G"},"b":{"ff":"SFP+","n":1,"sp":10,"h":"1x10G"},"skus":[{"L":3.0,"m":"ET5402-AOC-3MI"},{"L":5.0,"m":"ET5402-AOC-5MI"},{"L":7.0,"m":"ET5402-AOC-7MI"},{"L":10.0,"m":"ET5402-AOC-10MI"},{"L":15.0,"m":"ET5402-AOC-15MI"},{"L":30.0,"m":"ET5402-AOC-30MI"}],"issue":[]},{"id":"ET6402-10AOC","l":"40G QSFP+ to 4 x 10G SFP+ AOC Breakout Cable","md":"MMF","kind":"aoc","a":{"ff":"QSFP+","n":1,"sp":40,"h":"4x10G"},"b":{"ff":"SFP+","n":4,"sp":10,"h":"1x10G"},"skus":[{"L":1.0,"m":"ET6402-10AOC-1M"},{"L":2.0,"m":"ET6402-10AOC-2M"},{"L":3.0,"m":"ET6402-10AOC-3M"},{"L":5.0,"m":"ET6402-10AOC-5M"},{"L":7.0,"m":"ET6402-10AOC-7M"},{"L":10.0,"m":"ET6402-10AOC-10M"},{"L":15.0,"m":"ET6402-10AOC-15M"},{"L":30.0,"m":"ET6402-10AOC-30M"},{"L":100.0,"m":"ET6402-10AOC-100M"}],"issue":[]},{"id":"ET6402-AOC","l":"40G QSFP+ to 40G QSFP+ AOC cable","md":"MMF","kind":"aoc","a":{"ff":"QSFP+","n":1,"sp":40,"h":"4x10G"},"b":{"ff":"QSFP+","n":1,"sp":40,"h":"4x10G"},"skus":[{"L":3.0,"m":"ET6402-AOC-3M"},{"L":5.0,"m":"ET6402-AOC-5M"},{"L":7.0,"m":"ET6402-AOC-7M"},{"L":10.0,"m":"ET6402-AOC-10M"},{"L":15.0,"m":"ET6402-AOC-15M"},{"L":30.0,"m":"ET6402-AOC-30M"},{"L":100.0,"m":"ET6402-AOC100M"}],"issue":[]},{"id":"ET7302-AOC","l":"25G SFP28 to 25G SFP28 AOC cable","md":"MMF","kind":"aoc","a":{"ff":"SFP28","n":1,"sp":25,"h":"1x25G"},"b":{"ff":"SFP28","n":1,"sp":25,"h":"1x25G"},"skus":[{"L":3.0,"m":"ET7302-AOC-3M"},{"L":5.0,"m":"ET7302-AOC-5M"},{"L":7.0,"m":"ET7302-AOC-7M"},{"L":10.0,"m":"ET7302-AOC-10M"},{"L":15.0,"m":"ET7302-AOC-15M"},{"L":30.0,"m":"ET7302-AOC-30M"}],"issue":[]},{"id":"ET7402-25AOC","l":"100 Gbps QSFP28 to 4 x 25G SFP28 AOC cable","md":"MMF","kind":"aoc","a":{"ff":"QSFP28","n":1,"sp":100,"h":"4x25G"},"b":{"ff":"SFP28","n":4,"sp":25,"h":"1x25G"},"skus":[{"L":1.0,"m":"ET7402-25AOC-1M"},{"L":2.0,"m":"ET7402-25AOC-2M"},{"L":3.0,"m":"ET7402-25AOC-3M"},{"L":5.0,"m":"ET7402-25AOC-5M"},{"L":7.0,"m":"ET7402-25AOC-7M"},{"L":10.0,"m":"ET7402-25AOC-10M"},{"L":15.0,"m":"ET7402-25AOC-15M"},{"L":30.0,"m":"ET7402-25AOC-30M"}],"issue":[]},{"id":"ET7402-AOC","l":"100 Gbps to 100 Gbps AOC cable","md":"MMF","kind":"aoc","a":{"ff":"QSFP28","n":1,"sp":100,"h":"4x25G"},"b":{"ff":"QSFP28","n":1,"sp":100,"h":"4x25G"},"skus":[{"L":1.0,"m":"ET7402-AOC-1M"},{"L":2.0,"m":"ET7402-AOC-2M"},{"L":3.0,"m":"ET7402-AOC-3M"},{"L":5.0,"m":"ET7402-AOC-5M"},{"L":7.0,"m":"ET7402-AOC-7M"},{"L":10.0,"m":"ET7402-AOC-10M"},{"L":15.0,"m":"ET7402-AOC-15M"},{"L":30.0,"m":"ET7402-AOC-30M"},{"L":50.0,"m":"ET7402-AOC-50M"},{"L":100.0,"m":"ET7402-AOC-100M"}],"issue":[]},{"id":"ET7502-AOC","l":"400 Gbps to 400 Gbps AOC cable","md":"MMF","kind":"aoc","a":{"ff":"QSFP56-DD","n":1,"sp":400,"h":"8x50G"},"b":{"ff":"QSFP56-DD","n":1,"sp":400,"h":"8x50G"},"skus":[{"L":1.0,"m":"ET7502-AOC-1M"},{"L":1.0,"m":"ET7502-AOC-1M"},{"L":2.0,"m":"ET7502-AOC-2M"},{"L":2.0,"m":"ET7502-AOC-2M"},{"L":3.0,"m":"ET7502-AOC-3M"},{"L":3.0,"m":"ET7502-AOC-3M"},{"L":5.0,"m":"ET7502-AOC-5M"},{"L":5.0,"m":"ET7502-AOC-5M"},{"L":7.0,"m":"ET7502-AOC-7M"},{"L":7.0,"m":"ET7502-AOC-7M"},{"L":10.0,"m":"ET7502-AOC-10M"},{"L":10.0,"m":"ET7502-AOC-10M"},{"L":15.0,"m":"ET7502-AOC-15M"},{"L":15.0,"m":"ET7502-AOC-15M"},{"L":20.0,"m":"ET7502-AOC-20M"},{"L":20.0,"m":"ET7502-AOC-20M"},{"L":30.0,"m":"ET7502-AOC-30M"},{"L":30.0,"m":"ET7502-AOC-30M"}],"issue":[]},{"id":"ET7502-B2A","l":"400 Gbps QSFP-DD to 2 x 200G QSFP56 Breakout AOC cable","md":"MMF","kind":"aoc","a":{"ff":"QSFP56-DD","n":1,"sp":400,"h":"8x50G"},"b":{"ff":"QSFP56","n":2,"sp":200,"h":"4x50G"},"skus":[{"L":1.0,"m":"ET7502-B2A-1M"},{"L":2.0,"m":"ET7502-B2A-2M"},{"L":3.0,"m":"ET7502-B2A-3M"},{"L":5.0,"m":"ET7502-B2A-5M"},{"L":7.0,"m":"ET7502-B2A-7M"},{"L":10.0,"m":"ET7502-B2A-10M"},{"L":15.0,"m":"ET7502-B2A-15M"},{"L":30.0,"m":"ET7502-B2A-30M"}],"issue":[]},{"id":"ET7502-B4A","l":"400 Gbps QSFP-DD to 4 x 100G QSFP56 Breakout AOC cable","md":"MMF","kind":"aoc","a":{"ff":"QSFP56-DD","n":1,"sp":400,"h":"8x50G"},"b":{"ff":"QSFP56","n":4,"sp":100,"h":"2x50G"},"skus":[{"L":1.0,"m":"ET7502-B4A-1M"},{"L":2.0,"m":"ET7502-B4A-2M"},{"L":3.0,"m":"ET7502-B4A-3M"},{"L":5.0,"m":"ET7502-B4A-5M"},{"L":7.0,"m":"ET7502-B4A-7M"},{"L":10.0,"m":"ET7502-B4A-10M"},{"L":15.0,"m":"ET7502-B4A-15M"},{"L":30.0,"m":"ET7502-B4A-30M"}],"issue":[]},{"id":"ET8001SAOC","l":"800G OSFP-OSFP SM AOC","md":"SMF","kind":"aoc","a":{"ff":"OSFP","n":1,"sp":800,"h":"8x100G"},"b":{"ff":"OSFP","n":1,"sp":800,"h":"8x100G"},"skus":[{"L":1.0,"m":"ET8001SAOC-1M"},{"L":3.0,"m":"ET8001SAOC-3M"},{"L":5.0,"m":"ET8001SAOC-5M"},{"L":7.0,"m":"ET8001SAOC-7M"},{"L":10.0,"m":"ET8001SAOC-10M"},{"L":15.0,"m":"ET8001SAOC-15M"},{"L":20.0,"m":"ET8001SAOC-20M"},{"L":25.0,"m":"ET8001SAOC-25M"},{"L":30.0,"m":"ET8001SAOC-30M"}],"issue":[]},{"id":"ET8001SB2A-O","l":"800G OSFP- 2x 400G OSFP SM Breakout AOC","md":"SMF","kind":"aoc","a":{"ff":"OSFP","n":1,"sp":800,"h":"8x100G"},"b":{"ff":"OSFP","n":2,"sp":400,"h":"4x100G"},"skus":[{"L":1.0,"m":"ET8001SB2A-1M-O"},{"L":3.0,"m":"ET8001SB2A-3M-O"},{"L":5.0,"m":"ET8001SB2A-5M-O"},{"L":7.0,"m":"ET8001SB2A-7M-O"},{"L":10.0,"m":"ET8001SB2A-10M-O"},{"L":15.0,"m":"ET8001SB2A-15M-O"},{"L":20.0,"m":"ET8001SB2A-20M-O"},{"L":25.0,"m":"ET8001SB2A-25M-O"},{"L":30.0,"m":"ET8001SB2A-30M-O"}],"issue":[]},{"id":"ET8001SB2A-Q","l":"800G OSFP- 2x 400G QSFP112 SM Breakout AOC","md":"SMF","kind":"aoc","a":{"ff":"OSFP","n":1,"sp":800,"h":"8x100G"},"b":{"ff":"QSFP112","n":2,"sp":400,"h":"4x100G"},"skus":[{"L":1.0,"m":"ET8001SB2A-1M-Q"},{"L":3.0,"m":"ET8001SB2A-3M-Q"},{"L":5.0,"m":"ET8001SB2A-5M-Q"},{"L":7.0,"m":"ET8001SB2A-7M-Q"},{"L":10.0,"m":"ET8001SB2A-10M-Q"},{"L":15.0,"m":"ET8001SB2A-15M-Q"},{"L":20.0,"m":"ET8001SB2A-20M-Q"},{"L":25.0,"m":"ET8001SB2A-25M-Q"},{"L":30.0,"m":"ET8001SB2A-30M-Q"}],"issue":[]}],"AH":{"12.0":{"0":["a","b"],"1":["b"],"3":["a","b"],"4":["b"],"12":["a","b"],"13":["a","b"],"14":["b"],"16":["a","b"],"17":["b"]},"14.0":{"0":["a","b"],"1":["b"],"12":["a","b"],"13":["a","b"],"14":["b"]},"15.0":{"0":["a","b"],"1":["b"],"12":["a","b"],"13":["a","b"],"14":["b"]},"16.0":{"0":["a","b"],"1":["b"],"12":["a","b"],"13":["a","b"],"14":["b"]},"17.0":{"0":["a","b"],"1":["b"],"12":["a","b"],"13":["a","b"],"14":["b"]},"18.0":{"0":["a","b"],"1":["b"],"3":["a","b"],"4":["b"],"12":["a","b"],"13":["a","b"],"14":["b"],"16":["a","b"],"17":["b"]},"19.0":{"0":["a","b"],"1":["b"],"3":["a","b"],"4":["b"],"12":["a","b"],"13":["a","b"],"14":["b"],"16":["a","b"],"17":["b"]},"20.0":{"0":["a","b"],"1":["b"],"3":["a","b"],"4":["b"],"12":["a","b"],"13":["a","b"],"14":["b"],"16":["a","b"],"17":["b"]},"33.0":{"0":["a","b"],"1":["b"],"3":["a","b"],"4":["b"],"12":["a","b"],"13":["a","b"],"14":["b"],"16":["a","b"],"17":["b"]},"36.0":{"0":["a","b"],"1":["b"],"3":["a","b"],"4":["b"],"12":["a","b"],"13":["a","b"],"14":["b"],"16":["a","b"],"17":["b"]},"37.0":{"0":["a","b"],"1":["b"],"3":["a","b"],"4":["b"],"12":["a","b"],"13":["a","b"],"14":["b"],"16":["a","b"],"17":["b"]},"41.0":{"0":["a","b"],"1":["b"],"3":["a","b"],"4":["b"],"12":["a","b"],"13":["a","b"],"14":["b"],"16":["a","b"],"17":["b"]},"6.0":{"1":["a"],"2":["a","b"],"4":["a"],"5":["a","b"],"6":["a","b"],"7":["a","b"],"8":["a","b"],"14":["a"],"15":["a","b"],"17":["a"],"18":["a","b"],"19":["a","b"],"20":["a","b"],"21":["a","b"]},"7.0":{"1":["a"],"2":["a","b"],"4":["a"],"5":["a","b"],"6":["a","b"],"7":["a","b"],"8":["a","b"],"14":["a"],"15":["a","b"],"17":["a"],"18":["a","b"],"19":["a","b"],"20":["a","b"],"21":["a","b"]},"8.0":{"1":["a"],"2":["a","b"],"4":["a"],"5":["a","b"],"6":["a","b"],"7":["a","b"],"8":["a","b"],"14":["a"],"15":["a","b"],"17":["a"],"18":["a","b"],"19":["a","b"],"20":["a","b"],"21":["a","b"]},"9.0":{"1":["a"],"2":["a","b"],"4":["a"],"5":["a","b"],"6":["a","b"],"7":["a","b"],"8":["a","b"],"14":["a"],"15":["a","b"],"17":["a"],"18":["a","b"],"19":["a","b"],"20":["a","b"],"21":["a","b"]},"10.0":{"1":["a"],"2":["a","b"],"4":["a"],"5":["a","b"],"14":["a"],"15":["a","b"],"17":["a"],"18":["a","b"]},"10.1":{"1":["a"],"2":["a","b"],"4":["a"],"5":["a","b"],"14":["a"],"15":["a","b"],"17":["a"],"18":["a","b"]},"11.0":{"1":["a"],"2":["a","b"],"4":["a"],"5":["a","b"],"14":["a"],"15":["a","b"],"17":["a"],"18":["a","b"]},"12.1":{"1":["a"],"2":["a","b"],"4":["a"],"5":["a","b"],"14":["a"],"15":["a","b"],"17":["a"],"18":["a","b"]},"13.0":{"1":["a"],"2":["a","b"],"4":["a"],"5":["a","b"],"14":["a"],"15":["a","b"],"17":["a"],"18":["a","b"]},"13.1":{"1":["a"],"2":["a","b"],"4":["a"],"5":["a","b"],"14":["a"],"15":["a","b"],"17":["a"],"18":["a","b"]},"14.1":{"1":["a"],"2":["a","b"],"4":["a"],"5":["a","b"],"14":["a"],"15":["a","b"],"17":["a"],"18":["a","b"]},"14.2":{"1":["a"],"2":["a","b"],"4":["a"],"5":["a","b"],"14":["a"],"15":["a","b"],"17":["a"],"18":["a","b"]},"18.1":{"1":["a"],"2":["a","b"],"4":["a"],"5":["a","b"],"14":["a"],"15":["a","b"],"17":["a"],"18":["a","b"]},"19.1":{"1":["a"],"2":["a","b"],"4":["a"],"5":["a","b"],"14":["a"],"15":["a","b"],"17":["a"],"18":["a","b"]},"20.1":{"1":["a"],"2":["a","b"],"4":["a"],"5":["a","b"],"14":["a"],"15":["a","b"],"17":["a"],"18":["a","b"]},"22.0":{"1":["a"],"2":["a","b"],"4":["a"],"5":["a","b"],"6":["b"],"7":["b"],"9":["b"],"10":["b"],"14":["a"],"15":["a","b"],"17":["a"],"18":["a","b"],"20":["b"],"21":["b"],"24":["b"]},"24.0":{"1":["a"],"2":["a","b"],"4":["a"],"5":["a","b"],"6":["b"],"7":["b"],"9":["b"],"10":["b"],"14":["a"],"15":["a","b"],"17":["a"],"18":["a","b"],"20":["b"],"21":["b"],"24":["b"]},"25.0":{"1":["a"],"2":["a","b"],"4":["a"],"5":["a","b"],"6":["b"],"7":["b"],"10":["b"],"14":["a"],"15":["a","b"],"17":["a"],"18":["a","b"],"20":["b"],"21":["b"]},"30.0":{"1":["a"],"2":["a","b"],"4":["a"],"5":["a","b"],"6":["b"],"7":["b"],"9":["b"],"10":["b"],"14":["a"],"15":["a","b"],"17":["a"],"18":["a","b"],"20":["b"],"21":["b"],"24":["b"]},"31.0":{"1":["a"],"2":["a","b"],"4":["a"],"5":["a","b"],"6":["b"],"7":["b"],"10":["b"],"14":["a"],"15":["a","b"],"17":["a"],"18":["a","b"],"20":["b"],"21":["b"]},"32.0":{"1":["a"],"2":["a","b"],"4":["a"],"5":["a","b"],"7":["b"],"14":["a"],"15":["a","b"],"17":["a"],"18":["a","b"],"21":["b"]},"34.0":{"1":["a"],"2":["a","b"],"4":["a"],"5":["a","b"],"6":["b"],"7":["b"],"14":["a"],"15":["a","b"],"17":["a"],"18":["a","b"],"20":["b"],"21":["b"]},"35.0":{"1":["a"],"2":["a","b"],"4":["a"],"5":["a","b"],"7":["b"],"14":["a"],"15":["a","b"],"17":["a"],"18":["a","b"],"21":["b"]},"38.0":{"1":["a"],"2":["a","b"],"4":["a"],"5":["a","b"],"14":["a"],"15":["a","b"],"17":["a"],"18":["a","b"]},"39.0":{"1":["a"],"2":["a","b"],"14":["a"],"15":["a","b"]},"40.0":{"1":["a"],"2":["a","b"],"14":["a"],"15":["a","b"]},"3.0":{"4":["a"],"5":["a","b"],"6":["a","b"],"7":["a","b"],"8":["a","b"],"9":["b"],"10":["b"],"17":["a"],"18":["a","b"],"19":["a","b"],"20":["a","b"],"21":["a","b"],"24":["b"]},"5.0":{"4":["a"],"5":["a","b"],"6":["a","b"],"7":["a","b"],"8":["a","b"],"9":["b"],"10":["b"],"17":["a"],"18":["a","b"],"19":["a","b"],"20":["a","b"],"21":["a","b"],"24":["b"]},"42.0":{"4":["a"],"5":["a","b"],"6":["a","b"],"7":["a","b"],"8":["a","b"],"17":["a"],"18":["a","b"],"19":["a","b"],"20":["a","b"],"21":["a","b"]},"43.0":{"4":["a"],"5":["a","b"],"6":["b"],"7":["b"],"9":["b"],"10":["b"],"17":["a"],"18":["a","b"],"20":["b"],"21":["b"],"24":["b"]},"44.0":{"4":["a"],"5":["a","b"],"6":["b"],"7":["b"],"9":["b"],"10":["b"],"17":["a"],"18":["a","b"],"20":["b"],"21":["b"],"24":["b"]},"27.0":{"6":["b"],"7":["b"],"9":["b"],"10":["b"],"20":["b"],"21":["b"],"24":["b"]},"0.0":{"9":["a"],"10":["a"],"11":["a","b"],"22":["a","b"],"23":["a","b"],"24":["a"]},"1.0":{"9":["a"],"10":["a"],"11":["a","b"],"22":["a","b"],"23":["a","b"],"24":["a"]},"2.0":{"9":["a"],"10":["a"],"11":["a","b"],"22":["a","b"],"23":["a","b"],"24":["a"]},"4.0":{"9":["a"],"10":["a"],"11":["a","b"],"22":["a","b"],"23":["a","b"],"24":["a"]}},"N":{"prefixes":[{"id":"ET4202","speed":"1G","ff":"SFP"},{"id":"ET5402","speed":"10G","ff":"SFP+"},{"id":"ET6401","speed":"40G","ff":"QSFP+"},{"id":"ET6402","speed":"40G","ff":"QSFP+","aka":"目前只用於 AOC/DAC"},{"id":"ET7302","speed":"25G","ff":"SFP28"},{"id":"ET7312","speed":"25G","ff":"SFP28"},{"id":"ET7402","speed":"100G","ff":"QSFP28"},{"id":"ET7452","speed":"200G","ff":"QSFP56"},{"id":"ET7502","speed":"400G","ff":"QSFP56-DD","aka":"pricebook 寫 QSFP-DD"},{"id":"ET7511","speed":"400G","ff":"OSFP112"},{"id":"ET7512","speed":"400G","ff":"QSFP112"},{"id":"ET8001","speed":"800G","ff":"OSFP"},{"id":"ET8002","speed":"800G","ff":"QSFP112-DD"}],"suffixes":[{"id":"SR","media":"多模","reach":"短距","note":"850 nm 並列"},{"id":"SWDM4","media":"多模","reach":"短距","note":"850/880/910/940 nm，走一對光纖"},{"id":"DR","media":"單模","reach":"500 m","note":"1310 nm 並列，MPO"},{"id":"XDR","media":"單模","reach":"2 km","note":"與 DR 同光學，功率加強（QSFP112 線用 DR4P）"},{"id":"PSM4","media":"單模","reach":"2 km","note":"1310 nm 並列，四通道各走一對光纖"},{"id":"PLR","media":"單模","reach":"10 km","note":"1310 nm 並列"},{"id":"FR","media":"單模","reach":"2 km","note":"FR4 是 CWDM4 多波長；FR1 是單波長"},{"id":"LR","media":"單模","reach":"10 km","note":"LR4 是 LAN-WDM 多波長；LR1 是單波長"},{"id":"CWDM4","media":"單模","reach":"2 km","note":"1271/1291/1311/1331 nm（-10 為 10 km 版）"},{"id":"ER","media":"單模","reach":"40 km","note":"APD 接收器，過載門檻低"},{"id":"ZR","media":"單模","reach":"80 km","note":"APD 接收器，短跨距務必加衰減器"},{"id":"BX/BD","media":"單/多模","reach":"依型號","note":"單纖雙向，A/B 或 23/32 成對使用"}],"markers":[{"id":"2xDR4 / 2xFR4","note":"模組上有兩個獨立連接器，可分接成兩條鏈路"},{"id":"尾綴 I、-I、-I1","note":"工規溫度版本（-40~85°C）"},{"id":"Cxy / Ixy","note":"固定通道 DWDM，xy 是通道號，兩端必須同通道"},{"id":"LPO","note":"線性驅動（無 DSP），功耗低但對主機要求較高"},{"id":"-J-","note":"跳線，型號沿用它所服務的模組名"},{"id":"ET-JPSM / ET-JPMM","note":"單模 / 多模 跳線"},{"id":"AF / UF","note":"MPO 母頭 APC / UPC 研磨面"},{"id":"01B","note":"MPO 極性 Type B（兩顆並列模組直接對接只有 Type B 會通）"}]},"meta":{"switches":21,"nics":24,"devices":45,"transceivers":89,"profiles":66,"endpoint_classes":105,"aoc":13,"dac":12,"link_pairs":157,"reasons":2137}};
+const {P,X,C,E,H,M,R,T,S,N,AC,AH} = DB;
+const $ = id => document.getElementById(id);
+const esc = s => String(s??'').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+const st = {a:{sw:0,pg:0,x:null}, b:{sw:0,pg:0,x:null}, cat:'x', aoc:null};
+
+function reach(m){
+  const v = X[m].r;
+  return v>=1000 ? (v/1000)+' km' : v+' m';
+}
+function pgKey(sw,pg){ return sw+'.'+pg; }
+function fitsFor(sw,pg,x){ return (H[pgKey(sw,pg)]||{})[x] || []; }
+function compatModules(sw,pg){ return Object.keys(H[pgKey(sw,pg)]||{}).map(Number); }
+
+// ── 選單 ────────────────────────────────────────────────
+function fillSwitches(sel, side){
+  const grp = (label, kind) => {
+    const rows = P.map((p,i)=>[p,i]).filter(([p])=>(p.k||'switch')===kind);
+    if(!rows.length) return '';
+    return `<optgroup label="${esc(label)}">` + rows.map(([p,i])=>
+      `<option value="${i}">${esc(p.n)}${p.sc?' — '+esc(p.sc):''}</option>`).join('') + '</optgroup>';
+  };
+  sel.innerHTML = grp('Edgecore 交換器','switch') + grp('網卡','nic');
+  sel.value = st[side].sw;
+}
+function fillGroups(sel, side){
+  const p = P[st[side].sw];
+  sel.innerHTML = p.g.map((g,i)=>`<option value="${i}">${esc(g.l)}</option>`).join('');
+  if(st[side].pg >= p.g.length) st[side].pg = 0;
+  sel.value = st[side].pg;
+}
+// 晶片與埠位資訊。埠位模式清單有時十幾行，佔掉整個面板 ——
+// 收進行尾的 ! 裡，需要時才展開。
+function showModes(el, side){
+  const p = P[st[side].sw], g = p.g[st[side].pg];
+  // ★ 這份清單一律是「晶片做得到什麼」，不是「這台保證支援什麼」。
+  //
+  //   即使來自 platform.json 也一樣 —— 那是平台設計時宣告的 breakout 模式，
+  //   出貨的機器是否真的開放，還要看韌體與 NOS 版本。寫成「平台開放」
+  //   等於替它背書，是我不該做的。
+  //
+  //   兩種來源的可信度確實不同，但差別放在來源說明裡講，標題不分。
+  const tip = g.modes.length
+    ? `<b>晶片可產生的埠位模式（${g.modes.length}）</b>`
+      + `<table>${g.modes.map(m=>`<tr><td class="k">${esc(m)}</td></tr>`).join('')}</table>`
+      + `<div class="tipnote">左邊的數字是這個實體埠會切成幾個邏輯埠，`
+      + `括號裡是每個邏輯埠用幾條通道、每條跑多少速率。<br>`
+      + (g.pm
+          ? '來源：該平台 SONiC platform.json 宣告的 breakout 模式。'
+            + '那是<b>設計時定義</b>的，實際可用仍取決於韌體與 NOS 版本。'
+          : '來源：ASIC 的 SerDes 能力推導，該平台沒有 platform.json 可參照。'
+            + '這是<b>晶片做得到</b>的組合，平台設計時未必把這些通道都接出來。')
+      + '導入前請以該機型的 NOS 設定為準。'
+      + `</div>`
+    : '';
+  const head = `<b>${(p.k==='nic'?esc(p.vd)+' · ':'')}${esc(p.asic)}`
+    + (p.tp?` · ${esc(p.tp)}`:'') + ` · ${esc(g.cage)} 埠位 ×${g.c}`
+    + (g.hs ? ` · ${esc(g.hs)} 散熱` : '')
+    + (g.modes.length ? ` · 晶片可產生 ${g.modes.length} 種埠位模式` : '')
+    + (tip ? ` <span class="help" tabindex="0">!<span class="tip">${tip}</span></span>`
+           : '')
+    + `</b>`;
+  const pn = (p.pn && p.pn.length)
+    ? `<div class="pn">料號：${p.pn.map(esc).join('、')}</div>` : '';
+  el.innerHTML = head + pn
+    + (g.modes.length ? '' : '固定銅纜埠位，不使用可插拔模組');
+}
+
+// 對外版不帶 AVL，連圖例一起收掉
+if(!X.some(x=>x.avl)){ const L=$('avlLegend'); if(L) L.hidden = true; }
+
+// AVL 小標記。只有內部版會帶 avl 欄位，對外版拿到空字串就不畫。
+const AVL_LABEL = {p:'AVL', n:'還沒 AVL'};
+function avlTag(x){
+  if(!x.avl || !AVL_LABEL[x.avl]) return '';
+  const t = (x.avlt && x.avlt.length) ? esc(x.avlt.join('\n')) : '';
+  return `<span class="tag avl avl-${x.avl}"${t?` title="${t}"`:''}>${AVL_LABEL[x.avl]}</span>`;
+}
+
+// ── A 端模組清單 ────────────────────────────────────────
+function renderListA(){
+  if(st.cat !== 'x') return renderPanelCable('a');
+  const ids = compatModules(st.a.sw, st.a.pg);
+  const q = $('qA').value.trim().toLowerCase();
+  const hit = ids.filter(i => !q || (X[i].m+' '+X[i].s+' '+X[i].d+' '+X[i].f).toLowerCase().includes(q));
+  $('cntA').textContent = `此埠位可用模組 ${ids.length} 種` + (q?`，符合搜尋 ${hit.length} 種`:'');
+  if(st.a.x!==null && !hit.includes(st.a.x)) st.a.x = null;
+  $('listA').innerHTML = hit.length ? hit.map(i=>{
+    const x = X[i];
+    return `<div class="item ${st.a.x===i?'sel':''}" data-x="${i}">
+      <div class="mn">${esc(x.m)}<span class="tag">${esc(x.f)}</span>${x.hs?`<span class="tag">${esc(x.hs)}</span>`:''}${x.gb?'<span class="tag">gearbox</span>':''}${avlTag(x)}</div>
+      <div class="md">${esc(x.s)} · ${esc(x.cn)} · ${esc(x.md)} · ${reach(i)}</div></div>`;
+  }).join('') : '<div class="empty">此埠位沒有可用的模組。</div>';
+  $('listA').querySelectorAll('.item').forEach(el=>{
+    el.onclick = ()=>{ st.a.x = +el.dataset.x; renderListA(); renderListB(); renderResults(); };
+  });
+}
+
+// ── 配對：H 查表 → M 查表 ───────────────────────────────
+// 只有查表與整理，沒有任何判斷規則 —— 規則都在建置階段算完了。
+function pairRows(xa, xbList){
+  const fa = fitsFor(st.a.sw, st.a.pg, xa);
+  const rows = [];
+  for(const xb of xbList){
+    const fb = fitsFor(st.b.sw, st.b.pg, xb);
+    for(const [eca, opa, cfa, lba] of fa){
+      for(const [ecb, opb, cfb, lbb] of fb){
+        const r = (M[eca]||{})[ecb];
+        if(!r) continue;
+        const [ratio, big, cab, kind, notes, nCab] = r;
+        const tkey = P[st.a.sw].id+'|'+X[xa].m+'|'+P[st.b.sw].id+'|'+X[xb].m;
+        const status = (tkey in T) ? 'verified' : ((cfa&&cfb) ? 'supported' : 'theoretical');
+        // 有正式料號的優先；一旦有，通用型的佔位項目就別再佔版面
+        const real = cab.filter(i => C[i].sku);
+        const cabUse = real.length ? real : [...cab];
+        rows.push({xb, ratio, big, cab: cabUse, kind: S[kind], nCab, status,
+                   spA: E[eca].sp, ka: E[eca].k, kb: E[ecb].k,
+                   reach: Math.min(X[xa].r, X[xb].r),
+                   notes: notes.map(n=>S[n])});
+      }
+    }
+  }
+  return rows;
+}
+
+// A 端選定的模組能對接哪些 B 端模組
+function linkableB(){
+  if(st.a.x === null) return null;
+  return new Set(pairRows(st.a.x, compatModules(st.b.sw, st.b.pg)).map(r=>r.xb));
+}
+
+// ── B 端模組清單 ────────────────────────────────────────
+function renderListB(){
+  if(st.cat !== 'x') return renderPanelCable('b');
+  const ids = compatModules(st.b.sw, st.b.pg);
+  const linkable = linkableB();
+  const onlyLink = $('onlyLink').checked;
+  const q = $('qB').value.trim().toLowerCase();
+
+  let hit = ids.filter(i => !q || (X[i].m+' '+X[i].s+' '+X[i].d+' '+X[i].f).toLowerCase().includes(q));
+  if(onlyLink && linkable) hit = hit.filter(i => linkable.has(i));
+
+  $('cntB').textContent = st.a.x === null
+    ? `此埠位可用模組 ${ids.length} 種。選擇 A 端模組後，這裡會標出可對接的。`
+    : `此埠位可用模組 ${ids.length} 種，其中 ${linkable.size} 種可與 ${X[st.a.x].m} 對接`
+      + (q ? `，符合搜尋 ${hit.length} 種` : '')
+      + '。點選淡色的可查看不能對接的原因。';
+
+  if(st.b.x !== null && !hit.includes(st.b.x)) st.b.x = null;
+
+  $('listB').innerHTML = hit.length ? hit.map(i=>{
+    const x = X[i];
+    const dim = linkable && !linkable.has(i) ? ' dim' : '';
+    return `<div class="item${st.b.x===i?' sel':''}${dim}" data-x="${i}">
+      <div class="mn">${esc(x.m)}<span class="tag">${esc(x.f)}</span>${x.hs?`<span class="tag">${esc(x.hs)}</span>`:''}${x.gb?'<span class="tag">gearbox</span>':''}${avlTag(x)}</div>
+      <div class="md">${esc(x.s)} · ${esc(x.cn)} · ${esc(x.md)} · ${reach(i)}</div></div>`;
+  }).join('') : `<div class="empty">${
+      st.a.x !== null && onlyLink
+        ? `此埠位沒有能與 ${esc(X[st.a.x].m)} 對接的模組。取消勾選可看全部。`
+        : '此埠位沒有可用的模組。'}</div>`;
+
+  $('listB').querySelectorAll('.item').forEach(el=>{
+    el.onclick = ()=>{
+      const v = +el.dataset.x;
+      st.b.x = (st.b.x === v) ? null : v;   // 再點一次取消，回到列出全部
+      renderListB(); renderResults();
+    };
+  });
+}
+
+// ── AOC ────────────────────────────────────────────────────────
+//
+// 與模組完全不同的路徑：兩端焊死，沒有「對端解不解得開」的問題。
+// AH[埠位] = {AOC 索引: [吃得下的端]}，建置時算好，這裡只查表。
+// 目前分類的顯示名稱。所有對使用者的字串都走這裡 ——
+// 硬寫「AOC」在 DAC 模式下會變成錯的訊息。
+const catName = () => st.cat === 'dac' ? 'DAC' : 'AOC';
+
+const aocKey = side => `${st[side].sw}.${st[side].pg}`;
+
+function aocRoles(side, ai){ return (AH[aocKey(side)] || {})[ai] || []; }
+
+// 兩端任一插得上的整合式線材（依目前選的分類過濾）。
+//
+// ★ 要對稱 —— 只看 A 端的話，把 A/B 對調清單就變了，使用者會以為是 bug。
+function aocCandidates(){
+  const set = new Set([...Object.keys(AH[aocKey('a')] || {}),
+                       ...Object.keys(AH[aocKey('b')] || {})].map(Number));
+  return [...set].filter(i => AC[i].kind === st.cat)
+    .sort((x,y) => AC[x].id.localeCompare(AC[y].id));
+}
+
+// 這條 AOC 能不能接在目前的 A/B 兩個埠位之間，回傳兩端的角色
+function aocPair(ai){
+  const ra = aocRoles('a', ai), rb = aocRoles('b', ai);
+  for(const x of ra) for(const y of rb) if(x !== y) return [x, y];
+  return null;
+}
+
+function aocEnd(c, role){ return role === 'a' ? c.a : c.b; }
+
+// AOC / DAC 模式下的面板內容。
+//
+// ★ 整合式線材只有「一條線」要選，不是兩端各選一個 —— 兩邊擺一樣的清單
+//   會讓人不知道該按哪邊。所以兩個面板只負責選交換器與埠位，
+//   線材清單移到下方結果區，跟使用者的實際流程一致：
+//   先決定兩台機器，再挑線。
+function renderPanelCable(side){
+  const n = Object.keys(AH[aocKey(side)] || {}).map(Number)
+    .filter(i => AC[i].kind === st.cat).length;   // 這一端自己插得上幾種
+  const cnt = side === 'a' ? 'cntA' : 'cntB';
+  const list = side === 'a' ? 'listA' : 'listB';
+  $(cnt).textContent = n
+    ? `此埠位可插 ${n} 種 ${catName()}`
+    : `此埠位沒有可用的 ${catName()}`;
+  // ★ 只負責內容，顯示與否一律由 layout() 決定 ——
+  //   先前在這裡設 display:none，切回光模組時沒人還原，清單就永遠不見了。
+  $(list).innerHTML = '';
+}
+
+// 結果列：把 A 端插得上的線材全部列出來，接不到對端的也列，附原因。
+// 可用的排前面 —— 使用者要的是答案，不是清單。
+function aocRows(){
+  const onlyOk = $('aocOnly').checked;
+  const out = [];
+  for(const ai of aocCandidates()){
+    const c = AC[ai];
+    const pr = aocPair(ai);
+    if(onlyOk && !pr) continue;
+    out.push(pr
+      ? {ai, roleA: pr[0], roleB: pr[1], ok: true}
+      : {ai, ok: false, fitA: aocRoles('a', ai), fitB: aocRoles('b', ai)});
+  }
+  out.sort((x, y) => (y.ok - x.ok) || AC[x.ai].id.localeCompare(AC[y.ai].id));
+  return out;
+}
+
+// ── 結果表 ──────────────────────────────────────────────
+//
+// 一列 = 一個完整可下單的組合：A 端模組、B 端模組、中間的光纖線材
+// 並排在同一列。同一組配對在不同速率下可能有多種 breakout
+// （800G 1:1、400G 2:2、200G 4:4…），全部收在「速率」欄，
+// 不再每種各佔一列 —— 對挑料號的人那是雜訊。
+//
+// 每個部件的 Model Name / PN / Description 都能單獨複製；
+// 列尾的按鈕則複製整列三個部件（含數量），TSV 可直接貼進 Excel。
+function mergeRows(rows){
+  const g = new Map();
+  for(const r of rows){
+    const key = r.xb + '|' + r.ratio + '|' + r.big + '|' + r.cab.join(',');
+    if(!g.has(key)) g.set(key, {...r, combos: []});
+    const e = g.get(key);
+    e.combos.push({sp: r.spA, ka: r.ka, kb: r.kb});
+    if(r.status === 'verified') e.status = 'verified';
+    else if(r.status === 'supported' && e.status === 'theoretical') e.status = 'supported';
+  }
+  for(const e of g.values()){
+    const best = new Map();          // 同速率只留通道數最少的（最常見接法）
+    for(const c of e.combos){
+      const cur = best.get(c.sp);
+      if(!cur || c.ka < cur.ka) best.set(c.sp, c);
+    }
+    e.combos = [...best.values()].sort((a,b)=>b.sp-a.sp);
+  }
+  return [...g.values()];
+}
+
+const fmtSpeed = g => g>=1000 ? (g/1000)+'T' : g+'G';
+// 顯示用：主要料號。多來源時備選另外標註，不要串成「A / B」——
+// 那樣看起來像一個料號，複製進 BOM 也不能用。
+const pnOf = x => x.pn1 || ((x.pn && x.pn.length) ? x.pn[0] : '');
+const pnNote = x => {
+  const bits = [];
+  if(x.pnalt && x.pnalt.length) bits.push('另有備選：' + x.pnalt.join('、'));
+  if(x.pnwarn) bits.push(x.pnwarn);
+  return bits.join('；');
+};
+
+// 描述裡的 <L>M 是長度佔位符，選定長度後換成實際值
+const withLen = (desc, L) => (desc||'').replace(/<L>M/g, L != null ? L+'M' : '');
+
+// 預設選有料號的最短長度 —— BOM 用得上的才有意義
+function defaultSku(c){
+  const sk = c.skus || [];
+  const i = sk.findIndex(k => k.p);
+  return i >= 0 ? i : 0;
+}
+
+const cpBtn = (p, ri, ci) =>
+  `<button class="cp" data-p="${p}" data-ri="${ri}"${ci!=null?` data-ci="${ci}"`:''}`
+  + ` title="複製 Model Name / Part Number / Description">⧉</button>`;
+
+// 模組欄：Model Name / PN / 描述三行，右上角一顆複製鈕
+function partCell(model, pn, desc, tag, btn, note){
+  return `<div class="part">`
+       + `<div class="prow"><span class="mono pn">${esc(model)}</span>`
+       + (tag ? `<span class="tag">${esc(tag)}</span>` : '') + (btn||'')
+       + `</div>`
+       + (pn ? `<div class="sub mono">${esc(pn)}</div>`
+             : '<div class="sub nosku">無料號</div>')
+       + (note ? `<div class="sub note">${esc(note)}</div>` : '')
+       + (desc ? `<div class="sub">${esc(desc)}</div>` : '')
+       + `</div>`;
+}
+
+// 線材欄：長度選單就接在 model name 後面，換長度會同步換料號與描述
+function cableCell(idx, ri, ci){
+  const c = C[idx];
+  // Edgecore 沒有這個型式的料號。講清楚比只顯示「無料號」有用 ——
+  // 使用者要知道的是「要自己找貨源」，不是「料號待補」。
+  if(!c.sku)
+    return `<div class="part"><div class="prow">`
+      + `<span class="mono pn nosku">${esc(c.l)}</span>`
+      + `<span class="tag">Edgecore 無此料號</span></div>`
+      + `<div class="sub">${esc(c.spec || c.desc || '')}</div>`
+      + `<div class="sub note">此線材型式 Edgecore 未建立料號，需另行採購</div></div>`;
+  const sk = c.skus || [];
+  const d0 = defaultSku(c);
+  const f = sk[d0] || {};
+  const sel = sk.length
+    ? `<select class="lensel" data-ri="${ri}" data-ci="${ci}">`
+      + sk.map((k,n)=>`<option value="${n}"${n===d0?' selected':''}>`
+                      + `${k.L} m${k.p?'':'（無料號）'}</option>`).join('')
+      + '</select>' : '';
+  return `<div class="part cbl">`
+    + `<div class="prow"><span class="mono pn cbl-m">${esc(f.m || c.id)}</span>`
+    + sel + cpBtn('c', ri, ci) + `</div>`
+    + `<div class="sub mono cbl-p">${f.p ? esc(f.p) : '<span class="nosku">無料號</span>'}</div>`
+    + `<div class="sub cbl-d">${esc(withLen(c.desc || c.l, f.L))}</div></div>`;
+}
+
+// 目前畫面上選中的長度（使用者可能已經改過下拉選單）
+function skuOf(ri, ci){
+  const sel = document.querySelector(`.lensel[data-ri="${ri}"][data-ci="${ci}"]`);
+  const c = C[rowsCache[ri].cab[ci]];
+  const sk = c.skus || [];
+  if(!sk.length) return null;
+  return sk[sel ? +sel.value : defaultSku(c)];
+}
+
+const TSV = a => a.join('\t');
+
+// 單一部件的三個欄位；qty 給整列 BOM 用
+function partTsv(kind, ri, ci){
+  const r = rowsCache[ri];
+  const qa = r.big === 'A' ? 1 : r.ratio, qb = r.big === 'A' ? r.ratio : 1;
+  // ★ BOM 只能填一個料號。多來源時用 pn1（AVL 狀態最好的那個），
+  //   備選放進描述 —— 貼成「A / B」會讓 Excel 那格沒辦法用。
+  // ★ 沒有料號時料號欄不能留空白 —— 貼進 Excel 看起來像資料漏了，
+  //   而不是「這顆還沒有料號」。型號欄照填，那是真的型號（跟線材那邊
+  //   不同，線材沒料號時連型號都只是內部識別字）。
+  const one = (x, q) => [x.m, x.pn1 || pnOf(x) || '（尚無料號）',
+    (x.d || '') + (x.pnalt && x.pnalt.length
+      ? `（另有備選料號：${x.pnalt.join('、')}）` : '')
+      + (x.pnwarn ? `（注意：${x.pnwarn}）` : ''), q];
+  if(kind === 'a') return one(X[st.a.x], qa);
+  if(kind === 'b') return one(X[r.xb], qb);
+  const c = C[r.cab[ci || 0]], k = skuOf(ri, ci || 0);
+  // ★ 線材數量用 nCab，不是模組數量比 —— 800G-2DR4 對 8 顆 DR1
+  //   只要 2 條 1 對 4 分接線，抄數量比會變成 8 條。
+  //
+  // ★ 沒有 Edgecore 料號時，型號欄不能填 c.id（那是內部識別字）——
+  //   會在 BOM 裡變成一個看起來像產品、實際不存在的料。
+  //   改成明確的標記 + 完整規格，讓採購知道要自己找貨源。
+  if(!c.sku)
+    return ['（Edgecore 無此料號，需另行採購）', '（尚無料號）',
+            c.spec || c.l || '', r.nCab];
+  return [k ? (k.m || c.id) : c.id, (k && k.p) || '（尚無料號）',
+          withLen(c.desc || c.l || '', k && k.L), r.nCab];
+}
+
+// 整列 BOM：表頭 + A 端 + B 端 + 線材，含數量
+function bomLines(ri){
+  const out = [['Model Name', 'Part Number', 'Description', 'Qty'],
+               partTsv('a', ri), partTsv('b', ri)];
+  if(rowsCache[ri].cab.length) out.push(partTsv('c', ri, 0));
+  return out.map(TSV).join('\n');
+}
+
+function copyText(text, btn, label){
+  const done = ()=>{ const t = btn.textContent; btn.textContent = label || '已複製';
+                     btn.classList.add('done');
+                     setTimeout(()=>{ btn.textContent = t;
+                                      btn.classList.remove('done'); }, 1200); };
+  if(navigator.clipboard && window.isSecureContext){
+    navigator.clipboard.writeText(text).then(done, ()=>fallback(text, done));
+  } else fallback(text, done);
+}
+
+function fallback(text, done){
+  const ta = document.createElement('textarea');
+  ta.value = text; ta.style.position='fixed'; ta.style.opacity='0';
+  document.body.appendChild(ta); ta.select();
+  try{ document.execCommand('copy'); done(); } finally { ta.remove(); }
+}
+
+// 兩顆模組接不起來時，說明差在哪。
+//
+// 原因是建置階段算好的（R 表，鍵是線側輪廓），這裡只做查表 ——
+// 判斷邏輯不在這個檔案裡。並排列出兩端的線側規格，差異一眼可見。
+function profilesOf(side, xi){
+  const s = st[side];
+  const out = new Set();
+  for(const [ec] of fitsFor(s.sw, s.pg, xi)) out.add(E[ec].p);
+  return [...out];
+}
+
+function whyNot(xa, xb){
+  const a = X[xa], b = X[xb];
+  const reasons = new Set();
+  for(const pa of profilesOf('a', xa))
+    for(const pb of profilesOf('b', xb)){
+      const r = (R[pa]||{})[pb];
+      const r2 = (R[pb]||{})[pa];
+      if(r !== undefined) reasons.add(S[r]);
+      else if(r2 !== undefined) reasons.add(S[r2]);
+    }
+  // 線側相容但湊不出共同速率時，把兩端各自能跑的速率列出來 ——
+  // 使用者才知道是要換埠位（例如改用支援分接的那組）還是換模組。
+  const spOf = side => {
+    const s = st[side], xi = side === 'a' ? xa : xb;
+    return [...new Set(fitsFor(s.sw, s.pg, xi).map(f=>fmtSpeed(E[f[0]].sp)))];
+  };
+  const body = reasons.size
+    ? [...reasons].map(t=>`<div class="whyr">${esc(t)}</div>`).join('')
+    : `<div class="whyr">兩端的光訊號規格是相容的，但在目前選定的埠位上`
+      + `找不到共同的速率：<br>`
+      + `A 端 <b>${esc(P[st.a.sw].g[st.a.pg].l)}</b> 可跑 ${esc(spOf('a').join('、'))}；`
+      + `B 端 <b>${esc(P[st.b.sw].g[st.b.pg].l)}</b> 可跑 ${esc(spOf('b').join('、'))}。<br>`
+      + `若該設備另有支援分接的埠位，改選那一組即可；網卡的埠位不支援分接。</div>`;
+  const row = (tag, m) => `<tr><td class="whyk">${tag}</td>`
+    + `<td class="mono pn">${esc(m.m)}</td>`
+    + `<td class="sub">${esc((m.spec||[]).join(' · '))}</td></tr>`;
+  return `<div class="why"><div class="whyh">`
+    + `${esc(a.m)} 與 ${esc(b.m)} 無法對接</div>${body}`
+    + `<table class="whyt">${row('A 端', a)}${row('B 端', b)}</table></div>`;
+}
+
+let rowsCache = [];
+
+// AOC 的結果表。一條線一列，長度用下拉選；BOM 只有一行 —— 線就是全部。
+const HEAD_X = `<tr><th>A 端模組</th><th>B 端模組</th><th>光纖線材</th>`
+  + `<th title="每個實體埠切成幾個邏輯埠、各跑多少速率">埠模式 · 數量</th>`
+  + `<th>等級</th><th></th></tr>`;
+const HEAD_AOC = `<tr><th>線材型號</th><th>A 端接頭</th><th>B 端接頭</th>`
+  + `<th>速率</th><th>等級</th><th></th></tr>`;
+
+let aocCache = [];
+
+function aocDefaultSku(c){
+  const i = (c.skus || []).findIndex(k => k.p);
+  return i >= 0 ? i : 0;
+}
+
+function aocSku(ri){
+  const sel = document.querySelector(`.aoclen[data-ri="${ri}"]`);
+  const c = AC[aocCache[ri].ai];
+  const sk = c.skus || [];
+  if(!sk.length) return null;
+  return sk[sel ? +sel.value : aocDefaultSku(c)];
+}
+
+function aocTsv(ri){
+  const r = aocCache[ri], c = AC[r.ai], k = aocSku(ri);
+  const ea = aocEnd(c, r.roleA), eb = aocEnd(c, r.roleB);
+  const d = `${c.l}｜${ea.n}x ${ea.ff} (${ea.h}) 對 ${eb.n}x ${eb.ff} (${eb.h})`
+          + (k ? `｜${k.L} m` : '');
+  return [k ? k.m : c.id, (k && k.p) || '', d, 1];
+}
+
+function renderResultsAoc(){
+  const tb = $('res'), emp = $('resEmpty');
+  $('resHead').innerHTML = HEAD_AOC;
+  tb.innerHTML = ''; aocCache = aocRows();
+  if(!aocCache.length){
+    emp.style.display = 'block';
+    const total = aocCandidates().length;
+    emp.innerHTML = total && $('aocOnly').checked
+      ? `這兩個埠位之間沒有接得起來的 ${catName()}。`
+        + `<br><span class="sub">取消上方的勾選，可以看到 ${total} 種`
+        + `其中一端插得上的線材與接不起來的原因。</span>`
+      : `這兩個埠位都插不上任何 ${catName()}。`;
+    return;
+  }
+  emp.style.display = 'none'; emp.innerHTML = '';
+  tb.innerHTML = aocCache.map((r, ri)=>{
+    const c = AC[r.ai];
+    // 接不到對端的：不給長度選單與複製鈕，改成說明為什麼
+    const et = x => `${x.n > 1 ? x.n + 'x ' : ''}${x.ff}`;
+    if(!r.ok){
+      // 三種接不起來的情況，分開講 —— 籠統說「接不到」等於沒說
+      const pa = P[st.a.sw].g[st.a.pg].l, pb = P[st.b.sw].g[st.b.pg].l;
+      const why = !r.fitA.length
+        ? `A 端（${esc(pa)}）插不下這條線的任何一頭`
+        : !r.fitB.length
+          ? `B 端（${esc(pb)}）插不下這條線的任何一頭`
+          : `兩端都只插得下同一頭（${esc(et(aocEnd(c, r.fitA[0])))}），`
+            + `而這條線需要一頭 ${esc(et(c.a))}、另一頭 ${esc(et(c.b))}`;
+      return `<tr class="dimrow">
+        <td><div class="part"><div class="prow">`
+        + `<span class="mono pn">${esc(c.id)}</span></div>`
+        + `<div class="sub">${esc(c.l)}</div></div></td>
+        <td>${esc(et(c.a))}</td><td>${esc(et(c.b))}</td>
+        <td class="sub">${c.a.sp}G</td>
+        <td colspan="2" class="sub note">${why}</td></tr>`;
+    }
+    const ea = aocEnd(c, r.roleA), eb = aocEnd(c, r.roleB);
+    const sk = c.skus || [];  // 可用的才有長度與料號
+    const d0 = aocDefaultSku(c);
+    const k = sk[d0] || {};
+    const sel = sk.length
+      ? `<select class="aoclen" data-ri="${ri}">`
+        + sk.map((x,n)=>`<option value="${n}"${n===d0?' selected':''}>`
+                        + `${x.L} m${x.p?'':'（無料號）'}</option>`).join('')
+        + '</select>' : '';
+    const end = e => `<div class="mono pn">${e.n > 1 ? e.n + 'x ' : ''}`
+      + `${esc(e.ff)}</div><div class="sub">${esc(e.h)}　${e.sp}G/埠</div>`;
+    return `<tr>
+      <td><div class="part"><div class="prow">`
+        + `<span class="mono pn aoc-m">${esc(k.m || c.id)}</span>${sel}`
+        + cpBtnAoc(ri) + `</div>`
+        + `<div class="sub mono aoc-p">${k.p ? esc(k.p)
+             : '<span class="nosku">無料號</span>'}</div>`
+        + `<div class="sub">${esc(c.l)}</div>`
+        + (k.over ? `<div class="note danger">⚠ ${esc(k.over)}</div>` : '')
+        + (c.issue && c.issue.length
+            ? c.issue.map(x=>`<div class="note">${esc(x)}</div>`).join('') : '')
+        + `</div></td>
+      <td>${end(ea)}</td>
+      <td>${end(eb)}</td>
+      <td><span class="cmb">${ea.sp}G</span>
+          <div class="sub">${ea.n}:${eb.n}</div></td>
+      <td><span class="badge b-theoretical">theoretical</span></td>
+      <td><button class="copy" data-ri="${ri}">複製整列</button></td>
+    </tr>`;
+  }).join('');
+
+  tb.querySelectorAll('.aoclen').forEach(sel=>{
+    sel.onchange = ()=>{
+      const ri = +sel.dataset.ri, c = AC[aocCache[ri].ai];
+      const k = (c.skus || [])[+sel.value] || {};
+      const box = sel.closest('.part');
+      box.querySelector('.aoc-m').textContent = k.m || c.id;
+      box.querySelector('.aoc-p').innerHTML = k.p ? esc(k.p)
+        : '<span class="nosku">無料號</span>';
+    };
+  });
+  tb.querySelectorAll('.cp').forEach(btn=>{
+    btn.onclick = ()=>copyText(TSV(aocTsv(+btn.dataset.ri).slice(0,3)), btn, '✓');
+  });
+  tb.querySelectorAll('.copy').forEach(btn=>{
+    btn.onclick = ()=>{
+      const t = aocTsv(+btn.dataset.ri);
+      copyText([['Model Name','Part Number','Description','Qty'], t]
+        .map(TSV).join('\n'), btn);
+    };
+  });
+}
+
+const cpBtnAoc = ri => `<button class="cp" data-ri="${ri}"`
+  + ` title="複製 Model Name / Part Number / Description">⧉</button>`;
+
+function renderResults(){
+  $('resTitle').textContent = st.cat === 'x' ? '可對接的組合'
+                                             : `可用的 ${catName()}`;
+  if(st.cat !== 'x') return renderResultsAoc();
+  const tb = $('res'), emp = $('resEmpty');
+  $('resHead').innerHTML = HEAD_X;
+  tb.innerHTML = ''; rowsCache = [];
+  if(st.a.x === null){
+    emp.style.display='block';
+    emp.textContent='請先在左側選擇 A 端的交換器、埠位與模組。';
+    return;
+  }
+  const targets = st.b.x !== null ? [st.b.x] : compatModules(st.b.sw, st.b.pg);
+  const rows = mergeRows(pairRows(st.a.x, targets));
+  const rank = {verified:0, supported:1, theoretical:2};
+  rows.sort((p,q)=> rank[p.status]-rank[q.status]
+                    || q.combos[0].sp - p.combos[0].sp
+                    || X[p.xb].m.localeCompare(X[q.xb].m));
+  if(!rows.length){
+    emp.style.display='block';
+    emp.innerHTML = st.b.x !== null ? whyNot(st.a.x, st.b.x)
+      : `${esc(X[st.a.x].m)} 在 ${esc(P[st.b.sw].n)} 的此埠位上找不到可對接的模組。`;
+    return;
+  }
+  emp.style.display='none'; emp.innerHTML='';
+  rowsCache = rows;
+  const a = X[st.a.x];
+
+  tb.innerHTML = rows.map((r, ri)=>{
+    const b = X[r.xb];
+    // 兩端埠模式一致時只寫一次；不一致才拆成 A / B（例如 DR4 對 4 顆 DR1）
+    const speeds = r.combos.map(c=>{
+      const one = k => `${k}x${fmtSpeed(c.sp)}`;
+      const t = c.ka === c.kb ? one(c.ka)
+              : `A:${one(c.ka)} <-> B:${one(c.kb)}`;
+      return `<span class="cmb">${esc(t)}</span>`;
+    }).join('');
+    const qty = r.ratio === 1 ? 'A 1 : B 1'
+              : (r.big === 'A' ? `A 1 : B ${r.ratio}` : `A ${r.ratio} : B 1`);
+    return `<tr>
+      <td>${partCell(a.m, pnOf(a), a.d || '', a.f, cpBtn('a', ri), pnNote(a))}</td>
+      <td>${partCell(b.m, pnOf(b), b.d || '', b.f, cpBtn('b', ri), pnNote(b))}</td>
+      <td>${r.cab.length ? r.cab.map((i,ci)=>cableCell(i, ri, ci)).join('')
+                         : '<span class="sub">不需外接線材</span>'}</td>
+      <td>${speeds}<div class="sub">模組數量 ${esc(qty)}</div>
+          <div class="sub">${esc(r.kind)}</div></td>
+      <td><span class="badge b-${r.status}">${r.status}</span>
+          ${r.notes.map(n=>`<div class="note${n.startsWith('⚠')?' danger':''}">`
+                             + `${esc(n)}</div>`).join('')}</td>
+      <td><button class="copy" data-ri="${ri}">複製整列</button></td>
+    </tr>`;
+  }).join('');
+
+  // 換長度 -> 同步該線材的 model name / 料號 / 描述
+  tb.querySelectorAll('.lensel').forEach(sel=>{
+    sel.onchange = ()=>{
+      const r = rowsCache[+sel.dataset.ri];
+      const c = C[r.cab[+sel.dataset.ci]], k = (c.skus||[])[+sel.value] || {};
+      const box = sel.closest('.cbl');
+      box.querySelector('.cbl-m').textContent = k.m || c.id;
+      box.querySelector('.cbl-p').innerHTML = k.p ? esc(k.p)
+        : '<span class="nosku">無料號</span>';
+      box.querySelector('.cbl-d').textContent = withLen(c.desc || c.l, k.L);
+    };
+  });
+  tb.querySelectorAll('.cp').forEach(btn=>{
+    btn.onclick = ()=>copyText(
+      TSV(partTsv(btn.dataset.p, +btn.dataset.ri, +(btn.dataset.ci||0)).slice(0,3)),
+      btn, '✓');
+  });
+  tb.querySelectorAll('.copy').forEach(btn=>{
+    btn.onclick = ()=>copyText(bomLines(+btn.dataset.ri), btn);
+  });
+}
+
+// 在「兩個面板」與「一條壓縮列」之間搬動下拉選單。
+//
+// ★ AOC/DAC 只有一條線要選，兩個大面板裡各只剩兩個下拉選單，空一大塊。
+//   壓成一列，結果表就能拿到整個寬度 —— 那才是要看的東西。
+function layout(){
+  const cable = st.cat !== 'x';
+  if(cable){
+    $('cbA').appendChild($('rowA'));
+    $('cbB').appendChild($('rowB'));
+    $('cbMA').appendChild($('modeA'));
+    $('cbMB').appendChild($('modeB'));
+    $('cbar').style.display = '';
+    $('grid').style.display = 'none';
+  }else{
+    // 搬回原位：homeA/homeB 是定位點，after 保證順序不會亂
+    $('homeA').after($('rowA'), $('modeA'));
+    $('homeB').after($('rowB'), $('modeB'));
+    $('cbar').style.display = 'none';
+    $('grid').style.display = '';
+  }
+  // ★ 所有「哪些元件在這個模式下要顯示」都集中在這裡。
+  //   散在各個 render 函式裡藏東西，還原時一定會漏掉其中一個。
+  //   用 id 直接抓，不用 closest 爬結構 —— 版面一改 closest 就會抓空。
+  const hideInCable = ['onlyLinkWrap', 'qArow', 'qBrow', 'listA', 'listB'];
+  hideInCable.forEach(k => $(k).style.display = cable ? 'none' : '');
+  $('aocOnlyWrap').style.display = cable ? '' : 'none';
+  if(cable) $('qA').value = '';
+}
+
+// ── 全品項清單 ──────────────────────────────────────────
+//
+// 把手上所有產品列出來，不受目前選的交換器/埠位影響。
+// 項目的排版刻意跟左右兩邊的清單一致（.item > .mn + .md），
+// 這樣同一顆模組在兩個地方看起來是同一個東西。
+//
+// ★ 這個浮層自己管自己的顯示，不經過 layout()。
+const allSt = {kind: null};
+
+// 光模組：跟 renderListA / renderListB 用同一組欄位
+function allRowX(i){
+  const x = X[i];
+  return `<div class="item">
+    <div class="mn">${esc(x.m)}<span class="tag">${esc(x.f)}</span>${x.hs?`<span class="tag">${esc(x.hs)}</span>`:''}${x.gb?'<span class="tag">gearbox</span>':''}${avlTag(x)}</div>
+    <div class="md">${esc(x.s)} · ${esc(x.cn)} · ${esc(x.md)} · ${reach(i)}</div></div>`;
+}
+
+// 線材：AOC/DAC 兩端是焊死的，所以標記寫兩端封裝與埠模式
+function allRowC(i){
+  const c = AC[i];
+  const lens = c.skus.map(k => k.L).sort((a,b)=>a-b);
+  const ends = c.a.ff === c.b.ff && c.a.h === c.b.h
+    ? `${esc(c.a.ff)}　${esc(c.a.h)}`
+    : `${esc(c.a.ff)} ${esc(c.a.h)} ⟷ ${esc(c.b.ff)} ${esc(c.b.h)}`;
+  return `<div class="item">
+    <div class="mn">${esc(c.id)}<span class="tag">${c.kind === 'dac' ? 'DAC' : 'AOC'}</span><span class="tag">${ends}</span></div>
+    <div class="md">${esc(c.l || '—')} · 長度 ${lens.join(' / ')} m（${c.skus.length} 個料號）</div></div>`;
+}
+
+function renderAll(){
+  if(!allSt.kind) return;
+  const xc = allSt.kind === 'x';
+  const q = $('allQ').value.trim().toLowerCase();
+  let ids, rows, total;
+  if(xc){
+    ids = X.map((_,i)=>i);
+    total = ids.length;
+    // 搜尋範圍要涵蓋項目上看得到的每一欄，否則會「看得到卻搜不到」
+    ids = ids.filter(i => !q || (X[i].m+' '+X[i].s+' '+X[i].d+' '+X[i].f+' '
+      +X[i].cn+' '+X[i].md+' '+(X[i].hs||'')).toLowerCase().includes(q));
+    ids.sort((a,b)=> (X[b].sp - X[a].sp) || X[a].m.localeCompare(X[b].m));
+    rows = ids.map(allRowX);
+  }else{
+    ids = AC.map((_,i)=>i);
+    total = ids.length;
+    ids = ids.filter(i => !q || (AC[i].id+' '+AC[i].l+' '+AC[i].a.ff+' '+AC[i].b.ff
+      +' '+AC[i].a.h+' '+AC[i].b.h+' '+AC[i].kind).toLowerCase().includes(q));
+    ids.sort((a,b)=> (AC[b].a.sp - AC[a].a.sp) || AC[a].id.localeCompare(AC[b].id));
+    rows = ids.map(allRowC);
+  }
+  $('allCnt').textContent = `共 ${total} 種` + (q ? `，符合 ${ids.length} 種` : '');
+  $('allBody').innerHTML = rows.length ? rows.join('')
+    : '<div class="empty">沒有符合搜尋的項目。</div>';
+}
+
+function openAll(kind){
+  allSt.kind = kind;
+  $('allTitle').textContent = kind === 'x' ? '全部光模組' : '全部 AOC / DAC 線材';
+  $('allQ').placeholder = kind === 'x' ? '搜尋型號或規格…' : '搜尋線材型號或封裝…';
+  $('allQ').value = '';
+  $('allOvl').hidden = false;
+  renderAll();
+  $('allQ').focus();
+}
+
+function closeAll(){ $('allOvl').hidden = true; allSt.kind = null; }
+
+// ── 初始化 ──────────────────────────────────────────────
+function bind(side, swSel, pgSel, modeEl, after){
+  fillSwitches(swSel, side); fillGroups(pgSel, side); showModes(modeEl, side);
+  swSel.onchange = ()=>{ st[side].sw = +swSel.value; st[side].pg = 0;
+    fillGroups(pgSel, side); showModes(modeEl, side); after(); };
+  pgSel.onchange = ()=>{ st[side].pg = +pgSel.value; showModes(modeEl, side); after(); };
+}
+// A 端換交換器或埠位 -> A 的選擇失效，B 的可對接清單也要跟著重算
+bind('a', $('swA'), $('pgA'), $('modeA'),
+     ()=>{ st.a.x=null; renderListA(); renderListB(); renderResults(); });
+bind('b', $('swB'), $('pgB'), $('modeB'),
+     ()=>{ st.b.x=null; renderListB(); renderResults(); });
+$('catSel').querySelectorAll('button[data-cat]').forEach(b=>{
+  b.onclick = ()=>{
+    if(b.disabled) return;
+    st.cat = b.dataset.cat;
+    $('catSel').querySelectorAll('button').forEach(x=>
+      x.classList.toggle('on', x === b));
+    // 切換分類時清掉另一種的選擇，避免顯示到對不上的東西
+    st.a.x = null; st.b.x = null; st.aoc = null;
+    const q = $('qA');
+    q.placeholder = st.cat === 'x' ? '搜尋型號或規格…'
+      : `搜尋 ${catName()} 型號…`;
+    layout();
+    renderListA(); renderListB(); renderResults();
+  };
+});
+
+// 全品項清單的開關。這兩個按鈕不是分類切換，按了不會動到 st.cat ——
+// 所以不加 .on，也不碰 A/B 的選擇。
+$('allSel').querySelectorAll('button[data-all]').forEach(b=>{
+  b.onclick = ()=> openAll(b.dataset.all);
+});
+$('allClose').onclick = closeAll;
+$('allQ').oninput = renderAll;
+// 點背景關閉；點到內容區不關
+$('allOvl').onclick = e =>{ if(e.target === $('allOvl')) closeAll(); };
+document.addEventListener('keydown', e =>{
+  if(e.key === 'Escape' && !$('allOvl').hidden) closeAll();
+});
+
+$('qA').oninput = ()=>{ renderListA(); renderListB(); renderResults(); };
+
+$('aocOnly').onchange = renderResults;
+$('qB').oninput = renderListB;
+$('onlyLink').onchange = renderListB;
+// 預設淺色；使用者切過就記住，重開維持同一個選擇
+try{
+  const saved = localStorage.getItem('theme');
+  if(saved) document.documentElement.setAttribute('data-theme', saved);
+}catch(e){}
+
+$('theme').onclick = ()=>{
+  const dark = document.documentElement.getAttribute('data-theme') === 'dark';
+  const next = dark ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', next);
+  try{ localStorage.setItem('theme', next); }catch(e){}
+};
+
+const nSw = P.filter(p=>(p.k||'switch')==='switch').length;
+$('stat').innerHTML = `${nSw} 台交換器 · ${P.length-nSw} 種網卡 · `
+  + `${X.length} 顆模組 · ${C.length} 種光纖線 · `
+  + `${AC.filter(c=>c.kind==='aoc').length} 種 AOC · `
+  + `${AC.filter(c=>c.kind==='dac').length} 種 DAC`
+  + ` <span class="help" tabindex="0">!<span class="tip">${namingTip()}</span></span>`;
+
+// 命名慣例小抄。資料在 data/naming.yaml，這裡只負責排版。
+function namingTip(){
+  const tbl = (rows) => `<table>${rows}</table>`;
+  const pre = N.prefixes.map(p =>
+    `<tr><td class="k">${esc(p.id)}</td><td>${esc(p.speed)}</td>`
+    + `<td>${esc(p.ff)}</td>`
+    + `<td class="n">${esc(p.aka || '')}</td></tr>`).join('');
+  const suf = N.suffixes.map(p =>
+    `<tr><td class="k">${esc(p.id)}</td><td>${esc(p.media)}</td>`
+    + `<td>${esc(p.reach)}</td><td class="n">${esc(p.note || '')}</td></tr>`).join('');
+  const mk = N.markers.map(p =>
+    `<tr><td class="k">${esc(p.id)}</td><td class="n">${esc(p.note)}</td></tr>`).join('');
+  return `<b>型號前綴 → 速率 · 封裝</b>${tbl(pre)}`
+       + `<b>PMD 後綴（後面的數字是通道數，不是速率）</b>${tbl(suf)}`
+       + `<b>其他記號</b>${tbl(mk)}`;
+}
+$('foot').innerHTML =
+  '判斷依據為模組與平台的電氣與光學規格。實際佈署仍須確認 NOS 版本與模組韌體支援對應的速率與 breakout 模式。'
+  + '<br>標示 <b>theoretical</b> 的組合表示規格由標準推導而未經原廠規格書逐項確認，導入前請先與 Edgecore 確認。';
+
+layout();
+renderListA(); renderListB(); renderResults();
+</script>
+</body>
+</html>

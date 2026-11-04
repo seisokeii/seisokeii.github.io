@@ -4,7 +4,18 @@
         <link>https://seisokeii.github.io/zh-tw/tags/edgecore/</link>
         <description>Edgecore - 標籤 - seisokeii blog</description>
         <generator>Hugo -- gohugo.io</generator><language>zh-TW</language><managingEditor>Noway@bimbimbambam (seisokeii)</managingEditor>
-            <webMaster>Noway@bimbimbambam (seisokeii)</webMaster><lastBuildDate>Fri, 03 Jul 2026 15:20:21 &#43;0800</lastBuildDate><atom:link href="https://seisokeii.github.io/zh-tw/tags/edgecore/" rel="self" type="application/rss+xml" /><item>
+            <webMaster>Noway@bimbimbambam (seisokeii)</webMaster><lastBuildDate>Sat, 03 Oct 2026 13:55:32 &#43;0800</lastBuildDate><atom:link href="https://seisokeii.github.io/zh-tw/tags/edgecore/" rel="self" type="application/rss+xml" /><item>
+    <title>Fiber Optic Transceiver Module 光纖收發器模組型號簡介</title>
+    <link>https://seisokeii.github.io/zh-tw/posts/transceiver/transceiver-intro-05/</link>
+    <pubDate>Sat, 03 Oct 2026 13:55:32 &#43;0800</pubDate>
+    <author>Noway@bimbimbambam (seisokeii)</author>
+    <guid>https://seisokeii.github.io/zh-tw/posts/transceiver/transceiver-intro-05/</guid>
+    <description><![CDATA[<div class="featured-image">
+                <img src="/images/transceiver/xcver-intro-05/xcver-as1813-64o-pasta.jpeg" referrerpolicy="no-referrer">
+            </div><p>走過路過差點錯過，最近機櫃長出一台 1.6T 的 Tomahawk 6C 交換器，老實說滿重的，自己上架機器要小心的~</p>
+<p>從大學 10/100M fast ethernet 玩到現在 1.6T 都已經麻木了QQ 從原本的拿到機器快樂好幾個月到現在上架後就不快樂XD</p>]]></description>
+</item>
+<item>
     <title>CFP2 與 ZR Transceiver 簡介</title>
     <link>https://seisokeii.github.io/zh-tw/posts/transceiver/transceiver-intro-04/</link>
     <pubDate>Fri, 03 Jul 2026 15:20:21 &#43;0800</pubDate>
