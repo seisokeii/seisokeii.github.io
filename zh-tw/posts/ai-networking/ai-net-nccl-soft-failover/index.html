@@ -12,7 +12,8 @@
   <meta property="og:type" content="article">
     <meta property="article:section" content="posts">
     <meta property="article:published_time" content="2026-11-12T15:44:32+08:00">
-    <meta property="article:modified_time" content="2026-11-12T15:44:32+08:00">
+    <meta property="article:modified_time" content="2026-11-12T16:07:08+08:00">
+    <meta property="article:tag" content="AI-Networking">
 
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="NCCL 無 GPU 測試網路層的 Timeout 與 Port Failover">
@@ -32,8 +33,8 @@
         "mainEntityOfPage": {
             "@type": "WebPage",
             "@id": "https:\/\/seisokeii.github.io\/zh-tw\/posts\/ai-networking\/ai-net-nccl-soft-failover\/"
-        },"genre": "posts","wordcount":  14189 ,
-        "url": "https:\/\/seisokeii.github.io\/zh-tw\/posts\/ai-networking\/ai-net-nccl-soft-failover\/","datePublished": "2026-11-12T15:44:32+08:00","dateModified": "2026-11-12T15:44:32+08:00","publisher": {
+        },"genre": "posts","keywords": "AI-Networking","wordcount":  14189 ,
+        "url": "https:\/\/seisokeii.github.io\/zh-tw\/posts\/ai-networking\/ai-net-nccl-soft-failover\/","datePublished": "2026-11-12T15:44:32+08:00","dateModified": "2026-11-12T16:07:08+08:00","publisher": {
             "@type": "Organization",
             "name": ""},"author": {
                 "@type": "Person",
@@ -122,7 +123,7 @@
             <h2 class="toc-title">目錄</h2>
             <div class="toc-content" id="toc-content-auto"></div>
         </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">NCCL 無 GPU 測試網路層的 Timeout 與 Port Failover</h1><div class="post-meta">
-            <div class="post-meta-line"><span class="post-author"><a href="https://github.com/seisokeii" title="Author" target="_blank" rel="noopener noreffer author" class="author"><i class="fas fa-user-circle" aria-hidden="true"></i>seisokeii</a></span></div>
+            <div class="post-meta-line"><span class="post-author"><a href="https://github.com/seisokeii" title="Author" target="_blank" rel="noopener noreffer author" class="author"><i class="fas fa-user-circle" aria-hidden="true"></i>seisokeii</a></span>&nbsp;<span class="post-category">收錄於 <a href="/zh-tw/categories/ai-networking/"><i class="far fa-folder" aria-hidden="true"></i>AI-Networking</a></span></div>
             <div class="post-meta-line"><i class="far fa-calendar-alt" aria-hidden="true"></i>&nbsp;<time datetime="2026-11-12">2026-11-12</time>&nbsp;<i class="fas fa-pencil-alt" aria-hidden="true"></i>&nbsp;約 14189 字&nbsp;
                 <i class="far fa-clock" aria-hidden="true"></i>&nbsp;預計閱讀 29 分鐘&nbsp;</div>
         </div><div class="featured-image"><img
@@ -352,7 +353,7 @@
 <p>從網路的角度看，這會產生<strong>大量「A 傳給 B」的一對一大流量，而且所有連線同時在傳</strong>。</p>
 <h2 id="2-nccl-的分層以及為什麼可以不用-gpu">2. NCCL 的分層，以及為什麼可以不用 GPU</h2>
 <p>NCCL 內部大致分成這幾層：</p>
-<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
     <div class="code-header language-">
         <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
         <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
@@ -557,7 +558,7 @@
     </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="go">user@node-b:~$ ib_write_bw -d rxe0 -x 1 -F --report_gbits -s 1048576 -D 5
 </span></span></span></code></pre></div></div>
 <p>傳送端（node-a）再執行：</p>
-<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
     <div class="code-header language-console">
         <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
         <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
@@ -2055,13 +2056,13 @@
         <div class="post-info-line">
             <div class="post-info-md"></div>
             <div class="post-info-share">
-                <span><a href="javascript:void(0);" title="分享到 X" data-sharer="x" data-url="https://seisokeii.github.io/zh-tw/posts/ai-networking/ai-net-nccl-soft-failover/" data-title="NCCL 無 GPU 測試網路層的 Timeout 與 Port Failover"><i class="fab fa-x-twitter" aria-hidden="true"></i></a><a href="javascript:void(0);" title="分享到 Threads" data-sharer="threads" data-url="https://seisokeii.github.io/zh-tw/posts/ai-networking/ai-net-nccl-soft-failover/" data-title="NCCL 無 GPU 測試網路層的 Timeout 與 Port Failover"><i class="fab fa-threads" aria-hidden="true"></i></a><a href="javascript:void(0);" title="分享到 Diaspora" data-sharer="diaspora" data-url="https://seisokeii.github.io/zh-tw/posts/ai-networking/ai-net-nccl-soft-failover/" data-title="NCCL 無 GPU 測試網路層的 Timeout 與 Port Failover" data-description=""><i class="fab fa-diaspora" aria-hidden="true"></i></a><a href="https://t.me/share/url?url=https%3a%2f%2fseisokeii.github.io%2fzh-tw%2fposts%2fai-networking%2fai-net-nccl-soft-failover%2f&amp;text=NCCL%20%e7%84%a1%20GPU%20%e6%b8%ac%e8%a9%a6%e7%b6%b2%e8%b7%af%e5%b1%a4%e7%9a%84%20Timeout%20%e8%88%87%20Port%20Failover" target="_blank" title="分享到 Telegram"><i class="fab fa-telegram" aria-hidden="true"></i></a></span>
+                <span><a href="javascript:void(0);" title="分享到 X" data-sharer="x" data-url="https://seisokeii.github.io/zh-tw/posts/ai-networking/ai-net-nccl-soft-failover/" data-title="NCCL 無 GPU 測試網路層的 Timeout 與 Port Failover" data-hashtags="AI-Networking"><i class="fab fa-x-twitter" aria-hidden="true"></i></a><a href="javascript:void(0);" title="分享到 Threads" data-sharer="threads" data-url="https://seisokeii.github.io/zh-tw/posts/ai-networking/ai-net-nccl-soft-failover/" data-title="NCCL 無 GPU 測試網路層的 Timeout 與 Port Failover"><i class="fab fa-threads" aria-hidden="true"></i></a><a href="javascript:void(0);" title="分享到 Diaspora" data-sharer="diaspora" data-url="https://seisokeii.github.io/zh-tw/posts/ai-networking/ai-net-nccl-soft-failover/" data-title="NCCL 無 GPU 測試網路層的 Timeout 與 Port Failover" data-description=""><i class="fab fa-diaspora" aria-hidden="true"></i></a><a href="https://t.me/share/url?url=https%3a%2f%2fseisokeii.github.io%2fzh-tw%2fposts%2fai-networking%2fai-net-nccl-soft-failover%2f&amp;text=NCCL%20%e7%84%a1%20GPU%20%e6%b8%ac%e8%a9%a6%e7%b6%b2%e8%b7%af%e5%b1%a4%e7%9a%84%20Timeout%20%e8%88%87%20Port%20Failover" target="_blank" title="分享到 Telegram"><i class="fab fa-telegram" aria-hidden="true"></i></a></span>
             </div>
         </div>
     </div>
 
     <div class="post-info-more">
-        <section class="post-tags"></section>
+        <section class="post-tags"><i class="fas fa-tags" aria-hidden="true"></i>&nbsp;<a href="/zh-tw/tags/ai-networking/">AI-Networking</a></section>
         <section>
             <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/zh-tw/">主頁</a></span>
         </section>

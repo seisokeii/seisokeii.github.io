@@ -1,0 +1,19 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title>AI-Networking - 分類 - seisokeii blog</title>
+        <link>https://seisokeii.github.io/zh-tw/categories/ai-networking/</link>
+        <description>AI-Networking - 分類 - seisokeii blog</description>
+        <generator>Hugo -- gohugo.io</generator><language>zh-TW</language><managingEditor>Noway@bimbimbambam (seisokeii)</managingEditor>
+            <webMaster>Noway@bimbimbambam (seisokeii)</webMaster><lastBuildDate>Thu, 12 Nov 2026 15:44:32 &#43;0800</lastBuildDate><atom:link href="https://seisokeii.github.io/zh-tw/categories/ai-networking/" rel="self" type="application/rss+xml" /><item>
+    <title>NCCL 無 GPU 測試網路層的 Timeout 與 Port Failover</title>
+    <link>https://seisokeii.github.io/zh-tw/posts/ai-networking/ai-net-nccl-soft-failover/</link>
+    <pubDate>Thu, 12 Nov 2026 15:44:32 &#43;0800</pubDate>
+    <author>Noway@bimbimbambam (seisokeii)</author>
+    <guid>https://seisokeii.github.io/zh-tw/posts/ai-networking/ai-net-nccl-soft-failover/</guid>
+    <description><![CDATA[<div class="featured-image">
+                <img src="/images/AINetworking/ai-net-dgx-spark-01.jpeg" referrerpolicy="no-referrer">
+            </div><p>兩台小金磚，原本以為是完整的 CX7，結果是閹割版的&hellip; 不過至少可以拿來測試一點東西～
+哇哩咧現在 AI 真的是比工具人還好用了，都不用自己動手去做實驗誒！ 出一張最就可以拿到測試報告了&hellip; 感覺再這樣下去會變成廢人誒QQ</p>]]></description>
+</item>
+</channel>
+</rss>
