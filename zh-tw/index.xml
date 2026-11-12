@@ -4,9 +4,20 @@
         <link>https://seisokeii.github.io/zh-tw/</link>
         <description>seisokeii&#39;s blog</description>
         <generator>Hugo -- gohugo.io</generator><language>zh-TW</language><managingEditor>Noway@bimbimbambam (seisokeii)</managingEditor>
-            <webMaster>Noway@bimbimbambam (seisokeii)</webMaster><lastBuildDate>Sat, 03 Oct 2026 13:55:32 &#43;0800</lastBuildDate>
+            <webMaster>Noway@bimbimbambam (seisokeii)</webMaster><lastBuildDate>Thu, 12 Nov 2026 15:44:32 &#43;0800</lastBuildDate>
             <atom:link href="https://seisokeii.github.io/zh-tw/index.xml" rel="self" type="application/rss+xml" />
         <item>
+    <title>NCCL 無 GPU 測試網路層的 Timeout 與 Port Failover</title>
+    <link>https://seisokeii.github.io/zh-tw/posts/ai-networking/ai-net-nccl-soft-failover/</link>
+    <pubDate>Thu, 12 Nov 2026 15:44:32 &#43;0800</pubDate>
+    <author>Noway@bimbimbambam (seisokeii)</author>
+    <guid>https://seisokeii.github.io/zh-tw/posts/ai-networking/ai-net-nccl-soft-failover/</guid>
+    <description><![CDATA[<div class="featured-image">
+                <img src="/images/AINetworking/ai-net-dgx-spark-01.jpeg" referrerpolicy="no-referrer">
+            </div><p>兩台小金磚，原本以為是完整的 CX7，結果是閹割版的&hellip; 不過至少可以拿來測試一點東西～
+哇哩咧現在 AI 真的是比工具人還好用了，都不用自己動手去做實驗誒！ 出一張最就可以拿到測試報告了&hellip; 感覺再這樣下去會變成廢人誒QQ</p>]]></description>
+</item>
+<item>
     <title>Edgecore Switch Transceiver Interoperability</title>
     <link>https://seisokeii.github.io/zh-tw/posts/transceiver/transceiver-intro-05/</link>
     <pubDate>Sat, 03 Oct 2026 13:55:32 &#43;0800</pubDate>
@@ -122,19 +133,6 @@
             </div><p>上面這圖是重防營的隊徽以及發放的口罩~ 上面印有我們這一梯次的號碼，不知道是剛好還是真的為了我們這梯印的?</p>
 <hr>
 <p>終於到了義務役的後半段下部隊了! 有關於重防營(<del>破防營</del>)到目前為止(2024/12/06)網路上的資料少的可憐，原因是這個單位成立到現在只有2年多而已&hellip; 哪個連的退伍後我再補上XD</p>]]></description>
-</item>
-<item>
-    <title>台南大內137旅義務役新訓-part2</title>
-    <link>https://seisokeii.github.io/zh-tw/posts/army/army-part2/</link>
-    <pubDate>Sun, 27 Oct 2024 13:30:31 &#43;0800</pubDate>
-    <author>Noway@bimbimbambam (seisokeii)</author>
-    <guid>https://seisokeii.github.io/zh-tw/posts/army/army-part2/</guid>
-    <description><![CDATA[<div class="featured-image">
-                <img src="/images/army/army-daneidoor.png" referrerpolicy="no-referrer">
-            </div><p>上面這圖是 Google Map 街景圖的截圖，因為進營區後相機功能都被鎖住，沒辦法在營區拍照然後偶也懶得特地跑去營區前面拍照QQ</p>
-<hr>
-<p>前兩週是招募週，應該也可以說是適應週啦，反正就是早上起來集合，然後就開始聽招募演講，沒有聽的時候就是學軍歌跟一些軍人要學會的基本教練或是坐著發呆。
-喔對惹第二週是有開始塞一些課程，像是手榴彈投擲。</p>]]></description>
 </item>
 </channel>
 </rss>
