@@ -1,0 +1,19 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title>Infrastructure - 分類 - seisokeii blog</title>
+        <link>https://seisokeii.github.io/zh-tw/categories/infrastructure/</link>
+        <description>Infrastructure - 分類 - seisokeii blog</description>
+        <generator>Hugo -- gohugo.io</generator><language>zh-TW</language><managingEditor>Noway@bimbimbambam (seisokeii)</managingEditor>
+            <webMaster>Noway@bimbimbambam (seisokeii)</webMaster><lastBuildDate>Fri, 13 Nov 2026 14:17:12 &#43;0800</lastBuildDate><atom:link href="https://seisokeii.github.io/zh-tw/categories/infrastructure/" rel="self" type="application/rss+xml" /><item>
+    <title>Proxmox Cloud Init 製作 VM Template</title>
+    <link>https://seisokeii.github.io/zh-tw/posts/infrastructure/infra-pve-cloudinit/</link>
+    <pubDate>Fri, 13 Nov 2026 14:17:12 &#43;0800</pubDate>
+    <author>Noway@bimbimbambam (seisokeii)</author>
+    <guid>https://seisokeii.github.io/zh-tw/posts/infrastructure/infra-pve-cloudinit/</guid>
+    <description><![CDATA[<div class="featured-image">
+                <img src="/images/infrastructure/infra-server-rear-nics.jpeg" referrerpolicy="no-referrer">
+            </div><p>這台速度很快喔 這樣太危險～ 飛太遠～
+總是有酷酷的玩具可以玩好開心的。直接來兩張 BF3，兩張 CX7, 一張 CX8 可惜的是還有一張 CX8 不知道插哪跟另一張 BF3 加強版，測試就是這麼重成本QQ</p>]]></description>
+</item>
+</channel>
+</rss>

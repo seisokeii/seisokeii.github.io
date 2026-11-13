@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <title>Proxmox Cloud Init 製作 VM Template - seisokeii blog</title><meta name="Description" content="seisokeii&#39;s blog"><meta property="og:url" content="https://seisokeii.github.io/zh-tw/posts/infrastructure/infra-pve-cloudinit/">
+  <meta property="og:site_name" content="seisokeii blog">
+  <meta property="og:title" content="Proxmox Cloud Init 製作 VM Template">
+  <meta property="og:description" content="這台速度很快喔 這樣太危險～ 飛太遠～ 總是有酷酷的玩具可以玩好開心的。直接來兩張 BF3，兩張 CX7, 一張 CX8 可惜的是還有一張 CX8 不知道插哪跟另一張 BF3 加強版，測試就是這麼重成本QQ">
+  <meta property="og:locale" content="zh_TW">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2026-11-13T14:17:12+08:00">
+    <meta property="article:modified_time" content="2026-11-13T14:17:12+08:00">
+    <meta property="article:tag" content="Infrastructure">
+    <meta property="article:tag" content="Proxmox">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Proxmox Cloud Init 製作 VM Template">
+  <meta name="twitter:description" content="這台速度很快喔 這樣太危險～ 飛太遠～ 總是有酷酷的玩具可以玩好開心的。直接來兩張 BF3，兩張 CX7, 一張 CX8 可惜的是還有一張 CX8 不知道插哪跟另一張 BF3 加強版，測試就是這麼重成本QQ">
+<meta name="application-name" content="seisokeii の blog">
+<meta name="apple-mobile-web-app-title" content="seisokeii の blog">
+<meta name="referrer" content="no-referrer" /><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://seisokeii.github.io/zh-tw/posts/infrastructure/infra-pve-cloudinit/" /><link rel="prev" href="https://seisokeii.github.io/zh-tw/posts/ai-networking/ai-net-nccl-soft-failover/" /><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css"></noscript><link rel="preload" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css"></noscript><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "Proxmox Cloud Init 製作 VM Template",
+        "inLanguage": "zh-TW",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/seisokeii.github.io\/zh-tw\/posts\/infrastructure\/infra-pve-cloudinit\/"
+        },"genre": "posts","keywords": "infrastructure, Proxmox","wordcount":  1411 ,
+        "url": "https:\/\/seisokeii.github.io\/zh-tw\/posts\/infrastructure\/infra-pve-cloudinit\/","datePublished": "2026-11-13T14:17:12+08:00","dateModified": "2026-11-13T14:17:12+08:00","publisher": {
+            "@type": "Organization",
+            "name": ""},"author": {
+                "@type": "Person",
+                "name": "seisokeii"
+            },"description": ""
+    }
+    </script></head>
+    <body data-header-desktop="fixed" data-header-mobile="auto"><script>
+          const query = window.matchMedia('(prefers-color-scheme: dark)');
+          function applyTheme() {
+            let theme = window.localStorage?.getItem('theme') || 'dark';
+            let isDark = theme === 'dark' || (theme === 'auto' && query.matches);
+            document.body.setAttribute('theme', isDark? 'dark' : 'light');
+            document.body.setAttribute('cfg-theme', theme);
+          }
+
+          applyTheme();
+          query.addEventListener('change', applyTheme);
+        </script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/zh-tw/" title="seisokeii blog">seisokeii の blog</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/zh-tw/posts/"> 文章 </a><a class="menu-item" href="/zh-tw/tags/"> 標籤 </a><a class="menu-item" href="/zh-tw/categories/"> 分類 </a><a class="menu-item" href="/zh-tw/about/about"> About </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="搜索文章標題或內容..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切換主題">
+                    <i class="fas fa-adjust" aria-hidden="true"></i>
+                </a><a href="javascript:void(0);" class="menu-item language" title="選擇語言">
+                    <i class="fa fa-globe" aria-hidden="true"></i>
+                    <select class="language-select" id="language-select-desktop" onchange="location = this.value;"><option value="/zh-tw/posts/infrastructure/infra-pve-cloudinit/" selected>繁體中文</option></select>
+                </a></div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/zh-tw/" title="seisokeii blog">seisokeii の blog</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="搜索文章標題或內容..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/zh-tw/posts/" title="">文章</a><a class="menu-item" href="/zh-tw/tags/" title="">標籤</a><a class="menu-item" href="/zh-tw/categories/" title="">分類</a><a class="menu-item" href="/zh-tw/about/about" title="">About</a><a href="javascript:void(0);" class="menu-item theme-switch" title="切換主題">
+                <i class="fas fa-adjust" aria-hidden="true"></i>
+            </a><a href="javascript:void(0);" class="menu-item" title="選擇語言">
+                    <i class="fa fa-globe" aria-hidden="true"></i>
+                    <select class="language-select" onchange="location = this.value;"><option value="/zh-tw/posts/infrastructure/infra-pve-cloudinit/" selected>繁體中文</option></select>
+                </a></div>
+    </div>
+</header><div class="search-dropdown desktop">
+        <div id="search-dropdown-desktop"></div>
+    </div>
+    <div class="search-dropdown mobile">
+        <div id="search-dropdown-mobile"></div>
+    </div><main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目錄</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">Proxmox Cloud Init 製作 VM Template</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="https://github.com/seisokeii" title="Author" target="_blank" rel="noopener noreffer author" class="author"><i class="fas fa-user-circle" aria-hidden="true"></i>seisokeii</a></span>&nbsp;<span class="post-category">收錄於 <a href="/zh-tw/categories/infrastructure/"><i class="far fa-folder" aria-hidden="true"></i>Infrastructure</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt" aria-hidden="true"></i>&nbsp;<time datetime="2026-11-13">2026-11-13</time>&nbsp;<i class="fas fa-pencil-alt" aria-hidden="true"></i>&nbsp;約 1411 字&nbsp;
+                <i class="far fa-clock" aria-hidden="true"></i>&nbsp;預計閱讀 3 分鐘&nbsp;</div>
+        </div><div class="featured-image"><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="/images/infrastructure/infra-server-rear-nics.jpeg"
+        data-srcset="/images/infrastructure/infra-server-rear-nics.jpeg, /images/infrastructure/infra-server-rear-nics.jpeg 1.5x, /images/infrastructure/infra-server-rear-nics.jpeg 2x"
+        data-sizes="auto"
+        alt="/images/infrastructure/infra-server-rear-nics.jpeg"
+        title="/images/infrastructure/infra-server-rear-nics.jpeg" /></div><div class="details toc" id="toc-static"  data-kept="">
+                <div class="details-summary toc-title">
+                    <span>目錄</span>
+                    <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#下載-cloud-image">下載 Cloud Image</a></li>
+    <li><a href="#建立-vm--template">建立 VM &amp; Template</a>
+      <ul>
+        <li><a href="#新增-vm">新增 VM</a></li>
+        <li><a href="#把-image-匯入-storage-中">把 image 匯入 storage 中</a></li>
+        <li><a href="#vm-hardware-相關設定">VM Hardware 相關設定</a></li>
+        <li><a href="#設定-vm-cloud-init">設定 VM Cloud-Init</a></li>
+        <li><a href="#vm-轉換成-template">VM 轉換成 Template</a></li>
+      </ul>
+    </li>
+    <li><a href="#從-template-複製出-vm">從 Template 複製出 VM</a></li>
+    <li><a href="#檢查複製出來的-vm-設定">檢查複製出來的 VM 設定</a></li>
+    <li><a href="#測試開機">測試開機</a></li>
+    <li><a href="#結論">結論</a></li>
+    <li><a href="#參考">參考</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><p>這台速度很快喔 這樣太危險～ 飛太遠～
+總是有酷酷的玩具可以玩好開心的。直接來兩張 BF3，兩張 CX7, 一張 CX8 可惜的是還有一張 CX8 不知道插哪跟另一張 BF3 加強版，測試就是這麼重成本QQ</p>
+<hr>
+<p>因為要測試 RDMA 跟 CCL 相關的功能與行為研究，現在 server 好貴&hellip; 只能使用 VM 來直通網卡搞 IOT 測試了，蠻可惜沒辦法打效能的，
+之後有機會再來分享真實的 AI server 跑起來是怎樣吧～ 反正有 Gaudi2,Gaudi3,MI300X,MI350X,&hellip; 這些可以用＾＾</p>
+<p>手邊目前只有老舊的 server 上面跑 PVE 剛好要建立一堆虛擬機去直通網卡，所以來記錄一下，以防之後又忘記怎麼搞～</p>
+<p>從很久以前搞維運的時候就知道 cloud init 了，可惜一直懶得去用，現在趁著個機會來體驗一下～</p>
+<h2 id="下載-cloud-image">下載 Cloud Image</h2>
+<p>首先就是去下載 cloud image 專們用來做 cloud init 的～
+官方下載點 =&gt; <a href="https://cloud-images.ubuntu.com/noble/current/" target="_blank" rel="noopener noreffer ">點我</a></p>
+<p>這邊我使用 24.04 LTS 來當範例</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="複製到剪貼板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">wget -O /tmp/ubuntu-24.04.img https://cloud-images.ubuntu.com/noble/current/noble-server-cloudimg-amd64.img
+</span></span><span class="line"><span class="cl">qemu-img info /tmp/ubuntu-24.04.img</span></span></code></pre></div></div>
+<div style="display: flex; justify-content: center;">
+    <div style="width: 70%;">
+        <figure><a class="lightgallery" href="/images/infrastructure/infra-image-info.png" title="/images/infrastructure/infra-image-info.png" data-thumbnail="/images/infrastructure/infra-image-info.png" data-sub-html="<h2>qemu-img info 指令檢查是否為 qcow2</h2>">
+                <img
+                    class="lazyload"
+                    src="/svg/loading.min.svg"
+                    data-src="/images/infrastructure/infra-image-info.png"
+                    data-srcset="/images/infrastructure/infra-image-info.png, /images/infrastructure/infra-image-info.png 1.5x, /images/infrastructure/infra-image-info.png 2x"
+                    data-sizes="auto"
+                    alt="/images/infrastructure/infra-image-info.png" />
+            </a><figcaption class="image-caption">qemu-img info 指令檢查是否為 qcow2</figcaption>
+            </figure>
+    </div>
+</div>
+<h2 id="建立-vm--template">建立 VM &amp; Template</h2>
+<p>沒錯，要先建立一個 VM 然後再轉成 Template 呦～</p>
+<p>這邊我使用我的配置來當範例，每個人的 PVE 網路跟儲存應該都不太一樣的～
+以下我會使用指令的方式來建立，因為可以複製貼上比較快XD</p>
+<h3 id="新增-vm">新增 VM</h3>
+<p>注意的是要看你的環境網卡是什麼呦～</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="複製到剪貼板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># 建立 ID 411 的虛擬機，配置 8GB RAM、4 核心 (host 模式)、連接至 vmbr1</span>
+</span></span><span class="line"><span class="cl">qm create <span class="m">411</span> --name <span class="s2">&#34;ubuntu-2404-tpl&#34;</span> --memory <span class="m">8192</span> --cores <span class="m">4</span> --cpu host --net0 virtio,bridge<span class="o">=</span>vmbr1 --scsihw virtio-scsi-single</span></span></code></pre></div></div>
+<h3 id="把-image-匯入-storage-中">把 image 匯入 storage 中</h3>
+<p>儲存池這邊在我的環境是</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="複製到剪貼板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># 將下載的映像檔匯入至 vm-data 儲存池</span>
+</span></span><span class="line"><span class="cl">qm importdisk <span class="m">411</span> /tmp/ubuntu-24.04.img vm-data</span></span></code></pre></div></div>
+<div style="display: flex; justify-content: center;">
+    <div style="width: 70%;">
+        <figure><a class="lightgallery" href="/images/infrastructure/infra-import-image.png" title="/images/infrastructure/infra-import-image.png" data-thumbnail="/images/infrastructure/infra-import-image.png" data-sub-html="<h2>匯入 image 到新建立的 VM</h2>">
+                <img
+                    class="lazyload"
+                    src="/svg/loading.min.svg"
+                    data-src="/images/infrastructure/infra-import-image.png"
+                    data-srcset="/images/infrastructure/infra-import-image.png, /images/infrastructure/infra-import-image.png 1.5x, /images/infrastructure/infra-import-image.png 2x"
+                    data-sizes="auto"
+                    alt="/images/infrastructure/infra-import-image.png" />
+            </a><figcaption class="image-caption">匯入 image 到新建立的 VM</figcaption>
+            </figure>
+    </div>
+</div>
+<h3 id="vm-hardware-相關設定">VM Hardware 相關設定</h3>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="複製到剪貼板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># 掛載剛匯入的系統碟為 scsi0 並啟用 iothread</span>
+</span></span><span class="line"><span class="cl">qm <span class="nb">set</span> <span class="m">411</span> --scsi0 vm-data:vm-411-disk-0,iothread<span class="o">=</span><span class="m">1</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 掛載虛擬 CloudInit 光碟機到 ide0</span>
+</span></span><span class="line"><span class="cl">qm <span class="nb">set</span> <span class="m">411</span> --ide0 vm-data:cloudinit
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 設定開機順序優先從 scsi0 啟動</span>
+</span></span><span class="line"><span class="cl">qm <span class="nb">set</span> <span class="m">411</span> --boot <span class="nv">order</span><span class="o">=</span>scsi0
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 啟用 QEMU Guest Agent（讓 PVE 網頁可以直接顯示 VM 的 IP 位址）</span>
+</span></span><span class="line"><span class="cl">qm <span class="nb">set</span> <span class="m">411</span> --agent <span class="nv">enabled</span><span class="o">=</span><span class="m">1</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 調整預設硬碟大小至 50GB（Cloud-Init 首次開機會自動撐大內部系統分割區）</span>
+</span></span><span class="line"><span class="cl">qm resize <span class="m">411</span> scsi0 50G</span></span></code></pre></div></div>
+<div style="display: flex; justify-content: center;">
+    <div style="width: 70%;">
+        <figure><a class="lightgallery" href="/images/infrastructure/infra-vm-hardware-setup.png" title="/images/infrastructure/infra-vm-hardware-setup.png" data-thumbnail="/images/infrastructure/infra-vm-hardware-setup.png" data-sub-html="<h2>設定 VM 的 Hardware 相關周邊</h2>">
+                <img
+                    class="lazyload"
+                    src="/svg/loading.min.svg"
+                    data-src="/images/infrastructure/infra-vm-hardware-setup.png"
+                    data-srcset="/images/infrastructure/infra-vm-hardware-setup.png, /images/infrastructure/infra-vm-hardware-setup.png 1.5x, /images/infrastructure/infra-vm-hardware-setup.png 2x"
+                    data-sizes="auto"
+                    alt="/images/infrastructure/infra-vm-hardware-setup.png" />
+            </a><figcaption class="image-caption">設定 VM 的 Hardware 相關周邊</figcaption>
+            </figure>
+        <figure><a class="lightgallery" href="/images/infrastructure/infra-vm-hardware-webUI.png" title="/images/infrastructure/infra-vm-hardware-webUI.png" data-thumbnail="/images/infrastructure/infra-vm-hardware-webUI.png" data-sub-html="<h2>設定 VM 的 Hardware 網頁顯示</h2>">
+                <img
+                    class="lazyload"
+                    src="/svg/loading.min.svg"
+                    data-src="/images/infrastructure/infra-vm-hardware-webUI.png"
+                    data-srcset="/images/infrastructure/infra-vm-hardware-webUI.png, /images/infrastructure/infra-vm-hardware-webUI.png 1.5x, /images/infrastructure/infra-vm-hardware-webUI.png 2x"
+                    data-sizes="auto"
+                    alt="/images/infrastructure/infra-vm-hardware-webUI.png" />
+            </a><figcaption class="image-caption">設定 VM 的 Hardware 網頁顯示</figcaption>
+            </figure>
+    </div>
+</div>
+<p>Hardware 這邊要記得看一下有沒有 cloud init 的裝置，有了才可以去 VM 的 Cloud-Init 設定。
+到這邊差不多把麻煩要狂點跟輸入的東西用指令搞定了，接下來可以回到 WebUI 來看看～</p>
+<h3 id="設定-vm-cloud-init">設定 VM Cloud-Init</h3>
+<p>在 Hardware 那邊添加完 cloud-init 裝置後就可以來設定了。
+可以設定使用者帳密、DNS、ssh key、ip，這邊保留 IP 不設定，到時候 clone 後每台再去手動設定，或是可以使用自動化工具像是 Terraform 去設定也可以。</p>
+<div style="display: flex; justify-content: center;">
+    <div style="width: 70%;">
+        <figure><a class="lightgallery" href="/images/infrastructure/infra-vm-cloud-init-setting.png" title="/images/infrastructure/infra-vm-cloud-init-setting.png" data-thumbnail="/images/infrastructure/infra-vm-cloud-init-setting.png" data-sub-html="<h2>設定 VM 的 Cloud-Init 的設定</h2>">
+                <img
+                    class="lazyload"
+                    src="/svg/loading.min.svg"
+                    data-src="/images/infrastructure/infra-vm-cloud-init-setting.png"
+                    data-srcset="/images/infrastructure/infra-vm-cloud-init-setting.png, /images/infrastructure/infra-vm-cloud-init-setting.png 1.5x, /images/infrastructure/infra-vm-cloud-init-setting.png 2x"
+                    data-sizes="auto"
+                    alt="/images/infrastructure/infra-vm-cloud-init-setting.png" />
+            </a><figcaption class="image-caption">設定 VM 的 Cloud-Init 的設定</figcaption>
+            </figure>
+    </div>
+</div>
+<h3 id="vm-轉換成-template">VM 轉換成 Template</h3>
+<p>去 VM 列表右鍵，然後選擇 Convert to Template，然後轉完後會看到圖示有變化，多了一個可愛的資料夾～</p>
+<div style="display: flex; justify-content: center;">
+    <div style="width: 70%;">
+        <figure><a class="lightgallery" href="/images/infrastructure/infra-vm-convert-template.png" title="/images/infrastructure/infra-vm-convert-template.png" data-thumbnail="/images/infrastructure/infra-vm-convert-template.png" data-sub-html="<h2>將設置好的 VM 轉換成 Template</h2>">
+                <img
+                    class="lazyload"
+                    src="/svg/loading.min.svg"
+                    data-src="/images/infrastructure/infra-vm-convert-template.png"
+                    data-srcset="/images/infrastructure/infra-vm-convert-template.png, /images/infrastructure/infra-vm-convert-template.png 1.5x, /images/infrastructure/infra-vm-convert-template.png 2x"
+                    data-sizes="auto"
+                    alt="/images/infrastructure/infra-vm-convert-template.png" />
+            </a><figcaption class="image-caption">將設置好的 VM 轉換成 Template</figcaption>
+            </figure>
+        <figure><a class="lightgallery" href="/images/infrastructure/infra-template-icon.png" title="/images/infrastructure/infra-template-icon.png" data-thumbnail="/images/infrastructure/infra-template-icon.png" data-sub-html="<h2>Template 的 ICON 會有個資料夾</h2>">
+                <img
+                    class="lazyload"
+                    src="/svg/loading.min.svg"
+                    data-src="/images/infrastructure/infra-template-icon.png"
+                    data-srcset="/images/infrastructure/infra-template-icon.png, /images/infrastructure/infra-template-icon.png 1.5x, /images/infrastructure/infra-template-icon.png 2x"
+                    data-sizes="auto"
+                    alt="/images/infrastructure/infra-template-icon.png" />
+            </a><figcaption class="image-caption">Template 的 ICON 會有個資料夾</figcaption>
+            </figure>
+    </div>
+</div>
+<h2 id="從-template-複製出-vm">從 Template 複製出 VM</h2>
+<p>點選 VM 選單的 Template 右鍵一下，然後選擇 Clone 然後就會跳出一個選單，填一填就好了。</p>
+<p>另外選單中有 <code>Mode</code> 這個我都習慣使用 Full Clone 也就是會有獨立的虛擬硬碟，環境切乾淨的好。除非只是想要短暫測試後刪掉，那就可以選 Link Clone。</p>
+<div style="display: flex; justify-content: center;">
+    <div style="width: 70%;">
+        <figure><a class="lightgallery" href="/images/infrastructure/infra-template-clone-01.png" title="/images/infrastructure/infra-template-clone-01.png" data-thumbnail="/images/infrastructure/infra-template-clone-01.png" data-sub-html="<h2>Template 選擇 Clone</h2>">
+                <img
+                    class="lazyload"
+                    src="/svg/loading.min.svg"
+                    data-src="/images/infrastructure/infra-template-clone-01.png"
+                    data-srcset="/images/infrastructure/infra-template-clone-01.png, /images/infrastructure/infra-template-clone-01.png 1.5x, /images/infrastructure/infra-template-clone-01.png 2x"
+                    data-sizes="auto"
+                    alt="/images/infrastructure/infra-template-clone-01.png" />
+            </a><figcaption class="image-caption">Template 選擇 Clone</figcaption>
+            </figure>
+        <figure><a class="lightgallery" href="/images/infrastructure/infra-template-clone-02.png" title="/images/infrastructure/infra-template-clone-02.png" data-thumbnail="/images/infrastructure/infra-template-clone-02.png" data-sub-html="<h2>整體配置大概如圖所示</h2>">
+                <img
+                    class="lazyload"
+                    src="/svg/loading.min.svg"
+                    data-src="/images/infrastructure/infra-template-clone-02.png"
+                    data-srcset="/images/infrastructure/infra-template-clone-02.png, /images/infrastructure/infra-template-clone-02.png 1.5x, /images/infrastructure/infra-template-clone-02.png 2x"
+                    data-sizes="auto"
+                    alt="/images/infrastructure/infra-template-clone-02.png" />
+            </a><figcaption class="image-caption">整體配置大概如圖所示</figcaption>
+            </figure>
+    </div>
+</div>
+<h2 id="檢查複製出來的-vm-設定">檢查複製出來的 VM 設定</h2>
+<p>剛複製出來的 VM 設定會跟 Template 一樣沒有 IP，這邊再添加上去即可。</p>
+<p>添加完成後要記得去上方的 <code>Regenerate Image</code> 來套用設定。</p>
+<div style="display: flex; justify-content: center;">
+    <div style="width: 70%;">
+        <figure><a class="lightgallery" href="/images/infrastructure/infra-new-vm-cloud-init.png" title="/images/infrastructure/infra-new-vm-cloud-init.png" data-thumbnail="/images/infrastructure/infra-new-vm-cloud-init.png" data-sub-html="<h2>新的 VM cloud init 設定</h2>">
+                <img
+                    class="lazyload"
+                    src="/svg/loading.min.svg"
+                    data-src="/images/infrastructure/infra-new-vm-cloud-init.png"
+                    data-srcset="/images/infrastructure/infra-new-vm-cloud-init.png, /images/infrastructure/infra-new-vm-cloud-init.png 1.5x, /images/infrastructure/infra-new-vm-cloud-init.png 2x"
+                    data-sizes="auto"
+                    alt="/images/infrastructure/infra-new-vm-cloud-init.png" />
+            </a><figcaption class="image-caption">新的 VM cloud init 設定</figcaption>
+            </figure>
+    </div>
+</div>
+<p>這樣就大功告成了～～～ 接下來只需要直接開機，就可以使用 cloud-init 原本的帳密去登入了，以後建立 VM 會超級快的！！！</p>
+<h2 id="測試開機">測試開機</h2>
+<p>目前我的 PVE cluster 是全部 M.2 SSD 開機大概 25 秒，然後 cloud-init 大概 5 分鐘就做完了～</p>
+<p>過去手動安裝會耗費超多時間在把 iso 檔案解壓縮並寫道硬碟，然後完成安裝後還要去 apt update 所有套件，耗時超久的&hellip;</p>
+<p>登入 VM 後可以使用該指令查看是否 cloud-init 已經完成了。</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="複製到剪貼板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">cloud-init status --wait</span></span></code></pre></div></div>
+<p>有了 Cloud-Init 後，建立一台 VM 大概是 10 分鐘以內就可以有一台可以用了虛擬機了，超開勳的！！！</p>
+<div style="display: flex; justify-content: center;">
+    <div style="width: 70%;">
+        <figure><a class="lightgallery" href="/images/infrastructure/infra-vm-boot-time.png" title="/images/infrastructure/infra-vm-boot-time.png" data-thumbnail="/images/infrastructure/infra-vm-boot-time.png" data-sub-html="<h2>新的 VM 開機時間</h2>">
+                <img
+                    class="lazyload"
+                    src="/svg/loading.min.svg"
+                    data-src="/images/infrastructure/infra-vm-boot-time.png"
+                    data-srcset="/images/infrastructure/infra-vm-boot-time.png, /images/infrastructure/infra-vm-boot-time.png 1.5x, /images/infrastructure/infra-vm-boot-time.png 2x"
+                    data-sizes="auto"
+                    alt="/images/infrastructure/infra-vm-boot-time.png" />
+            </a><figcaption class="image-caption">新的 VM 開機時間</figcaption>
+            </figure>
+        <figure><a class="lightgallery" href="/images/infrastructure/infra-vm-cloud-init-status.png" title="/images/infrastructure/infra-vm-cloud-init-status.png" data-thumbnail="/images/infrastructure/infra-vm-cloud-init-status.png" data-sub-html="<h2>開機後大約5分鐘就好了</h2>">
+                <img
+                    class="lazyload"
+                    src="/svg/loading.min.svg"
+                    data-src="/images/infrastructure/infra-vm-cloud-init-status.png"
+                    data-srcset="/images/infrastructure/infra-vm-cloud-init-status.png, /images/infrastructure/infra-vm-cloud-init-status.png 1.5x, /images/infrastructure/infra-vm-cloud-init-status.png 2x"
+                    data-sizes="auto"
+                    alt="/images/infrastructure/infra-vm-cloud-init-status.png" />
+            </a><figcaption class="image-caption">開機後大約5分鐘就好了</figcaption>
+            </figure>
+    </div>
+</div>
+<h2 id="結論">結論</h2>
+<p>雖然這個東西現在看應該已經很過時了，但維運或是像我這樣很常做實驗的，非常推薦弄一個 template 來讓之後作業更加快速省時間，
+維運的話還可以再來看怎麼使用 Terraform 或是其他自動化 framework 來做 DevOps ~</p>
+<h2 id="參考">參考</h2>
+<p><a href="https://cloud-images.ubuntu.com/noble/current/" target="_blank" rel="noopener noreffer ">Ubuntu Cloud Image</a></p>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新於 2026-11-13</span>
+            </div></div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="分享到 X" data-sharer="x" data-url="https://seisokeii.github.io/zh-tw/posts/infrastructure/infra-pve-cloudinit/" data-title="Proxmox Cloud Init 製作 VM Template" data-hashtags="infrastructure,Proxmox"><i class="fab fa-x-twitter" aria-hidden="true"></i></a><a href="javascript:void(0);" title="分享到 Threads" data-sharer="threads" data-url="https://seisokeii.github.io/zh-tw/posts/infrastructure/infra-pve-cloudinit/" data-title="Proxmox Cloud Init 製作 VM Template"><i class="fab fa-threads" aria-hidden="true"></i></a><a href="javascript:void(0);" title="分享到 Diaspora" data-sharer="diaspora" data-url="https://seisokeii.github.io/zh-tw/posts/infrastructure/infra-pve-cloudinit/" data-title="Proxmox Cloud Init 製作 VM Template" data-description=""><i class="fab fa-diaspora" aria-hidden="true"></i></a><a href="https://t.me/share/url?url=https%3a%2f%2fseisokeii.github.io%2fzh-tw%2fposts%2finfrastructure%2finfra-pve-cloudinit%2f&amp;text=Proxmox%20Cloud%20Init%20%e8%a3%bd%e4%bd%9c%20VM%20Template" target="_blank" title="分享到 Telegram"><i class="fab fa-telegram" aria-hidden="true"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags" aria-hidden="true"></i>&nbsp;<a href="/zh-tw/tags/infrastructure/">Infrastructure</a>,&nbsp;<a href="/zh-tw/tags/proxmox/">Proxmox</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/zh-tw/">主頁</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/zh-tw/posts/ai-networking/ai-net-nccl-soft-failover/" class="prev" rel="prev" title="NCCL 無 GPU 測試網路層的 Timeout 與 Port Failover"><i class="fas fa-angle-left" aria-hidden="true"></i>NCCL 無 GPU 測試網路層的 Timeout 與 Port Failover</a></div>
+</div>
+<div id="comments"><div id="disqus_thread" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://disqus.com/?ref_noscript">Disqus</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.154.5">Hugo</a> 強力驅動 | 主題 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 1.0.0"><i class="far fa-kiss-wink-heart" aria-hidden="true"></i> LoveIt</a>
+                </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright" aria-hidden="true"></i><span itemprop="copyrightYear">2024 - 2026</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/zh-tw/" target="_blank">seisokeii</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到頂部">
+                <i class="fas fa-arrow-up" aria-hidden="true"></i>
+            </a>
+        </div>
+
+        <div id="fixed-buttons-hidden"><a href="#" id="view-comments" class="fixed-button" title="查看評論">
+                <i class="fas fa-comment" aria-hidden="true"></i>
+            </a>
+        </div><script src="https://.disqus.com/embed.js" defer></script><script src="https://cdn.jsdelivr.net/npm/autocomplete.js@0.38.1/dist/autocomplete.min.js"></script><script src="https://cdn.jsdelivr.net/npm/lunr@2.3.9/lunr.min.js"></script><script src="/lib/lunr/lunr.stemmer.support.min.js"></script><script src="/lib/lunr/lunr.zh.min.js"></script><script src="https://cdn.jsdelivr.net/npm/lazysizes@5.3.2/lazysizes.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.11/dist/clipboard.min.js"></script><script src="https://cdn.jsdelivr.net/npm/sharer.js@0.5.2/sharer.min.js"></script><script>window.config={"comment":{},"search":{"highlightTag":"em","lunrLanguageCode":"zh","lunrSegmentitURL":"/lib/lunr/lunr.segmentit.js","maxResultLength":10,"noResultsFound":"沒有找到結果","snippetLength":30}};</script><script src="/js/theme.js"></script></body>
+</html>

@@ -4,7 +4,18 @@
         <link>https://seisokeii.github.io/zh-tw/posts/</link>
         <description>所有文章 | seisokeii blog</description>
         <generator>Hugo -- gohugo.io</generator><language>zh-TW</language><managingEditor>Noway@bimbimbambam (seisokeii)</managingEditor>
-            <webMaster>Noway@bimbimbambam (seisokeii)</webMaster><lastBuildDate>Thu, 12 Nov 2026 15:44:32 &#43;0800</lastBuildDate><atom:link href="https://seisokeii.github.io/zh-tw/posts/" rel="self" type="application/rss+xml" /><item>
+            <webMaster>Noway@bimbimbambam (seisokeii)</webMaster><lastBuildDate>Fri, 13 Nov 2026 14:17:12 &#43;0800</lastBuildDate><atom:link href="https://seisokeii.github.io/zh-tw/posts/" rel="self" type="application/rss+xml" /><item>
+    <title>Proxmox Cloud Init 製作 VM Template</title>
+    <link>https://seisokeii.github.io/zh-tw/posts/infrastructure/infra-pve-cloudinit/</link>
+    <pubDate>Fri, 13 Nov 2026 14:17:12 &#43;0800</pubDate>
+    <author>Noway@bimbimbambam (seisokeii)</author>
+    <guid>https://seisokeii.github.io/zh-tw/posts/infrastructure/infra-pve-cloudinit/</guid>
+    <description><![CDATA[<div class="featured-image">
+                <img src="/images/infrastructure/infra-server-rear-nics.jpeg" referrerpolicy="no-referrer">
+            </div><p>這台速度很快喔 這樣太危險～ 飛太遠～
+總是有酷酷的玩具可以玩好開心的。直接來兩張 BF3，兩張 CX7, 一張 CX8 可惜的是還有一張 CX8 不知道插哪跟另一張 BF3 加強版，測試就是這麼重成本QQ</p>]]></description>
+</item>
+<item>
     <title>NCCL 無 GPU 測試網路層的 Timeout 與 Port Failover</title>
     <link>https://seisokeii.github.io/zh-tw/posts/ai-networking/ai-net-nccl-soft-failover/</link>
     <pubDate>Thu, 12 Nov 2026 15:44:32 &#43;0800</pubDate>
@@ -119,18 +130,6 @@
             </div><p>上面這張圖是 OSFP 洞洞的交換器，越來越粗了呢(灬ºωº灬)</p>
 <hr>
 <p>當手上有錢了以後，想要買 400G 跟 800G switch 來玩 AI 網路時，發現光纖模組一大堆，到底要挑哪款&hellip;</p>]]></description>
-</item>
-<item>
-    <title>十軍團重要目標防護營(重防營)義務役下部隊-part3</title>
-    <link>https://seisokeii.github.io/zh-tw/posts/army/army-part3/</link>
-    <pubDate>Fri, 06 Dec 2024 22:41:21 &#43;0800</pubDate>
-    <author>Noway@bimbimbambam (seisokeii)</author>
-    <guid>https://seisokeii.github.io/zh-tw/posts/army/army-part3/</guid>
-    <description><![CDATA[<div class="featured-image">
-                <img src="/images/army/army-CTPB209TMask.jpg" referrerpolicy="no-referrer">
-            </div><p>上面這圖是重防營的隊徽以及發放的口罩~ 上面印有我們這一梯次的號碼，不知道是剛好還是真的為了我們這梯印的?</p>
-<hr>
-<p>終於到了義務役的後半段下部隊了! 有關於重防營(<del>破防營</del>)到目前為止(2024/12/06)網路上的資料少的可憐，原因是這個單位成立到現在只有2年多而已&hellip; 哪個連的退伍後我再補上XD</p>]]></description>
 </item>
 </channel>
 </rss>
